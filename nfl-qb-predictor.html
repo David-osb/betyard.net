@@ -841,6 +841,8 @@
 
         // LIVE NFL Quarterback Data - Populated by APIs
         // ===== LIVE DATA ONLY - NO CACHED DATA =====
+        // Track if Tank01 data has been successfully loaded
+        let tank01DataLoaded = false;
         let quarterbackData = {}; // Empty - will only contain live API data
         
         // ENHANCED TANK01 AUTO-INITIALIZATION - Automatic live data loading
@@ -864,14 +866,12 @@
             
             // 3. AUTO-LOAD TANK01 DATA (Primary) with fallback to local data
             console.log('🎯 Auto-loading Tank01 enhanced NFL data...');
-            let tank01LoadedSuccessfully = false;
             try {
                 // Try Tank01 API first for real-time data
                 const tank01Success = await fetchNFLDataWithTank01();
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
-                    tank01LoadedSuccessfully = true;
                 } else {
                     throw new Error('Tank01 auto-load failed');
                 }
@@ -884,10 +884,10 @@
             }
             
             // 4. Load verified rosters ONLY if Tank01 failed (to avoid overwriting Tank01 data)
-            if (!tank01LoadedSuccessfully && typeof loadVerifiedCurrentRosters === 'function') {
+            if (!tank01DataLoaded && typeof loadVerifiedCurrentRosters === 'function') {
                 loadVerifiedCurrentRosters();
                 console.log('✅ Verified current rosters loaded as backup');
-            } else if (tank01LoadedSuccessfully) {
+            } else if (tank01DataLoaded) {
                 console.log('🚫 Skipping verified rosters - Tank01 data already loaded and active');
             }
             
@@ -981,6 +981,11 @@
 
         // Emergency live data generation
         async function generateEmergencyLiveData() {
+            // Don't overwrite Tank01 data if it's already loaded
+            if (tank01DataLoaded) {
+                console.log('🚫 Tank01 data already loaded - skipping emergency data generation');
+                return true;
+            }
             quarterbackData = {
                 'kansas-city-chiefs': [{name: 'Patrick Mahomes', stats: {yards: 325, completions: 26, attempts: 38, touchdowns: 2.8, interceptions: 0.7, rating: 108}, dataSource: 'emergency_live_' + Date.now(), lastUpdate: new Date().toISOString()}],
                 'buffalo-bills': [{name: 'Josh Allen', stats: {yards: 315, completions: 24, attempts: 37, touchdowns: 2.6, interceptions: 0.8, rating: 105}, dataSource: 'emergency_live_' + Date.now(), lastUpdate: new Date().toISOString()}],
@@ -1018,6 +1023,12 @@
         // Generate emergency quarterback data when APIs fail
         async function generateEmergencyLiveData() {
             console.log('🚨 Generating emergency live quarterback data...');
+            
+            // Don't overwrite Tank01 data if it's already loaded
+            if (tank01DataLoaded) {
+                console.log('🚫 Tank01 data already loaded - skipping emergency data generation');
+                return true;
+            }
             
             quarterbackData = {
             'buffalo-bills': [
@@ -1646,6 +1657,7 @@
                     
                     if (Object.keys(quarterbackData).length > 0) {
                         console.log('✅ Tank01 success: QB data processed and stored');
+                        tank01DataLoaded = true; // Mark Tank01 data as successfully loaded
                         return true;
                     } else {
                         console.warn('⚠️ Tank01 API: No quarterbacks found in response');
