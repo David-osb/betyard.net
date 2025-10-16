@@ -1385,26 +1385,45 @@
                     
                     console.log(`🏈 Fetching rosters for all ${teamIDs.length} remaining NFL teams...`);
                     
-                    for (const teamID of teamIDs) {
+                    let successCount = 0;
+                    let failCount = 0;
+                    
+                    for (let i = 0; i < teamIDs.length; i++) {
+                        const teamID = teamIDs[i];
                         try {
+                            console.log(`🔄 Fetching team ${i + 1}/${teamIDs.length}: ID ${teamID}...`);
+                            
                             const teamUrl = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamID}&getStats=true`;
                             const teamResponse = await fetch(teamUrl, options);
+                            
                             if (teamResponse.ok) {
                                 const teamData = await teamResponse.json();
                                 const roster = teamData.body?.roster || teamData.body;
-                                if (Array.isArray(roster)) {
+                                if (Array.isArray(roster) && roster.length > 0) {
                                     allPlayersData = allPlayersData.concat(roster);
-                                    console.log(`📊 Added ${roster.length} players from team ID ${teamID}`);
+                                    successCount++;
+                                    console.log(`✅ Team ID ${teamID}: Added ${roster.length} players (${successCount}/${teamIDs.length} teams successful)`);
                                 } else {
-                                    console.log(`⚠️ No roster data for team ID ${teamID}`);
+                                    failCount++;
+                                    console.log(`⚠️ Team ID ${teamID}: No roster data found (${failCount} failures)`);
                                 }
                             } else {
-                                console.log(`⚠️ Failed to fetch team ID ${teamID}: ${teamResponse.status}`);
+                                failCount++;
+                                console.log(`❌ Team ID ${teamID}: HTTP ${teamResponse.status} ${teamResponse.statusText} (${failCount} failures)`);
                             }
+                            
+                            // Add small delay to avoid rate limiting
+                            if (i < teamIDs.length - 1) {
+                                await new Promise(resolve => setTimeout(resolve, 100));
+                            }
+                            
                         } catch (err) {
-                            console.log(`⚠️ Failed to get roster for team ID ${teamID}:`, err.message);
+                            failCount++;
+                            console.log(`💥 Team ID ${teamID}: Error - ${err.message} (${failCount} failures)`);
                         }
                     }
+                    
+                    console.log(`📊 Final results: ${successCount} teams successful, ${failCount} failed, ${allPlayersData.length} total players`);
                     
                     // Use the combined roster data from all 32 NFL teams
                     data = { body: allPlayersData };
