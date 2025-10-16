@@ -1170,7 +1170,7 @@
             
             <!-- Live Update Indicator -->
             <div id="live-indicator" style="margin-top: 6px; padding: 6px 12px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; border-radius: 6px; font-size: 10px; font-weight: 600; text-align: center; animation: pulse 2s infinite;">
-                🔴 <strong>LIVE</strong> - Real-time Updates Active | Updated: <span id="last-update-time"></span> | v3.0-NO-TANK01
+                🔴 <strong>LIVE</strong> - Real-time Updates Active | Updated: <span id="last-update-time"></span> | v4.0-TANK01-ENABLED
             </div>
             
             <!-- Domain Branding -->
@@ -1178,14 +1178,14 @@
                 🌐 <strong>BetYard.net</strong> - Professional NFL Analysis Platform
             </div>
             
-            <!-- Tank01 API Notice -->
-            <div style="margin-top: 8px; padding: 12px 16px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; border: 2px solid #b91c1c; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); animation: fadeIn 2s ease-in;">
+            <!-- Tank01 API Status -->
+            <div style="margin-top: 8px; padding: 12px 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; border: 2px solid #047857; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); animation: fadeIn 2s ease-in;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
-                    <span style="font-size: 16px;">🚫</span>
-                    <strong>TANK01 API DISABLED</strong>
+                    <span style="font-size: 16px;">�</span>
+                    <strong>TANK01 API ENABLED</strong>
                 </div>
                 <div style="font-size: 12px; font-weight: 500; opacity: 0.95;">
-                    If you see Tank01 API errors, clear browser cache (<strong>Ctrl+F5</strong>) - All API calls removed!
+                    Live NFL data integration active - Real-time roster and statistics loading!
                 </div>
             </div>
             <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
@@ -1285,11 +1285,11 @@
 
                 <button class="btn" onclick="generatePrediction()">🚀 Generate XGBoost Prediction</button>
                 <button class="btn btn-secondary" onclick="clearForm()">Reset</button>
-                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🔄 Refresh Local Data (Tank01 Disabled)</button>
+                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🔄 Refresh Live Data (Tank01 Enabled)</button>
                 
                 <!-- API Information Notice -->
                 <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
-                    <strong>🤖 ML System:</strong> XGBoost Enhanced → Tank01 (Primary) → RapidAPI (Backup) → Local Data<br>
+                    <strong>🤖 ML System:</strong> XGBoost Enhanced → Tank01 (Primary - ACTIVE) → RapidAPI (Backup) → Local Data<br>
                     <em>Advanced machine learning with betting value analysis and recommendations</em>
                 </div>
             </div>
@@ -1634,33 +1634,16 @@
         // ===== LIVE DATA ONLY - NO CACHED DATA =====
         // Track if Tank01 data has been successfully loaded
         let tank01DataLoaded = false;
-        let quarterbackData = {}; // Empty - will only contain live API data
+        let quarterbackData = {}; // Will contain live API data from Tank01
         
-        // EMERGENCY TANK01 OVERRIDE - FORCE DISABLE ALL CALLS
-        console.log('🚨 EMERGENCY TANK01 DISABLE SCRIPT LOADING...');
+        // Tank01 API Re-enabled - Live data integration restored
+        console.log('� Tank01 API ENABLED - Loading live NFL data...');
         
-        // Override Tank01 functions immediately to prevent any calls
-        window.originalFetchNFLDataWithTank01 = window.fetchNFLDataWithTank01;
-        window.originalFetchNFLDataWithTank01Enhanced = window.fetchNFLDataWithTank01Enhanced;
-        
-        window.fetchNFLDataWithTank01Enhanced = function() {
-            console.log('🚫 EMERGENCY OVERRIDE: fetchNFLDataWithTank01Enhanced BLOCKED');
-            return Promise.resolve(false);
-        };
-        
-        window.fetchNFLDataWithTank01 = function() {
-            console.log('🚫 EMERGENCY OVERRIDE: fetchNFLDataWithTank01 BLOCKED');
-            return Promise.resolve(false);
-        };
-        
-        console.log('✅ EMERGENCY TANK01 FUNCTIONS OVERRIDDEN - NO API CALLS POSSIBLE');
-        alert('🚫 TANK01 DISABLED VERSION LOADED - If you still see Tank01 API calls, please clear browser cache (Ctrl+F5)');
-        
-        // TANK01-FREE VERSION - No API calls to prevent rate limits
+        // TANK01 ENABLED VERSION - Live API calls for real-time data
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚫 NFL QB Predictor v3.0 - TANK01 DISABLED VERSION LOADED');
-            console.log('🚫 NO TANK01 API CALLS WILL BE MADE - RATE LIMIT FREE');
-            console.log('⚡ Loading local data only for instant, reliable experience');
+            console.log('🏈 NFL QB Predictor v4.0 - TANK01 ENABLED VERSION LOADED');
+            console.log('� Tank01 API calls active for live, real-time NFL data');
+            console.log('⚡ Attempting to load live data with proper fallbacks');
             
             // Initialize mobile loading UI
             showMobileLoadingIfNeeded();
@@ -2649,31 +2632,68 @@
         }
 
         // Enhanced Tank01 function with mobile loading feedback
-        // DEPRECATED: fetchNFLDataWithTank01Enhanced - disabled to prevent auto-API calls
+        // Tank01 Enhanced Function - Re-enabled for live data fetching
         async function fetchNFLDataWithTank01Enhanced() {
-            console.log('⚠️ fetchNFLDataWithTank01Enhanced is deprecated - use manual refresh instead');
-            updateMobileStatus('⚠️ Auto API calls disabled - use manual refresh', 'warning');
-            hideMobileLoading();
-            return false; // Always return false to prevent API calls
+            console.log('🚀 Tank01 Enhanced function called - attempting live data fetch...');
+            
+            try {
+                showMobileLoading('Tank01 Data', 'Fetching live NFL data...');
+                updateMobileStatus('📡 Connecting to Tank01 API...', 'info');
+                
+                // Try to fetch live data from Tank01
+                const success = await fetchNFLDataWithTank01();
+                
+                if (success) {
+                    updateMobileStatus('✅ Tank01 data loaded successfully!', 'success');
+                    hideMobileLoading();
+                    return true;
+                } else {
+                    console.log('⚠️ Tank01 fetch failed, falling back to local data...');
+                    updateMobileStatus('⚠️ Tank01 failed, using local data', 'warning');
+                    hideMobileLoading();
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Tank01 Enhanced error:', error);
+                updateMobileStatus('❌ Tank01 error - using local data', 'error');
+                hideMobileLoading();
+                return false;
+            }
         }
 
         // TANK01 NFL API - Primary data source for comprehensive NFL data
-        // TANK01 FUNCTION - RATE LIMIT PROTECTED (cache-only mode)
+        // TANK01 FUNCTION - LIVE API ENABLED (with proper rate limiting)
         async function fetchNFLDataWithTank01() {
             try {
-                // Only check cache - NEVER make API calls to prevent rate limits
+                // Check cache first for efficiency
                 const cachedData = tank01Cache.get();
                 if (cachedData) {
-                    console.log('⚡ Using cached Tank01 data (avoiding rate limits)');
+                    console.log('⚡ Using cached Tank01 data (fresh within cache window)');
                     quarterbackData = cachedData;
                     tank01DataLoaded = true;
                     return true;
                 }
 
-                console.log('❌ No cached Tank01 data available, API calls disabled to prevent rate limits');
-                console.log('� Use manual refresh if fresh Tank01 data is needed');
-                return false; // Always return false when no cache to prevent API calls
+                console.log('📡 No cached data found, fetching fresh Tank01 data...');
+                console.log('🔧 Testing Tank01 API connection with Cardinals roster...');
                 
+                // Tank01 API Configuration
+                const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
+                const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
+                
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': RAPIDAPI_KEY,
+                        'X-RapidAPI-Host': RAPIDAPI_HOST
+                    }
+                };
+                
+                // Test with Cardinals roster (teamID=1)
+                const testUrl = `https://${RAPIDAPI_HOST}/getNFLTeamRoster?teamID=1&getStats=true`;
+                console.log('🧪 Testing Tank01 with URL:', testUrl);
+                
+                const testResponse = await fetch(testUrl, options);
                 console.log('📡 Tank01 API Response Status:', testResponse.status, testResponse.statusText);
                 
                 if (!testResponse.ok) {
