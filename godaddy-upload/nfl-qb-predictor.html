@@ -4399,8 +4399,11 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     console.warn("Missing QB stats for:", qb.name);
                 }
                 
-                // Determine if starter or backup based on various criteria
-                const isStarter = determineQBRole(qb, teamQBs);
+                // Use the already-determined status from our dynamic analysis
+                const status = qb.status || 'Backup'; // Default to backup if no status
+                console.log(`📋 Dropdown: ${qb.name} - Status: ${status} (Source: ${qb.dataSource || 'unknown'})`);
+                
+                const isStarter = (status === 'Starter');
                 
                 if (isStarter) {
                     starters.push(qb);
@@ -4408,6 +4411,14 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     backups.push(qb);
                 }
             });
+            
+            console.log(`📊 Dropdown summary: ${starters.length} starters, ${backups.length} backups`);
+            if (starters.length === 0) {
+                console.warn(`⚠️ No starters found! All QBs classified as backups.`);
+            }
+            if (backups.length === 0) {
+                console.warn(`⚠️ No backups found! All QBs classified as starters.`);
+            }
             
             // Add starters first with visual indicator
             if (starters.length > 0) {
