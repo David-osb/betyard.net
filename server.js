@@ -108,4 +108,4 @@ app.listen(PORT, () => {
     console.log(`📡 Tank01 API endpoint: http://localhost:${PORT}/api/nfl/tank01`);
     console.log(`📡 RapidAPI endpoint: http://localhost:${PORT}/api/nfl/rapidapi`);
     console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-});is it working
+});
