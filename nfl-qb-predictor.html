@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform</title>
+    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v2.1.2-FIX]</title>
     <meta name="description" content="Professional NFL Quarterback predictions, statistics, injury reports, and betting analysis on BetYard.net">
     <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, injury reports">
     
@@ -1592,7 +1592,10 @@
                                     overUnder: player.overUnder || null,
                                     spreadImpact: calculateSpreadImpact(player),
                                     valueRating: calculateValueRating(player),
-                                    confidenceLevel: calculateTank01PlayerConfidence(player)
+                                    confidenceLevel: (() => {
+                                        console.log('🎯 Calling Tank01 confidence calculation for:', player.longName);
+                                        return calculateTank01PlayerConfidence(player);
+                                    })()
                                 },
                                 dataSource: 'tank01_enhanced',
                                 lastUpdate: new Date().toISOString(),
