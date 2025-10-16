@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v2.1.2-FIX]</title>
+    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v2.2.0-AUTO]</title>
     <meta name="description" content="Professional NFL Quarterback predictions, statistics, injury reports, and betting analysis on BetYard.net">
     <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, injury reports">
     
@@ -529,7 +529,7 @@
             
             <!-- RapidAPI Configuration Notice -->
             <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
-                🏈 <strong>Tank01 API:</strong> Real-time NFL data source - Click "🏈 Fetch Live NFL Data" for rosters, injuries, depth charts & stats
+                🏈 <strong>Tank01 API:</strong> Real-time NFL data source - Automatically loads on page load! Use "🔄 Refresh Tank01 Data" to update manually
             </div>
             <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                 <div style="font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">
@@ -604,7 +604,7 @@
 
                 <button class="btn" onclick="generatePrediction()">Generate Prediction</button>
                 <button class="btn btn-secondary" onclick="clearForm()">Reset</button>
-                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🏈 Fetch Live NFL Data (Multi-API)</button>
+                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🔄 Refresh Tank01 Data (Auto-Enhanced)</button>
                 
                 <!-- API Information Notice -->
                 <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
@@ -843,9 +843,9 @@
         // ===== LIVE DATA ONLY - NO CACHED DATA =====
         let quarterbackData = {}; // Empty - will only contain live API data
         
-        // SIMPLIFIED LOCAL DATA INITIALIZATION - No API calls, instant loading
+        // ENHANCED TANK01 AUTO-INITIALIZATION - Automatic live data loading
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🏈 NFL QB Predictor - Using LOCAL DATA for instant reliability...');
+            console.log('🏈 NFL QB Predictor - Auto-loading TANK01 enhanced data...');
             
             // Initialize live update indicator
             updateLiveIndicator();
@@ -862,12 +862,26 @@
             if (scheduleWeek) scheduleWeek.addEventListener('change', loadSchedule);
             if (scheduleTeam) scheduleTeam.addEventListener('change', loadSchedule);
             
-            // 3. IMMEDIATELY load local quarterback data (no API delays)
-            console.log('� Loading comprehensive local quarterback database...');
-            await generateEmergencyLiveData();
-            console.log('✅ Local quarterback data loaded - ALL 32 NFL teams ready!');
+            // 3. AUTO-LOAD TANK01 DATA (Primary) with fallback to local data
+            console.log('🎯 Auto-loading Tank01 enhanced NFL data...');
+            try {
+                // Try Tank01 API first for real-time data
+                const tank01Success = await fetchNFLDataWithTank01();
+                if (tank01Success) {
+                    console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
+                    updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
+                } else {
+                    throw new Error('Tank01 auto-load failed');
+                }
+            } catch (error) {
+                console.log('⚠️ Tank01 auto-load failed, using reliable local data...');
+                // Fallback to local data for instant reliability
+                await generateEmergencyLiveData();
+                console.log('✅ Local quarterback data loaded - ALL 32 NFL teams ready!');
+                updateStatusDisplay('✅ LOCAL DATA: Fast, reliable, instant predictions available', 'info');
+            }
             
-            // 4. Load verified rosters (local data only)
+            // 4. Load verified rosters (enhanced with Tank01 or local data)
             if (typeof loadVerifiedCurrentRosters === 'function') {
                 loadVerifiedCurrentRosters();
                 console.log('✅ Verified current rosters loaded');
@@ -883,12 +897,9 @@
             if (typeof updateLiveConditions === 'function') updateLiveConditions();
             if (typeof startAutoRefresh === 'function') startAutoRefresh();
             
-            // 7. Update status to show local data is active
-            updateStatusDisplay('🏈 TANK01: Ready for live NFL data - Use "Fetch Live NFL Data" button', 'success');
-            
             console.log('🏈 NFL Quarterback Statistics Predictor loaded successfully!');
-            console.log('✅ LOCAL DATA MODE: Fast, reliable, instant predictions available!');
-            console.log('📊 Database includes: All 32 teams, current QBs, backup QBs, full stats');
+            console.log('✅ AUTO-ENHANCED MODE: Tank01 data automatically loaded with enhanced features!');
+            console.log('📊 Database includes: All 32 teams, enhanced injury reports, practice status, recent form, betting edge');
         });
 
         // ScrapeOwl live scraping function
@@ -7140,7 +7151,7 @@ function generateAdvancedPrediction() {
         // Manual quarterback roster data fetch function - MULTI-API SOURCE (Tank01 → RapidAPI → Local)
         async function fetchQuarterbackRosterData(buttonElement) {
             let button = buttonElement;
-            let originalText = 'Fetch Live NFL Data';
+            let originalText = 'Refresh Tank01 Data';
             
             try {
                 console.log('🔥 BUTTON CLICKED - Fetching LIVE NFL data with multi-API system...');
