@@ -566,8 +566,8 @@
                 <h2>Quarterback Selection</h2>
                 <div class="form-group">
                     <label for="team-select">Team</label>
-                    <select id="team-select">
-                        <option value="">Choose your team...</option>
+                    <select id="team-select" disabled>
+                        <option value="">⏳ Loading Tank01 data...</option>
                         
                         <optgroup label="🏈 AFC EAST">
                             <option value="buffalo-bills">Buffalo Bills</option>
@@ -916,6 +916,18 @@
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
+                    
+                    // Enable team dropdown now that Tank01 data is loaded
+                    const teamSelect = document.getElementById('team-select');
+                    if (teamSelect) {
+                        teamSelect.disabled = false;
+                        // Update loading option to normal selection
+                        const loadingOption = teamSelect.querySelector('option[value=""]');
+                        if (loadingOption) {
+                            loadingOption.textContent = 'Choose your team...';
+                        }
+                        console.log('✅ Team dropdown enabled - Tank01 data ready');
+                    }
                     
                     // Enable QB dropdown now that Tank01 data is loaded
                     const qbSelect = document.getElementById('qb-select');
@@ -3381,9 +3393,9 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 // Show notification to user
                 showNotification('⏳ Tank01 Loading', 'Please wait for Tank01 data to finish loading before selecting quarterbacks', 'warning', 4000);
                 
-                // Wait for Tank01 data to load (check every 500ms for up to 10 seconds)
+                // Wait for Tank01 data to load (check every 500ms for up to 20 seconds)
                 let waitAttempts = 0;
-                const maxWaitAttempts = 20; // 10 seconds total
+                const maxWaitAttempts = 40; // 20 seconds total
                 
                 const waitForTank01 = setInterval(() => {
                     waitAttempts++;
