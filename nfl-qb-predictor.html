@@ -1337,16 +1337,10 @@
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
                 const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
                 
-                // Get current date for API call (YYYYMMDD format)
-                const today = new Date();
-                const dateStr = today.getFullYear().toString() + 
-                               (today.getMonth() + 1).toString().padStart(2, '0') + 
-                               today.getDate().toString().padStart(2, '0');
+                console.log('🔄 Trying Tank01 team rosters endpoint...');
                 
-                console.log(`📅 Using date: ${dateStr} for Tank01 API call`);
-                
-                // Tank01 API endpoint for comprehensive NFL data
-                const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLDFS?date=${dateStr}&includeTeamDefense=true`;
+                // Try the getNFLTeams endpoint for roster data instead of DFS
+                let url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams`;
                 
                 const options = {
                     method: 'GET',
@@ -1358,7 +1352,7 @@
                 };
                 
                 console.log('🔄 Making Tank01 API request...');
-                const response = await fetch(url, options);
+                let response = await fetch(url, options);
                 
                 console.log('📡 Tank01 API Response Status:', response.status, response.statusText);
                 
@@ -1367,86 +1361,140 @@
                     throw new Error(`Tank01 API error: ${response.status} ${response.statusText}`);
                 }
                 
-                const data = await response.json();
+                let data = await response.json();
                 console.log('✅ Tank01 API response received. Keys:', Object.keys(data));
                 
-                // Tank01 API returns DFS data in format: { statusCode: 200, body: { draftKings: [...], fanduel: [...], yahoo: [...] } }
+                // If getNFLTeams doesn't work, try the players endpoint
+                if (!data || !data.body || Object.keys(data.body).length === 0) {
+                    console.log('🔄 Teams endpoint empty, trying players endpoint...');
+                    
+                    url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLPlayerList`;
+                    response = await fetch(url, options);
+                    
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('✅ Tank01 Players API response received. Keys:', Object.keys(data));
+                    }
+                }
+                
+                // Tank01 API response processing
                 let playersData = null;
                 
                 if (data && data.body) {
-                    console.log('📊 Found data.body, checking for DFS platforms...');
+                    console.log('📊 Found data.body, checking structure...');
                     console.log('📊 data.body keys:', Object.keys(data.body));
                     
-                    // Try to get player data from the first available DFS platform
-                    const dfsKeys = ['draftKings', 'fanduel', 'yahoo'];
-                    
-                    for (const platform of dfsKeys) {
-                        if (data.body[platform] && Array.isArray(data.body[platform]) && data.body[platform].length > 0) {
-                            playersData = data.body[platform];
-                            console.log(`📊 Found ${data.body[platform].length} players in data.body.${platform}`);
-                            console.log(`📊 First player sample:`, JSON.stringify(data.body[platform][0], null, 2));
-                            break;
+                    // Try to process team roster data or player list data
+                    if (Array.isArray(data.body)) {
+                        // Direct array of teams or players
+                        playersData = data.body;
+                        console.log(`📊 Found ${data.body.length} items in data.body array`);
+                    } else if (typeof data.body === 'object') {
+                        // Check for different possible structures
+                        const possibleKeys = ['teams', 'players', 'roster', 'draftKings', 'fanduel', 'yahoo'];
+                        
+                        for (const key of possibleKeys) {
+                            if (data.body[key] && Array.isArray(data.body[key]) && data.body[key].length > 0) {
+                                playersData = data.body[key];
+                                console.log(`📊 Found ${data.body[key].length} items in data.body.${key}`);
+                                break;
+                            }
                         }
+                        
+                        // If no arrays found, log the structure for debugging
+                        if (!playersData) {
+                            console.log('📊 Available data.body keys:', Object.keys(data.body));
+                            console.log('📊 data.body structure:', JSON.stringify(data.body, null, 2).slice(0, 500));
+                        }
+                    }
+                } else {
+                    console.log('📊 No data.body found, checking top-level structure...');
+                    if (Array.isArray(data)) {
+                        playersData = data;
+                        console.log(`📊 Found ${data.length} items in top-level array`);
                     }
                 }
                 
                 if (playersData) {
                     quarterbackData = {}; // Reset quarterback data
                     console.log(`📊 Processing Tank01 data...`);
-                    console.log(`📊 Players data type:`, typeof playersData, `Array[${playersData.length}]`);
+                    console.log(`📊 Data type:`, typeof playersData, `Array[${playersData.length}]`);
+                    console.log(`📊 First item sample:`, JSON.stringify(playersData[0], null, 2).slice(0, 300));
                     
                     // Group quarterbacks by team
                     const qbsByTeam = {};
                     let qbCount = 0;
                     
-                    playersData.forEach((player, index) => {
-                        // Log first few players to understand structure
+                    playersData.forEach((item, index) => {
+                        // Log structure for first few items to understand the data format
                         if (index < 3) {
-                            console.log(`🔍 Player ${index}:`, JSON.stringify(player, null, 2).substring(0, 300));
+                            console.log(`🔍 Item ${index}:`, JSON.stringify(item, null, 2).substring(0, 300));
                         }
                         
-                        if (player && player.pos === 'QB' && player.team) {
-                            qbCount++;
-                            console.log(`🏈 Found QB: ${player.longName || player.name} - ${player.team}`);
-                            
-                            // Convert team name to our format (lowercase with hyphens)
-                            const teamKey = player.team.toLowerCase()
-                                .replace(/\s+/g, '-')
-                                .replace(/[^a-z0-9-]/g, '');
-                            
-                            if (!qbsByTeam[teamKey]) {
-                                qbsByTeam[teamKey] = [];
-                            }
-                            
-                            // Create QB object with Tank01 data
-                            const qbData = {
-                                name: player.longName || player.name || 'Unknown',
-                                team: player.team,
-                                teamName: player.team,
-                                position: player.pos,
-                                jersey: null, // Tank01 doesn't provide jersey numbers
-                                stats: {
-                                    yards: 0,
-                                    completions: 0,
-                                    attempts: 0,
-                                    touchdowns: 0,
-                                    interceptions: 0,
-                                    rating: 0,
-                                    fantasyPoints: 0
-                                },
-                                injury: {
-                                    status: 'Healthy',
-                                    isInjured: false
-                                },
-                                dataSource: 'tank01_dfs',
-                                lastUpdate: new Date().toISOString(),
-                                salary: player.salary,
-                                playerID: player.playerID,
-                                teamID: player.teamID
-                            };
-                            
-                            qbsByTeam[teamKey].push(qbData);
+                        // Handle different data structures - could be team with roster or direct player data
+                        let players = [];
+                        
+                        if (item.roster && Array.isArray(item.roster)) {
+                            // Team object with roster
+                            players = item.roster;
+                            console.log(`🏈 Found team ${item.teamName || item.name} with ${players.length} players`);
+                        } else if (item.pos || item.position) {
+                            // Direct player object
+                            players = [item];
+                        } else if (item.players && Array.isArray(item.players)) {
+                            // Team object with players array
+                            players = item.players;
                         }
+                        
+                        // Process players to find quarterbacks
+                        players.forEach(player => {
+                            const position = player.pos || player.position || '';
+                            if (position === 'QB' && (player.team || item.teamName || item.name)) {
+                                qbCount++;
+                                const playerName = player.longName || player.name || player.playerName || 'Unknown';
+                                const teamName = player.team || item.teamName || item.name || 'Unknown';
+                                
+                                console.log(`🏈 Found QB: ${playerName} - ${teamName}`);
+                                
+                                // Convert team name to our format (lowercase with hyphens)
+                                const teamKey = teamName.toLowerCase()
+                                    .replace(/\s+/g, '-')
+                                    .replace(/[^a-z0-9-]/g, '');
+                                
+                                if (!qbsByTeam[teamKey]) {
+                                    qbsByTeam[teamKey] = [];
+                                }
+                                
+                                // Create QB object with Tank01 data
+                                const qbData = {
+                                    name: playerName,
+                                    team: teamName,
+                                    teamName: teamName,
+                                    position: position,
+                                    jersey: player.jersey || null,
+                                    stats: {
+                                        yards: player.yards || 0,
+                                        completions: player.completions || 0,
+                                        attempts: player.attempts || 0,
+                                        touchdowns: player.touchdowns || 0,
+                                        interceptions: player.interceptions || 0,
+                                        rating: player.rating || 0,
+                                        fantasyPoints: player.fantasyPoints || 0
+                                    },
+                                    injury: {
+                                        status: player.injuryStatus || 'Healthy',
+                                        isInjured: player.isInjured || false
+                                    },
+                                    dataSource: 'tank01_api',
+                                    lastUpdate: new Date().toISOString(),
+                                    salary: player.salary || null,
+                                    playerID: player.playerID || null,
+                                    teamID: player.teamID || null
+                                };
+                                
+                                qbsByTeam[teamKey].push(qbData);
+                            }
+                        });
                     });
                     
                     // Assign processed data to quarterbackData
