@@ -1287,6 +1287,26 @@
         let tank01DataLoaded = false;
         let quarterbackData = {}; // Empty - will only contain live API data
         
+        // EMERGENCY TANK01 OVERRIDE - FORCE DISABLE ALL CALLS
+        console.log('🚨 EMERGENCY TANK01 DISABLE SCRIPT LOADING...');
+        
+        // Override Tank01 functions immediately to prevent any calls
+        window.originalFetchNFLDataWithTank01 = window.fetchNFLDataWithTank01;
+        window.originalFetchNFLDataWithTank01Enhanced = window.fetchNFLDataWithTank01Enhanced;
+        
+        window.fetchNFLDataWithTank01Enhanced = function() {
+            console.log('🚫 EMERGENCY OVERRIDE: fetchNFLDataWithTank01Enhanced BLOCKED');
+            return Promise.resolve(false);
+        };
+        
+        window.fetchNFLDataWithTank01 = function() {
+            console.log('🚫 EMERGENCY OVERRIDE: fetchNFLDataWithTank01 BLOCKED');
+            return Promise.resolve(false);
+        };
+        
+        console.log('✅ EMERGENCY TANK01 FUNCTIONS OVERRIDDEN - NO API CALLS POSSIBLE');
+        alert('🚫 TANK01 DISABLED VERSION LOADED - If you still see Tank01 API calls, please clear browser cache (Ctrl+F5)');
+        
         // TANK01-FREE VERSION - No API calls to prevent rate limits
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚫 NFL QB Predictor v3.0 - TANK01 DISABLED VERSION LOADED');
