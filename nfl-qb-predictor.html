@@ -864,12 +864,14 @@
             
             // 3. AUTO-LOAD TANK01 DATA (Primary) with fallback to local data
             console.log('🎯 Auto-loading Tank01 enhanced NFL data...');
+            let tank01LoadedSuccessfully = false;
             try {
                 // Try Tank01 API first for real-time data
                 const tank01Success = await fetchNFLDataWithTank01();
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
+                    tank01LoadedSuccessfully = true;
                 } else {
                     throw new Error('Tank01 auto-load failed');
                 }
@@ -881,10 +883,12 @@
                 updateStatusDisplay('✅ LOCAL DATA: Fast, reliable, instant predictions available', 'info');
             }
             
-            // 4. Load verified rosters (enhanced with Tank01 or local data)
-            if (typeof loadVerifiedCurrentRosters === 'function') {
+            // 4. Load verified rosters ONLY if Tank01 failed (to avoid overwriting Tank01 data)
+            if (!tank01LoadedSuccessfully && typeof loadVerifiedCurrentRosters === 'function') {
                 loadVerifiedCurrentRosters();
-                console.log('✅ Verified current rosters loaded');
+                console.log('✅ Verified current rosters loaded as backup');
+            } else if (tank01LoadedSuccessfully) {
+                console.log('🚫 Skipping verified rosters - Tank01 data already loaded and active');
             }
             
             // 5. Load current week schedule by default
