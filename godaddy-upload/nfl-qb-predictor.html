@@ -3873,10 +3873,10 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             applyTank01Adjustments(predictedStats, selectedQB);
 
             // Generate comprehensive overlay data for analysis
-            const healthData = selectedQB.injury || generateHealthAnalysis(selectedQB.name, selectedQB.team);
-            const formData = selectedQB.recentForm || generateRecentForm(selectedQB.name, selectedQB.team);
-            const practiceData = selectedQB.practiceReports || generatePracticeReport(selectedQB.name, selectedQB.team);
-            const bettingData = selectedQB.bettingEdge || generateBettingAnalysis(selectedQB.name, selectedQB.team);
+            const healthData = selectedQB.injury || generateHealthAnalysis(selectedQB.name, selectedQB.team) || {};
+            const formData = selectedQB.recentForm || generateRecentForm(selectedQB.name, selectedQB.team) || {};
+            const practiceData = selectedQB.practiceReports || generatePracticeReport(selectedQB.name, selectedQB.team) || {};
+            const bettingData = selectedQB.bettingEdge || generateBettingAnalysis(selectedQB.name, selectedQB.team) || {};
 
             // Apply overlay-based adjustments BEFORE traditional adjustments
             applyOverlayAdjustments(predictedStats, healthData, formData, practiceData, bettingData);
@@ -3896,6 +3896,19 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
         }
 
         function applyOverlayAdjustments(stats, healthData, formData, practiceData, bettingData) {
+            // Safety check - ensure stats object exists and has required properties
+            if (!stats) {
+                console.warn('⚠️ applyOverlayAdjustments: stats object is undefined');
+                return;
+            }
+            
+            // Ensure all stats properties exist with default values
+            stats.passingYards = stats.passingYards || 0;
+            stats.completions = stats.completions || 0;
+            stats.touchdowns = stats.touchdowns || 0;
+            stats.interceptions = stats.interceptions || 0;
+            stats.qbRating = stats.qbRating || 0;
+            
             let adjustmentFactors = {
                 health: 1.0,
                 form: 1.0,
@@ -3904,8 +3917,20 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 keyFactors: []
             };
 
-            // Health Status Impact
-            const primaryInjury = healthData.injuries[0];
+            // Health Status Impact - Handle different data structures
+            let primaryInjury = null;
+            if (healthData && healthData.injuries && Array.isArray(healthData.injuries) && healthData.injuries.length > 0) {
+                primaryInjury = healthData.injuries[0];
+            } else if (healthData && healthData.status && healthData.status !== 'Healthy') {
+                // Handle injury object format
+                primaryInjury = {
+                    severity: healthData.status === 'Questionable' ? 'Minor' : 
+                             healthData.status === 'Doubtful' ? 'Moderate' : 'Major',
+                    type: healthData.injuryType || 'General',
+                    status: healthData.status
+                };
+            }
+            
             if (primaryInjury) {
                 switch(primaryInjury.severity) {
                     case "Minor":
@@ -3939,33 +3964,34 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 }
             }
 
-            // Recent Form Analysis
-            const recentGames = formData.games.slice(0, 3); // Last 3 games
-            const avgCompletion = recentGames.reduce((sum, game) => sum + parseFloat(game.completion), 0) / recentGames.length;
-            const avgYards = recentGames.reduce((sum, game) => sum + game.yards, 0) / recentGames.length;
-            const avgTDs = recentGames.reduce((sum, game) => sum + game.tds, 0) / recentGames.length;
-            const avgINTs = recentGames.reduce((sum, game) => sum + game.ints, 0) / recentGames.length;
+            // Recent Form Analysis - Handle different data structures
+            if (formData && formData.games && Array.isArray(formData.games) && formData.games.length > 0) {
+                const recentGames = formData.games.slice(0, 3); // Last 3 games
+                const avgCompletion = recentGames.reduce((sum, game) => sum + parseFloat(game.completion || 0), 0) / recentGames.length;
+                const avgYards = recentGames.reduce((sum, game) => sum + (game.yards || 0), 0) / recentGames.length;
+                const avgTDs = recentGames.reduce((sum, game) => sum + (game.tds || 0), 0) / recentGames.length;
+                const avgINTs = recentGames.reduce((sum, game) => sum + (game.ints || 0), 0) / recentGames.length;
 
-            // Form trend adjustments
-            if (avgCompletion >= 70) {
-                adjustmentFactors.form *= 1.08;
-                adjustmentFactors.keyFactors.push("Excellent recent accuracy");
-                stats.completions *= 1.06;
-                stats.qbRating *= 1.05;
-            } else if (avgCompletion >= 65) {
-                adjustmentFactors.form *= 1.04;
-                adjustmentFactors.keyFactors.push("Strong completion rate");
-            } else if (avgCompletion < 58) {
-                adjustmentFactors.form *= 0.92;
-                adjustmentFactors.keyFactors.push("Recent accuracy struggles");
-                stats.completions *= 0.94;
-                stats.interceptions *= 1.12;
-            }
+                // Form trend adjustments
+                if (avgCompletion >= 70) {
+                    adjustmentFactors.form *= 1.08;
+                    adjustmentFactors.keyFactors.push("Excellent recent accuracy");
+                    stats.completions *= 1.06;
+                    stats.qbRating *= 1.05;
+                } else if (avgCompletion >= 65) {
+                    adjustmentFactors.form *= 1.04;
+                    adjustmentFactors.keyFactors.push("Strong completion rate");
+                } else if (avgCompletion < 58) {
+                    adjustmentFactors.form *= 0.92;
+                    adjustmentFactors.keyFactors.push("Recent accuracy struggles");
+                    stats.completions *= 0.94;
+                    stats.interceptions *= 1.12;
+                }
 
-            if (avgYards >= 300) {
-                adjustmentFactors.keyFactors.push("High yardage trend");
-                stats.passingYards *= 1.05;
-            } else if (avgYards < 220) {
+                if (avgYards >= 300) {
+                    adjustmentFactors.keyFactors.push("High yardage trend");
+                    stats.passingYards *= 1.05;
+                } else if (avgYards < 220) {
                 adjustmentFactors.form *= 0.95;
                 adjustmentFactors.keyFactors.push("Lower yardage recently");
                 stats.passingYards *= 0.96;
@@ -3975,13 +4001,44 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 adjustmentFactors.keyFactors.push("Red zone efficiency");
                 stats.touchdowns *= 1.08;
             } else if (avgINTs >= 1.5) {
-                adjustmentFactors.keyFactors.push("Recent turnover issues");
-                stats.interceptions *= 1.15;
-                stats.qbRating *= 0.94;
+                    adjustmentFactors.keyFactors.push("Recent turnover issues");
+                    stats.interceptions *= 1.15;
+                    stats.qbRating *= 0.94;
+                }
+            } else if (formData && formData.trend) {
+                // Handle alternative form data structure
+                switch(formData.trend) {
+                    case 'Hot':
+                        adjustmentFactors.form *= 1.08;
+                        adjustmentFactors.keyFactors.push("Hot streak - trending up");
+                        break;
+                    case 'Trending Up':
+                        adjustmentFactors.form *= 1.04;
+                        adjustmentFactors.keyFactors.push("Positive trend");
+                        break;
+                    case 'Cold':
+                        adjustmentFactors.form *= 0.92;
+                        adjustmentFactors.keyFactors.push("Cold streak - struggling");
+                        break;
+                    case 'Trending Down':
+                        adjustmentFactors.form *= 0.96;
+                        adjustmentFactors.keyFactors.push("Declining performance");
+                        break;
+                }
             }
 
-            // Practice Report Impact
-            const latestPractice = practiceData.weeklyGrades[0];
+            // Practice Report Impact - Handle different data structures
+            let latestPractice = null;
+            if (practiceData && practiceData.weeklyGrades && Array.isArray(practiceData.weeklyGrades) && practiceData.weeklyGrades.length > 0) {
+                latestPractice = practiceData.weeklyGrades[0];
+            } else if (practiceData && practiceData.participation) {
+                // Handle alternative practice data structure
+                latestPractice = {
+                    grade: practiceData.participation === 'Full' ? 'A' : 
+                           practiceData.participation === 'Limited' ? 'B-' : 'C'
+                };
+            }
+            
             if (latestPractice) {
                 switch(latestPractice.grade) {
                     case "A+":
@@ -4016,9 +4073,14 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 }
             }
 
-            // Market Validation from Betting Data
-            const passingYardsProp = bettingData.props.find(p => p.category === "Passing Yards");
-            const passingTDsProp = bettingData.props.find(p => p.category === "Passing TDs");
+            // Market Validation from Betting Data - Handle different data structures
+            let passingYardsProp = null;
+            let passingTDsProp = null;
+            
+            if (bettingData && bettingData.props && Array.isArray(bettingData.props)) {
+                passingYardsProp = bettingData.props.find(p => p.category === "Passing Yards");
+                passingTDsProp = bettingData.props.find(p => p.category === "Passing TDs");
+            }
             
             if (passingYardsProp) {
                 // Blend our prediction with market expectation (70% our model, 30% market)
