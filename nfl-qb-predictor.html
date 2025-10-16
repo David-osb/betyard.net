@@ -590,7 +590,7 @@
                     </select>
                     
                     <!-- API Test Button -->
-                    <button type="button" onclick="testRosterUpdate()" style="margin-top: 8px; padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                    <button type="button" onclick="testRosterUpdate(this)" style="margin-top: 8px; padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
                         🔄 Force Roster Update
                     </button>
                 </div>
@@ -2687,11 +2687,11 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
         }
 
         // Manual test function for live roster updates
-        async function testRosterUpdate() {
+        async function testRosterUpdate(buttonElement) {
             console.log('🧪 Manual live roster update test triggered');
             
             // Show loading
-            const button = event.target;
+            const button = buttonElement;
             const originalText = button.textContent;
             button.textContent = '⏳ Fetching Live Data...';
             button.disabled = true;

@@ -2697,12 +2697,16 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             button.disabled = true;
             
             try {
-                // Use our new NFL.com JSON feeds system
-                const success = await fetchCurrentNFLQuarterbacks();
+                // Use the corrected fetchQuarterbackRosterData function that includes Tank01 API
+                console.log('🔄 Starting quarterback roster data fetch...');
+                showNotification('🔄 Processing', 'Fetching live NFL quarterback data...', 'info');
+                
+                // Call the main function that handles Tank01 primary + RapidAPI fallback
+                const success = await fetchQuarterbackRosterData();
                 
                 if (success) {
                     button.textContent = '✅ Live Data Updated!';
-                    showNotification('✅ Success', 'Live NFL rosters updated from NFL.com Game Center!', 'success');
+                    showNotification('✅ Success', 'Live NFL quarterback rosters updated!', 'success');
                     
                     // Update the dropdown if a team is selected
                     const teamSelect = document.getElementById('team-select');
@@ -2710,9 +2714,12 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                         // Trigger the team change event to refresh QB dropdown
                         teamSelect.dispatchEvent(new Event('change'));
                     }
+                    
+                    // Update the last update time display
+                    updateStatusDisplay('🔄 Roster data successfully updated', 'success');
                 } else {
                     button.textContent = '❌ API Failed';
-                    showNotification('❌ Failed', 'Unable to fetch live roster data - using cached data', 'error');
+                    showNotification('❌ Failed', 'Unable to fetch live roster data - all APIs failed', 'error');
                 }
                 
                 setTimeout(() => {
@@ -2721,7 +2728,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 }, 3000);
                 
             } catch (error) {
-                console.error('Test failed:', error);
+                console.error('🚨 Test roster update failed:', error);
                 button.textContent = '❌ Failed';
                 showNotification('❌ Error', `Roster update failed: ${error.message}`, 'error');
                 setTimeout(() => {
