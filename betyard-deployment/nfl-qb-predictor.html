@@ -658,6 +658,11 @@
             </div>
 
             <div class="conditions-section">
+                <h3>📅 <span id="current-week-indicator">Current Week</span></h3>
+                <div id="current-week-info" style="padding: 16px; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; min-height: 60px; margin-bottom: 16px;">
+                    <span style="color: #0284c7; font-size: 14px; font-weight: 600;">Loading current week...</span>
+                </div>
+                
                 <h3>🏟️ Home Team Stadium</h3>
                 <div id="home-team-stadium-info" style="padding: 16px; background: #f8fafc; border-radius: 8px; min-height: 100px; margin-bottom: 16px;">
                     <span style="color: #64748b; font-size: 14px;">Select team to see stadium information...</span>
@@ -883,6 +888,66 @@
             'seattle-seahawks': 'Seattle Seahawks'
         };
 
+        // Function to determine current NFL week based on actual date
+        function getCurrentWeek() {
+            const today = new Date();
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            
+            // NFL weeks and their start dates for 2025 season
+            const weekStartDates = {
+                6: new Date(2025, 9, 6),   // Week 6: Oct 6
+                7: new Date(2025, 9, 13),  // Week 7: Oct 13
+                8: new Date(2025, 9, 20),  // Week 8: Oct 20
+                9: new Date(2025, 9, 27),  // Week 9: Oct 27
+                10: new Date(2025, 10, 3), // Week 10: Nov 3
+                11: new Date(2025, 10, 10), // Week 11: Nov 10
+                12: new Date(2025, 10, 17), // Week 12: Nov 17
+                13: new Date(2025, 10, 24), // Week 13: Nov 24
+                14: new Date(2025, 11, 1), // Week 14: Dec 1
+                15: new Date(2025, 11, 8), // Week 15: Dec 8
+                16: new Date(2025, 11, 15), // Week 16: Dec 15
+                17: new Date(2025, 11, 22), // Week 17: Dec 22
+                18: new Date(2025, 11, 29)  // Week 18: Dec 29
+            };
+            
+            // Find the current week
+            let currentWeek = 6;
+            for (let week = 18; week >= 6; week--) {
+                if (currentDate >= weekStartDates[week]) {
+                    currentWeek = week;
+                    break;
+                }
+            }
+            
+            return currentWeek;
+        }
+
+        // Function to update current week display
+        function updateCurrentWeekDisplay() {
+            const currentWeek = getCurrentWeek();
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const weekIndicator = document.getElementById('current-week-indicator');
+            const weekInfo = document.getElementById('current-week-info');
+            
+            if (weekIndicator && weekInfo) {
+                weekIndicator.textContent = `Week ${currentWeek}`;
+                weekInfo.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <span style="font-size: 18px; font-weight: 700; color: #0284c7;">NFL Week ${currentWeek}</span>
+                        <span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">LIVE</span>
+                    </div>
+                    <div style="color: #64748b; font-size: 14px;">${formattedDate}</div>
+                `;
+            }
+        }
+
         // LIVE NFL Quarterback Data - Populated by APIs
         // ===== LIVE DATA ONLY - NO CACHED DATA =====
         // Track if Tank01 data has been successfully loaded
@@ -892,6 +957,9 @@
         // ENHANCED TANK01 AUTO-INITIALIZATION - Automatic live data loading
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🏈 NFL QB Predictor - Auto-loading TANK01 enhanced data...');
+            
+            // Update current week display
+            updateCurrentWeekDisplay();
             
             // Initialize live update indicator
             updateLiveIndicator();
