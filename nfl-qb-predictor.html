@@ -1592,7 +1592,7 @@
                                     overUnder: player.overUnder || null,
                                     spreadImpact: calculateSpreadImpact(player),
                                     valueRating: calculateValueRating(player),
-                                    confidenceLevel: calculateConfidence(player)
+                                    confidenceLevel: calculateTank01PlayerConfidence(player)
                                 },
                                 dataSource: 'tank01_enhanced',
                                 lastUpdate: new Date().toISOString(),
@@ -1727,8 +1727,8 @@
             }
         }
 
-        // Calculate confidence level for predictions
-        function calculateConfidence(player) {
+        // Calculate confidence level for Tank01 player predictions
+        function calculateTank01PlayerConfidence(player) {
             try {
                 const rating = player.rating || player.qbRating || 0;
                 const gamesPlayed = player.gamesPlayed || player.games || 0;
