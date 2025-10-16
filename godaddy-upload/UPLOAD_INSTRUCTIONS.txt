@@ -1,0 +1,17 @@
+🏈 BetYard.net - GoDaddy Upload Instructions 
+============================================= 
+ 
+1. Log into your GoDaddy account 
+2. Go to My Products > Web Hosting > Manage 
+3. Open File Manager 
+4. Navigate to public_html folder 
+5. DELETE any existing files 
+6. UPLOAD all files from this folder 
+7. Visit https://betyard.net to test 
+ 
+Files to upload: 
+- index.html (Homepage) 
+- nfl-qb-predictor.html (NFL App) 
+- robots.txt (SEO) 
+- sitemap.xml (Search Engines) 
+- assets/ (Images folder) 
