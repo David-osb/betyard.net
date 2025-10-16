@@ -7212,7 +7212,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px;">
                         <div style="font-weight: 600; color: #1e40af; margin-bottom: 6px;">🎯 ML Factors</div>
                         <div style="font-size: 13px; color: #475569;">
-                            ${meta.keyFactors.slice(0, 3).map(factor => `• ${factor}`).join('<br>')}
+                            ${meta.keyFactors.slice(0, 3).map(factor => '• ' + factor).join('<br>')}
                         </div>
                     </div>
                     
@@ -7265,7 +7265,6 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     </div>
                 </div>
             `;
-        }
 
         function updateConfidenceMeter(confidence) {
             const meter = document.getElementById('confidence-meter');
