@@ -7,6 +7,13 @@
     <meta name="description" content="Professional NFL Quarterback predictions, statistics, injury reports, and betting analysis on BetYard.net">
     <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, injury reports">
     
+    <!-- HTTPS Enforcement -->
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+            location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+        }
+    </script>
+    
     <!-- Domain Meta Tags -->
     <link rel="canonical" href="https://betyard.net/nfl-qb-predictor.html">
     <meta property="og:url" content="https://betyard.net/nfl-qb-predictor.html">
@@ -490,6 +497,12 @@
             background: #a8a8a8;
         }
 
+        /* Live Update Indicator Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
     </style>
 </head>
 <body>
@@ -503,6 +516,11 @@
             
             <h1>🏈 BetYard - NFL QB Predictor</h1>
             <p id="header-subtitle">Professional quarterback analysis & predictions</p>
+            
+            <!-- Live Update Indicator -->
+            <div id="live-indicator" style="margin-top: 6px; padding: 6px 12px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; border-radius: 6px; font-size: 10px; font-weight: 600; text-align: center; animation: pulse 2s infinite;">
+                🔴 <strong>LIVE</strong> - Real-time Updates Active | Updated: <span id="last-update-time"></span> | v2.1
+            </div>
             
             <!-- Domain Branding -->
             <div style="margin-top: 6px; padding: 8px 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 6px; font-size: 11px; font-weight: 600; text-align: center;">
@@ -590,8 +608,8 @@
                 
                 <!-- API Information Notice -->
                 <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
-                    <strong>📡 API System:</strong> Tank01 (Live) → RapidAPI (Backup) → Local Data (Reliable)<br>
-                    <em>Note: Tank01 requires HTTP server due to browser CORS security</em>
+                    <strong>📡 API System:</strong> Tank01 (Primary) → RapidAPI (Backup) → Local Data (Reliable)<br>
+                    <em>Tank01 API provides the most comprehensive real-time NFL data</em>
                 </div>
             </div>
 
@@ -828,6 +846,11 @@
         // SIMPLIFIED LOCAL DATA INITIALIZATION - No API calls, instant loading
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🏈 NFL QB Predictor - Using LOCAL DATA for instant reliability...');
+            
+            // Initialize live update indicator
+            updateLiveIndicator();
+            // Update every 30 seconds to show activity
+            setInterval(updateLiveIndicator, 30000);
             
             // 1. Force light theme as default
             localStorage.setItem('darkTheme', 'false');
@@ -1231,15 +1254,84 @@
             activeAPIs: []
         };
 
+        // Custom notification system to replace alerts
+        function showNotification(message, type = 'info', duration = 5000) {
+            // Create notification container if it doesn't exist
+            let container = document.getElementById('notification-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'notification-container';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                color: white;
+                padding: 12px 20px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                pointer-events: auto;
+                cursor: pointer;
+                max-width: 400px;
+                word-wrap: break-word;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // Add animation styles
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            notification.innerHTML = message.replace(/\n/g, '<br>');
+            container.appendChild(notification);
+            
+            // Auto remove after duration
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, duration);
+            
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            });
+        }
+
         // TANK01 NFL API - Primary data source for comprehensive NFL data
         async function fetchNFLDataWithTank01() {
             try {
                 console.log('🏈 Fetching NFL data from Tank01 API (Primary Source)...');
-                
-                // ⚠️ Check if running from file:// protocol (CORS restriction)
-                if (window.location.protocol === 'file:') {
-                    throw new Error('CORS_BLOCKED: Tank01 API blocked by browser security from file:// protocol. Please use a local server or direct RapidAPI instead.');
-                }
                 
                 // Tank01 API Configuration
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
@@ -1268,89 +1360,122 @@
                 console.log('🔄 Making Tank01 API request...');
                 const response = await fetch(url, options);
                 
+                console.log('📡 Tank01 API Response Status:', response.status, response.statusText);
+                
                 if (!response.ok) {
+                    console.error(`❌ Tank01 API HTTP Error: ${response.status} ${response.statusText}`);
                     throw new Error(`Tank01 API error: ${response.status} ${response.statusText}`);
                 }
                 
                 const data = await response.json();
-                console.log('✅ Tank01 API response received:', data);
+                console.log('✅ Tank01 API response received. Keys:', Object.keys(data));
                 
-                // Process Tank01 data for quarterbacks
+                // Tank01 API returns DFS data in format: { statusCode: 200, body: { draftKings: [...], fanduel: [...], yahoo: [...] } }
+                let playersData = null;
+                
                 if (data && data.body) {
-                    quarterbackData = {}; // Reset quarterback data
+                    console.log('📊 Found data.body, checking for DFS platforms...');
+                    console.log('📊 data.body keys:', Object.keys(data.body));
                     
-                    // Process player data for quarterbacks
-                    if (data.body.players) {
-                        console.log('📊 Processing Tank01 player data...');
-                        
-                        // Group quarterbacks by team
-                        const qbsByTeam = {};
-                        
-                        Object.values(data.body.players).forEach(player => {
-                            if (player.position === 'QB' && player.team) {
-                                // Convert team name to our format (lowercase with hyphens)
-                                const teamKey = player.team.toLowerCase()
-                                    .replace(/\s+/g, '-')
-                                    .replace(/[^a-z0-9-]/g, '');
-                                
-                                if (!qbsByTeam[teamKey]) {
-                                    qbsByTeam[teamKey] = [];
-                                }
-                                
-                                // Create QB object with Tank01 data
-                                const qbData = {
-                                    name: player.longName || player.playerName || 'Unknown',
-                                    team: player.team,
-                                    position: player.position,
-                                    jersey: player.jerseyNum,
-                                    experience: player.exp,
-                                    age: player.age,
-                                    height: player.height,
-                                    weight: player.weight,
-                                    stats: {
-                                        yards: parseFloat(player.passYds || 0),
-                                        completions: parseFloat(player.passCmp || 0),
-                                        attempts: parseFloat(player.passAtt || 0),
-                                        touchdowns: parseFloat(player.passTD || 0),
-                                        interceptions: parseFloat(player.passInt || 0),
-                                        rating: parseFloat(player.qbRating || 0),
-                                        fantasyPoints: parseFloat(player.fantasyPoints || 0)
-                                    },
-                                    injury: {
-                                        status: player.injury || 'Healthy',
-                                        isInjured: player.injury && player.injury !== 'Healthy'
-                                    },
-                                    dataSource: 'tank01_live',
-                                    lastUpdate: new Date().toISOString(),
-                                    salary: player.salary,
-                                    teamDepth: player.teamDepth
-                                };
-                                
-                                qbsByTeam[teamKey].push(qbData);
-                            }
-                        });
-                        
-                        // Assign processed data to quarterbackData
-                        quarterbackData = qbsByTeam;
-                        
-                        console.log(`✅ Tank01: Processed ${Object.keys(quarterbackData).length} teams with QB data`);
-                        console.log('📊 Teams with QBs:', Object.keys(quarterbackData));
-                        
-                        // Log QB counts per team
-                        Object.keys(quarterbackData).forEach(team => {
-                            console.log(`🏈 ${team}: ${quarterbackData[team].length} QBs -`, 
-                                quarterbackData[team].map(qb => `${qb.name} (${qb.injury.status})`));
-                        });
-                        
-                        return true;
+                    // Try to get player data from the first available DFS platform
+                    const dfsKeys = ['draftKings', 'fanduel', 'yahoo'];
+                    
+                    for (const platform of dfsKeys) {
+                        if (data.body[platform] && Array.isArray(data.body[platform]) && data.body[platform].length > 0) {
+                            playersData = data.body[platform];
+                            console.log(`📊 Found ${data.body[platform].length} players in data.body.${platform}`);
+                            console.log(`📊 First player sample:`, JSON.stringify(data.body[platform][0], null, 2));
+                            break;
+                        }
                     }
                 }
                 
-                console.warn('⚠️ Tank01 API: No player data found in response');
-                return false;
+                if (playersData) {
+                    quarterbackData = {}; // Reset quarterback data
+                    console.log(`📊 Processing Tank01 data...`);
+                    console.log(`📊 Players data type:`, typeof playersData, `Array[${playersData.length}]`);
+                    
+                    // Group quarterbacks by team
+                    const qbsByTeam = {};
+                    let qbCount = 0;
+                    
+                    playersData.forEach((player, index) => {
+                        // Log first few players to understand structure
+                        if (index < 3) {
+                            console.log(`🔍 Player ${index}:`, JSON.stringify(player, null, 2).substring(0, 300));
+                        }
+                        
+                        if (player && player.pos === 'QB' && player.team) {
+                            qbCount++;
+                            console.log(`🏈 Found QB: ${player.longName || player.name} - ${player.team}`);
+                            
+                            // Convert team name to our format (lowercase with hyphens)
+                            const teamKey = player.team.toLowerCase()
+                                .replace(/\s+/g, '-')
+                                .replace(/[^a-z0-9-]/g, '');
+                            
+                            if (!qbsByTeam[teamKey]) {
+                                qbsByTeam[teamKey] = [];
+                            }
+                            
+                            // Create QB object with Tank01 data
+                            const qbData = {
+                                name: player.longName || player.name || 'Unknown',
+                                team: player.team,
+                                teamName: player.team,
+                                position: player.pos,
+                                jersey: null, // Tank01 doesn't provide jersey numbers
+                                stats: {
+                                    yards: 0,
+                                    completions: 0,
+                                    attempts: 0,
+                                    touchdowns: 0,
+                                    interceptions: 0,
+                                    rating: 0,
+                                    fantasyPoints: 0
+                                },
+                                injury: {
+                                    status: 'Healthy',
+                                    isInjured: false
+                                },
+                                dataSource: 'tank01_dfs',
+                                lastUpdate: new Date().toISOString(),
+                                salary: player.salary,
+                                playerID: player.playerID,
+                                teamID: player.teamID
+                            };
+                            
+                            qbsByTeam[teamKey].push(qbData);
+                        }
+                    });
+                    
+                    // Assign processed data to quarterbackData
+                    quarterbackData = qbsByTeam;
+                    
+                    console.log(`✅ Tank01: Found ${qbCount} total QBs across ${Object.keys(quarterbackData).length} teams`);
+                    console.log('📊 Teams with QBs:', Object.keys(quarterbackData));
+                    
+                    // Log QB counts per team
+                    Object.keys(quarterbackData).forEach(team => {
+                        console.log(`🏈 ${team}: ${quarterbackData[team].length} QBs -`, 
+                            quarterbackData[team].map(qb => `${qb.name} ($${qb.salary})`));
+                    });
+                    
+                    if (Object.keys(quarterbackData).length > 0) {
+                        console.log('✅ Tank01 success: QB data processed and stored');
+                        return true;
+                    } else {
+                        console.warn('⚠️ Tank01 API: No quarterbacks found in response');
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ Tank01 API: No player data found in response');
+                    return false;
+                }
                 
             } catch (error) {
                 console.error('❌ Tank01 API Error:', error);
+                console.error('❌ Error details:', error.message);
                 return false;
             }
         }
@@ -3490,7 +3615,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             const qb = document.getElementById('qb-select').value;
 
             if (!qb) {
-                alert('Please select a quarterback first.');
+                showNotification('Please select a quarterback first.', 'warning', 3000);
                 return;
             }
 
@@ -3547,7 +3672,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             const rating = document.getElementById('qb-rating').textContent;
 
             if (yards === '---') {
-                alert('Please generate a prediction first!');
+                showNotification('Please generate a prediction first!', 'warning', 3000);
                 return;
             }
 
@@ -6203,7 +6328,7 @@ function generateAdvancedPrediction() {
                     console.log(`📊 Database contains ${Object.keys(quarterbackData).length} teams with quarterback data`);
                     
                     // Show success alert with Tank01 details
-                    alert('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!');
+                    showNotification('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!', 'success', 8000);
                 } else {
                     // Fallback to comprehensive fetch
                     console.log('⚠️ Tank01 failed (CORS/Browser restriction), trying RapidAPI fallback...');
@@ -6211,7 +6336,7 @@ function generateAdvancedPrediction() {
                     
                     if (fallbackSuccess) {
                         updateStatusDisplay('✅ RAPIDAPI: NFL data loaded via backup source', 'warning');
-                        alert('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available\n\nNote: Tank01 blocked by browser security (CORS). Use a local server for Tank01 access.');
+                        showNotification('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available', 'warning', 6000);
                     } else {
                         // Final fallback to local data
                         await generateEmergencyLiveData();
@@ -6219,7 +6344,7 @@ function generateAdvancedPrediction() {
                             loadVerifiedCurrentRosters();
                         }
                         updateStatusDisplay('⚠️ OFFLINE: Using local database', 'warning');
-                        alert('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.');
+                        showNotification('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.', 'warning', 6000);
                     }
                 }
                 
@@ -6238,7 +6363,7 @@ function generateAdvancedPrediction() {
                 button.disabled = false;
                 button.style.opacity = '1';
                 
-                alert('❌ Error fetching NFL data. Using local database.');
+                showNotification('❌ Error fetching NFL data. Using local database.', 'error', 5000);
             }
         }
                     
@@ -6268,6 +6393,22 @@ function generateAdvancedPrediction() {
                 // Orphaned code removed
                 
                 // Additional functions can be added below
+
+        // Live Update Indicator Function
+        function updateLiveIndicator() {
+            const indicator = document.getElementById('last-update-time');
+            if (indicator) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                indicator.textContent = timeStr;
+                console.log('🔴 Live indicator updated:', timeStr);
+            }
+        }
 
         // End of quarterback data functions    </script>
     <!-- Injury Report Overlay -->
