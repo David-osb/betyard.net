@@ -1319,6 +1319,10 @@
                 const tank01Success = await fetchNFLDataWithTank01Enhanced();
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
+                    
+                    // Add fallback data for teams that failed due to rate limits
+                    addFallbackQBData();
+                    
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
                     
                     // Enable team dropdown now that Tank01 data is loaded
@@ -1843,7 +1847,7 @@
         const tank01Cache = {
             data: null,
             timestamp: null,
-            expiry: 10 * 60 * 1000, // Increased to 10 minutes for better performance
+            expiry: 30 * 60 * 1000, // Extended to 30 minutes to reduce API rate limit issues
             localStorageKey: 'tank01_nfl_data',
             
             isValid() {
@@ -1943,7 +1947,7 @@
             }
         }
 
-        const tank01Queue = new RequestQueue(5, 30); // Higher performance settings
+        const tank01Queue = new RequestQueue(2, 100); // Reduced concurrency to avoid rate limits
 
         // QB Depth Chart and Role Classification System
         const qbDepthChart = {
@@ -2681,6 +2685,59 @@
                 console.error('❌ Tank01 API Error:', error);
                 console.error('❌ Error details:', error.message);
                 return false;
+            }
+        }
+
+        // Fallback QB data for teams that fail to load from Tank01 (due to rate limits)
+        function addFallbackQBData() {
+            console.log('🔄 Adding fallback QB data for teams missing from Tank01...');
+            
+            const fallbackQBs = {
+                'cincinnati-bengals': [
+                    {name: 'Joe Flacco', status: 'Starter', depth: 1},
+                    {name: 'Jake Browning', status: 'Backup', depth: 2}
+                ],
+                'kansas-city-chiefs': [
+                    {name: 'Patrick Mahomes', status: 'Starter', depth: 1},
+                    {name: 'Carson Wentz', status: 'Backup', depth: 2}
+                ],
+                'philadelphia-eagles': [
+                    {name: 'Jalen Hurts', status: 'Starter', depth: 1},
+                    {name: 'Kenny Pickett', status: 'Backup', depth: 2}
+                ],
+                'new-york-jets': [
+                    {name: 'Aaron Rodgers', status: 'Starter', depth: 1},
+                    {name: 'Tyrod Taylor', status: 'Backup', depth: 2}
+                ],
+                // Add more fallback teams as needed
+            };
+            
+            let addedTeams = 0;
+            Object.keys(fallbackQBs).forEach(teamKey => {
+                if (!quarterbackData[teamKey] || quarterbackData[teamKey].length === 0) {
+                    quarterbackData[teamKey] = fallbackQBs[teamKey].map(qb => ({
+                        name: qb.name,
+                        team: teamKey,
+                        teamName: teamKey.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        position: 'QB',
+                        jersey: null,
+                        status: qb.status,
+                        depth: qb.depth,
+                        stats: {
+                            yards: 0, completions: 0, attempts: 0, touchdowns: 0,
+                            interceptions: 0, rating: 0, fantasyPoints: 0
+                        },
+                        injury: { status: 'Healthy', isInjured: false },
+                        dataSource: 'fallback_current',
+                        lastUpdate: new Date().toISOString()
+                    }));
+                    addedTeams++;
+                    console.log(`✅ Added fallback QBs for ${teamKey}: ${fallbackQBs[teamKey].map(qb => qb.name).join(', ')}`);
+                }
+            });
+            
+            if (addedTeams > 0) {
+                console.log(`🔄 Added fallback data for ${addedTeams} teams due to Tank01 rate limits`);
             }
         }
 
