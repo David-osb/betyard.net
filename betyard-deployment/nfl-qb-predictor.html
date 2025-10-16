@@ -882,7 +882,7 @@
             
             <!-- RapidAPI Configuration Notice -->
             <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
-                🏈 <strong>Smart Loading:</strong> Uses cached Tank01 data when available to avoid rate limits - Fresh local data loaded instantly!
+                🏈 <strong>Zero Rate Limits:</strong> Auto-loads local data instantly - Tank01 API available only via manual refresh!
             </div>
             <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                 <div style="font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">
@@ -1312,57 +1312,53 @@
             if (scheduleWeek) scheduleWeek.addEventListener('change', loadSchedule);
             if (scheduleTeam) scheduleTeam.addEventListener('change', loadSchedule);
             
-            // 3. SMART DATA LOADING with Tank01 rate limit avoidance
-            console.log('🎯 Smart-loading NFL data with rate limit protection...');
+            // 3. TANK01-FREE AUTO-LOADING - Completely avoids API rate limits
+            console.log('🎯 Loading NFL data with zero API calls (rate limit protection)...');
             try {
-                // First check if we have recent cached Tank01 data
+                // Always use local data for auto-load to completely avoid rate limits
+                console.log('⚡ Using local data exclusively - no API calls on auto-load');
+                await generateEmergencyLiveData();
+                
+                // Check if we have cached Tank01 data to enhance the local data
                 const cachedData = tank01Cache.get();
                 if (cachedData) {
-                    console.log('⚡ Using cached Tank01 data (avoiding API rate limits)');
-                    quarterbackData = cachedData;
+                    console.log('📊 Found cached Tank01 data - merging with local data');
+                    // Merge cached data with local data (cached takes priority)
+                    quarterbackData = { ...quarterbackData, ...cachedData };
                     tank01DataLoaded = true;
-                    
-                    // Add fallback data for teams that might be missing
-                    addFallbackQBData();
-                    
-                    updateStatusDisplay('✅ TANK01 CACHED: Live NFL data loaded from cache', 'success');
-                    
-                    // Enable dropdowns
-                    const teamSelect = document.getElementById('team-select');
-                    if (teamSelect) {
-                        teamSelect.disabled = false;
-                        const loadingOption = teamSelect.querySelector('option[value=""]');
-                        if (loadingOption) loadingOption.textContent = 'Choose your team...';
-                        console.log('✅ Team dropdown enabled - Cached Tank01 data ready');
-                    }
-                    
-                    const qbSelect = document.getElementById('qb-select');
-                    if (qbSelect) {
-                        qbSelect.disabled = false;
-                        qbSelect.innerHTML = '<option value="">Select team first...</option>';
-                        console.log('✅ QB dropdown enabled - Cached Tank01 data ready');
-                    }
+                    updateStatusDisplay('✅ HYBRID: Local data enhanced with cached Tank01 data', 'success');
                 } else {
-                    console.log('⚠️ No cached Tank01 data available, using reliable local data to avoid rate limits...');
-                    // Skip Tank01 API entirely to avoid rate limits - use local data instead
-                    await generateEmergencyLiveData();
-                    console.log('✅ Local quarterback data loaded - ALL 32 NFL teams ready!');
+                    console.log('📊 No cached Tank01 data - using pure local data');
                     updateStatusDisplay('✅ LOCAL DATA: Fast, reliable, instant predictions available', 'info');
-                    
-                    // Enable QB dropdown with local data
-                    const qbSelect = document.getElementById('qb-select');
-                    if (qbSelect) {
-                        qbSelect.disabled = false;
-                        qbSelect.innerHTML = '<option value="">Select team first...</option>';
-                        console.log('✅ QB dropdown enabled - Local data ready');
-                    }
                 }
+                
+                // Add fallback data for any missing teams
+                addFallbackQBData();
+                console.log('✅ All NFL quarterback data loaded - ALL 32 NFL teams ready!');
+                
+                // Enable dropdowns
+                const teamSelect = document.getElementById('team-select');
+                if (teamSelect) {
+                    teamSelect.disabled = false;
+                    const loadingOption = teamSelect.querySelector('option[value=""]');
+                    if (loadingOption) loadingOption.textContent = 'Choose your team...';
+                    console.log('✅ Team dropdown enabled - Data ready');
+                }
+                
+                const qbSelect = document.getElementById('qb-select');
+                if (qbSelect) {
+                    qbSelect.disabled = false;
+                    qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                    console.log('✅ QB dropdown enabled - Data ready');
+                }
+                
             } catch (error) {
-                console.log('⚠️ Smart loading failed, using reliable local data...');
-                // Fallback to local data for instant reliability
+                console.log('⚠️ Auto-loading failed, using emergency fallback...');
+                // Absolute emergency fallback
                 await generateEmergencyLiveData();
-                console.log('✅ Local quarterback data loaded - ALL 32 NFL teams ready!');
-                updateStatusDisplay('✅ LOCAL DATA: Fast, reliable, instant predictions available', 'info');
+                addFallbackQBData();
+                console.log('✅ Emergency quarterback data loaded - ALL 32 NFL teams ready!');
+                updateStatusDisplay('✅ EMERGENCY: Local database loaded successfully', 'info');
                 
                 // Enable QB dropdown with local data
                 const qbSelect = document.getElementById('qb-select');
@@ -2282,26 +2278,12 @@
         }
 
         // Enhanced Tank01 function with mobile loading feedback
+        // DEPRECATED: fetchNFLDataWithTank01Enhanced - disabled to prevent auto-API calls
         async function fetchNFLDataWithTank01Enhanced() {
-            updateMobileStatus('🏈 Connecting to Tank01 API...', 'loading');
-            
-            try {
-                const result = await fetchNFLDataWithTank01();
-                
-                if (result) {
-                    updateMobileStatus('✅ NFL Data Loaded Successfully', 'success');
-                    hideMobileLoading();
-                    return true;
-                } else {
-                    updateMobileStatus('⚠️ Tank01 API Error - Using Local Data', 'error');
-                    hideMobileLoading();
-                    return false;
-                }
-            } catch (error) {
-                updateMobileStatus('❌ API Connection Failed', 'error');
-                hideMobileLoading();
-                return false;
-            }
+            console.log('⚠️ fetchNFLDataWithTank01Enhanced is deprecated - use manual refresh instead');
+            updateMobileStatus('⚠️ Auto API calls disabled - use manual refresh', 'warning');
+            hideMobileLoading();
+            return false; // Always return false to prevent API calls
         }
 
         // TANK01 NFL API - Primary data source for comprehensive NFL data
