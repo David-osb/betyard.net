@@ -608,8 +608,8 @@
                 
                 <!-- API Information Notice -->
                 <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
-                    <strong>📡 API System:</strong> Tank01 (Live) → RapidAPI (Backup) → Local Data (Reliable)<br>
-                    <em>Note: Tank01 requires HTTP server due to browser CORS security</em>
+                    <strong>📡 API System:</strong> Tank01 (Primary) → RapidAPI (Backup) → Local Data (Reliable)<br>
+                    <em>Tank01 API provides the most comprehensive real-time NFL data</em>
                 </div>
             </div>
 
@@ -1254,15 +1254,86 @@
             activeAPIs: []
         };
 
+        // Custom notification system to replace alerts
+        function showNotification(message, type = 'info', duration = 5000) {
+            // Create notification container if it doesn't exist
+            let container = document.getElementById('notification-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'notification-container';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                color: white;
+                padding: 12px 20px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                pointer-events: auto;
+                cursor: pointer;
+                max-width: 400px;
+                word-wrap: break-word;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // Add animation styles
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            notification.innerHTML = message.replace(/\n/g, '<br>');
+            container.appendChild(notification);
+            
+            // Auto remove after duration
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, duration);
+            
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            });
+        }
+
         // TANK01 NFL API - Primary data source for comprehensive NFL data
         async function fetchNFLDataWithTank01() {
             try {
                 console.log('🏈 Fetching NFL data from Tank01 API (Primary Source)...');
                 
-                // ⚠️ Check if running from file:// protocol (CORS restriction)
-                if (window.location.protocol === 'file:') {
-                    throw new Error('CORS_BLOCKED: Tank01 API blocked by browser security from file:// protocol. Please use a local server or direct RapidAPI instead.');
-                }
+                // Remove CORS restriction - Tank01 API works on HTTPS GitHub Pages
                 
                 // Tank01 API Configuration
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
@@ -3513,7 +3584,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             const qb = document.getElementById('qb-select').value;
 
             if (!qb) {
-                alert('Please select a quarterback first.');
+                showNotification('Please select a quarterback first.', 'warning', 3000);
                 return;
             }
 
@@ -3570,7 +3641,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             const rating = document.getElementById('qb-rating').textContent;
 
             if (yards === '---') {
-                alert('Please generate a prediction first!');
+                showNotification('Please generate a prediction first!', 'warning', 3000);
                 return;
             }
 
@@ -6226,7 +6297,7 @@ function generateAdvancedPrediction() {
                     console.log(`📊 Database contains ${Object.keys(quarterbackData).length} teams with quarterback data`);
                     
                     // Show success alert with Tank01 details
-                    alert('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!');
+                    showNotification('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!', 'success', 8000);
                 } else {
                     // Fallback to comprehensive fetch
                     console.log('⚠️ Tank01 failed (CORS/Browser restriction), trying RapidAPI fallback...');
@@ -6234,7 +6305,7 @@ function generateAdvancedPrediction() {
                     
                     if (fallbackSuccess) {
                         updateStatusDisplay('✅ RAPIDAPI: NFL data loaded via backup source', 'warning');
-                        alert('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available\n\nNote: Tank01 blocked by browser security (CORS). Use a local server for Tank01 access.');
+                        showNotification('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available', 'warning', 6000);
                     } else {
                         // Final fallback to local data
                         await generateEmergencyLiveData();
@@ -6242,7 +6313,7 @@ function generateAdvancedPrediction() {
                             loadVerifiedCurrentRosters();
                         }
                         updateStatusDisplay('⚠️ OFFLINE: Using local database', 'warning');
-                        alert('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.');
+                        showNotification('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.', 'warning', 6000);
                     }
                 }
                 
@@ -6261,7 +6332,7 @@ function generateAdvancedPrediction() {
                 button.disabled = false;
                 button.style.opacity = '1';
                 
-                alert('❌ Error fetching NFL data. Using local database.');
+                showNotification('❌ Error fetching NFL data. Using local database.', 'error', 5000);
             }
         }
                     
