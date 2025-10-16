@@ -496,8 +496,8 @@
             <p id="header-subtitle">Smart quarterback performance predictions</p>
             
             <!-- RapidAPI Configuration Notice -->
-            <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
-                🏈 <strong>Tank01 API:</strong> Real-time NFL data source - Click "🏈 Fetch Live NFL Data" for rosters, injuries, depth charts & stats
+            <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
+                🚫 <strong>TANK01 DISABLED:</strong> Using local database - Clear browser cache (Ctrl+F5) if you see API errors
             </div>
             <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                 <div style="font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">
@@ -575,9 +575,9 @@
                 <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🏈 Fetch Live NFL Data (Multi-API)</button>
                 
                 <!-- API Information Notice -->
-                <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
-                    <strong>📡 API System:</strong> Tank01 (Primary) → RapidAPI (Backup) → Local Data (Reliable)<br>
-                    <em>Tank01 API provides the most comprehensive real-time NFL data</em>
+                <div style="margin-top: 10px; padding: 8px 12px; background: #fef2f2; border: 1px solid #ef4444; border-radius: 6px; font-size: 12px;">
+                    <strong>📡 API System:</strong> Local Database (Primary) → RapidAPI (Backup if enabled)<br>
+                    <em>🚫 Tank01 API has been disabled - All calls removed</em>
                 </div>
             </div>
 
@@ -847,7 +847,7 @@
             if (typeof startAutoRefresh === 'function') startAutoRefresh();
             
             // 7. Update status to show local data is active
-            updateStatusDisplay('🏈 TANK01: Ready for live NFL data - Use "Fetch Live NFL Data" button', 'success');
+            updateStatusDisplay('🚫 TANK01 DISABLED: Using local database - All API calls removed', 'warning');
             
             console.log('🏈 NFL Quarterback Statistics Predictor loaded successfully!');
             console.log('✅ LOCAL DATA MODE: Fast, reliable, instant predictions available!');
@@ -1636,18 +1636,11 @@
             console.log('🔄 Starting comprehensive QB data fetch...');
             
             try {
-                // Try Tank01 API first (Primary Source)
-                console.log('🏈 Attempting Tank01 API (Primary)...');
-                const tank01Success = await fetchNFLDataWithTank01();
+                // REMOVED: Tank01 API calls (disabled per user request)
+                // Skip straight to RapidAPI fallback
                 
-                if (tank01Success) {
-                    console.log('✅ Tank01 quarterback data loaded successfully');
-                    updateStatusDisplay('✅ LIVE: Tank01 NFL data loaded (Roster, Injuries, Stats)', 'success');
-                    return true;
-                }
-                
-                // Fallback to RapidAPI NFL Data
-                console.log('🔄 Tank01 failed, trying RapidAPI fallback...');
+                // Try RapidAPI NFL Data
+                console.log('🔄 Trying RapidAPI...');
                 const rapidApiSuccess = await fetchNFLRosterDataWithRapidAPI();
                 
                 if (rapidApiSuccess) {
@@ -6275,13 +6268,14 @@ function generateAdvancedPrediction() {
         // Load theme preference on page load - REMOVED: Consolidated into main DOMContentLoaded
         // (Theme and data loading now handled in main DOMContentLoaded event)
 
-        // Manual quarterback roster data fetch function - MULTI-API SOURCE (Tank01 → RapidAPI → Local)
+        // Manual quarterback roster data fetch function - MULTI-API SOURCE (RapidAPI → Local)
+        // REMOVED: All Tank01 API calls per user request
         async function fetchQuarterbackRosterData(buttonElement) {
             try {
-                console.log('🔥 BUTTON CLICKED - Fetching LIVE NFL data with multi-API system...');
+                console.log('🔥 BUTTON CLICKED - Fetching NFL data (Tank01 disabled)...');
                 
                 // Show loading state
-                updateStatusDisplay('🔄 Fetching live NFL data (Tank01 → RapidAPI → Local)...', 'warning');
+                updateStatusDisplay('🔄 Fetching NFL data (RapidAPI → Local)...', 'warning');
                 
                 // Add visual feedback to button
                 const button = buttonElement;
@@ -6290,36 +6284,23 @@ function generateAdvancedPrediction() {
                 button.disabled = true;
                 button.style.opacity = '0.7';
                 
-                console.log('🏈 Attempting Tank01 API for live NFL data...');
+                // REMOVED: Tank01 API calls - disabled per user request
+                console.log('⚠️ Tank01 API disabled - using fallback sources...');
                 
-                // Try Tank01 API first
-                const tank01Success = await fetchNFLDataWithTank01();
+                // Try fallback data sources
+                const fallbackSuccess = await fetchAllQuarterbackData();
                 
-                if (tank01Success) {
-                    // Success with Tank01
-                    updateStatusDisplay('✅ TANK01: Live NFL data loaded successfully!', 'success');
-                    console.log('✅ Tank01 quarterback data fetch completed');
-                    console.log(`📊 Database contains ${Object.keys(quarterbackData).length} teams with quarterback data`);
-                    
-                    // Show success notification with Tank01 details
-                    showNotification('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!', 'success', 8000);
+                if (fallbackSuccess) {
+                    updateStatusDisplay('✅ NFL data loaded from backup source', 'success');
+                    showNotification('✅ Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available\n\n🚫 Tank01 API has been disabled', 'success', 6000);
                 } else {
-                    // Fallback to comprehensive fetch
-                    console.log('⚠️ Tank01 failed (CORS/Browser restriction), trying RapidAPI fallback...');
-                    const fallbackSuccess = await fetchAllQuarterbackData();
-                    
-                    if (fallbackSuccess) {
-                        updateStatusDisplay('✅ RAPIDAPI: NFL data loaded via backup source', 'warning');
-                        showNotification('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available\n\nNote: Tank01 blocked by browser security (CORS). Use a local server for Tank01 access.', 'warning', 8000);
-                    } else {
-                        // Final fallback to local data
-                        await generateEmergencyLiveData();
-                        if (typeof loadVerifiedCurrentRosters === 'function') {
-                            loadVerifiedCurrentRosters();
-                        }
-                        updateStatusDisplay('⚠️ OFFLINE: Using local database', 'warning');
-                        showNotification('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.', 'warning', 6000);
+                    // Final fallback to local data
+                    await generateEmergencyLiveData();
+                    if (typeof loadVerifiedCurrentRosters === 'function') {
+                        loadVerifiedCurrentRosters();
                     }
+                    updateStatusDisplay('⚠️ Using local database', 'warning');
+                    showNotification('⚠️ Using local database.\n\nFor real-time data, check your internet connection and try again.', 'warning', 6000);
                 }
                 
                 // Restore button
