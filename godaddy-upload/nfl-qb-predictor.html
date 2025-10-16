@@ -1839,35 +1839,77 @@
             });
         }
 
-        // PERFORMANCE OPTIMIZATION: Tank01 API Caching and Request Management
+        // PERFORMANCE OPTIMIZATION: Tank01 API Caching and Request Management with Local Storage
         const tank01Cache = {
             data: null,
             timestamp: null,
-            expiry: 5 * 60 * 1000, // 5 minutes cache
+            expiry: 10 * 60 * 1000, // Increased to 10 minutes for better performance
+            localStorageKey: 'tank01_nfl_data',
+            
             isValid() {
                 return this.data && this.timestamp && (Date.now() - this.timestamp < this.expiry);
             },
+            
             get() {
-                return this.isValid() ? this.data : null;
+                // Try memory cache first
+                if (this.isValid()) {
+                    return this.data;
+                }
+                
+                // Try localStorage cache
+                try {
+                    const stored = localStorage.getItem(this.localStorageKey);
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        if (parsed.timestamp && (Date.now() - parsed.timestamp < this.expiry)) {
+                            this.data = parsed.data;
+                            this.timestamp = parsed.timestamp;
+                            console.log('⚡ Using localStorage Tank01 cache (super fast load)');
+                            return this.data;
+                        }
+                    }
+                } catch (e) {
+                    console.log('⚠️ localStorage cache error:', e.message);
+                }
+                
+                return null;
             },
+            
             set(data) {
                 this.data = data;
                 this.timestamp = Date.now();
-                console.log('💾 Tank01 data cached for 5 minutes');
+                
+                // Store in localStorage for persistence across sessions
+                try {
+                    localStorage.setItem(this.localStorageKey, JSON.stringify({
+                        data: data,
+                        timestamp: this.timestamp
+                    }));
+                    console.log('💾 Tank01 data cached in memory and localStorage');
+                } catch (e) {
+                    console.log('⚠️ localStorage save error:', e.message);
+                }
             },
+            
             clear() {
                 this.data = null;
                 this.timestamp = null;
+                try {
+                    localStorage.removeItem(this.localStorageKey);
+                } catch (e) {
+                    console.log('⚠️ localStorage clear error:', e.message);
+                }
             }
         };
 
-        // Request queue for Tank01 API to prevent rate limiting
+        // Enhanced Request Queue with better performance
         class RequestQueue {
-            constructor(concurrency = 3, delay = 50) {
+            constructor(concurrency = 5, delay = 30) { // Increased concurrency, reduced delay
                 this.concurrency = concurrency;
                 this.delay = delay;
                 this.queue = [];
                 this.running = 0;
+                this.results = [];
             }
 
             async add(requestFn) {
@@ -1901,7 +1943,179 @@
             }
         }
 
-        const tank01Queue = new RequestQueue(3, 50); // 3 concurrent requests, 50ms delay
+        const tank01Queue = new RequestQueue(5, 30); // Higher performance settings
+
+        // QB Depth Chart and Role Classification System
+        const qbDepthChart = {
+            'arizona-cardinals': [
+                {name: 'Kyler Murray', starter: true, depthOrder: 1},
+                {name: 'Clayton Tune', starter: false, depthOrder: 2}
+            ],
+            'atlanta-falcons': [
+                {name: 'Kirk Cousins', starter: true, depthOrder: 1},
+                {name: 'Michael Penix Jr.', starter: false, depthOrder: 2}
+            ],
+            'baltimore-ravens': [
+                {name: 'Lamar Jackson', starter: true, depthOrder: 1},
+                {name: 'Josh Johnson', starter: false, depthOrder: 2}
+            ],
+            'buffalo-bills': [
+                {name: 'Josh Allen', starter: true, depthOrder: 1},
+                {name: 'Mitch Trubisky', starter: false, depthOrder: 2}
+            ],
+            'carolina-panthers': [
+                {name: 'Bryce Young', starter: true, depthOrder: 1},
+                {name: 'Andy Dalton', starter: false, depthOrder: 2}
+            ],
+            'chicago-bears': [
+                {name: 'Caleb Williams', starter: true, depthOrder: 1},
+                {name: 'Tyson Bagent', starter: false, depthOrder: 2}
+            ],
+            'cincinnati-bengals': [
+                {name: 'Joe Burrow', starter: true, depthOrder: 1},
+                {name: 'Jake Browning', starter: false, depthOrder: 2}
+            ],
+            'cleveland-browns': [
+                {name: 'Deshaun Watson', starter: true, depthOrder: 1},
+                {name: 'Jameis Winston', starter: false, depthOrder: 2}
+            ],
+            'dallas-cowboys': [
+                {name: 'Dak Prescott', starter: true, depthOrder: 1},
+                {name: 'Cooper Rush', starter: false, depthOrder: 2}
+            ],
+            'denver-broncos': [
+                {name: 'Bo Nix', starter: true, depthOrder: 1},
+                {name: 'Jarrett Stidham', starter: false, depthOrder: 2}
+            ],
+            'detroit-lions': [
+                {name: 'Jared Goff', starter: true, depthOrder: 1},
+                {name: 'Hendon Hooker', starter: false, depthOrder: 2}
+            ],
+            'green-bay-packers': [
+                {name: 'Jordan Love', starter: true, depthOrder: 1},
+                {name: 'Malik Willis', starter: false, depthOrder: 2}
+            ],
+            'houston-texans': [
+                {name: 'C.J. Stroud', starter: true, depthOrder: 1},
+                {name: 'Davis Mills', starter: false, depthOrder: 2}
+            ],
+            'indianapolis-colts': [
+                {name: 'Anthony Richardson', starter: true, depthOrder: 1},
+                {name: 'Joe Flacco', starter: false, depthOrder: 2}
+            ],
+            'jacksonville-jaguars': [
+                {name: 'Trevor Lawrence', starter: true, depthOrder: 1},
+                {name: 'Mac Jones', starter: false, depthOrder: 2}
+            ],
+            'kansas-city-chiefs': [
+                {name: 'Patrick Mahomes', starter: true, depthOrder: 1},
+                {name: 'Carson Wentz', starter: false, depthOrder: 2}
+            ],
+            'las-vegas-raiders': [
+                {name: 'Gardner Minshew', starter: true, depthOrder: 1},
+                {name: 'Aidan O\'Connell', starter: false, depthOrder: 2}
+            ],
+            'los-angeles-chargers': [
+                {name: 'Justin Herbert', starter: true, depthOrder: 1},
+                {name: 'Easton Stick', starter: false, depthOrder: 2}
+            ],
+            'los-angeles-rams': [
+                {name: 'Matthew Stafford', starter: true, depthOrder: 1},
+                {name: 'Jimmy Garoppolo', starter: false, depthOrder: 2}
+            ],
+            'miami-dolphins': [
+                {name: 'Tua Tagovailoa', starter: true, depthOrder: 1},
+                {name: 'Tyler Huntley', starter: false, depthOrder: 2}
+            ],
+            'minnesota-vikings': [
+                {name: 'Sam Darnold', starter: true, depthOrder: 1},
+                {name: 'J.J. McCarthy', starter: false, depthOrder: 2}
+            ],
+            'new-england-patriots': [
+                {name: 'Drake Maye', starter: true, depthOrder: 1},
+                {name: 'Jacoby Brissett', starter: false, depthOrder: 2}
+            ],
+            'new-orleans-saints': [
+                {name: 'Derek Carr', starter: true, depthOrder: 1},
+                {name: 'Jake Haener', starter: false, depthOrder: 2}
+            ],
+            'new-york-giants': [
+                {name: 'Daniel Jones', starter: true, depthOrder: 1},
+                {name: 'Drew Lock', starter: false, depthOrder: 2}
+            ],
+            'new-york-jets': [
+                {name: 'Aaron Rodgers', starter: true, depthOrder: 1},
+                {name: 'Tyrod Taylor', starter: false, depthOrder: 2}
+            ],
+            'philadelphia-eagles': [
+                {name: 'Jalen Hurts', starter: true, depthOrder: 1},
+                {name: 'Kenny Pickett', starter: false, depthOrder: 2}
+            ],
+            'pittsburgh-steelers': [
+                {name: 'Russell Wilson', starter: true, depthOrder: 1},
+                {name: 'Justin Fields', starter: false, depthOrder: 2}
+            ],
+            'san-francisco-49ers': [
+                {name: 'Brock Purdy', starter: true, depthOrder: 1},
+                {name: 'Joshua Dobbs', starter: false, depthOrder: 2}
+            ],
+            'seattle-seahawks': [
+                {name: 'Geno Smith', starter: true, depthOrder: 1},
+                {name: 'Sam Howell', starter: false, depthOrder: 2}
+            ],
+            'tampa-bay-buccaneers': [
+                {name: 'Baker Mayfield', starter: true, depthOrder: 1},
+                {name: 'Kyle Trask', starter: false, depthOrder: 2}
+            ],
+            'tennessee-titans': [
+                {name: 'Will Levis', starter: true, depthOrder: 1},
+                {name: 'Mason Rudolph', starter: false, depthOrder: 2}
+            ],
+            'washington-commanders': [
+                {name: 'Jayden Daniels', starter: true, depthOrder: 1},
+                {name: 'Marcus Mariota', starter: false, depthOrder: 2}
+            ]
+        };
+
+        // Function to determine QB role accurately
+        function determineQBRole(playerName, teamKey) {
+            const depthChart = qbDepthChart[teamKey];
+            if (!depthChart) return { status: 'Unknown', depth: 99 };
+            
+            // Normalize player name for comparison
+            const normalizedName = playerName.toLowerCase().replace(/[^a-z\s]/g, '');
+            
+            for (const qb of depthChart) {
+                const normalizedQBName = qb.name.toLowerCase().replace(/[^a-z\s]/g, '');
+                
+                // Check for exact match or partial match
+                if (normalizedName.includes(normalizedQBName) || 
+                    normalizedQBName.includes(normalizedName) ||
+                    areSimilarNames(normalizedName, normalizedQBName)) {
+                    return {
+                        status: qb.starter ? 'Starter' : 'Backup',
+                        depth: qb.depthOrder
+                    };
+                }
+            }
+            
+            // Default to backup if not found in depth chart
+            return { status: 'Backup', depth: 99 };
+        }
+
+        // Helper function to check name similarity
+        function areSimilarNames(name1, name2) {
+            const words1 = name1.split(' ');
+            const words2 = name2.split(' ');
+            
+            // Check if they share at least first or last name
+            return words1.some(word1 => 
+                words2.some(word2 => 
+                    word1.length > 2 && word2.length > 2 && 
+                    (word1.includes(word2) || word2.includes(word1))
+                )
+            );
+        }
 
         // Mobile Loading Enhancement Functions
         function showMobileLoadingIfNeeded() {
@@ -2209,13 +2423,17 @@
                                 qbsByTeam[teamKey] = [];
                             }
                             
-                            // Create QB object with Tank01 data
+                            // Create QB object with Tank01 data and accurate role classification
+                            const roleInfo = determineQBRole(playerName, teamKey);
+                            
                             const qbData = {
                                 name: playerName,
                                 team: teamMapping[teamAbbreviation.toUpperCase()] || teamAbbreviation,
                                 teamName: teamMapping[teamAbbreviation.toUpperCase()] || teamAbbreviation,
                                 position: position,
                                 jersey: player.jersey || player.jerseyNum || player.playerID || null,
+                                status: roleInfo.status, // Accurate starter/backup classification
+                                depth: roleInfo.depth,   // Proper depth chart position
                                 stats: {
                                     yards: player.yards || player.passYds || 0,
                                     completions: player.completions || player.cmp || 0,
