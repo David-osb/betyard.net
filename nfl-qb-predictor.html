@@ -3724,8 +3724,11 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     if (game.homeTeam === teamName || game.awayTeam === teamName) {
                         const gameDate = new Date(game.date + ', 2025');
                         
+                        // Create a clean date for comparison (start of today)
+                        const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                        
                         // Include games from today onwards
-                        if (gameDate >= currentDate.setHours(0,0,0,0) && (!soonestDate || gameDate < soonestDate)) {
+                        if (gameDate >= today && (!soonestDate || gameDate < soonestDate)) {
                             soonestDate = gameDate;
                             soonestGame = {...game, week};
                         }
@@ -3786,8 +3789,11 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                         const gameDate = new Date(game.date + ', 2025');
                         console.log(`🏈 Checking Week ${week} game: ${game.date}, Game Date: ${gameDate.toDateString()}`);
                         
+                        // Create a clean date for comparison (start of today)
+                        const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                        
                         // Include games from today onwards
-                        if (gameDate >= currentDate.setHours(0,0,0,0) && (!soonestDate || gameDate < soonestDate)) {
+                        if (gameDate >= today && (!soonestDate || gameDate < soonestDate)) {
                             soonestDate = gameDate;
                             soonestGame = {...game, week};
                             console.log(`✅ Found soonest game: Week ${week} on ${gameDate.toDateString()}`);
