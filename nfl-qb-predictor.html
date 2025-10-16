@@ -1337,10 +1337,10 @@
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
                 const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
                 
-                console.log('🔄 Trying Tank01 player list endpoint for quarterback data...');
+                console.log('🔄 Trying Tank01 specific team roster endpoint for quarterback data...');
                 
-                // Use the getNFLPlayerList endpoint directly for player data
-                let url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLPlayerList`;
+                // Try a specific team roster endpoint to get actual player data
+                let url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=1&getStats=true`;
                 
                 const options = {
                     method: 'GET',
@@ -1351,7 +1351,7 @@
                     }
                 };
                 
-                console.log('🔄 Making Tank01 Player List API request...');
+                console.log('🔄 Making Tank01 Team Roster API request for team ID 1 (Cardinals)...');
                 let response = await fetch(url, options);
                 
                 console.log('📡 Tank01 API Response Status:', response.status, response.statusText);
@@ -1364,17 +1364,42 @@
                 let data = await response.json();
                 console.log('✅ Tank01 API response received. Keys:', Object.keys(data));
                 
-                // If player list doesn't work, try team rosters endpoint
-                if (!data || !data.body || (Array.isArray(data.body) && data.body.length === 0)) {
-                    console.log('🔄 Player list endpoint empty, trying team rosters with roster data...');
+                // If single team roster works, try to get all teams
+                if (data && data.body && (data.body.roster || Array.isArray(data.body))) {
+                    console.log('🎯 Single team roster worked! Now trying to get all 32 teams...');
                     
-                    url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=1`;
-                    response = await fetch(url, options);
+                    // Store the successful single team data
+                    let allPlayersData = [];
                     
-                    if (response.ok) {
-                        data = await response.json();
-                        console.log('✅ Tank01 Team Roster API response received. Keys:', Object.keys(data));
+                    // Add this team's roster
+                    const teamRoster = data.body.roster || data.body;
+                    if (Array.isArray(teamRoster)) {
+                        allPlayersData = allPlayersData.concat(teamRoster);
+                        console.log(`� Added ${teamRoster.length} players from Cardinals roster`);
                     }
+                    
+                    // Try to get a few more teams to build a better dataset
+                    const teamIDs = [2, 3, 4, 5, 6]; // ATL, BAL, BUF, CAR, CHI
+                    for (const teamID of teamIDs) {
+                        try {
+                            const teamUrl = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamID}&getStats=true`;
+                            const teamResponse = await fetch(teamUrl, options);
+                            if (teamResponse.ok) {
+                                const teamData = await teamResponse.json();
+                                const roster = teamData.body?.roster || teamData.body;
+                                if (Array.isArray(roster)) {
+                                    allPlayersData = allPlayersData.concat(roster);
+                                    console.log(`📊 Added ${roster.length} players from team ID ${teamID}`);
+                                }
+                            }
+                        } catch (err) {
+                            console.log(`⚠️ Failed to get roster for team ID ${teamID}:`, err.message);
+                        }
+                    }
+                    
+                    // Use the combined roster data
+                    data = { body: allPlayersData };
+                    console.log(`🏈 Combined roster data: ${allPlayersData.length} total players`);
                 }
                 
                 // Tank01 API response processing
@@ -1384,13 +1409,17 @@
                     console.log('📊 Found data.body, checking structure...');
                     console.log('📊 data.body keys:', Object.keys(data.body));
                     
-                    // Try to process player list data or team roster data
+                    // Try to process team roster data
                     if (Array.isArray(data.body)) {
-                        // Direct array of players
+                        // Direct array of players from combined rosters
                         playersData = data.body;
-                        console.log(`📊 Found ${data.body.length} players in data.body array`);
+                        console.log(`📊 Found ${data.body.length} players in combined roster data`);
+                    } else if (data.body && data.body.roster && Array.isArray(data.body.roster)) {
+                        // Single team roster format
+                        playersData = data.body.roster;
+                        console.log(`📊 Found ${data.body.roster.length} players in team roster`);
                     } else if (typeof data.body === 'object') {
-                        // Check for different possible structures
+                        // Check for other possible structures
                         const possibleKeys = ['players', 'roster', 'playerList', 'data'];
                         
                         for (const key of possibleKeys) {
