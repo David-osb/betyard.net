@@ -2761,65 +2761,13 @@
         }
 
         // TANK01 NEWS & INJURY REPORTS - Fetch recent news, practice reports, and injury updates
+        // REMOVED: Tank01 NEWS & INJURY REPORTS - API disabled
         async function fetchRemovedAPINews(playerID = null, teamID = null) {
-            try {
-                
-                
-                const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
-                const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
-                
-                                let newsUrl = `https://${RAPIDAPI_HOST}/getNFLNews`;
-                if (teamID) {
-                    newsUrl += `?teamID=${teamID}`;
-                }
-                
-                console.log(`🔄 Fetching Tank01 news from: ${newsUrl}`);
-                
-                const response = await fetch(newsUrl, {
-                    method: 'GET',
-                    headers: {
-                        'X-RapidAPI-Key': RAPIDAPI_KEY,
-                        'X-RapidAPI-Host': RAPIDAPI_HOST
-                    }
-                });
-                
-                console.log('📡 Tank01 News API Response Status:', response.status);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ Tank01 news data received:', data);
-                    
-                    // Process news data for injuries and practice reports
-                    if (data && data.body) {
-                        const newsItems = Array.isArray(data.body) ? data.body : [data.body];
-                        
-                        const processedNews = newsItems.map(item => ({
-                            title: item.title || item.headline || 'NFL Update',
-                            content: item.content || item.description || '',
-                            date: item.date || item.publishDate || new Date().toISOString(),
-                            source: item.source || 'Tank01',
-                            type: determineNewsType(item),
-                            playerName: item.playerName || null,
-                            teamName: item.teamName || null,
-                            injuryStatus: item.injuryStatus || null,
-                            practiceStatus: item.practiceStatus || null
-                        }));
-                        
-                        console.log(`📰 Processed ${processedNews.length} news items`);
-                        return processedNews;
-                    }
-                } else {
-                    console.warn(`⚠️ Tank01 News API error: ${response.status}`);
-                }
-                
-                // Fallback: Generate enhanced news from existing quarterback data
-                return generateEnhancedNews();
-                
-            } catch (error) {
-                console.error('❌ Tank01 News fetch failed:', error);
-                return generateEnhancedNews();
-            }
+            // Tank01 API disabled - no news fetching
+            console.log('🚫 Tank01 news API disabled');
+            return { success: false, news: [], message: 'Tank01 API disabled' };
         }
+
 
         // Determine news type from content
         function determineNewsType(newsItem) {
