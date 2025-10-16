@@ -981,7 +981,7 @@
 
                 <button class="btn" onclick="generatePrediction()">Generate Prediction</button>
                 <button class="btn btn-secondary" onclick="clearForm()">Reset</button>
-                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🔄 Smart Refresh (Cache-Aware)</button>
+                <button class="btn btn-secondary" onclick="fetchQuarterbackRosterData(this)" style="background: #10b981; color: white;">🔄 Refresh Local Data (Tank01 Disabled)</button>
                 
                 <!-- API Information Notice -->
                 <div style="margin-top: 10px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 12px;">
@@ -2287,37 +2287,21 @@
         }
 
         // TANK01 NFL API - Primary data source for comprehensive NFL data
+        // TANK01 FUNCTION - RATE LIMIT PROTECTED (cache-only mode)
         async function fetchNFLDataWithTank01() {
             try {
-                // Check cache first
+                // Only check cache - NEVER make API calls to prevent rate limits
                 const cachedData = tank01Cache.get();
                 if (cachedData) {
-                    console.log('⚡ Using cached Tank01 data (fast load)');
+                    console.log('⚡ Using cached Tank01 data (avoiding rate limits)');
                     quarterbackData = cachedData;
                     tank01DataLoaded = true;
                     return true;
                 }
 
-                console.log('🏈 Fetching NFL data from Tank01 API (Primary Source)...');
-                
-                // Tank01 API Configuration
-                const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
-                const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
-                
-                const options = {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-host': RAPIDAPI_HOST,
-                        'x-rapidapi-key': RAPIDAPI_KEY,
-                        'Content-Type': 'application/json'
-                    }
-                };
-
-                console.log('🔄 Trying Tank01 specific team roster endpoint for quarterback data...');
-                
-                // Start with a test request to verify API connectivity
-                const testUrl = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=1&getStats=true`;
-                const testResponse = await fetch(testUrl, options);
+                console.log('❌ No cached Tank01 data available, API calls disabled to prevent rate limits');
+                console.log('� Use manual refresh if fresh Tank01 data is needed');
+                return false; // Always return false when no cache to prevent API calls
                 
                 console.log('📡 Tank01 API Response Status:', testResponse.status, testResponse.statusText);
                 
@@ -2674,8 +2658,7 @@
                 }
                 
             } catch (error) {
-                console.error('❌ Tank01 API Error:', error);
-                console.error('❌ Error details:', error.message);
+                console.error('❌ Tank01 cache check error:', error);
                 return false;
             }
         }
@@ -3172,23 +3155,16 @@
             }
         }
         
-        // Updated function to try Tank01 first, then other APIs as fallbacks
+        // Updated function - Tank01 API disabled to prevent rate limits
         async function fetchAllQuarterbackData() {
-            console.log('🔄 Starting comprehensive QB data fetch...');
+            console.log('🔄 Starting comprehensive QB data fetch (Tank01 disabled)...');
             
             try {
-                // Try Tank01 API first (Primary Source)
-                console.log('🏈 Attempting Tank01 API (Primary)...');
-                const tank01Success = await fetchNFLDataWithTank01();
-                
-                if (tank01Success) {
-                    console.log('✅ Tank01 quarterback data loaded successfully');
-                    updateStatusDisplay('✅ LIVE: Tank01 NFL data loaded (Roster, Injuries, Stats)', 'success');
-                    return true;
-                }
+                // Skip Tank01 API to prevent rate limits - go straight to fallback
+                console.log('⚠️ Tank01 API disabled to prevent rate limits, using fallback sources...');
                 
                 // Fallback to RapidAPI NFL Data
-                console.log('🔄 Tank01 failed, trying RapidAPI fallback...');
+                console.log('🔄 Using RapidAPI as primary source...');
                 const rapidApiSuccess = await fetchNFLRosterDataWithRapidAPI();
                 
                 if (rapidApiSuccess) {
@@ -8582,36 +8558,20 @@ function generateAdvancedPrediction() {
                 if (button) {
                     button.textContent = '⚠️ API Rate Limit Risk...';
                 }
-                updateStatusDisplay('⚠️ No cached data - attempting Tank01 API (rate limit risk)...', 'warning');
                 
-                console.log('🏈 Attempting Tank01 API for live NFL data (with timeout protection)...');
+                // Skip Tank01 API entirely to prevent rate limits - use local data only
+                console.log('🏈 Tank01 API disabled to prevent rate limits - loading local data...');
+                updateStatusDisplay('⚠️ Tank01 API disabled to prevent rate limits - using local data', 'info');
                 
-                // Try Tank01 API with timeout protection
-                const tank01Promise = fetchNFLDataWithTank01();
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Tank01 API timeout after 10 seconds')), 10000)
-                );
-                
-                try {
-                    const tank01Success = await Promise.race([tank01Promise, timeoutPromise]);
-                    
-                    if (tank01Success) {
-                        // Success with Tank01
-                        updateStatusDisplay('✅ TANK01: Live NFL data loaded successfully!', 'success');
-                        console.log('✅ Tank01 quarterback data fetch completed');
-                        console.log(`📊 Database contains ${Object.keys(quarterbackData).length} teams with quarterback data`);
-                        
-                        // Show success alert with Tank01 details
-                        showNotification('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!', 'success', 8000);
-                        
-                        return true; // Return success for Tank01
-                    }
-                } catch (error) {
-                    console.log(`⚠️ Tank01 failed (${error.message}), using reliable local data...`);
-                    updateStatusDisplay('⚠️ Tank01 rate limited - using reliable local data', 'warning');
+                // Load comprehensive local quarterback database
+                console.log('📊 Loading comprehensive local quarterback database...');
+                await generateEmergencyLiveData();
+                if (typeof loadVerifiedCurrentRosters === 'function') {
+                    loadVerifiedCurrentRosters();
                 }
-                
-                // Fallback to local data (fastest and most reliable)
+                updateStatusDisplay('✅ LOCAL DATA: Reliable offline database loaded', 'info');
+                showNotification('✅ Local Data Success!\n\nUsing comprehensive offline database:\n• All 32 NFL teams\n• Current depth charts\n• Verified 2025 rosters\n\nData is reliable and always available!', 'info', 6000);
+                return true;
                 console.log('📊 Loading comprehensive local quarterback database...');
                 await generateEmergencyLiveData();
                 if (typeof loadVerifiedCurrentRosters === 'function') {
