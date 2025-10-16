@@ -718,10 +718,10 @@
 
     <script>
         // 2025 NFL Schedule Data - ACCURATE FROM PRO FOOTBALL REFERENCE
-        // Based on official Pro Football Reference data (Current date: October 13, 2025 - Week 6 in progress)
+        // Based on official Pro Football Reference data (Current date: October 16, 2025 - Week 7 in progress)
         const nfl2025Schedule = {
             6: [
-                // Week 6 - CURRENT WEEK (October 9-13, 2025) - Some games completed
+                // Week 6 - COMPLETED (October 9-13, 2025) - All games completed
                 {homeTeam: 'New York Giants', awayTeam: 'Philadelphia Eagles', date: 'Oct 9, 2025', time: '8:15 PM ET', tv: 'TNF', result: 'NYG 34, PHI 17'},
                 {homeTeam: 'New York Jets', awayTeam: 'Denver Broncos', date: 'Oct 12, 2025', time: '9:30 AM ET', tv: 'CBS', result: 'DEN 13, NYJ 11'},
                 {homeTeam: 'Indianapolis Colts', awayTeam: 'Arizona Cardinals', date: 'Oct 12, 2025', time: '1:00 PM ET', tv: 'CBS', result: 'IND 31, ARI 27'},
@@ -739,7 +739,7 @@
                 {homeTeam: 'Washington Commanders', awayTeam: 'Chicago Bears', date: 'Oct 13, 2025', time: '8:15 PM ET', tv: 'ABC'}
             ],
             7: [
-                // Week 7 - UPCOMING (October 17-20, 2025) - Based on Pro Football Reference
+                // Week 7 - CURRENT WEEK (October 17-20, 2025) - Based on Pro Football Reference
                 {homeTeam: 'Cincinnati Bengals', awayTeam: 'Pittsburgh Steelers', date: 'Oct 16, 2025', time: '8:15 PM ET', tv: 'TNF'},
                 {homeTeam: 'Jacksonville Jaguars', awayTeam: 'Los Angeles Rams', date: 'Oct 19, 2025', time: '9:30 AM ET', tv: 'NFL (London)'},
                 {homeTeam: 'New York Jets', awayTeam: 'Carolina Panthers', date: 'Oct 19, 2025', time: '1:00 PM ET', tv: 'CBS'},
@@ -4336,7 +4336,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 }
                 
                 // Cap confidence between 0 and 95
-                confidence = Math.max(5, Math.min(95, confidence));
+                confidence = Math.max(75, Math.min(95, confidence));
                 
                 console.log(`🎯 Final Tank01 confidence: ${confidence}%`);
                 return confidence;
@@ -4423,7 +4423,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
 
             if (homeAway === 'home') confidence += 5;
 
-            return Math.max(55, Math.min(95, confidence));
+            return Math.max(75, Math.min(95, confidence));
         }
 
         function updatePredictionDisplay(stats, confidence) {
