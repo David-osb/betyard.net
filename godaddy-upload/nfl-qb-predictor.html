@@ -4358,7 +4358,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
         function populateQuarterbackDropdown(qbSelect, teamQBs) {
             qbSelect.innerHTML = '<option value="">Choose quarterback...</option>';
             
-            // Separate quarterbacks into starters and backups
+            // Separate quarterbacks into starters and backups using their analyzed status
             const starters = [];
             const backups = [];
             
@@ -4373,15 +4373,18 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     console.warn("Missing QB stats for:", qb.name);
                 }
                 
-                // Determine if starter or backup based on various criteria
-                const isStarter = determineQBRole(qb, teamQBs);
+                // Use the already-determined status from our dynamic analysis
+                const status = qb.status || 'Backup'; // Default to backup if no status
+                console.log(`📋 QB Dropdown: ${qb.name} - Status: ${status} (Source: ${qb.dataSource || 'unknown'})`);
                 
-                if (isStarter) {
+                if (status === 'Starter') {
                     starters.push(qb);
                 } else {
                     backups.push(qb);
                 }
             });
+            
+            console.log(`📊 Dropdown populated: ${starters.length} starters, ${backups.length} backups`);
             
             // Add starters first with visual indicator
             if (starters.length > 0) {
@@ -4392,16 +4395,14 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     const option = document.createElement('option');
                     option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
                     
-                    // Add data source indicator to QB name based on source
-                    let indicator = '';
-                    if (qb.dataSource === 'tank01_enhanced') {
-                        indicator = ' 🔴'; // Tank01 data
+                    // Add status and data source indicator
+                    let indicator = ' 🟢'; // Green dot for starter
+                    if (qb.dataSource === 'tank01_dynamic_analyzed') {
+                        indicator = ' �⚡'; // Dynamic analysis + starter
+                    } else if (qb.dataSource === 'tank01_enhanced' || qb.dataSource === 'tank01_dynamic') {
+                        indicator = ' 🟢🔴'; // Tank01 data + starter
                     } else if (qb.dataSource === 'api_current') {
-                        indicator = ' 🔴'; // Live API data
-                    } else if (qb.dataSource === 'api_enhanced') {
-                        indicator = ' ✅'; // API enhanced
-                    } else if (qb.dataSource === 'local_validated') {
-                        indicator = ' ✓'; // Validated local
+                        indicator = ' 🟢📡'; // Live API + starter
                     }
                     
                     option.textContent = qb.name + indicator;
@@ -4409,6 +4410,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     // Store additional metadata
                     option.dataset.dataSource = qb.dataSource;
                     option.dataset.role = 'starter';
+                    option.dataset.depth = qb.depth || 1;
                     if (qb.lastValidated) {
                         option.dataset.lastValidated = qb.lastValidated;
                     }
@@ -4428,16 +4430,14 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     const option = document.createElement('option');
                     option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
                     
-                    // Add data source indicator
-                    let indicator = '';
-                    if (qb.dataSource === 'tank01_enhanced') {
-                        indicator = ' 🔴'; // Tank01 data
+                    // Add status and data source indicator for backups
+                    let indicator = ' 🟡'; // Yellow dot for backup
+                    if (qb.dataSource === 'tank01_dynamic_analyzed') {
+                        indicator = ' �⚡'; // Dynamic analysis + backup
+                    } else if (qb.dataSource === 'tank01_enhanced' || qb.dataSource === 'tank01_dynamic') {
+                        indicator = ' 🟡🔴'; // Tank01 data + backup
                     } else if (qb.dataSource === 'api_current') {
-                        indicator = ' 🔴'; // Live API data
-                    } else if (qb.dataSource === 'api_enhanced') {
-                        indicator = ' ✅'; // API enhanced
-                    } else if (qb.dataSource === 'local_validated') {
-                        indicator = ' ✓'; // Validated local
+                        indicator = ' 🟡📡'; // Live API + backup
                     }
                     
                     option.textContent = qb.name + indicator;
@@ -4445,6 +4445,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     // Store additional metadata
                     option.dataset.dataSource = qb.dataSource;
                     option.dataset.role = 'backup';
+                    option.dataset.depth = qb.depth || 2;
                     if (qb.lastValidated) {
                         option.dataset.lastValidated = qb.lastValidated;
                     }
