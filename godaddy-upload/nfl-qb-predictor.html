@@ -3696,18 +3696,27 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             
             // Find the soonest upcoming game from schedule
             const currentDate = new Date();
+            console.log('🔍 Current date for opponent search:', currentDate.toDateString());
             let soonestGame = null;
             let soonestDate = null;
             
             for (const week in nfl2025Schedule) {
                 const games = nfl2025Schedule[week];
                 for (const game of games) {
+                    // Skip games that already have results (completed games)
+                    if (game.result) {
+                        continue;
+                    }
+                    
                     if (game.homeTeam === teamName || game.awayTeam === teamName) {
                         const gameDate = new Date(game.date + ', 2025');
+                        console.log(`🏈 Checking Week ${week} game: ${game.date}, Game Date: ${gameDate.toDateString()}`);
                         
-                        if (gameDate >= currentDate && (!soonestDate || gameDate < soonestDate)) {
+                        // Include games from today onwards
+                        if (gameDate >= currentDate.setHours(0,0,0,0) && (!soonestDate || gameDate < soonestDate)) {
                             soonestDate = gameDate;
                             soonestGame = {...game, week};
+                            console.log(`✅ Found soonest game: Week ${week} on ${gameDate.toDateString()}`);
                         }
                     }
                 }
@@ -3723,6 +3732,9 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 
                 // Show success notification
                 showNotification('🎯 Next opponent found!', `${opponent} • Week ${soonestGame.week}`, 'success');
+            } else {
+                console.warn('⚠️ No upcoming games found for team:', teamName);
+                showNotification('⚠️ No upcoming games', `No future games found for ${teamName}`, 'warning');
             }
         }
 
