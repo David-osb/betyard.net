@@ -6424,6 +6424,8 @@ function generateAdvancedPrediction() {
                     
                     // Show success alert with Tank01 details
                     showNotification('✅ Tank01 Success! Live NFL data loaded including:\n\n• Player Rosters & Depth Charts\n• Injury Reports\n• Current Stats\n• Fantasy Points\n• Team Defense\n\nAll data is current and includes real-time updates!', 'success', 8000);
+                    
+                    return true; // Return success for Tank01
                 } else {
                     // Fallback to comprehensive fetch
                     console.log('⚠️ Tank01 failed (CORS/Browser restriction), trying RapidAPI fallback...');
@@ -6432,6 +6434,7 @@ function generateAdvancedPrediction() {
                     if (fallbackSuccess) {
                         updateStatusDisplay('✅ RAPIDAPI: NFL data loaded via backup source', 'warning');
                         showNotification('✅ RapidAPI Success! NFL data loaded from backup source.\n\n📋 Current quarterback rosters loaded\n🏈 All 32 teams available', 'warning', 6000);
+                        return true; // Return success for RapidAPI fallback
                     } else {
                         // Final fallback to local data
                         await generateEmergencyLiveData();
@@ -6440,6 +6443,7 @@ function generateAdvancedPrediction() {
                         }
                         updateStatusDisplay('⚠️ OFFLINE: Using local database', 'warning');
                         showNotification('⚠️ Live data unavailable. Using local database.\n\nFor real-time injury reports and stats, check your internet connection and try again.', 'warning', 6000);
+                        return false; // Return failure when using local data only
                     }
                 }
                 
@@ -6462,35 +6466,9 @@ function generateAdvancedPrediction() {
                 }
                 
                 showNotification('❌ Error fetching NFL data. Using local database.', 'error', 5000);
+                return false; // Return failure on error
             }
         }
-                    
-                // Display summary
-                const teamCount = Object.keys(quarterbackData).length;
-                
-                // Create detailed summary
-                let summary = `✅ Success! Loaded quarterback data for ${teamCount} NFL teams from RapidAPI.\n\n`;
-                summary += `📊 QUARTERBACK ROSTER SUMMARY:\n`;
-                
-                Object.keys(quarterbackData).forEach(teamSlug => {
-                    const qbs = quarterbackData[teamSlug];
-                    const teamName = qbs[0]?.teamName || teamSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    summary += `\n🏈 ${teamName}:\n`;
-                    qbs.forEach((qb, index) => {
-                        summary += `  ${index + 1}. ${qb.name} (#${qb.jersey || '?'}) - ${qb.status || 'QB'}\n`;
-                        if (qb.stats) {
-                            summary += `     Stats: ${qb.stats.yards || 0} yds, ${qb.stats.touchdowns || 0} TDs, ${qb.stats.rating || 0} rating\n`;
-                        }
-                    });
-                });
-                
-                summary += `\n💡 Data includes starters, backups, and current season projections.`;
-                
-                alert(summary);
-                
-                // Orphaned code removed
-                
-                // Additional functions can be added below
 
         // Live Update Indicator Function
         function updateLiveIndicator() {
