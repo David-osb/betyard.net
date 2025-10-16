@@ -477,6 +477,339 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ENHANCED MOBILE OPTIMIZATIONS */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Improved touch targets */
+            .btn {
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+                margin-bottom: 12px;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Better form layouts */
+            .prediction-form {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                font-size: 16px;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            .form-group select, 
+            .form-group input {
+                width: 100%;
+                min-height: 44px;
+                font-size: 16px;
+                padding: 12px 16px;
+                border-radius: 8px;
+                border: 2px solid #e2e8f0;
+                box-sizing: border-box;
+            }
+
+            /* Optimize cards for mobile */
+            .card {
+                padding: 16px;
+                margin-bottom: 16px;
+                border-radius: 8px;
+            }
+
+            /* Stack conditions section vertically */
+            .conditions-section {
+                display: block;
+            }
+
+            .conditions-section h3 {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+
+            /* Better status displays */
+            .status-display {
+                padding: 12px;
+                font-size: 14px;
+                margin-bottom: 16px;
+            }
+
+            /* Mobile-friendly predictions */
+            .predictions-card {
+                padding: 16px;
+            }
+
+            .prediction-item {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Extra small screens */
+            .container {
+                padding: 8px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                text-align: center;
+                margin-bottom: 16px;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            /* Single column stats */
+            .stat-display {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .stat-item {
+                padding: 12px;
+                text-align: center;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .stat-label {
+                font-size: 12px;
+            }
+
+            /* Compact form styling */
+            .btn {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+
+            /* Better spacing */
+            .card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            /* Mobile navigation aids */
+            .section-divider {
+                height: 2px;
+                background: linear-gradient(90deg, #2563eb, #10b981);
+                margin: 24px 0;
+                border-radius: 1px;
+            }
+        }
+
+        /* Touch-friendly scrollable areas */
+        @media (hover: none) and (pointer: coarse) {
+            /* Mobile device detected */
+            .scrollable-area {
+                -webkit-overflow-scrolling: touch;
+                overflow-x: auto;
+            }
+
+            /* Larger touch targets */
+            .btn, select, input[type="button"] {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Prevent text selection on buttons */
+            .btn {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            /* Better focus states for accessibility */
+            .btn:focus,
+            select:focus,
+            input:focus {
+                outline: 3px solid #60a5fa;
+                outline-offset: 2px;
+            }
+        }
+
+        /* Progressive Enhancement: Advanced layout for larger screens */
+        @media (min-width: 1200px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+                gap: 32px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .stat-display {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Mobile-Optimized Loading System */
+        .mobile-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-left: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #4b5563;
+            text-align: center;
+            max-width: 280px;
+            line-height: 1.4;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Mobile Status Indicators */
+        .mobile-status-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .api-status-mobile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-loading { background: #f59e0b; }
+        .status-success { background: #10b981; }
+        .status-error { background: #ef4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Touch-Optimized Form Elements */
+        @media (max-width: 768px) {
+            .form-row {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .form-row.mobile-row {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .form-row.mobile-row > * {
+                flex: 1;
+            }
+
+            .mobile-refresh-btn {
+                position: sticky;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                z-index: 50;
+                background: #10b981;
+                color: white;
+                border: none;
+                border-radius: 12px;
+                padding: 16px;
+                font-size: 16px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                margin-top: 24px;
+            }
+
+            .mobile-refresh-btn:hover {
+                background: #059669;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            }
+        }
+
+        /* Performance-First Mobile Animations */
+        @media (prefers-reduced-motion: no-preference) {
+            .card, .btn, .status-display {
+                will-change: transform;
+            }
+
+            .fade-in {
+                animation: fadeIn 0.3s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
         /* Injury Report Overlay Animation */
         @keyframes slideIn {
             from {
@@ -958,6 +1291,9 @@
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🏈 NFL QB Predictor - Auto-loading TANK01 enhanced data...');
             
+            // Initialize mobile loading UI
+            showMobileLoadingIfNeeded();
+            
             // Update current week display
             updateCurrentWeekDisplay();
             
@@ -976,11 +1312,11 @@
             if (scheduleWeek) scheduleWeek.addEventListener('change', loadSchedule);
             if (scheduleTeam) scheduleTeam.addEventListener('change', loadSchedule);
             
-            // 3. AUTO-LOAD TANK01 DATA (Primary) with fallback to local data
+            // 3. AUTO-LOAD TANK01 DATA (Primary) with enhanced mobile support
             console.log('🎯 Auto-loading Tank01 enhanced NFL data...');
             try {
-                // Try Tank01 API first for real-time data
-                const tank01Success = await fetchNFLDataWithTank01();
+                // Try Tank01 API first for real-time data with mobile loading
+                const tank01Success = await fetchNFLDataWithTank01Enhanced();
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
@@ -1503,19 +1839,170 @@
             });
         }
 
+        // PERFORMANCE OPTIMIZATION: Tank01 API Caching and Request Management
+        const tank01Cache = {
+            data: null,
+            timestamp: null,
+            expiry: 5 * 60 * 1000, // 5 minutes cache
+            isValid() {
+                return this.data && this.timestamp && (Date.now() - this.timestamp < this.expiry);
+            },
+            get() {
+                return this.isValid() ? this.data : null;
+            },
+            set(data) {
+                this.data = data;
+                this.timestamp = Date.now();
+                console.log('💾 Tank01 data cached for 5 minutes');
+            },
+            clear() {
+                this.data = null;
+                this.timestamp = null;
+            }
+        };
+
+        // Request queue for Tank01 API to prevent rate limiting
+        class RequestQueue {
+            constructor(concurrency = 3, delay = 50) {
+                this.concurrency = concurrency;
+                this.delay = delay;
+                this.queue = [];
+                this.running = 0;
+            }
+
+            async add(requestFn) {
+                return new Promise((resolve, reject) => {
+                    this.queue.push({ requestFn, resolve, reject });
+                    this.process();
+                });
+            }
+
+            async process() {
+                if (this.running >= this.concurrency || this.queue.length === 0) {
+                    return;
+                }
+
+                this.running++;
+                const { requestFn, resolve, reject } = this.queue.shift();
+
+                try {
+                    const result = await requestFn();
+                    resolve(result);
+                } catch (error) {
+                    reject(error);
+                } finally {
+                    this.running--;
+                    if (this.delay > 0) {
+                        setTimeout(() => this.process(), this.delay);
+                    } else {
+                        this.process();
+                    }
+                }
+            }
+        }
+
+        const tank01Queue = new RequestQueue(3, 50); // 3 concurrent requests, 50ms delay
+
+        // Mobile Loading Enhancement Functions
+        function showMobileLoadingIfNeeded() {
+            // Only show on mobile devices during initial load
+            if (window.innerWidth <= 768 && !tank01DataLoaded) {
+                const loadingOverlay = document.createElement('div');
+                loadingOverlay.className = 'mobile-loading-overlay';
+                loadingOverlay.id = 'mobile-loading';
+                loadingOverlay.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">
+                        🏈 Loading NFL Data<br>
+                        <small>Fetching real-time quarterback stats...</small>
+                    </div>
+                `;
+                document.body.appendChild(loadingOverlay);
+                
+                // Auto-hide after 15 seconds if still loading
+                setTimeout(() => {
+                    hideMobileLoading();
+                }, 15000);
+            }
+        }
+
+        function hideMobileLoading() {
+            const overlay = document.getElementById('mobile-loading');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.remove(), 300);
+            }
+        }
+
+        function updateMobileStatus(message, type = 'loading') {
+            // Update status in both desktop and mobile formats
+            updateStatusDisplay(message, type === 'loading' ? 'info' : type);
+            
+            // Mobile-specific status updates
+            if (window.innerWidth <= 768) {
+                let statusBar = document.querySelector('.mobile-status-bar');
+                if (!statusBar) {
+                    statusBar = document.createElement('div');
+                    statusBar.className = 'mobile-status-bar';
+                    document.body.insertBefore(statusBar, document.body.firstChild);
+                }
+                
+                statusBar.innerHTML = `
+                    <div class="api-status-mobile">
+                        <div class="status-indicator status-${type}"></div>
+                        ${message}
+                    </div>
+                `;
+                
+                // Auto-hide success messages
+                if (type === 'success') {
+                    setTimeout(() => {
+                        if (statusBar) statusBar.remove();
+                    }, 3000);
+                }
+            }
+        }
+
+        // Enhanced Tank01 function with mobile loading feedback
+        async function fetchNFLDataWithTank01Enhanced() {
+            updateMobileStatus('🏈 Connecting to Tank01 API...', 'loading');
+            
+            try {
+                const result = await fetchNFLDataWithTank01();
+                
+                if (result) {
+                    updateMobileStatus('✅ NFL Data Loaded Successfully', 'success');
+                    hideMobileLoading();
+                    return true;
+                } else {
+                    updateMobileStatus('⚠️ Tank01 API Error - Using Local Data', 'error');
+                    hideMobileLoading();
+                    return false;
+                }
+            } catch (error) {
+                updateMobileStatus('❌ API Connection Failed', 'error');
+                hideMobileLoading();
+                return false;
+            }
+        }
+
         // TANK01 NFL API - Primary data source for comprehensive NFL data
         async function fetchNFLDataWithTank01() {
             try {
+                // Check cache first
+                const cachedData = tank01Cache.get();
+                if (cachedData) {
+                    console.log('⚡ Using cached Tank01 data (fast load)');
+                    quarterbackData = cachedData;
+                    tank01DataLoaded = true;
+                    return true;
+                }
+
                 console.log('🏈 Fetching NFL data from Tank01 API (Primary Source)...');
                 
                 // Tank01 API Configuration
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
                 const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
-                
-                console.log('🔄 Trying Tank01 specific team roster endpoint for quarterback data...');
-                
-                // Try a specific team roster endpoint to get actual player data
-                let url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=1&getStats=true`;
                 
                 const options = {
                     method: 'GET',
@@ -1525,78 +2012,85 @@
                         'Content-Type': 'application/json'
                     }
                 };
+
+                console.log('🔄 Trying Tank01 specific team roster endpoint for quarterback data...');
                 
-                console.log('🔄 Making Tank01 Team Roster API request for team ID 1 (Cardinals)...');
-                let response = await fetch(url, options);
+                // Start with a test request to verify API connectivity
+                const testUrl = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=1&getStats=true`;
+                const testResponse = await fetch(testUrl, options);
                 
-                console.log('📡 Tank01 API Response Status:', response.status, response.statusText);
+                console.log('📡 Tank01 API Response Status:', testResponse.status, testResponse.statusText);
                 
-                if (!response.ok) {
-                    console.error(`❌ Tank01 API HTTP Error: ${response.status} ${response.statusText}`);
-                    throw new Error(`Tank01 API error: ${response.status} ${response.statusText}`);
+                if (!testResponse.ok) {
+                    console.error(`❌ Tank01 API HTTP Error: ${testResponse.status} ${testResponse.statusText}`);
+                    throw new Error(`Tank01 API error: ${testResponse.status} ${testResponse.statusText}`);
                 }
+
+                const testData = await testResponse.json();
+                console.log('✅ Tank01 API response received. Keys:', Object.keys(testData));
                 
-                let data = await response.json();
-                console.log('✅ Tank01 API response received. Keys:', Object.keys(data));
-                
-                // If single team roster works, try to get all teams
-                if (data && data.body && (data.body.roster || Array.isArray(data.body))) {
-                    console.log('🎯 Single team roster worked! Now trying to get all 32 teams...');
+                // If single team roster works, try to get all teams with optimized requests
+                if (testData && testData.body && (testData.body.roster || Array.isArray(testData.body))) {
+                    console.log('🎯 Single team roster worked! Now fetching all 32 teams with optimized requests...');
                     
-                    // Store the successful single team data
                     let allPlayersData = [];
                     
-                    // Add this team's roster
-                    const teamRoster = data.body.roster || data.body;
-                    if (Array.isArray(teamRoster)) {
-                        allPlayersData = allPlayersData.concat(teamRoster);
-                        console.log(`� Added ${teamRoster.length} players from Cardinals roster`);
+                    // Add the test team's roster
+                    const testRoster = testData.body.roster || testData.body;
+                    if (Array.isArray(testRoster)) {
+                        allPlayersData = allPlayersData.concat(testRoster);
+                        console.log(`✅ Added ${testRoster.length} players from Cardinals roster`);
                     }
                     
-                    // Try to get all 32 NFL teams to build complete dataset
-                    const teamIDs = [
+                    // All remaining 31 NFL teams (excluding Cardinals which we already have)
+                    const remainingTeamIDs = [
                         2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
-                    ]; // All 32 NFL teams (Cardinals = 1, already fetched above)
+                    ];
                     
-                    console.log(`🏈 Fetching rosters for all ${teamIDs.length} remaining NFL teams...`);
+                    console.log(`🚀 Using concurrent requests to fetch ${remainingTeamIDs.length} teams...`);
+                    const startTime = Date.now();
                     
-                    let successCount = 0;
-                    let failCount = 0;
-                    
-                    for (let i = 0; i < teamIDs.length; i++) {
-                        const teamID = teamIDs[i];
-                        try {
-                            console.log(`🔄 Fetching team ${i + 1}/${teamIDs.length}: ID ${teamID}...`);
-                            
-                            const teamUrl = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamID}&getStats=true`;
-                            const teamResponse = await fetch(teamUrl, options);
-                            
-                            if (teamResponse.ok) {
-                                const teamData = await teamResponse.json();
+                    // Create concurrent request functions
+                    const teamRequests = remainingTeamIDs.map(teamID => {
+                        return () => fetch(
+                            `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamID}&getStats=true`,
+                            options
+                        ).then(async response => {
+                            if (response.ok) {
+                                const teamData = await response.json();
                                 const roster = teamData.body?.roster || teamData.body;
                                 if (Array.isArray(roster) && roster.length > 0) {
-                                    allPlayersData = allPlayersData.concat(roster);
-                                    successCount++;
-                                    console.log(`✅ Team ID ${teamID}: Added ${roster.length} players (${successCount}/${teamIDs.length} teams successful)`);
-                                } else {
-                                    failCount++;
-                                    console.log(`⚠️ Team ID ${teamID}: No roster data found (${failCount} failures)`);
+                                    return { teamID, roster, success: true };
                                 }
-                            } else {
-                                failCount++;
-                                console.log(`❌ Team ID ${teamID}: HTTP ${teamResponse.status} ${teamResponse.statusText} (${failCount} failures)`);
                             }
-                            
-                            // Add small delay to avoid rate limiting
-                            if (i < teamIDs.length - 1) {
-                                await new Promise(resolve => setTimeout(resolve, 100));
-                            }
-                            
-                        } catch (err) {
+                            return { teamID, error: `HTTP ${response.status}`, success: false };
+                        }).catch(error => {
+                            return { teamID, error: error.message, success: false };
+                        });
+                    });
+                    
+                    // Execute requests through the optimized queue
+                    const results = await Promise.all(
+                        teamRequests.map(requestFn => tank01Queue.add(requestFn))
+                    );
+                    
+                    // Process results
+                    let successCount = 1; // Cardinals already successful
+                    let failCount = 0;
+                    
+                    for (const result of results) {
+                        if (result.success) {
+                            allPlayersData = allPlayersData.concat(result.roster);
+                            successCount++;
+                            console.log(`✅ Team ID ${result.teamID}: Added ${result.roster.length} players (${successCount}/32 teams successful)`);
+                        } else {
                             failCount++;
-                            console.log(`💥 Team ID ${teamID}: Error - ${err.message} (${failCount} failures)`);
+                            console.log(`❌ Team ID ${result.teamID}: ${result.error} (${failCount} failures)`);
                         }
                     }
+                    
+                    const loadTime = Date.now() - startTime;
+                    console.log(`⚡ Completed ${successCount}/32 teams in ${loadTime}ms (${Math.round(loadTime/1000*10)/10}s)`);
                     
                     console.log(`📊 Final results: ${successCount} teams successful, ${failCount} failed, ${allPlayersData.length} total players`);
                     
@@ -1795,6 +2289,9 @@
                     // Assign processed data to quarterbackData
                     quarterbackData = qbsByTeam;
                     
+                    // Cache the successful data for future requests
+                    tank01Cache.set(quarterbackData);
+                    
                     console.log(`✅ Tank01: Found ${qbCount} total QBs across ${Object.keys(quarterbackData).length} teams`);
                     console.log('📊 Teams with QBs:', Object.keys(quarterbackData));
                     
@@ -1805,7 +2302,7 @@
                     });
                     
                     if (Object.keys(quarterbackData).length > 0) {
-                        console.log('✅ Tank01 success: QB data processed and stored');
+                        console.log('✅ Tank01 success: QB data processed, stored, and cached');
                         tank01DataLoaded = true; // Mark Tank01 data as successfully loaded
                         return true;
                     } else {
