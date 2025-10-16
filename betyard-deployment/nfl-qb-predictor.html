@@ -872,7 +872,7 @@
             
             <!-- Live Update Indicator -->
             <div id="live-indicator" style="margin-top: 6px; padding: 6px 12px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; border-radius: 6px; font-size: 10px; font-weight: 600; text-align: center; animation: pulse 2s infinite;">
-                🔴 <strong>LIVE</strong> - Real-time Updates Active | Updated: <span id="last-update-time"></span> | v2.1
+                🔴 <strong>LIVE</strong> - Real-time Updates Active | Updated: <span id="last-update-time"></span> | v3.0-NO-TANK01
             </div>
             
             <!-- Domain Branding -->
@@ -881,8 +881,8 @@
             </div>
             
             <!-- RapidAPI Configuration Notice -->
-            <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
-                🏈 <strong>Zero Rate Limits:</strong> Auto-loads local data instantly - Tank01 API available only via manual refresh!
+            <div style="margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 6px; font-size: 11px; font-weight: 500; text-align: center;">
+                🚫 <strong>TANK01 DISABLED:</strong> If you see Tank01 API errors, clear browser cache (Ctrl+F5) - All API calls removed!
             </div>
             <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                 <div style="font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">
@@ -1287,9 +1287,11 @@
         let tank01DataLoaded = false;
         let quarterbackData = {}; // Empty - will only contain live API data
         
-        // ENHANCED TANK01 AUTO-INITIALIZATION - Automatic live data loading
+        // TANK01-FREE VERSION - No API calls to prevent rate limits
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🏈 NFL QB Predictor - Auto-loading TANK01 enhanced data...');
+            console.log('🚫 NFL QB Predictor v3.0 - TANK01 DISABLED VERSION LOADED');
+            console.log('🚫 NO TANK01 API CALLS WILL BE MADE - RATE LIMIT FREE');
+            console.log('⚡ Loading local data only for instant, reliable experience');
             
             // Initialize mobile loading UI
             showMobileLoadingIfNeeded();
