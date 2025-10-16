@@ -2689,9 +2689,30 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
         // Manual test function for live roster updates
         async function testRosterUpdate(buttonElement) {
             console.log('🧪 Manual live roster update test triggered');
+            console.log('📍 Button element:', buttonElement);
+            
+            // Safety check for button element - try to find the button if not provided
+            let button = buttonElement;
+            if (!button) {
+                console.warn('⚠️ Button element not provided, searching for Force Roster Update button...');
+                // Try to find the button by its text content
+                const buttons = document.querySelectorAll('button');
+                for (let btn of buttons) {
+                    if (btn.textContent.includes('Force Roster Update')) {
+                        button = btn;
+                        console.log('✅ Found Force Roster Update button');
+                        break;
+                    }
+                }
+                
+                if (!button) {
+                    console.error('❌ Could not find Force Roster Update button!');
+                    showNotification('❌ Error', 'Button reference error - please refresh the page', 'error');
+                    return;
+                }
+            }
             
             // Show loading
-            const button = buttonElement;
             const originalText = button.textContent;
             button.textContent = '⏳ Fetching Live Data...';
             button.disabled = true;
