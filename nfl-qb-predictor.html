@@ -2723,7 +2723,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 showNotification('🔄 Processing', 'Fetching live NFL quarterback data...', 'info');
                 
                 // Call the main function that handles Tank01 primary + RapidAPI fallback
-                const success = await fetchQuarterbackRosterData();
+                const success = await fetchQuarterbackRosterData(button);
                 
                 if (success) {
                     button.textContent = '✅ Live Data Updated!';
@@ -6331,18 +6331,24 @@ function generateAdvancedPrediction() {
 
         // Manual quarterback roster data fetch function - MULTI-API SOURCE (Tank01 → RapidAPI → Local)
         async function fetchQuarterbackRosterData(buttonElement) {
+            let button = buttonElement;
+            let originalText = 'Fetch Live NFL Data';
+            
             try {
                 console.log('🔥 BUTTON CLICKED - Fetching LIVE NFL data with multi-API system...');
                 
                 // Show loading state
                 updateStatusDisplay('🔄 Fetching live NFL data (Tank01 → RapidAPI → Local)...', 'warning');
                 
-                // Add visual feedback to button
-                const button = buttonElement;
-                const originalText = button.textContent;
-                button.textContent = '🔄 Fetching Live Data...';
-                button.disabled = true;
-                button.style.opacity = '0.7';
+                // Add visual feedback to button (with safety check)
+                if (button && button.textContent) {
+                    originalText = button.textContent;
+                    button.textContent = '🔄 Fetching Live Data...';
+                    button.disabled = true;
+                    button.style.opacity = '0.7';
+                } else {
+                    console.warn('⚠️ Button element not available for visual feedback');
+                }
                 
                 console.log('🏈 Attempting Tank01 API for live NFL data...');
                 
@@ -6376,20 +6382,23 @@ function generateAdvancedPrediction() {
                     }
                 }
                 
-                // Restore button
-                button.textContent = originalText;
-                button.disabled = false;
-                button.style.opacity = '1';
+                // Restore button (with safety check)
+                if (button && button.textContent) {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                }
                 
             } catch (error) {
                 console.error('❌ NFL data fetch error:', error);
                 updateStatusDisplay('❌ Error fetching NFL data', 'error');
                 
-                // Restore button on error
-                const button = buttonElement;
-                button.textContent = 'Fetch Live NFL Data';
-                button.disabled = false;
-                button.style.opacity = '1';
+                // Restore button on error (with safety check)
+                if (button && button.textContent) {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                }
                 
                 showNotification('❌ Error fetching NFL data. Using local database.', 'error', 5000);
             }
