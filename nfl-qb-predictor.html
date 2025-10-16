@@ -2601,10 +2601,20 @@
                     console.log('📊 Running Tank01 dynamic QB analysis for accurate starter/backup determination...');
                     Object.keys(quarterbackData).forEach(teamKey => {
                         const teamQBs = quarterbackData[teamKey];
-                        if (teamQBs && teamQBs.length > 1) {
+                        if (teamQBs && teamQBs.length >= 1) { // Analyze teams with ANY QBs, including single QB teams
                             console.log(`🔍 Analyzing ${teamKey} QBs:`, teamQBs.map(qb => qb.name).join(', '));
                             
-                            // Re-analyze with Tank01 data now that we have full team context
+                            // Handle single QB teams - they're automatically starters
+                            if (teamQBs.length === 1) {
+                                const qb = teamQBs[0];
+                                qb.status = 'Starter';
+                                qb.depth = 1;
+                                qb.dataSource = 'tank01_single_qb';
+                                console.log(`✅ Single QB: ${qb.name} = Starter (only QB on ${teamKey})`);
+                                return;
+                            }
+                            
+                            // For multiple QBs, re-analyze with Tank01 data
                             teamQBs.forEach(qb => {
                                 const updatedRole = determineQBRole(qb.name, teamKey, { 
                                     longName: qb.name,
@@ -2621,6 +2631,22 @@
                                     qb.depth = updatedRole.depth;
                                     qb.dataSource = 'tank01_dynamic_analyzed';
                                     console.log(`✅ Updated ${qb.name}: ${updatedRole.status} (depth: ${updatedRole.depth})`);
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Fallback: Ensure ALL QBs have a status assigned (important for teams that weren't analyzed)
+                    console.log('🔄 Running fallback status assignment for any missing QBs...');
+                    Object.keys(quarterbackData).forEach(teamKey => {
+                        const teamQBs = quarterbackData[teamKey];
+                        if (teamQBs) {
+                            teamQBs.forEach((qb, index) => {
+                                if (!qb.status) {
+                                    qb.status = index === 0 ? 'Starter' : 'Backup';
+                                    qb.depth = index + 1;
+                                    qb.dataSource = qb.dataSource || 'tank01_fallback';
+                                    console.log(`🔄 Fallback: ${qb.name} = ${qb.status} (${teamKey}, index ${index})`);
                                 }
                             });
                         }
@@ -4358,7 +4384,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
         function populateQuarterbackDropdown(qbSelect, teamQBs) {
             qbSelect.innerHTML = '<option value="">Choose quarterback...</option>';
             
-            // Separate quarterbacks into starters and backups using their analyzed status
+            // Separate quarterbacks into starters and backups
             const starters = [];
             const backups = [];
             
@@ -4373,18 +4399,15 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     console.warn("Missing QB stats for:", qb.name);
                 }
                 
-                // Use the already-determined status from our dynamic analysis
-                const status = qb.status || 'Backup'; // Default to backup if no status
-                console.log(`📋 QB Dropdown: ${qb.name} - Status: ${status} (Source: ${qb.dataSource || 'unknown'})`);
+                // Determine if starter or backup based on various criteria
+                const isStarter = determineQBRole(qb, teamQBs);
                 
-                if (status === 'Starter') {
+                if (isStarter) {
                     starters.push(qb);
                 } else {
                     backups.push(qb);
                 }
             });
-            
-            console.log(`📊 Dropdown populated: ${starters.length} starters, ${backups.length} backups`);
             
             // Add starters first with visual indicator
             if (starters.length > 0) {
@@ -4395,14 +4418,16 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     const option = document.createElement('option');
                     option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
                     
-                    // Add status and data source indicator
-                    let indicator = ' 🟢'; // Green dot for starter
-                    if (qb.dataSource === 'tank01_dynamic_analyzed') {
-                        indicator = ' �⚡'; // Dynamic analysis + starter
-                    } else if (qb.dataSource === 'tank01_enhanced' || qb.dataSource === 'tank01_dynamic') {
-                        indicator = ' 🟢🔴'; // Tank01 data + starter
+                    // Add data source indicator to QB name based on source
+                    let indicator = '';
+                    if (qb.dataSource === 'tank01_enhanced') {
+                        indicator = ' 🔴'; // Tank01 data
                     } else if (qb.dataSource === 'api_current') {
-                        indicator = ' 🟢📡'; // Live API + starter
+                        indicator = ' 🔴'; // Live API data
+                    } else if (qb.dataSource === 'api_enhanced') {
+                        indicator = ' ✅'; // API enhanced
+                    } else if (qb.dataSource === 'local_validated') {
+                        indicator = ' ✓'; // Validated local
                     }
                     
                     option.textContent = qb.name + indicator;
@@ -4410,7 +4435,6 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     // Store additional metadata
                     option.dataset.dataSource = qb.dataSource;
                     option.dataset.role = 'starter';
-                    option.dataset.depth = qb.depth || 1;
                     if (qb.lastValidated) {
                         option.dataset.lastValidated = qb.lastValidated;
                     }
@@ -4430,14 +4454,16 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     const option = document.createElement('option');
                     option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
                     
-                    // Add status and data source indicator for backups
-                    let indicator = ' 🟡'; // Yellow dot for backup
-                    if (qb.dataSource === 'tank01_dynamic_analyzed') {
-                        indicator = ' �⚡'; // Dynamic analysis + backup
-                    } else if (qb.dataSource === 'tank01_enhanced' || qb.dataSource === 'tank01_dynamic') {
-                        indicator = ' 🟡🔴'; // Tank01 data + backup
+                    // Add data source indicator
+                    let indicator = '';
+                    if (qb.dataSource === 'tank01_enhanced') {
+                        indicator = ' 🔴'; // Tank01 data
                     } else if (qb.dataSource === 'api_current') {
-                        indicator = ' 🟡📡'; // Live API + backup
+                        indicator = ' 🔴'; // Live API data
+                    } else if (qb.dataSource === 'api_enhanced') {
+                        indicator = ' ✅'; // API enhanced
+                    } else if (qb.dataSource === 'local_validated') {
+                        indicator = ' ✓'; // Validated local
                     }
                     
                     option.textContent = qb.name + indicator;
@@ -4445,7 +4471,6 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                     // Store additional metadata
                     option.dataset.dataSource = qb.dataSource;
                     option.dataset.role = 'backup';
-                    option.dataset.depth = qb.depth || 2;
                     if (qb.lastValidated) {
                         option.dataset.lastValidated = qb.lastValidated;
                     }
