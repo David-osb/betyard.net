@@ -4961,10 +4961,258 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             
             if (qbValue && team) {
                 updateQuarterbackNews(team, qbValue);
+                // Show QB's current season stats immediately
+                displayQuarterbackBaselineStats(team, qbValue);
             } else {
                 clearQuarterbackNews();
+                // Clear the stats display
+                resetPredictionsDisplay();
             }
         });
+
+        // NEW: Display QB's current season stats when selected
+        function displayQuarterbackBaselineStats(team, qbValue) {
+            console.log(`📊 Displaying baseline stats for ${qbValue} on ${team}`);
+            
+            try {
+                // Find the selected quarterback's current stats
+                const teamQBs = getQuarterbackData(team);
+                const selectedQB = teamQBs.find(qb => 
+                    qb.name.toLowerCase().replace(/\s+/g, '-') === qbValue
+                );
+
+                if (!selectedQB || !selectedQB.stats) {
+                    console.warn(`No stats found for ${qbValue}`);
+                    resetPredictionsDisplay();
+                    return;
+                }
+
+                // Extract current season stats
+                const currentStats = {
+                    passingYards: selectedQB.stats.passingYards || selectedQB.stats.yards || 0,
+                    completions: selectedQB.stats.completions || 0,
+                    attempts: selectedQB.stats.attempts || 0,
+                    touchdowns: selectedQB.stats.touchdowns || 0,
+                    interceptions: selectedQB.stats.interceptions || 0,
+                    qbRating: selectedQB.stats.qbr || selectedQB.stats.rating || 0,
+                    gamesPlayed: selectedQB.stats.games || 0
+                };
+
+                // Calculate per-game averages for more accurate baseline
+                const gamesPlayed = Math.max(1, currentStats.gamesPlayed);
+                const baselineStats = {
+                    passingYards: Math.round(currentStats.passingYards / gamesPlayed),
+                    completions: Math.round(currentStats.completions / gamesPlayed),
+                    attempts: Math.round(currentStats.attempts / gamesPlayed),
+                    touchdowns: Math.round((currentStats.touchdowns / gamesPlayed) * 10) / 10,
+                    interceptions: Math.round((currentStats.interceptions / gamesPlayed) * 10) / 10,
+                    qbRating: Math.round(currentStats.qbRating * 10) / 10
+                };
+
+                // Display the baseline stats with context
+                displayBaselinePerformance(baselineStats, selectedQB, gamesPlayed);
+                
+                console.log(`✅ Displayed baseline stats for ${selectedQB.name}:`, baselineStats);
+
+            } catch (error) {
+                console.error('Error displaying baseline stats:', error);
+                resetPredictionsDisplay();
+            }
+        }
+
+        // NEW: Display baseline performance with QB context
+        function displayBaselinePerformance(stats, qb, gamesPlayed) {
+            const statElements = {
+                'passing-yards': `${stats.passingYards} (avg)`,
+                'completions': `${stats.completions}/${stats.attempts}`,
+                'touchdowns': stats.touchdowns,
+                'interceptions': stats.interceptions,
+                'qb-rating': stats.qbRating,
+                'attempts': stats.attempts
+            };
+
+            // Update each stat element with baseline data
+            Object.keys(statElements).forEach((id, index) => {
+                setTimeout(() => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.transform = 'scale(1.05)';
+                        element.style.color = '#64748b'; // Gray color for baseline
+                        element.textContent = statElements[id];
+                        
+                        setTimeout(() => {
+                            element.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                }, index * 50);
+            });
+
+            // Show QB context information
+            showQuarterbackContext(qb, gamesPlayed, stats);
+            
+            // Hide confidence meter for baseline stats
+            const confidenceMeter = document.getElementById('confidence-meter');
+            if (confidenceMeter) {
+                confidenceMeter.style.display = 'none';
+            }
+
+            // Hide betting recommendations for baseline
+            const bettingSection = document.getElementById('betting-recommendations');
+            if (bettingSection) {
+                bettingSection.style.display = 'none';
+            }
+        }
+
+        // NEW: Show quarterback context and current form
+        function showQuarterbackContext(qb, gamesPlayed, stats) {
+            let insightsPanel = document.getElementById('prediction-insights');
+            if (!insightsPanel) {
+                insightsPanel = document.createElement('div');
+                insightsPanel.id = 'prediction-insights';
+                insightsPanel.style.cssText = `
+                    margin-top: 20px;
+                    padding: 16px;
+                    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                    border-radius: 12px;
+                    border-left: 4px solid #64748b;
+                    font-size: 14px;
+                `;
+                
+                // Insert after predictions display
+                const predictionsDisplay = document.getElementById('predictions-display');
+                if (predictionsDisplay && predictionsDisplay.parentNode) {
+                    predictionsDisplay.parentNode.insertBefore(insightsPanel, predictionsDisplay.nextSibling);
+                }
+            }
+
+            // Create comprehensive QB profile
+            const profile = generateQuarterbackProfile(qb, gamesPlayed, stats);
+            
+            insightsPanel.innerHTML = `
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 18px; margin-right: 8px;">👤</span>
+                    <strong style="color: #1e293b;">${qb.name} - Current Season Baseline</strong>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px;">
+                        <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">📊 Season Summary</div>
+                        <div style="font-size: 13px; color: #475569;">
+                            Games Played: ${gamesPlayed}<br>
+                            Position: ${qb.role || qb.status || 'Starter'}<br>
+                            Experience: ${qb.experience || 'N/A'} years
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 12px; border-radius: 8px;">
+                        <div style="font-weight: 600; color: #047857; margin-bottom: 4px;">🎯 Performance</div>
+                        <div style="font-size: 13px; color: #475569;">
+                            Completion %: ${((stats.completions/stats.attempts) * 100).toFixed(1)}%<br>
+                            TD/INT Ratio: ${(stats.touchdowns/Math.max(0.1, stats.interceptions)).toFixed(1)}<br>
+                            Rating Grade: ${getRatingGrade(stats.qbRating)}
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(245, 158, 11, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <div style="font-weight: 600; color: #92400e; margin-bottom: 6px;">📈 Form Analysis</div>
+                    <div style="font-size: 13px; color: #475569;">
+                        ${profile.formAnalysis}
+                    </div>
+                </div>
+                
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 12px; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #6b21a8; margin-bottom: 6px;">⚡ Projection Notes</div>
+                    <div style="font-size: 13px; color: #475569;">
+                        These are <strong>per-game averages</strong> from ${qb.name}'s current season.<br>
+                        Click <strong>"🚀 Generate XGBoost Prediction"</strong> for enhanced projections with ML analysis and betting recommendations.
+                    </div>
+                </div>
+            `;
+        }
+
+        // NEW: Generate comprehensive quarterback profile
+        function generateQuarterbackProfile(qb, gamesPlayed, stats) {
+            const profile = {
+                formAnalysis: '',
+                riskFactors: [],
+                advantages: []
+            };
+
+            // Analyze current form
+            if (stats.qbRating > 100) {
+                profile.formAnalysis = `Exceptional form with ${stats.qbRating} rating. Elite production across all metrics.`;
+                profile.advantages.push('Elite QB rating');
+            } else if (stats.qbRating > 90) {
+                profile.formAnalysis = `Strong performance with ${stats.qbRating} rating. Consistent above-average production.`;
+                profile.advantages.push('Above-average efficiency');
+            } else if (stats.qbRating > 80) {
+                profile.formAnalysis = `Solid baseline with ${stats.qbRating} rating. Room for improvement in key areas.`;
+            } else {
+                profile.formAnalysis = `Below-average form with ${stats.qbRating} rating. Significant upside potential.`;
+                profile.riskFactors.push('Low efficiency rating');
+            }
+
+            // Add TD/INT analysis
+            const tdIntRatio = stats.touchdowns / Math.max(0.1, stats.interceptions);
+            if (tdIntRatio > 3) {
+                profile.advantages.push('Excellent ball security');
+            } else if (tdIntRatio < 1.5) {
+                profile.riskFactors.push('Turnover concerns');
+            }
+
+            // Add completion percentage analysis
+            const completionPct = (stats.completions / stats.attempts) * 100;
+            if (completionPct > 68) {
+                profile.advantages.push('High accuracy');
+            } else if (completionPct < 60) {
+                profile.riskFactors.push('Accuracy issues');
+            }
+
+            return profile;
+        }
+
+        // NEW: Get rating grade
+        function getRatingGrade(rating) {
+            if (rating >= 110) return 'A+';
+            if (rating >= 100) return 'A';
+            if (rating >= 90) return 'B+';
+            if (rating >= 80) return 'B';
+            if (rating >= 70) return 'C+';
+            if (rating >= 60) return 'C';
+            return 'D';
+        }
+
+        // NEW: Reset predictions display
+        function resetPredictionsDisplay() {
+            const statIds = ['passing-yards', 'completions', 'touchdowns', 'interceptions', 'qb-rating', 'attempts'];
+            
+            statIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = '—';
+                    element.style.color = '#64748b';
+                }
+            });
+
+            // Hide insights panel
+            const insightsPanel = document.getElementById('prediction-insights');
+            if (insightsPanel) {
+                insightsPanel.remove();
+            }
+
+            // Hide confidence meter
+            const confidenceMeter = document.getElementById('confidence-meter');
+            if (confidenceMeter) {
+                confidenceMeter.style.display = 'none';
+            }
+
+            // Hide betting recommendations
+            const bettingSection = document.getElementById('betting-recommendations');
+            if (bettingSection) {
+                bettingSection.style.display = 'none';
+            }
+        }
 
         // Get upcoming game information for automatic detection
         async function getUpcomingGameInfo(teamKey) {
