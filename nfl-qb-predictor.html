@@ -113,6 +113,26 @@
             transition: all 0.2s ease;
             background: white;
         }
+        
+        .form-group select optgroup {
+            font-weight: bold;
+            color: #374151;
+            background: #f8fafc;
+            padding: 4px;
+            font-size: 13px;
+        }
+        
+        .form-group select option {
+            font-weight: normal;
+            color: #374151;
+            padding: 6px 8px;
+        }
+        
+        .form-group select:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
 
         .form-group select:focus,
         .form-group input:focus {
@@ -548,45 +568,69 @@
                     <label for="team-select">Team</label>
                     <select id="team-select">
                         <option value="">Choose your team...</option>
-                        <option value="buffalo-bills">Buffalo Bills</option>
-                        <option value="miami-dolphins">Miami Dolphins</option>
-                        <option value="new-england-patriots">New England Patriots</option>
-                        <option value="new-york-jets">New York Jets</option>
-                        <option value="baltimore-ravens">Baltimore Ravens</option>
-                        <option value="cincinnati-bengals">Cincinnati Bengals</option>
-                        <option value="cleveland-browns">Cleveland Browns</option>
-                        <option value="pittsburgh-steelers">Pittsburgh Steelers</option>
-                        <option value="houston-texans">Houston Texans</option>
-                        <option value="indianapolis-colts">Indianapolis Colts</option>
-                        <option value="jacksonville-jaguars">Jacksonville Jaguars</option>
-                        <option value="tennessee-titans">Tennessee Titans</option>
-                        <option value="denver-broncos">Denver Broncos</option>
-                        <option value="kansas-city-chiefs">Kansas City Chiefs</option>
-                        <option value="las-vegas-raiders">Las Vegas Raiders</option>
-                        <option value="los-angeles-chargers">Los Angeles Chargers</option>
-                        <option value="dallas-cowboys">Dallas Cowboys</option>
-                        <option value="new-york-giants">New York Giants</option>
-                        <option value="philadelphia-eagles">Philadelphia Eagles</option>
-                        <option value="washington-commanders">Washington Commanders</option>
-                        <option value="chicago-bears">Chicago Bears</option>
-                        <option value="detroit-lions">Detroit Lions</option>
-                        <option value="green-bay-packers">Green Bay Packers</option>
-                        <option value="minnesota-vikings">Minnesota Vikings</option>
-                        <option value="atlanta-falcons">Atlanta Falcons</option>
-                        <option value="carolina-panthers">Carolina Panthers</option>
-                        <option value="new-orleans-saints">New Orleans Saints</option>
-                        <option value="tampa-bay-buccaneers">Tampa Bay Buccaneers</option>
-                        <option value="arizona-cardinals">Arizona Cardinals</option>
-                        <option value="los-angeles-rams">Los Angeles Rams</option>
-                        <option value="san-francisco-49ers">San Francisco 49ers</option>
-                        <option value="seattle-seahawks">Seattle Seahawks</option>
+                        
+                        <optgroup label="🏈 AFC EAST">
+                            <option value="buffalo-bills">Buffalo Bills</option>
+                            <option value="miami-dolphins">Miami Dolphins</option>
+                            <option value="new-england-patriots">New England Patriots</option>
+                            <option value="new-york-jets">New York Jets</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏈 AFC NORTH">
+                            <option value="baltimore-ravens">Baltimore Ravens</option>
+                            <option value="cincinnati-bengals">Cincinnati Bengals</option>
+                            <option value="cleveland-browns">Cleveland Browns</option>
+                            <option value="pittsburgh-steelers">Pittsburgh Steelers</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏈 AFC SOUTH">
+                            <option value="houston-texans">Houston Texans</option>
+                            <option value="indianapolis-colts">Indianapolis Colts</option>
+                            <option value="jacksonville-jaguars">Jacksonville Jaguars</option>
+                            <option value="tennessee-titans">Tennessee Titans</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏈 AFC WEST">
+                            <option value="denver-broncos">Denver Broncos</option>
+                            <option value="kansas-city-chiefs">Kansas City Chiefs</option>
+                            <option value="las-vegas-raiders">Las Vegas Raiders</option>
+                            <option value="los-angeles-chargers">Los Angeles Chargers</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏆 NFC EAST">
+                            <option value="dallas-cowboys">Dallas Cowboys</option>
+                            <option value="new-york-giants">New York Giants</option>
+                            <option value="philadelphia-eagles">Philadelphia Eagles</option>
+                            <option value="washington-commanders">Washington Commanders</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏆 NFC NORTH">
+                            <option value="chicago-bears">Chicago Bears</option>
+                            <option value="detroit-lions">Detroit Lions</option>
+                            <option value="green-bay-packers">Green Bay Packers</option>
+                            <option value="minnesota-vikings">Minnesota Vikings</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏆 NFC SOUTH">
+                            <option value="atlanta-falcons">Atlanta Falcons</option>
+                            <option value="carolina-panthers">Carolina Panthers</option>
+                            <option value="new-orleans-saints">New Orleans Saints</option>
+                            <option value="tampa-bay-buccaneers">Tampa Bay Buccaneers</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏆 NFC WEST">
+                            <option value="arizona-cardinals">Arizona Cardinals</option>
+                            <option value="los-angeles-rams">Los Angeles Rams</option>
+                            <option value="san-francisco-49ers">San Francisco 49ers</option>
+                            <option value="seattle-seahawks">Seattle Seahawks</option>
+                        </optgroup>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="qb-select">Quarterback</label>
-                    <select id="qb-select">
-                        <option value="">Select team first...</option>
+                    <select id="qb-select" disabled>
+                        <option value="">⏳ Loading Tank01 data...</option>
                     </select>
                     
                     <!-- API Test Button -->
@@ -872,6 +916,14 @@
                 if (tank01Success) {
                     console.log('✅ Tank01 data auto-loaded successfully - Enhanced features active!');
                     updateStatusDisplay('✅ TANK01: Live NFL data auto-loaded with enhanced features', 'success');
+                    
+                    // Enable QB dropdown now that Tank01 data is loaded
+                    const qbSelect = document.getElementById('qb-select');
+                    if (qbSelect) {
+                        qbSelect.disabled = false;
+                        qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                        console.log('✅ QB dropdown enabled - Tank01 data ready');
+                    }
                 } else {
                     throw new Error('Tank01 auto-load failed');
                 }
@@ -881,6 +933,14 @@
                 await generateEmergencyLiveData();
                 console.log('✅ Local quarterback data loaded - ALL 32 NFL teams ready!');
                 updateStatusDisplay('✅ LOCAL DATA: Fast, reliable, instant predictions available', 'info');
+                
+                // Enable QB dropdown with local data
+                const qbSelect = document.getElementById('qb-select');
+                if (qbSelect) {
+                    qbSelect.disabled = false;
+                    qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                    console.log('✅ QB dropdown enabled - Local data ready');
+                }
             }
             
             // 4. Load verified rosters ONLY if Tank01 failed (to avoid overwriting Tank01 data)
@@ -993,6 +1053,15 @@
                 'philadelphia-eagles': [{name: 'Jalen Hurts', stats: {yards: 270, completions: 20, attempts: 33, touchdowns: 2.0, interceptions: 0.9, rating: 95}, dataSource: 'emergency_live_' + Date.now(), lastUpdate: new Date().toISOString()}],
                 'baltimore-ravens': [{name: 'Lamar Jackson', stats: {yards: 295, completions: 20, attempts: 33, touchdowns: 2.5, interceptions: 0.8, rating: 105}, dataSource: 'emergency_live_' + Date.now(), lastUpdate: new Date().toISOString()}]
             };
+            
+            // Enable QB dropdown since data is now available
+            const qbSelect = document.getElementById('qb-select');
+            if (qbSelect) {
+                qbSelect.disabled = false;
+                qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                console.log('✅ QB dropdown enabled - Emergency data ready');
+            }
+            
             return true;
         }
         
@@ -3291,10 +3360,65 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             
             console.log(`🔍 Team selected: "${team}"`);
             console.log('📊 Current quarterbackData keys:', Object.keys(quarterbackData));
+            console.log('🔄 Tank01 data loaded:', tank01DataLoaded);
             
             // Clear previous options with smooth transition
             qbSelect.style.opacity = '0.5';
+            
+            if (!team) {
+                qbSelect.innerHTML = '<option value="">⏳ Loading Tank01 data...</option>';
+                qbSelect.disabled = true;
+                qbSelect.style.opacity = '1';
+                return;
+            }
+            
+            // Check if Tank01 data is loaded
+            if (!tank01DataLoaded) {
+                qbSelect.innerHTML = '<option value="">⏳ Please wait for Tank01 data to finish loading...</option>';
+                qbSelect.disabled = true;
+                qbSelect.style.opacity = '1';
+                
+                // Show notification to user
+                showNotification('⏳ Tank01 Loading', 'Please wait for Tank01 data to finish loading before selecting quarterbacks', 'warning', 4000);
+                
+                // Wait for Tank01 data to load (check every 500ms for up to 10 seconds)
+                let waitAttempts = 0;
+                const maxWaitAttempts = 20; // 10 seconds total
+                
+                const waitForTank01 = setInterval(() => {
+                    waitAttempts++;
+                    console.log(`⏳ Waiting for Tank01 data... attempt ${waitAttempts}/${maxWaitAttempts}`);
+                    
+                    if (tank01DataLoaded || waitAttempts >= maxWaitAttempts) {
+                        clearInterval(waitForTank01);
+                        
+                        if (tank01DataLoaded) {
+                            console.log('✅ Tank01 data loaded! Proceeding with QB selection...');
+                            showNotification('✅ Tank01 Ready', 'Tank01 data loaded successfully! You can now select quarterbacks.', 'success', 3000);
+                            // Re-trigger the team selection now that data is loaded
+                            this.dispatchEvent(new Event('change'));
+                        } else {
+                            console.log('⚠️ Tank01 data loading timeout, using available data...');
+                            showNotification('⚠️ Using Backup Data', 'Tank01 loading timeout. Using available quarterback data.', 'warning', 4000);
+                            // Enable QB selection with available data
+                            qbSelect.disabled = false;
+                            qbSelect.innerHTML = '<option value="">Choose quarterback...</option>';
+                            
+                            // Load QBs with available data
+                            const teamQBs = getQuarterbackData(team);
+                            if (teamQBs && teamQBs.length > 0) {
+                                populateQuarterbackDropdown(qbSelect, teamQBs);
+                            }
+                        }
+                    }
+                }, 500);
+                
+                return;
+            }
+            
+            // Tank01 data is loaded, proceed normally
             qbSelect.innerHTML = '<option value="">Loading quarterbacks...</option>';
+            qbSelect.disabled = false;
             
             // Always check for quarterback data (enhanced or local)
             const teamQBs = getQuarterbackData(team);
@@ -3302,42 +3426,7 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
             
             if (team && teamQBs.length > 0) {
                 setTimeout(() => {
-                    qbSelect.innerHTML = '<option value="">Choose quarterback...</option>';
-                    
-                    teamQBs.forEach(qb => {
-                        // Validate QB data before processing
-                        if (!qb || !qb.name) {
-                            console.warn("Invalid QB data found:", qb);
-                            return; // Skip this QB
-                        }
-                        
-                        if (!qb.stats) {
-                            console.warn("Missing QB stats for:", qb.name);
-                        }
-                        
-                        const option = document.createElement('option');
-                        option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
-                        
-                        // Add data source indicator to QB name based on source
-                        let indicator = '';
-                        if (qb.dataSource === 'api_current') {
-                            indicator = ' 🔴'; // Live API data
-                        } else if (qb.dataSource === 'api_enhanced') {
-                            indicator = ' ✅'; // API enhanced
-                        } else if (qb.dataSource === 'local_validated') {
-                            indicator = ' ✓'; // Validated local
-                        }
-                        
-                        option.textContent = qb.name + indicator;
-                        
-                        // Store additional metadata
-                        option.dataset.dataSource = qb.dataSource;
-                        if (qb.lastValidated) {
-                            option.dataset.lastValidated = qb.lastValidated;
-                        }
-                        
-                        qbSelect.appendChild(option);
-                    });
+                    populateQuarterbackDropdown(qbSelect, teamQBs);
                     qbSelect.style.opacity = '1';
                 }, 300);
                 
@@ -3350,6 +3439,179 @@ This app ONLY uses live, current NFL roster data from official APIs like ESPN fo
                 qbSelect.style.opacity = '1';
             }
         });
+        
+        // Helper function to populate QB dropdown with starter/backup organization
+        function populateQuarterbackDropdown(qbSelect, teamQBs) {
+            qbSelect.innerHTML = '<option value="">Choose quarterback...</option>';
+            
+            // Separate quarterbacks into starters and backups
+            const starters = [];
+            const backups = [];
+            
+            teamQBs.forEach(qb => {
+                // Validate QB data before processing
+                if (!qb || !qb.name) {
+                    console.warn("Invalid QB data found:", qb);
+                    return; // Skip this QB
+                }
+                
+                if (!qb.stats) {
+                    console.warn("Missing QB stats for:", qb.name);
+                }
+                
+                // Determine if starter or backup based on various criteria
+                const isStarter = determineQBRole(qb, teamQBs);
+                
+                if (isStarter) {
+                    starters.push(qb);
+                } else {
+                    backups.push(qb);
+                }
+            });
+            
+            // Add starters first with visual indicator
+            if (starters.length > 0) {
+                const starterGroup = document.createElement('optgroup');
+                starterGroup.label = '⭐ STARTERS';
+                
+                starters.forEach(qb => {
+                    const option = document.createElement('option');
+                    option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
+                    
+                    // Add data source indicator to QB name based on source
+                    let indicator = '';
+                    if (qb.dataSource === 'tank01_enhanced') {
+                        indicator = ' 🔴'; // Tank01 data
+                    } else if (qb.dataSource === 'api_current') {
+                        indicator = ' 🔴'; // Live API data
+                    } else if (qb.dataSource === 'api_enhanced') {
+                        indicator = ' ✅'; // API enhanced
+                    } else if (qb.dataSource === 'local_validated') {
+                        indicator = ' ✓'; // Validated local
+                    }
+                    
+                    option.textContent = qb.name + indicator;
+                    
+                    // Store additional metadata
+                    option.dataset.dataSource = qb.dataSource;
+                    option.dataset.role = 'starter';
+                    if (qb.lastValidated) {
+                        option.dataset.lastValidated = qb.lastValidated;
+                    }
+                    
+                    starterGroup.appendChild(option);
+                });
+                
+                qbSelect.appendChild(starterGroup);
+            }
+            
+            // Add backups with visual indicator
+            if (backups.length > 0) {
+                const backupGroup = document.createElement('optgroup');
+                backupGroup.label = '🏃 BACKUPS';
+                
+                backups.forEach(qb => {
+                    const option = document.createElement('option');
+                    option.value = qb.name.toLowerCase().replace(/\s+/g, '-');
+                    
+                    // Add data source indicator
+                    let indicator = '';
+                    if (qb.dataSource === 'tank01_enhanced') {
+                        indicator = ' 🔴'; // Tank01 data
+                    } else if (qb.dataSource === 'api_current') {
+                        indicator = ' 🔴'; // Live API data
+                    } else if (qb.dataSource === 'api_enhanced') {
+                        indicator = ' ✅'; // API enhanced
+                    } else if (qb.dataSource === 'local_validated') {
+                        indicator = ' ✓'; // Validated local
+                    }
+                    
+                    option.textContent = qb.name + indicator;
+                    
+                    // Store additional metadata
+                    option.dataset.dataSource = qb.dataSource;
+                    option.dataset.role = 'backup';
+                    if (qb.lastValidated) {
+                        option.dataset.lastValidated = qb.lastValidated;
+                    }
+                    
+                    backupGroup.appendChild(option);
+                });
+                
+                qbSelect.appendChild(backupGroup);
+            }
+        }
+        
+        // Helper function to determine if a QB is a starter or backup
+        function determineQBRole(qb, allTeamQBs) {
+            // Priority 1: Explicit status from data source
+            if (qb.status === 'Starter' || qb.status === 'starter') return true;
+            if (qb.status === 'Backup' || qb.status === 'backup') return false;
+            if (qb.isStarter === true) return true;
+            if (qb.isStarter === false) return false;
+            if (qb.depth === 1) return true;
+            if (qb.depth && qb.depth > 1) return false;
+            
+            // Priority 2: Compare stats within team to determine starter
+            if (allTeamQBs.length > 1) {
+                // Calculate a composite score based on stats
+                const qbScore = calculateQBScore(qb);
+                const teamScores = allTeamQBs.map(teamQB => ({
+                    qb: teamQB,
+                    score: calculateQBScore(teamQB)
+                }));
+                
+                // Sort by score descending
+                teamScores.sort((a, b) => b.score - a.score);
+                
+                // Top QB(s) are starters (usually just 1, sometimes 2 if very close)
+                const topScore = teamScores[0].score;
+                const scoreThreshold = topScore * 0.95; // Within 5% of top score
+                
+                return qbScore >= scoreThreshold && teamScores.findIndex(ts => ts.qb === qb) < 2;
+            }
+            
+            // Priority 3: Well-known starters by name (fallback)
+            const knownStarters = [
+                'patrick mahomes', 'josh allen', 'joe burrow', 'lamar jackson', 'dak prescott',
+                'aaron rodgers', 'jalen hurts', 'tua tagovailoa', 'justin herbert', 'russell wilson',
+                'geno smith', 'derek carr', 'kirk cousins', 'baker mayfield', 'brock purdy',
+                'jared goff', 'jordan love', 'caleb williams', 'jayden daniels', 'c.j. stroud',
+                'anthony richardson', 'trevor lawrence', 'daniel jones', 'kyler murray', 'matthew stafford',
+                'sam darnold', 'bo nix', 'will levis', 'bryce young', 'gardner minshew'
+            ];
+            
+            const qbNameLower = qb.name.toLowerCase();
+            if (knownStarters.some(starter => qbNameLower.includes(starter))) {
+                return true;
+            }
+            
+            // Default: First QB in list is starter
+            return allTeamQBs.indexOf(qb) === 0;
+        }
+        
+        // Helper function to calculate QB composite score for starter determination
+        function calculateQBScore(qb) {
+            if (!qb.stats) return 0;
+            
+            const stats = qb.stats;
+            let score = 0;
+            
+            // Weighted scoring system
+            score += (stats.rating || 0) * 2;           // QB Rating (most important)
+            score += (stats.yards || 0) * 0.01;         // Passing yards
+            score += (stats.touchdowns || 0) * 20;      // TDs
+            score -= (stats.interceptions || 0) * 15;   // INTs (penalty)
+            score += (stats.completions || 0) * 2;      // Completions
+            
+            // Bonus for high completion percentage
+            if (stats.attempts && stats.attempts > 0) {
+                const completionPct = (stats.completions || 0) / stats.attempts * 100;
+                if (completionPct > 65) score += (completionPct - 65) * 2;
+            }
+            
+            return Math.max(0, score); // No negative scores
+        }
 
         // Add quarterback selection event listener for news updates
         document.getElementById('qb-select').addEventListener('change', function() {
@@ -7156,6 +7418,14 @@ function generateAdvancedPrediction() {
             // quarterbackData is already populated above with verified current rosters
             console.log('✅ Verified 2025 NFL quarterback rosters loaded for all 32 teams');
             console.log('📅 Data current as of October 15, 2025');
+            
+            // Enable QB dropdown since verified roster data is now available
+            const qbSelect = document.getElementById('qb-select');
+            if (qbSelect) {
+                qbSelect.disabled = false;
+                qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                console.log('✅ QB dropdown enabled - Verified roster data ready');
+            }
             
             // Update status to show current roster data
             updateStatusDisplay('✅ UPDATED: Complete 2025 NFL QB Rosters (Oct 15, 2025) | All 32 Teams Current', 'success');
