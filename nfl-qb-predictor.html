@@ -1376,53 +1376,117 @@
                 console.log('📊 Tank01 raw data structure:', data);
                 
                 // Process Tank01 data for quarterbacks
+                console.log('🔍 Analyzing Tank01 response structure...');
+                console.log('📊 Full Tank01 response:', JSON.stringify(data, null, 2).substring(0, 1000));
+                
+                // Check multiple possible data structures
+                let playersData = null;
                 if (data && data.body) {
-                    quarterbackData = {}; // Reset quarterback data
+                    console.log('📊 Found data.body, checking for players...');
+                    console.log('📊 data.body keys:', Object.keys(data.body));
                     
-                    // Process player data for quarterbacks
                     if (data.body.players) {
-                        console.log('📊 Processing Tank01 player data...');
-                        
-                        // Group quarterbacks by team
-                        const qbsByTeam = {};
-                        
-                        Object.values(data.body.players).forEach(player => {
-                            if (player.position === 'QB' && player.team) {
-                                // Convert team name to our format (lowercase with hyphens)
-                                const teamKey = player.team.toLowerCase()
-                                    .replace(/\s+/g, '-')
-                                    .replace(/[^a-z0-9-]/g, '');
-                                
-                                if (!qbsByTeam[teamKey]) {
-                                    qbsByTeam[teamKey] = [];
+                        playersData = data.body.players;
+                        console.log('📊 Found players in data.body.players');
+                    } else if (data.body.playerData) {
+                        playersData = data.body.playerData;
+                        console.log('📊 Found players in data.body.playerData');
+                    } else if (data.body.data) {
+                        playersData = data.body.data;
+                        console.log('📊 Found players in data.body.data');
+                    } else if (data.body.dfsData) {
+                        playersData = data.body.dfsData;
+                        console.log('📊 Found players in data.body.dfsData');
+                    } else {
+                        // Log all available keys in data.body
+                        console.log('🔍 data.body structure:', JSON.stringify(data.body, null, 2).substring(0, 500));
+                        // Try to find any array or object that might contain player data
+                        for (const key of Object.keys(data.body)) {
+                            const value = data.body[key];
+                            if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+                                console.log(`🔍 Checking ${key}:`, typeof value, Array.isArray(value) ? `Array[${value.length}]` : 'Object');
+                                if (Array.isArray(value) && value.length > 0 && value[0].position) {
+                                    playersData = value;
+                                    console.log(`📊 Found players in data.body.${key}`);
+                                    break;
                                 }
-                                
-                                // Create QB object with Tank01 data
-                                const qbData = {
-                                    name: player.longName || player.playerName || 'Unknown',
-                                    team: player.team,
-                                    position: player.position,
-                                    jersey: player.jerseyNum,
-                                    experience: player.exp,
-                                    age: player.age,
-                                    height: player.height,
-                                    weight: player.weight,
-                                    stats: {
-                                        yards: parseFloat(player.passYds || 0),
-                                        completions: parseFloat(player.passCmp || 0),
-                                        attempts: parseFloat(player.passAtt || 0),
-                                        touchdowns: parseFloat(player.passTD || 0),
-                                        interceptions: parseFloat(player.passInt || 0),
-                                        rating: parseFloat(player.qbRating || 0),
-                                        fantasyPoints: parseFloat(player.fantasyPoints || 0)
-                                    },
-                                    injury: {
-                                        status: player.injury || 'Healthy',
-                                        isInjured: player.injury && player.injury !== 'Healthy'
-                                    },
-                                    dataSource: 'tank01_live',
-                                    lastUpdate: new Date().toISOString(),
-                                    salary: player.salary,
+                            }
+                        }
+                    }
+                }
+                
+                if (playersData) {
+                    quarterbackData = {}; // Reset quarterback data
+                    console.log(`📊 Processing Tank01 data...`);
+                    console.log(`📊 Players data type:`, typeof playersData, Array.isArray(playersData) ? `Array[${playersData.length}]` : 'Object');
+                    
+                    // Group quarterbacks by team
+                    const qbsByTeam = {};
+                    let qbCount = 0;
+                    
+                    // Handle both array and object formats
+                    const players = Array.isArray(playersData) ? playersData : Object.values(playersData);
+                    console.log(`📊 Processing ${players.length} total players...`);
+                    
+                    players.forEach((player, index) => {
+                        // Log first few players to understand structure
+                        if (index < 3) {
+                            console.log(`🔍 Player ${index}:`, JSON.stringify(player, null, 2).substring(0, 300));
+                        }
+                        
+                        if (player && (player.position === 'QB' || player.pos === 'QB') && player.team) {
+                            qbCount++;
+                            console.log(`🏈 Found QB: ${player.longName || player.playerName || player.name} - ${player.team}`);
+                            
+                            // Convert team name to our format (lowercase with hyphens)
+                            const teamKey = player.team.toLowerCase()
+                                .replace(/\s+/g, '-')
+                                .replace(/[^a-z0-9-]/g, '');
+                            
+                            if (!qbsByTeam[teamKey]) {
+                                qbsByTeam[teamKey] = [];
+                            }
+                            
+                            // Create QB object with Tank01 data
+                            const qbData = {
+                                name: player.longName || player.playerName || player.name || 'Unknown',
+                                team: player.team,
+                                teamName: player.teamName || player.team,
+                                position: player.position || player.pos,
+                                jersey: player.jerseyNum || player.jersey,
+                                experience: player.exp || player.experience,
+                                age: player.age,
+                                height: player.height,
+                                weight: player.weight,
+                                stats: {
+                                    yards: parseFloat(player.passYds || player.passingYards || 0),
+                                    completions: parseFloat(player.passCmp || player.completions || 0),
+                                    attempts: parseFloat(player.passAtt || player.attempts || 0),
+                                    touchdowns: parseFloat(player.passTD || player.touchdowns || 0),
+                                    interceptions: parseFloat(player.passInt || player.interceptions || 0),
+                                    rating: parseFloat(player.qbRating || player.rating || 0),
+                                    fantasyPoints: parseFloat(player.fantasyPoints || player.fpts || 0)
+                                },
+                                injury: {
+                                    status: player.injury || player.injuryStatus || 'Healthy',
+                                    isInjured: (player.injury && player.injury !== 'Healthy') || 
+                                              (player.injuryStatus && player.injuryStatus !== 'Healthy')
+                                },
+                                dataSource: 'tank01_live',
+                                lastUpdate: new Date().toISOString(),
+                                salary: player.salary,
+                                teamDepth: player.teamDepth || player.depth
+                            };
+                            
+                            qbsByTeam[teamKey].push(qbData);
+                        }
+                    });
+                    
+                    // Assign processed data to quarterbackData
+                    quarterbackData = qbsByTeam;
+                    
+                    console.log(`✅ Tank01: Found ${qbCount} total QBs across ${Object.keys(quarterbackData).length} teams`);
+                    console.log('📊 Teams with QBs:', Object.keys(quarterbackData));
                                     teamDepth: player.teamDepth
                                 };
                                 
@@ -1442,15 +1506,22 @@
                                 quarterbackData[team].map(qb => `${qb.name} (${qb.injury.status})`));
                         });
                         
-                        return true;
+                        if (Object.keys(quarterbackData).length > 0) {
+                            console.log('✅ Tank01 success: QB data processed and stored');
+                            return true;
+                        }
+                    } else {
+                        console.warn('⚠️ Tank01 API: No quarterback data found in response');
+                        return false;
                     }
+                } else {
+                    console.warn('⚠️ Tank01 API: No player data found in response');
+                    return false;
                 }
-                
-                console.warn('⚠️ Tank01 API: No player data found in response');
-                return false;
                 
             } catch (error) {
                 console.error('❌ Tank01 API Error:', error);
+                console.error('❌ Error details:', error.message);
                 return false;
             }
         }
