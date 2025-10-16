@@ -1360,14 +1360,20 @@
                 };
                 
                 console.log('🔄 Making Tank01 API request...');
+                console.log('🔗 API URL:', url);
+                console.log('📋 Request options:', options);
                 const response = await fetch(url, options);
                 
+                console.log('📡 Tank01 API Response Status:', response.status, response.statusText);
+                
                 if (!response.ok) {
+                    console.error(`❌ Tank01 API HTTP Error: ${response.status} ${response.statusText}`);
                     throw new Error(`Tank01 API error: ${response.status} ${response.statusText}`);
                 }
                 
                 const data = await response.json();
-                console.log('✅ Tank01 API response received:', data);
+                console.log('✅ Tank01 API response received. Keys:', Object.keys(data));
+                console.log('📊 Tank01 raw data structure:', data);
                 
                 // Process Tank01 data for quarterbacks
                 if (data && data.body) {
