@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax Test</title>
+</head>
+<body>
+    <h1>JavaScript Syntax Test</h1>
+    
+    <script>
+        console.log('Testing syntax - starting...');
+        
+        // Test the exact line that's causing issues
+        console.log('CACHED: Recent cached Tank01 data found, using cache to avoid rate limits');
+        
+        // Test template literals
+        const testVar = `This is a test template literal`;
+        console.log(`Template literal test: ${testVar}`);
+        
+        // Test function syntax
+        async function testFunction() {
+            try {
+                console.log('Function test successful');
+                return true;
+            } catch (error) {
+                console.error('Function test error:', error);
+                return false;
+            }
+        }
+        
+        // Call test function
+        testFunction();
+        
+        console.log('Syntax test completed successfully');
+    </script>
+</body>
+</html>
