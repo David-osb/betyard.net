@@ -1576,6 +1576,55 @@
                 setInterval(updateLiveIndicator, 30000); // Update every 30 seconds
             }
             
+            console.log('🔍 CRITICAL DEBUG: About to execute Tank01 API section...');
+            
+            // Start Tank01 API loading process - simplified version
+            console.log('🚀 Starting Tank01 API data fetch...');
+            console.log('🔍 DEBUG: Calling updateStatusDisplay...');
+            
+            if (typeof updateStatusDisplay === 'function') {
+                updateStatusDisplay('🔄 Loading Tank01 API data...', 'loading');
+                console.log('✅ updateStatusDisplay called successfully');
+            } else {
+                console.error('❌ updateStatusDisplay function not found');
+            }
+            
+            console.log('🔍 DEBUG: About to call fetchNFLDataWithTank01Enhanced...');
+            
+            if (typeof fetchNFLDataWithTank01Enhanced === 'function') {
+                console.log('✅ fetchNFLDataWithTank01Enhanced function exists');
+                // Call the function asynchronously but don't wait for it
+                fetchNFLDataWithTank01Enhanced()
+                    .then(success => {
+                        console.log('🔍 DEBUG: Tank01 API completed with result:', success);
+                        if (success) {
+                            console.log('✅ Tank01 API data loaded successfully');
+                            if (typeof updateStatusDisplay === 'function') {
+                                updateStatusDisplay('✅ Live NFL data loaded', 'success');
+                            }
+                        } else {
+                            console.log('⚠️ Tank01 API failed, using emergency data');
+                            if (typeof updateStatusDisplay === 'function') {
+                                updateStatusDisplay('⚠️ Using backup data', 'warning');
+                            }
+                        }
+                        if (typeof enableDropdownsAfterTank01 === 'function') {
+                            enableDropdownsAfterTank01();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('❌ Tank01 API error:', error);
+                        if (typeof updateStatusDisplay === 'function') {
+                            updateStatusDisplay('❌ Using backup data', 'error');
+                        }
+                        if (typeof enableDropdownsAfterTank01 === 'function') {
+                            enableDropdownsAfterTank01();
+                        }
+                    });
+            } else {
+                console.error('❌ fetchNFLDataWithTank01Enhanced function not found');
+            }
+            
             console.log('✅ Application fully initialized and ready');
         });
     </script>
@@ -1739,30 +1788,7 @@
             if (typeof updateLiveConditions === 'function') updateLiveConditions();
             if (typeof startAutoRefresh === 'function') startAutoRefresh();
             
-            // Start Tank01 API loading process
-            console.log('🚀 Starting Tank01 API data fetch...');
-            updateStatusDisplay('🔄 Loading Tank01 API data...', 'loading');
-            
-            try {
-                // Attempt Tank01 API with timeout
-                const tank01Success = await fetchNFLDataWithTank01Enhanced();
-                if (tank01Success && tank01DataLoaded) {
-                    console.log('✅ Tank01 API loaded successfully!');
-                    updateStatusDisplay('✅ Tank01 API data loaded successfully', 'success');
-                    enableDropdownsAfterTank01();
-                    hideMobileLoading();
-                } else {
-                    throw new Error('Tank01 API failed');
-                }
-            } catch (error) {
-                console.log('⚠️ Tank01 API failed, using local data fallback');
-                updateStatusDisplay('⚠️ Tank01 API unavailable - using local data', 'warning');
-                enableDropdownsAfterTank01(false); // false = fallback mode
-                hideMobileLoading();
-            }
-            
             console.log('🏈 NFL Quarterback Statistics Predictor loaded successfully!');
-            console.log('✅ AUTO-ENHANCED MODE: Tank01 data automatically loaded with enhanced features!');
             console.log('📊 Database includes: All 32 teams, enhanced injury reports, practice status, recent form, betting edge');
         });
 
