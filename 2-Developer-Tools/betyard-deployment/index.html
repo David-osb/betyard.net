@@ -873,15 +873,25 @@
         function initializeStatusUpdates() {
             // Update platform timestamps
             const now = new Date();
-            document.getElementById('platformLastUpdate').textContent = now.toLocaleTimeString();
-            document.getElementById('apiResponseTime').textContent = 'Fast (<200ms)';
+            const platformUpdate = document.getElementById('platformLastUpdate');
+            const apiResponse = document.getElementById('apiResponseTime');
+            
+            if (platformUpdate) {
+                platformUpdate.textContent = now.toLocaleTimeString();
+            }
+            if (apiResponse) {
+                apiResponse.textContent = 'Fast (<200ms)';
+            }
             
             // Update confidence in betting section
             updateBettingInsights();
             
-            // Set up periodic updates
+            // Set up periodic updates with null safety
             setInterval(() => {
-                document.getElementById('platformLastUpdate').textContent = new Date().toLocaleTimeString();
+                const platformUpdateEl = document.getElementById('platformLastUpdate');
+                if (platformUpdateEl) {
+                    platformUpdateEl.textContent = new Date().toLocaleTimeString();
+                }
             }, 30000); // Update every 30 seconds
         }
         
@@ -1120,20 +1130,34 @@
                     qbRating: Math.floor(Math.random() * 40) + 80
                 };
                 
-                // Update prediction display
-                document.getElementById('passing-yards').textContent = prediction.passingYards;
-                document.getElementById('completions').textContent = prediction.completions;
-                document.getElementById('attempts').textContent = prediction.attempts;
-                document.getElementById('touchdowns').textContent = prediction.touchdowns;
-                document.getElementById('interceptions').textContent = prediction.interceptions;
-                document.getElementById('qb-rating').textContent = prediction.qbRating.toFixed(1);
+                // Update prediction display with null safety
+                const elements = {
+                    'passing-yards': prediction.passingYards,
+                    'completions': prediction.completions,
+                    'attempts': prediction.attempts,
+                    'touchdowns': prediction.touchdowns,
+                    'interceptions': prediction.interceptions,
+                    'qb-rating': prediction.qbRating.toFixed(1)
+                };
                 
-                // Show confidence meter
+                Object.entries(elements).forEach(([id, value]) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = value;
+                    }
+                });
+                
+                // Show confidence meter with null safety
                 const confidenceMeter = document.getElementById('confidence-meter');
                 const confidenceText = document.getElementById('confidence-text');
                 const confidence = Math.floor(Math.random() * 20) + 75;
-                confidenceText.textContent = confidence + '%';
-                confidenceMeter.style.display = 'block';
+                
+                if (confidenceText) {
+                    confidenceText.textContent = confidence + '%';
+                }
+                if (confidenceMeter) {
+                    confidenceMeter.style.display = 'block';
+                }
                 
                 // Update QB news
                 updateQBNews(qbName, teamName);
