@@ -1558,6 +1558,7 @@
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚀 NFL QB Predictor initialized');
+            console.log('🔥 UPDATED FILE LOADED - Tank01 debugging should work now!');
             
             // Update current week display
             if (typeof updateCurrentWeekDisplay === 'function') {
@@ -1574,6 +1575,56 @@
             if (typeof updateLiveIndicator === 'function') {
                 updateLiveIndicator();
                 setInterval(updateLiveIndicator, 30000); // Update every 30 seconds
+            }
+            
+            console.log('🔍 CRITICAL DEBUG: About to execute Tank01 API section...');
+            
+            // Start Tank01 API loading process - simplified version
+            console.log('🚀 Starting Tank01 API data fetch...');
+            console.log('🔍 DEBUG: Calling updateStatusDisplay...');
+            
+            if (typeof updateStatusDisplay === 'function') {
+                updateStatusDisplay('🔄 Loading Tank01 API data...', 'loading');
+                console.log('✅ updateStatusDisplay called successfully');
+            } else {
+                console.error('❌ updateStatusDisplay function not found');
+            }
+            
+            console.log('🔍 DEBUG: About to call fetchNFLDataWithTank01Enhanced...');
+            console.log('🔍 DEBUG: typeof fetchNFLDataWithTank01Enhanced =', typeof fetchNFLDataWithTank01Enhanced);
+            
+            if (typeof fetchNFLDataWithTank01Enhanced === 'function') {
+                console.log('✅ fetchNFLDataWithTank01Enhanced function exists');
+                // Call the function asynchronously but don't wait for it
+                fetchNFLDataWithTank01Enhanced()
+                    .then(success => {
+                        console.log('🔍 DEBUG: Tank01 API completed with result:', success);
+                        if (success) {
+                            console.log('✅ Tank01 API data loaded successfully');
+                            if (typeof updateStatusDisplay === 'function') {
+                                updateStatusDisplay('✅ Live NFL data loaded', 'success');
+                            }
+                        } else {
+                            console.log('⚠️ Tank01 API failed, using emergency data');
+                            if (typeof updateStatusDisplay === 'function') {
+                                updateStatusDisplay('⚠️ Using backup data', 'warning');
+                            }
+                        }
+                        if (typeof enableDropdownsAfterTank01 === 'function') {
+                            enableDropdownsAfterTank01();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('❌ Tank01 API error:', error);
+                        if (typeof updateStatusDisplay === 'function') {
+                            updateStatusDisplay('❌ Using backup data', 'error');
+                        }
+                        if (typeof enableDropdownsAfterTank01 === 'function') {
+                            enableDropdownsAfterTank01();
+                        }
+                    });
+            } else {
+                console.error('❌ fetchNFLDataWithTank01Enhanced function not found');
             }
             
             console.log('✅ Application fully initialized and ready');
@@ -2684,6 +2735,7 @@
 
         // Enhanced Tank01 function with mobile loading feedback
         // Tank01 Enhanced Function - Re-enabled for live data fetching
+        console.log('🔍 DEBUG: About to define fetchNFLDataWithTank01Enhanced function...');
         async function fetchNFLDataWithTank01Enhanced() {
             console.log('🚀 Tank01 Enhanced function called - attempting live data fetch...');
             
