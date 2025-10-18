@@ -1,4 +1,5 @@
 // Main NFL QB Predictor Application JavaScript
+
 // Contains: Data management, API calls, UI logic, prediction engine
 
 console.log('📄 Main application JavaScript loaded from external file');
