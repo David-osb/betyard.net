@@ -2691,23 +2691,27 @@
                 showMobileLoading('Tank01 Data', 'Fetching live NFL data...');
                 updateMobileStatus('📡 Connecting to Tank01 API...', 'info');
                 
+                console.log('📞 About to call fetchNFLDataWithTank01()...');
+                
                 // Try to fetch live data from Tank01
                 const success = await fetchNFLDataWithTank01();
                 
-                if (success) {
+                console.log(`🔍 Tank01 fetch result: ${success}`);
+                console.log(`🔍 tank01DataLoaded status: ${tank01DataLoaded}`);
+                console.log(`🔍 quarterbackData keys: ${Object.keys(quarterbackData).length}`);
+                
+                if (success && tank01DataLoaded) {
+                    console.log('✅ Tank01 SUCCESS - data loaded and validated');
                     updateMobileStatus('✅ Tank01 data loaded successfully!', 'success');
-                    hideMobileLoading();
                     return true;
                 } else {
-                    console.log('⚠️ Tank01 fetch failed, falling back to local data...');
+                    console.log('⚠️ Tank01 fetch failed or no data loaded, falling back to local data...');
                     updateMobileStatus('⚠️ Tank01 failed, using local data', 'warning');
-                    hideMobileLoading();
                     return false;
                 }
             } catch (error) {
                 console.error('❌ Tank01 Enhanced error:', error);
                 updateMobileStatus('❌ Tank01 error - using local data', 'error');
-                hideMobileLoading();
                 return false;
             }
         }
@@ -2732,6 +2736,9 @@
                 const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
                 const RAPIDAPI_HOST = 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com';
                 
+                console.log('🔑 API Key (first 10 chars):', RAPIDAPI_KEY.substring(0, 10) + '...');
+                console.log('🏠 API Host:', RAPIDAPI_HOST);
+                
                 const options = {
                     method: 'GET',
                     headers: {
@@ -2743,9 +2750,12 @@
                 // Test with Cardinals roster (teamID=1)
                 const testUrl = `https://${RAPIDAPI_HOST}/getNFLTeamRoster?teamID=1&getStats=true`;
                 console.log('🧪 Testing Tank01 with URL:', testUrl);
+                console.log('📋 Request options:', JSON.stringify(options, null, 2));
                 
+                console.log('⏳ About to make fetch request...');
                 const testResponse = await fetch(testUrl, options);
                 console.log('📡 Tank01 API Response Status:', testResponse.status, testResponse.statusText);
+                console.log('📡 Response headers:', [...testResponse.headers.entries()]);
                 
                 if (!testResponse.ok) {
                     console.error(`❌ Tank01 API HTTP Error: ${testResponse.status} ${testResponse.statusText}`);
