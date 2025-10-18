@@ -10,10 +10,14 @@
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
-    <meta name="timestamp" content="2024-10-18-15-15-FINAL-NULL-SAFETY-FIX">
+    <meta name="timestamp" content="2024-10-18-15-20-ULTIMATE-CACHE-BUSTER">
     
     <!-- Kill service workers and force reload -->
     <script>
+        // ULTIMATE CACHE KILLER - Force reload if wrong version detected
+        const EXPECTED_VERSION = 'v2024-10-18-15-15-final-null-safety';
+        
+        // Kill service workers
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
@@ -21,6 +25,18 @@
                 }
             });
         }
+        
+        // Force reload if wrong version in cache
+        const lastKnownVersion = localStorage.getItem('last-known-version');
+        if (lastKnownVersion && lastKnownVersion !== EXPECTED_VERSION) {
+            console.log('🔄 FORCING IMMEDIATE RELOAD - Version mismatch detected');
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.reload(true);
+        }
+        
+        // Set version for next check
+        localStorage.setItem('last-known-version', EXPECTED_VERSION);
     </script>
     <meta http-equiv="pragma" content="no-cache">
     
@@ -863,8 +879,8 @@
     <script src="assets/js/https-enforcement.js"></script>
     <script src="assets/js/xgboost-simulation.js"></script>
     <script src="assets/js/syntax-validation.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/app-logic.js"></script>
+    <script src="assets/js/main.js?v=2024-10-18-15-20"></script>
+    <script src="assets/js/app-logic.js?v=2024-10-18-15-20"></script>
     <script>
         // Toggle expandable card functionality
         function toggleCard(cardId) {
@@ -945,12 +961,17 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 VERSION 2024-10-18-15:15 - FINAL NULL SAFETY FIX - showBettingRecommendations elements protected!");
+            console.log("🔥 VERSION 2024-10-18-15:20 - ULTIMATE CACHE BUSTER - Final null safety with forced reload!");
             console.log("✅ ALL DOM element access has null safety checks INCLUDING topValueBets, marketTrends, riskAssessment!");
             console.log("🎯 Tank01 API working perfectly - Cincinnati shows Joe Flacco #16 and Jake Browning #6!");
             
+            // EMERGENCY VERSION CHECK - If console still shows old version, force reload
+            const currentTimestamp = Date.now();
+            const expectedVersion = 'v2024-10-18-15-20-ultimate';
+            console.log('🕐 Current timestamp:', currentTimestamp, 'Expected version:', expectedVersion);
+            
             // Force cache clearing and version check
-            const currentVersion = 'v2024-10-18-15-15-final-null-safety';
+            const currentVersion = 'v2024-10-18-15-20-ultimate-cache-buster';
             const lastVersion = localStorage.getItem('bety-cache-version');
             
             if (!lastVersion || lastVersion !== currentVersion) {
