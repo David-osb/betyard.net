@@ -559,8 +559,8 @@
                                 <!-- Team Selection -->
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <select class="mdl-textfield__input" id="team-select" disabled onchange="updateQBOptions()">
-                                            <option value="">⏳ Loading Tank01 data...</option>
+                                        <select class="mdl-textfield__input" id="team-select" onchange="updateQBOptions()">
+                                            <option value="">Select an NFL Team...</option>
                                             
                                             <optgroup label="🏈 AFC EAST">
                                                 <option value="BUF">Buffalo Bills</option>
@@ -626,7 +626,7 @@
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <select class="mdl-textfield__input" id="qb-select" disabled onchange="generatePrediction()">
-                                            <option value="">⏳ Loading Tank01 data...</option>
+                                            <option value="">Select a team first...</option>
                                         </select>
                                         <label class="mdl-textfield__label" for="qb-select">Quarterback</label>
                                     </div>
@@ -857,6 +857,13 @@
             
             // Initialize status updates
             initializeStatusUpdates();
+            
+            // IMMEDIATELY enable the team dropdown - no need to wait!
+            const teamSelect = document.getElementById('team-select');
+            if (teamSelect) {
+                teamSelect.disabled = false;
+                console.log('✅ Team dropdown enabled immediately');
+            }
             
             const statusDiv = document.getElementById("status-display");
             
