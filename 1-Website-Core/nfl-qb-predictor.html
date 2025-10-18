@@ -1688,20 +1688,20 @@
                 addFallbackQBData();
                 console.log('✅ All NFL quarterback data loaded - ALL 32 NFL teams ready!');
                 
-                // Enable dropdowns
+                // DO NOT enable dropdowns yet - wait for Tank01 API
                 const teamSelect = document.getElementById('team-select');
                 if (teamSelect) {
-                    teamSelect.disabled = false;
+                    teamSelect.disabled = true;
                     const loadingOption = teamSelect.querySelector('option[value=""]');
-                    if (loadingOption) loadingOption.textContent = 'Choose your team...';
-                    console.log('✅ Team dropdown enabled - Data ready');
+                    if (loadingOption) loadingOption.textContent = '⏳ Loading Tank01 API...';
+                    console.log('🔄 Team dropdown disabled - waiting for Tank01 API');
                 }
                 
                 const qbSelect = document.getElementById('qb-select');
                 if (qbSelect) {
-                    qbSelect.disabled = false;
-                    qbSelect.innerHTML = '<option value="">Select team first...</option>';
-                    console.log('✅ QB dropdown enabled - Data ready');
+                    qbSelect.disabled = true;
+                    qbSelect.innerHTML = '<option value="">⏳ Loading Tank01 API...</option>';
+                    console.log('🔄 QB dropdown disabled - waiting for Tank01 API');
                 }
                 
             } catch (error) {
@@ -1712,12 +1712,12 @@
                 console.log('✅ Emergency quarterback data loaded - ALL 32 NFL teams ready!');
                 updateStatusDisplay('✅ EMERGENCY: Local database loaded successfully', 'info');
                 
-                // Enable QB dropdown with local data
+                // Keep dropdowns disabled - wait for Tank01 API
                 const qbSelect = document.getElementById('qb-select');
                 if (qbSelect) {
-                    qbSelect.disabled = false;
-                    qbSelect.innerHTML = '<option value="">Select team first...</option>';
-                    console.log('✅ QB dropdown enabled - Local data ready');
+                    qbSelect.disabled = true;
+                    qbSelect.innerHTML = '<option value="">⏳ Loading Tank01 API...</option>';
+                    console.log('🔄 QB dropdown disabled - waiting for Tank01 API');
                 }
             }
             
@@ -1739,8 +1739,27 @@
             if (typeof updateLiveConditions === 'function') updateLiveConditions();
             if (typeof startAutoRefresh === 'function') startAutoRefresh();
             
-            // Hide mobile loading after everything is initialized
-            hideMobileLoading();
+            // Start Tank01 API loading process
+            console.log('🚀 Starting Tank01 API data fetch...');
+            updateStatusDisplay('🔄 Loading Tank01 API data...', 'loading');
+            
+            try {
+                // Attempt Tank01 API with timeout
+                const tank01Success = await fetchNFLDataWithTank01Enhanced();
+                if (tank01Success && tank01DataLoaded) {
+                    console.log('✅ Tank01 API loaded successfully!');
+                    updateStatusDisplay('✅ Tank01 API data loaded successfully', 'success');
+                    enableDropdownsAfterTank01();
+                    hideMobileLoading();
+                } else {
+                    throw new Error('Tank01 API failed');
+                }
+            } catch (error) {
+                console.log('⚠️ Tank01 API failed, using local data fallback');
+                updateStatusDisplay('⚠️ Tank01 API unavailable - using local data', 'warning');
+                enableDropdownsAfterTank01(false); // false = fallback mode
+                hideMobileLoading();
+            }
             
             console.log('🏈 NFL Quarterback Statistics Predictor loaded successfully!');
             console.log('✅ AUTO-ENHANCED MODE: Tank01 data automatically loaded with enhanced features!');
@@ -2202,6 +2221,37 @@
                     }
                 }, 300);
             });
+        }
+
+        // Enable dropdowns after Tank01 API completes (success or failure)
+        function enableDropdownsAfterTank01(tank01Success = true) {
+            console.log(`🔓 Enabling dropdowns - Tank01 ${tank01Success ? 'SUCCESS' : 'FAILED'}`);
+            
+            const teamSelect = document.getElementById('team-select');
+            if (teamSelect) {
+                teamSelect.disabled = false;
+                const loadingOption = teamSelect.querySelector('option[value=""]');
+                if (loadingOption) {
+                    loadingOption.textContent = tank01Success ? 
+                        'Choose your team...' : 
+                        'Choose your team... (Local Data)';
+                }
+                console.log('✅ Team dropdown enabled');
+            }
+            
+            const qbSelect = document.getElementById('qb-select');
+            if (qbSelect) {
+                qbSelect.disabled = false;
+                qbSelect.innerHTML = '<option value="">Select team first...</option>';
+                console.log('✅ QB dropdown enabled');
+            }
+            
+            // Update status message
+            if (tank01Success) {
+                showNotification('🎯 Tank01 API Ready!', 'Live NFL data loaded successfully', 'success');
+            } else {
+                showNotification('⚠️ Using Local Data', 'Tank01 API unavailable - predictions still available', 'warning');
+            }
         }
 
         // PERFORMANCE OPTIMIZATION: Tank01 API Caching and Request Management with Local Storage
