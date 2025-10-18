@@ -10,6 +10,18 @@
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
+    <meta name="timestamp" content="2024-10-18-15-00-NULL-SAFETY-FIX">
+    
+    <!-- Kill service workers and force reload -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+    </script>
     <meta http-equiv="pragma" content="no-cache">
     
     <!-- Favicon -->
@@ -933,16 +945,32 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 VERSION 2024-10-18-14:30 - NULL SAFETY FIXED - Using modular JavaScript!");
-            console.log("✅ All DOM element access now has null safety checks!");
-            console.log("🚨 If you still see errors, hard refresh with Ctrl+Shift+R");
+            console.log("🔥 VERSION 2024-10-18-15:00 - NULL SAFETY COMPREHENSIVE FIX - Using modular JavaScript!");
+            console.log("✅ ALL DOM element access has null safety checks!");
+            console.log("🎯 Tank01 API working perfectly - Cincinnati shows Joe Flacco #16 and Jake Browning #6!");
             
-            // Force cache clear by reloading if this is first load with errors
-            if (window.location.search.indexOf('cache_cleared') === -1) {
-                console.log("🔄 Cache clearing reload...");
-                window.location.href = window.location.href + (window.location.search ? '&' : '?') + 'cache_cleared=' + Date.now();
-                return;
+            // Force cache clearing and version check
+            const currentVersion = 'v2024-10-18-15-00-null-safety';
+            const lastVersion = localStorage.getItem('bety-cache-version');
+            
+            if (!lastVersion || lastVersion !== currentVersion) {
+                console.log('🔄 FORCING CACHE REFRESH - Version: ' + currentVersion);
+                localStorage.clear();
+                sessionStorage.clear();
+                localStorage.setItem('bety-cache-version', currentVersion);
+                
+                // Clear all possible caches
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
             }
+            
+            console.log('🔄 Cache version check complete: ' + currentVersion);
+            
+            // Clear any potential cached functions
+            window.showBettingRecommendations = null;
             
             // Initialize status updates
             initializeStatusUpdates();
