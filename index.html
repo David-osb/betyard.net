@@ -963,27 +963,16 @@
                 qbSelect.disabled = false;
                 qbSelect.innerHTML = '<option value="">⏳ Loading quarterbacks...</option>';
                 
-                // Define corrected QB data for teams with known Tank01 issues
-                const correctedQBData = {
-                    'CIN': [
-                        {name: 'Joe Burrow', longName: 'Joe Burrow', number: 9, jerseyNum: '9', pos: 'QB', playerID: 'burrow_joe'},
-                        {name: 'Jake Browning', longName: 'Jake Browning', number: 6, jerseyNum: '6', pos: 'QB', playerID: 'browning_jake'}
-                    ]
-                };
-                
-                // First try to use LIVE Tank01 data, but check for corrections
+                // First try to use LIVE Tank01 data (now with corrections built-in)
                 if (window.nflTeamsData && window.nflTeamsData[teamSelect.value]) {
                     const team = window.nflTeamsData[teamSelect.value];
                     qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
                     
-                    // Use corrected data if available, otherwise use Tank01 data
-                    let qbsToUse = correctedQBData[teamSelect.value] || team.roster;
-                    
-                    if (qbsToUse && qbsToUse.length > 0) {
-                        const dataSource = correctedQBData[teamSelect.value] ? 'CORRECTED' : 'LIVE Tank01';
-                        console.log(`🏈 Using ${dataSource} data for`, teamSelect.value, ':', qbsToUse);
+                    if (team.roster && team.roster.length > 0) {
+                        const dataSource = team.dataSource || 'TANK01';
+                        console.log(`🏈 Using ${dataSource} data for`, teamSelect.value, ':', team.roster);
                         
-                        qbsToUse.forEach(qb => {
+                        team.roster.forEach(qb => {
                             const displayName = qb.longName || qb.espnName || qb.name || 'Unknown Player';
                             const jerseyNumber = qb.jerseyNum || qb.number || '';
                             const position = qb.pos || 'QB';
@@ -992,9 +981,9 @@
                                 ${jerseyNumber ? '#' + jerseyNumber + ' ' : ''}${displayName} (${position})
                             </option>`;
                         });
-                        console.log('✅ Loaded', qbsToUse.length, 'QBs from', dataSource, 'data');
+                        console.log('✅ Loaded', team.roster.length, 'QBs from', dataSource, 'data');
                     } else {
-                        console.log('⚠️ No QBs found in Tank01 data for', teamSelect.value);
+                        console.log('⚠️ No QBs found in processed data for', teamSelect.value);
                         qbSelect.innerHTML += '<option value="">❌ No QB data available</option>';
                     }
                 } else {
