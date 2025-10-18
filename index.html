@@ -10,13 +10,13 @@
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
-    <meta name="timestamp" content="2024-10-18-15-25-NUCLEAR-CACHE-KILLER">
+    <meta name="timestamp" content="2024-10-18-15-35-FUNCTION-SCOPE-FIXED">
     
     <!-- Kill service workers and force reload -->
     <script>
-        // NUCLEAR CACHE KILLER - Immediate redirect if cached
+        // ULTIMATE CACHE KILLER - Force complete reload with function fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2024-10-18-15-25-nuclear';
+        const EXPECTED_VERSION = 'v2024-10-18-15-35-function-scope-fixed';
         
         // Kill service workers
         if ('serviceWorker' in navigator) {
@@ -886,8 +886,8 @@
     <script src="assets/js/https-enforcement.js"></script>
     <script src="assets/js/xgboost-simulation.js"></script>
     <script src="assets/js/syntax-validation.js"></script>
-    <script src="assets/js/main.js?v=2024-10-18-15-25"></script>
-    <script src="assets/js/app-logic.js?v=2024-10-18-15-25"></script>
+    <script src="assets/js/main.js?v=2024-10-18-15-35"></script>
+    <script src="assets/js/app-logic.js?v=2024-10-18-15-35"></script>
     <script>
         // Toggle expandable card functionality
         function toggleCard(cardId) {
@@ -968,18 +968,26 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 VERSION 2024-10-18-15:25 - NUCLEAR CACHE KILLER - URL redirect with timestamp!");
+            console.log("🔥 VERSION 2024-10-18-15:35 - FUNCTION SCOPE FIXED - showBettingRecommendations moved before generatePrediction!");
             console.log("✅ ALL DOM element access has null safety checks INCLUDING topValueBets, marketTrends, riskAssessment!");
             console.log("🎯 Tank01 API working perfectly - Cincinnati shows Joe Flacco #16 and Jake Browning #6!");
-            console.log("💥 NUCLEAR CACHE BUSTER ACTIVE - If you see this, cache is cleared!");
+            console.log("💥 FUNCTION SCOPE RESOLVED - showBettingRecommendations should now be available!");
             
             // EMERGENCY VERSION CHECK - If console still shows old version, force reload
             const currentTimestamp = Date.now();
-            const expectedVersion = 'v2024-10-18-15-25-nuclear';
+            const expectedVersion = 'v2024-10-18-15-35-function-scope-fixed';
             console.log('🕐 Current timestamp:', currentTimestamp, 'Expected version:', expectedVersion);
             
+            // FUNCTION AVAILABILITY CHECK
+            console.log('🔍 Checking if showBettingRecommendations is available:', typeof showBettingRecommendations);
+            if (typeof showBettingRecommendations !== 'function') {
+                console.error('❌ showBettingRecommendations function NOT FOUND - cache issue!');
+            } else {
+                console.log('✅ showBettingRecommendations function is available!');
+            }
+            
             // Force cache clearing and version check
-            const currentVersion = 'v2024-10-18-15-25-nuclear-cache-killer';
+            const currentVersion = 'v2024-10-18-15-35-function-scope-fixed';
             const lastVersion = localStorage.getItem('bety-cache-version');
             
             if (!lastVersion || lastVersion !== currentVersion) {
