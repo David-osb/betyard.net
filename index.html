@@ -1229,8 +1229,12 @@
                 // Update QB news
                 updateQBNews(qbName, teamName);
                 
-                // Show betting recommendations
-                showBettingRecommendations(prediction, confidence);
+                // Show betting recommendations with function check
+                if (typeof showBettingRecommendations === 'function') {
+                    showBettingRecommendations(prediction, confidence);
+                } else {
+                    console.log('⚠️ showBettingRecommendations function not found, skipping betting recommendations');
+                }
                 
                 // Update current week info
                 const currentWeekInfo = document.getElementById('current-week-info');
