@@ -10401,7 +10401,6 @@ function generateAdvancedPrediction() {
             isDarkTheme = !isDarkTheme;
             const body = document.body;
             const themeIcon = document.getElementById('theme-icon');
-            const themeText = document.getElementById('theme-text');
             const themeToggle = document.getElementById('theme-toggle');
             
             if (isDarkTheme) {
@@ -10438,8 +10437,7 @@ function generateAdvancedPrediction() {
                 themeToggle.style.background = '#4a5568';
                 themeToggle.style.color = '#e2e8f0';
                 themeToggle.style.border = '2px solid #718096';
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Light';
+                themeIcon.textContent = 'wb_sunny';
                 
                 // Store preference
                 localStorage.setItem('darkTheme', 'true');
@@ -10478,8 +10476,7 @@ function generateAdvancedPrediction() {
                 themeToggle.style.background = '#f3f4f6';
                 themeToggle.style.color = '#374151';
                 themeToggle.style.border = '2px solid #e5e7eb';
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Dark';
+                themeIcon.textContent = 'brightness_2';
                 
                 // Store preference
                 localStorage.setItem('darkTheme', 'false');
