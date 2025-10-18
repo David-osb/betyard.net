@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -59,60 +60,59 @@
             animation: pulse 2s infinite;
         }
 
-        /* Live Status Section Styles */
+        /* Compact Live Status Section */
         .live-status-section {
-            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
-            padding: 20px 0;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 8px 0;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #cbd5e1;
         }
 
-        .section-title {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 500;
+        .compact-status-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: white;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
         }
 
-        .platform-card {
-            width: 100%;
-            min-height: 160px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
         }
 
-        .platform-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        .status-icon {
+            font-size: 14px;
+            animation: pulse 2s infinite;
         }
 
-        .platform-card .mdl-card__title {
-            color: white;
-            height: 60px;
-        }
-
-        .platform-card .mdl-card__title-text {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
+        .status-text {
             font-weight: 600;
-            margin-bottom: 8px;
+            color: #374151;
         }
 
-        .status-indicator.online {
-            background-color: #e8f5e8;
-            color: #2e7d32;
-            border: 1px solid #4caf50;
-        }
-
-        .last-updated {
+        .status-time {
             font-size: 11px;
-            color: #666;
-            font-style: italic;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .compact-status-bar {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px;
+            }
+            
+            .status-item {
+                justify-content: center;
+                gap: 8px;
+            }
         }
 
         /* Betting Insights Styles */
@@ -209,49 +209,25 @@
             </div>
         </header>
         
-        <!-- Live Status Indicators -->
+        <!-- Compact Live Status Bar -->
         <section class="live-status-section">
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col">
-                    <h4 class="section-title">🔴 Live NFL Status & Platform Updates</h4>
-                </div>
-                
-                <!-- Platform Status Cards -->
-                <div class="mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
-                    <div class="mdl-card mdl-shadow--2dp platform-card">
-                        <div class="mdl-card__title mdl-card--expand" style="background: linear-gradient(135deg, #1a237e, #3949ab);">
-                            <h2 class="mdl-card__title-text">Betyard.net Status</h2>
+                    <div class="compact-status-bar">
+                        <div class="status-item">
+                            <span class="status-icon">🟢</span>
+                            <span class="status-text">Platform Online</span>
+                            <span class="status-time" id="platformLastUpdate">Loading...</span>
                         </div>
-                        <div class="mdl-card__supporting-text">
-                            <div class="status-indicator online">🟢 ONLINE</div>
-                            <p>Platform operational with live Tank01 API integration</p>
-                            <div class="last-updated">Last updated: <span id="platformLastUpdate">Loading...</span></div>
+                        <div class="status-item">
+                            <span class="status-icon">🟢</span>
+                            <span class="status-text">Tank01 API Active</span>
+                            <span class="status-time" id="apiResponseTime">Fast</span>
                         </div>
-                    </div>
-                </div>
-
-                <div class="mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
-                    <div class="mdl-card mdl-shadow--2dp platform-card">
-                        <div class="mdl-card__title mdl-card--expand" style="background: linear-gradient(135deg, #b71c1c, #e53935);">
-                            <h2 class="mdl-card__title-text">NFL Tank01 API</h2>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <div class="status-indicator online" id="apiStatus">🟢 ACTIVE</div>
-                            <p>Real-time NFL data and statistics</p>
-                            <div class="last-updated">API Response: <span id="apiResponseTime">Loading...</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
-                    <div class="mdl-card mdl-shadow--2dp platform-card">
-                        <div class="mdl-card__title mdl-card--expand" style="background: linear-gradient(135deg, #1b5e20, #43a047);">
-                            <h2 class="mdl-card__title-text">Prediction Engine</h2>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <div class="status-indicator online">🟢 READY</div>
-                            <p>XGBoost ML model with professional analytics</p>
-                            <div class="last-updated">Model accuracy: <span id="modelAccuracy">94.7%</span></div>
+                        <div class="status-item">
+                            <span class="status-icon">🟢</span>
+                            <span class="status-text">ML Engine Ready</span>
+                            <span class="status-time" id="modelAccuracy">94.7%</span>
                         </div>
                     </div>
                 </div>
