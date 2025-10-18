@@ -1630,6 +1630,46 @@
             console.log('✅ Application fully initialized and ready');
         });
     </script>
+    
+    <script>
+        // ISOLATED Tank01 API Function - moved to separate script block to avoid syntax errors
+        console.log('🔍 ISOLATED SCRIPT: Tank01 function definition starting...');
+        
+        async function fetchNFLDataWithTank01Enhanced() {
+            console.log('🚀 Tank01 Enhanced function called - attempting live data fetch...');
+            
+            try {
+                console.log('📞 About to call fetchNFLDataWithTank01()...');
+                
+                // Simple Tank01 API call
+                const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
+                const response = await fetch('https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams?rosters=true&schedules=false&topPerformers=false&teamStats=false', {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': RAPIDAPI_KEY,
+                        'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Tank01 API SUCCESS:', data);
+                    return true;
+                } else {
+                    console.log('❌ Tank01 API failed with status:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Tank01 API error:', error);
+                return false;
+            }
+        }
+        
+        // Make sure function is accessible globally
+        window.fetchNFLDataWithTank01Enhanced = fetchNFLDataWithTank01Enhanced;
+        console.log('✅ ISOLATED SCRIPT: Tank01 function defined and globally accessible');
+    </script>
+
                 13: new Date(2025, 10, 24), // Week 13: Nov 24
                 14: new Date(2025, 11, 1), // Week 14: Dec 1
                 15: new Date(2025, 11, 8), // Week 15: Dec 8
