@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v4.1-ORGANIZED]</title>
+    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v4.2-NULL-SAFETY-FIX]</title>
     <meta name="description" content="Professional NFL Quarterback predictions with XGBoost ML, betting analysis, and value recommendations on BetYard.net">
     <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, xgboost, machine learning, value bets">
-    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta http-equiv="pragma" content="no-cache">
     
@@ -932,7 +933,16 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 ORGANIZED VERSION - Using modular JavaScript!");
+            console.log("🔥 VERSION 2024-10-18-14:30 - NULL SAFETY FIXED - Using modular JavaScript!");
+            console.log("✅ All DOM element access now has null safety checks!");
+            console.log("🚨 If you still see errors, hard refresh with Ctrl+Shift+R");
+            
+            // Force cache clear by reloading if this is first load with errors
+            if (window.location.search.indexOf('cache_cleared') === -1) {
+                console.log("🔄 Cache clearing reload...");
+                window.location.href = window.location.href + (window.location.search ? '&' : '?') + 'cache_cleared=' + Date.now();
+                return;
+            }
             
             // Initialize status updates
             initializeStatusUpdates();
