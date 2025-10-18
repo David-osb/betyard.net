@@ -267,19 +267,37 @@ async function fetchNFLDataWithTank01Enhanced() {
             if (data && data.body) {
                 window.nflTeamsData = {};
                 
+                // Tank01 to UI team abbreviation mapping
+                const tank01ToUIMapping = {
+                    'BUF': 'BUF', 'MIA': 'MIA', 'NE': 'NE', 'NYJ': 'NYJ',
+                    'BAL': 'BAL', 'CIN': 'CIN', 'CLE': 'CLE', 'PIT': 'PIT',
+                    'HOU': 'HOU', 'IND': 'IND', 'JAX': 'JAX', 'TEN': 'TEN',
+                    'DEN': 'DEN', 'KC': 'KC', 'LV': 'LV', 'LAC': 'LAC',
+                    'DAL': 'DAL', 'NYG': 'NYG', 'PHI': 'PHI', 'WSH': 'WAS',
+                    'CHI': 'CHI', 'DET': 'DET', 'GB': 'GB', 'MIN': 'MIN',
+                    'ATL': 'ATL', 'CAR': 'CAR', 'NO': 'NO', 'TB': 'TB',
+                    'ARI': 'ARI', 'LAR': 'LAR', 'SF': 'SF', 'SEA': 'SEA'
+                };
+                
                 // Process each team and store roster data
                 data.body.forEach(team => {
-                    if (team.teamAbv && team.roster) {
-                        window.nflTeamsData[team.teamAbv] = {
+                    if (team.teamAbv && team.Roster) {
+                        const uiTeamCode = tank01ToUIMapping[team.teamAbv] || team.teamAbv;
+                        const quarterbacks = Object.values(team.Roster).filter(player => player.pos === 'QB');
+                        
+                        window.nflTeamsData[uiTeamCode] = {
                             teamName: team.teamCity + ' ' + team.teamName,
-                            roster: team.roster.filter(player => player.pos === 'QB'),
-                            teamAbv: team.teamAbv
+                            roster: quarterbacks,
+                            teamAbv: uiTeamCode,
+                            tank01Abv: team.teamAbv
                         };
+                        
+                        console.log(`🏈 Processed ${uiTeamCode} (Tank01: ${team.teamAbv}): ${quarterbacks.length} QBs`);
                     }
                 });
                 
                 console.log('✅ Live NFL roster data stored:', Object.keys(window.nflTeamsData).length + ' teams');
-                console.log('🏈 Sample data:', window.nflTeamsData);
+                console.log('🏈 Sample Cincinnati data:', window.nflTeamsData['CIN']);
                 return true;
             } else {
                 console.log('❌ Tank01 API returned unexpected data structure');
