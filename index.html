@@ -888,6 +888,7 @@
     <script src="assets/js/syntax-validation.js"></script>
     <script src="assets/js/main.js?v=2024-10-18-15-35"></script>
     <script src="assets/js/app-logic.js?v=2024-10-18-15-35"></script>
+    <script src="assets/js/ml-integration.js?v=2024-10-18-15-45"></script>
     <script>
         // Toggle expandable card functionality
         function toggleCard(cardId) {
@@ -1184,7 +1185,7 @@
         
         // Betting recommendations functionality now inlined in generatePrediction
         
-        function generatePrediction() {
+        async function generatePrediction() {
             const teamSelect = document.getElementById('team-select');
             const qbSelect = document.getElementById('qb-select');
             
@@ -1192,15 +1193,38 @@
                 const teamName = teamSelect.options[teamSelect.selectedIndex].text;
                 const qbName = qbSelect.options[qbSelect.selectedIndex].text;
                 
-                // Generate realistic prediction data
-                const prediction = {
-                    passingYards: Math.floor(Math.random() * 150) + 200,
-                    completions: Math.floor(Math.random() * 10) + 20,
-                    attempts: Math.floor(Math.random() * 15) + 30,
-                    touchdowns: Math.floor(Math.random() * 3) + 1,
-                    interceptions: Math.floor(Math.random() * 2),
-                    qbRating: Math.floor(Math.random() * 40) + 80
-                };
+                // Generate REAL ML prediction using XGBoost backend
+                let prediction;
+                
+                if (window.BetYardML && window.BetYardML.isAvailable) {
+                    console.log('🧠 Using REAL XGBoost ML Backend for predictions!');
+                    const mlPrediction = await window.BetYardML.getPrediction(qbName, teamSelect.value);
+                    
+                    prediction = {
+                        passingYards: mlPrediction.passing_yards,
+                        completions: mlPrediction.completions,
+                        attempts: mlPrediction.attempts,
+                        touchdowns: mlPrediction.touchdowns,
+                        interceptions: mlPrediction.interceptions,
+                        qbRating: mlPrediction.qb_rating
+                    };
+                    
+                    console.log('✅ Real ML prediction generated:', prediction);
+                    console.log('📊 Weather impact:', mlPrediction.metadata?.weather_impact);
+                    console.log('🏥 Injury factor:', mlPrediction.metadata?.injury_adjustment);
+                } else {
+                    console.log('⚠️ ML Backend not available - using fallback prediction');
+                    console.log('💡 To use real XGBoost: Run .\\ml-backend\\Start-ML-Backend.ps1');
+                    
+                    prediction = {
+                        passingYards: Math.floor(Math.random() * 150) + 200,
+                        completions: Math.floor(Math.random() * 10) + 20,
+                        attempts: Math.floor(Math.random() * 15) + 30,
+                        touchdowns: Math.floor(Math.random() * 3) + 1,
+                        interceptions: Math.floor(Math.random() * 2),
+                        qbRating: Math.floor(Math.random() * 40) + 80
+                    };
+                }
                 
                 // Update prediction display with null safety
                 const elements = {
