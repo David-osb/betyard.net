@@ -1610,8 +1610,30 @@
                                 updateStatusDisplay('⚠️ Using backup data', 'warning');
                             }
                         }
+                        console.log('🔍 DEBUG: About to call enableDropdownsAfterTank01...');
                         if (typeof enableDropdownsAfterTank01 === 'function') {
+                            console.log('✅ enableDropdownsAfterTank01 function exists, calling it now...');
                             enableDropdownsAfterTank01();
+                            console.log('✅ enableDropdownsAfterTank01 called successfully');
+                        } else {
+                            console.error('❌ enableDropdownsAfterTank01 function not found');
+                            console.log('🔍 Available functions:', Object.getOwnPropertyNames(window).filter(name => name.includes('enable')));
+                            
+                            // Manual fallback to enable dropdowns
+                            console.log('🔧 FALLBACK: Manually enabling dropdowns...');
+                            const qbSelect = document.getElementById('qb-select');
+                            if (qbSelect) {
+                                qbSelect.disabled = false;
+                                qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
+                                console.log('✅ QB dropdown manually enabled');
+                            }
+                            
+                            // Hide any loading spinners
+                            const loadingElements = document.querySelectorAll('[id*="loading"], [class*="loading"], [class*="spinner"]');
+                            loadingElements.forEach(el => {
+                                el.style.display = 'none';
+                                console.log('🔧 Hidden loading element:', el.className || el.id);
+                            });
                         }
                     })
                     .catch(error => {
