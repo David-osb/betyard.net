@@ -12,7 +12,7 @@ Your NFL QB Predictor now includes integration with RapidAPI's NFL API Data serv
 4. Copy your API key from the dashboard
 
 ### 2. Configure the API Key
-1. Open `UI.roughdraft2.html` in your code editor
+1. Open `nfl-qb-predictor.html` in your code editor
 2. Find line with: `const RAPIDAPI_KEY = 'YOUR_RAPIDAPI_KEY_HERE';`
 3. Replace `YOUR_RAPIDAPI_KEY_HERE` with your actual RapidAPI key
 4. Save the file
@@ -93,7 +93,7 @@ Each quarterback object contains:
 ### 8. Troubleshooting
 
 #### "API Key Missing" Error
-- Ensure you've replaced `YOUR_RAPIDAPI_KEY_HERE` with your actual key
+- Ensure you've replaced `YOUR_RAPIDAPI_KEY_HERE` with your actual key in `nfl-qb-predictor.html`
 - Check that the key doesn't have extra spaces or quotes
 
 #### "Rate Limit Exceeded" Error
@@ -104,6 +104,11 @@ Each quarterback object contains:
 - Check your internet connection
 - Verify the API service is operational
 - The system will automatically fall back to cached data
+
+#### Local Testing Issues
+- Use `Start-Server.ps1` for local development with CORS support
+- Test at http://localhost:8000/nfl-qb-predictor.html
+- Check browser console for detailed error messages
 
 ### 9. Cost Information
 - **Free Tier**: Usually includes 500-1000 requests per month
@@ -117,5 +122,17 @@ If you encounter issues:
 3. Test with the manual fetch button first
 4. The system provides detailed logging for troubleshooting
 
+## Current Status
+Your betyard.net website is live and operational at https://betyard.net with:
+- ✅ NFL QB Predictor fully functional
+- ✅ RapidAPI integration configured
+- ✅ Multi-source data fallback system active
+- ✅ Mobile-responsive design deployed
+
+## File Locations
+- **Main Application**: `nfl-qb-predictor.html`
+- **Live Website**: https://betyard.net
+- **Local Testing**: Use `Start-Server.ps1` for development
+
 ---
-*Last updated: October 15, 2025*
+*Last updated: October 18, 2025*

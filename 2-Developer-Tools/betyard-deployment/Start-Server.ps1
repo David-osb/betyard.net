@@ -10,7 +10,7 @@ $Url = "http://localhost:$Port/"
 
 Write-Host "🏈 NFL QB Predictor Server Starting..." -ForegroundColor Green
 Write-Host "📡 Server: $Url" -ForegroundColor Cyan
-Write-Host "🎯 NFL App: ${Url}UI.roughdraft2.html" -ForegroundColor Yellow
+Write-Host "🎯 NFL App: ${Url}nfl-qb-predictor.html" -ForegroundColor Yellow
 Write-Host "✅ CORS headers enabled for API access" -ForegroundColor Green
 Write-Host ""
 Write-Host "🚀 Opening browser automatically..." -ForegroundColor Magenta
@@ -26,7 +26,7 @@ try {
     $listener.Start()
     
     # Open browser
-    Start-Process "${Url}UI.roughdraft2.html"
+    Start-Process "${Url}nfl-qb-predictor.html"
     
     Write-Host "✅ Server running at $Url" -ForegroundColor Green
     Write-Host "📂 Serving from: $Directory" -ForegroundColor Gray
@@ -42,7 +42,7 @@ try {
         $response.Headers.Add("Access-Control-Allow-Headers", "*")
         
         $requestedFile = $request.Url.LocalPath.TrimStart('/')
-        if ($requestedFile -eq '') { $requestedFile = 'UI.roughdraft2.html' }
+    if ($requestedFile -eq '') { $requestedFile = 'nfl-qb-predictor.html' }
         
         $filePath = Join-Path $Directory $requestedFile
         
