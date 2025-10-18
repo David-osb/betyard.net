@@ -1739,6 +1739,9 @@
             if (typeof updateLiveConditions === 'function') updateLiveConditions();
             if (typeof startAutoRefresh === 'function') startAutoRefresh();
             
+            // Hide mobile loading after everything is initialized
+            hideMobileLoading();
+            
             console.log('🏈 NFL Quarterback Statistics Predictor loaded successfully!');
             console.log('✅ AUTO-ENHANCED MODE: Tank01 data automatically loaded with enhanced features!');
             console.log('📊 Database includes: All 32 teams, enhanced injury reports, practice status, recent form, betting edge');
@@ -10024,14 +10027,17 @@ function generateAdvancedPrediction() {
                 }
             ];
             
-            return props.map(prop => `
-                <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${prop.recommendation === 'OVER' ? '#22c55e' : '#ef4444'};">
+            return props.map(prop => {
+                const borderColor = prop.recommendation === 'OVER' ? '#22c55e' : '#ef4444';
+                const recColor = borderColor;
+                return `
+                <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${borderColor};">
                     <div style="display: grid; grid-template-columns: 120px 80px 100px 100px 80px 80px 1fr; gap: 12px; align-items: center; font-size: 13px;">
                         <div style="font-weight: 600; color: #374151;">${prop.type}</div>
                         <div style="color: #6b7280;">${prop.line}</div>
                         <div style="color: #22c55e;">O ${prop.overOdds}</div>
                         <div style="color: #ef4444;">U ${prop.underOdds}</div>
-                        <div style="font-weight: bold; color: ${prop.recommendation === 'OVER' ? '#22c55e' : '#ef4444'};">${prop.recommendation}</div>
+                        <div style="font-weight: bold; color: ${recColor};">${prop.recommendation}</div>
                         <div style="background: rgba(34, 197, 94, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; text-align: center;">${prop.confidence}%</div>
                         <div style="font-size: 11px; color: #6b7280;">${prop.reasoning}</div>
                     </div>
@@ -10039,7 +10045,8 @@ function generateAdvancedPrediction() {
                         <span style="background: #fef3c7; padding: 2px 6px; border-radius: 4px; color: #a16207; font-weight: 600;">Edge: ${prop.edge}</span>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
         
         function generateValueBetAnalysis(qbName) {
