@@ -961,148 +961,74 @@
             
             if (teamSelect.value) {
                 qbSelect.disabled = false;
-                qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
+                qbSelect.innerHTML = '<option value="">⏳ Loading quarterbacks...</option>';
                 
-                // Real NFL QB data for 2025 season
-                const realQBData = {
-                    'KC': [
-                        {name: 'Patrick Mahomes', number: 15, status: 'Starter'},
-                        {name: 'Carson Wentz', number: 11, status: 'Backup'}
-                    ],
-                    'BUF': [
-                        {name: 'Josh Allen', number: 17, status: 'Starter'},
-                        {name: 'Matt Barkley', number: 2, status: 'Backup'}
-                    ],
-                    'MIA': [
-                        {name: 'Tua Tagovailoa', number: 1, status: 'Starter'},
-                        {name: 'Mike White', number: 14, status: 'Backup'}
-                    ],
-                    'NE': [
-                        {name: 'Drake Maye', number: 10, status: 'Starter'},
-                        {name: 'Jacoby Brissett', number: 7, status: 'Backup'}
-                    ],
-                    'NYJ': [
-                        {name: 'Aaron Rodgers', number: 8, status: 'Starter'},
-                        {name: 'Tyrod Taylor', number: 2, status: 'Backup'}
-                    ],
-                    'BAL': [
-                        {name: 'Lamar Jackson', number: 8, status: 'Starter'},
-                        {name: 'Josh Johnson', number: 17, status: 'Backup'}
-                    ],
-                    'CIN': [
-                        {name: 'Joe Burrow', number: 9, status: 'Starter'},
-                        {name: 'Jake Browning', number: 6, status: 'Backup'}
-                    ],
-                    'CLE': [
-                        {name: 'Deshaun Watson', number: 4, status: 'Starter'},
-                        {name: 'Jameis Winston', number: 5, status: 'Backup'}
-                    ],
-                    'PIT': [
-                        {name: 'Russell Wilson', number: 3, status: 'Starter'},
-                        {name: 'Justin Fields', number: 2, status: 'Backup'}
-                    ],
-                    'HOU': [
-                        {name: 'C.J. Stroud', number: 7, status: 'Starter'},
-                        {name: 'Davis Mills', number: 10, status: 'Backup'}
-                    ],
-                    'IND': [
-                        {name: 'Anthony Richardson', number: 5, status: 'Starter'},
-                        {name: 'Joe Flacco', number: 15, status: 'Backup'}
-                    ],
-                    'JAX': [
-                        {name: 'Trevor Lawrence', number: 16, status: 'Starter'},
-                        {name: 'Mac Jones', number: 10, status: 'Backup'}
-                    ],
-                    'TEN': [
-                        {name: 'Will Levis', number: 8, status: 'Starter'},
-                        {name: 'Mason Rudolph', number: 11, status: 'Backup'}
-                    ],
-                    'DEN': [
-                        {name: 'Bo Nix', number: 10, status: 'Starter'},
-                        {name: 'Jarrett Stidham', number: 4, status: 'Backup'}
-                    ],
-                    'LV': [
-                        {name: 'Gardner Minshew', number: 15, status: 'Starter'},
-                        {name: 'Aidan O\'Connell', number: 12, status: 'Backup'}
-                    ],
-                    'LAC': [
-                        {name: 'Justin Herbert', number: 10, status: 'Starter'},
-                        {name: 'Taylor Heinicke', number: 4, status: 'Backup'}
-                    ],
-                    'DAL': [
-                        {name: 'Dak Prescott', number: 4, status: 'Starter'},
-                        {name: 'Cooper Rush', number: 10, status: 'Backup'}
-                    ],
-                    'NYG': [
-                        {name: 'Daniel Jones', number: 8, status: 'Starter'},
-                        {name: 'Drew Lock', number: 2, status: 'Backup'}
-                    ],
-                    'PHI': [
-                        {name: 'Jalen Hurts', number: 1, status: 'Starter'},
-                        {name: 'Kenny Pickett', number: 7, status: 'Backup'}
-                    ],
-                    'WAS': [
-                        {name: 'Jayden Daniels', number: 5, status: 'Starter'},
-                        {name: 'Marcus Mariota', number: 18, status: 'Backup'}
-                    ],
-                    'CHI': [
-                        {name: 'Caleb Williams', number: 18, status: 'Starter'},
-                        {name: 'Tyson Bagent', number: 17, status: 'Backup'}
-                    ],
-                    'DET': [
-                        {name: 'Jared Goff', number: 16, status: 'Starter'},
-                        {name: 'Hendon Hooker', number: 2, status: 'Backup'}
-                    ],
-                    'GB': [
-                        {name: 'Jordan Love', number: 10, status: 'Starter'},
-                        {name: 'Malik Willis', number: 11, status: 'Backup'}
-                    ],
-                    'MIN': [
-                        {name: 'Sam Darnold', number: 14, status: 'Starter'},
-                        {name: 'J.J. McCarthy', number: 9, status: 'Backup'}
-                    ],
-                    'ATL': [
-                        {name: 'Kirk Cousins', number: 18, status: 'Starter'},
-                        {name: 'Michael Penix Jr.', number: 9, status: 'Backup'}
-                    ],
-                    'CAR': [
-                        {name: 'Bryce Young', number: 9, status: 'Starter'},
-                        {name: 'Andy Dalton', number: 14, status: 'Backup'}
-                    ],
-                    'NO': [
-                        {name: 'Derek Carr', number: 4, status: 'Starter'},
-                        {name: 'Spencer Rattler', number: 18, status: 'Backup'}
-                    ],
-                    'TB': [
-                        {name: 'Baker Mayfield', number: 6, status: 'Starter'},
-                        {name: 'Kyle Trask', number: 2, status: 'Backup'}
-                    ],
-                    'ARI': [
-                        {name: 'Kyler Murray', number: 1, status: 'Starter'},
-                        {name: 'Clayton Tune', number: 16, status: 'Backup'}
-                    ],
-                    'LAR': [
-                        {name: 'Matthew Stafford', number: 9, status: 'Starter'},
-                        {name: 'Jimmy Garoppolo', number: 10, status: 'Backup'}
-                    ],
-                    'SF': [
-                        {name: 'Brock Purdy', number: 13, status: 'Starter'},
-                        {name: 'Sam Darnold', number: 14, status: 'Backup'}
-                    ],
-                    'SEA': [
-                        {name: 'Geno Smith', number: 7, status: 'Starter'},
-                        {name: 'Sam Howell', number: 6, status: 'Backup'}
-                    ]
-                };
-                
-                // Use real QB data
-                if (realQBData[teamSelect.value]) {
-                    realQBData[teamSelect.value].forEach(qb => {
-                        qbSelect.innerHTML += `<option value="${qb.name}">#${qb.number} ${qb.name} (${qb.status})</option>`;
-                    });
+                // First try to use LIVE Tank01 data
+                if (window.nflTeamsData && window.nflTeamsData[teamSelect.value]) {
+                    const team = window.nflTeamsData[teamSelect.value];
+                    qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
+                    
+                    if (team.roster && team.roster.length > 0) {
+                        console.log('🏈 Using LIVE Tank01 data for', teamSelect.value, ':', team.roster);
+                        team.roster.forEach(qb => {
+                            const displayName = qb.longName || qb.espnName || qb.name || 'Unknown Player';
+                            const jerseyNumber = qb.jerseyNum || qb.number || '';
+                            const position = qb.pos || 'QB';
+                            
+                            qbSelect.innerHTML += `<option value="${qb.playerID || displayName}">
+                                ${jerseyNumber ? '#' + jerseyNumber + ' ' : ''}${displayName} (${position})
+                            </option>`;
+                        });
+                        console.log('✅ Loaded', team.roster.length, 'QBs from live Tank01 data');
+                    } else {
+                        console.log('⚠️ No QBs found in Tank01 data for', teamSelect.value);
+                        qbSelect.innerHTML += '<option value="starter">Starting QB</option><option value="backup">Backup QB</option>';
+                    }
                 } else {
-                    // Fallback if team not found
-                    qbSelect.innerHTML += '<option value="starter">Starting QB</option><option value="backup">Backup QB</option>';
+                    // Fallback to static data if Tank01 not available
+                    console.log('⚠️ Using fallback static data for', teamSelect.value);
+                    const staticQBData = {
+                        'KC': [{name: 'Patrick Mahomes', number: 15}, {name: 'Carson Wentz', number: 11}],
+                        'BUF': [{name: 'Josh Allen', number: 17}, {name: 'Matt Barkley', number: 2}],
+                        'CIN': [{name: 'Jake Browning', number: 6}, {name: 'AJ McCarron', number: 5}], // Current starter per your note
+                        'MIA': [{name: 'Tua Tagovailoa', number: 1}, {name: 'Mike White', number: 14}],
+                        'NE': [{name: 'Drake Maye', number: 10}, {name: 'Jacoby Brissett', number: 7}],
+                        'NYJ': [{name: 'Aaron Rodgers', number: 8}, {name: 'Tyrod Taylor', number: 2}],
+                        'BAL': [{name: 'Lamar Jackson', number: 8}, {name: 'Josh Johnson', number: 17}],
+                        'CLE': [{name: 'Deshaun Watson', number: 4}, {name: 'Jameis Winston', number: 5}],
+                        'PIT': [{name: 'Russell Wilson', number: 3}, {name: 'Justin Fields', number: 2}],
+                        'HOU': [{name: 'C.J. Stroud', number: 7}, {name: 'Davis Mills', number: 10}],
+                        'IND': [{name: 'Anthony Richardson', number: 5}, {name: 'Joe Flacco', number: 15}],
+                        'JAX': [{name: 'Trevor Lawrence', number: 16}, {name: 'Mac Jones', number: 10}],
+                        'TEN': [{name: 'Will Levis', number: 8}, {name: 'Mason Rudolph', number: 11}],
+                        'DEN': [{name: 'Bo Nix', number: 10}, {name: 'Jarrett Stidham', number: 4}],
+                        'LV': [{name: 'Gardner Minshew', number: 15}, {name: 'Aidan O\'Connell', number: 12}],
+                        'LAC': [{name: 'Justin Herbert', number: 10}, {name: 'Taylor Heinicke', number: 4}],
+                        'DAL': [{name: 'Dak Prescott', number: 4}, {name: 'Cooper Rush', number: 10}],
+                        'NYG': [{name: 'Daniel Jones', number: 8}, {name: 'Drew Lock', number: 2}],
+                        'PHI': [{name: 'Jalen Hurts', number: 1}, {name: 'Kenny Pickett', number: 7}],
+                        'WAS': [{name: 'Jayden Daniels', number: 5}, {name: 'Marcus Mariota', number: 18}],
+                        'CHI': [{name: 'Caleb Williams', number: 18}, {name: 'Tyson Bagent', number: 17}],
+                        'DET': [{name: 'Jared Goff', number: 16}, {name: 'Hendon Hooker', number: 2}],
+                        'GB': [{name: 'Jordan Love', number: 10}, {name: 'Malik Willis', number: 11}],
+                        'MIN': [{name: 'Sam Darnold', number: 14}, {name: 'J.J. McCarthy', number: 9}],
+                        'ATL': [{name: 'Kirk Cousins', number: 18}, {name: 'Michael Penix Jr.', number: 9}],
+                        'CAR': [{name: 'Bryce Young', number: 9}, {name: 'Andy Dalton', number: 14}],
+                        'NO': [{name: 'Derek Carr', number: 4}, {name: 'Spencer Rattler', number: 18}],
+                        'TB': [{name: 'Baker Mayfield', number: 6}, {name: 'Kyle Trask', number: 2}],
+                        'ARI': [{name: 'Kyler Murray', number: 1}, {name: 'Clayton Tune', number: 16}],
+                        'LAR': [{name: 'Matthew Stafford', number: 9}, {name: 'Jimmy Garoppolo', number: 10}],
+                        'SF': [{name: 'Brock Purdy', number: 13}, {name: 'Sam Darnold', number: 14}],
+                        'SEA': [{name: 'Geno Smith', number: 7}, {name: 'Sam Howell', number: 6}]
+                    };
+                    
+                    if (staticQBData[teamSelect.value]) {
+                        staticQBData[teamSelect.value].forEach(qb => {
+                            qbSelect.innerHTML += `<option value="${qb.name}">#${qb.number} ${qb.name}</option>`;
+                        });
+                    } else {
+                        qbSelect.innerHTML += '<option value="starter">Starting QB</option><option value="backup">Backup QB</option>';
+                    }
                 }
                 
                 // Update team info

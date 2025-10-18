@@ -262,7 +262,29 @@ async function fetchNFLDataWithTank01Enhanced() {
         if (response.ok) {
             const data = await response.json();
             console.log('✅ Tank01 API SUCCESS:', data);
-            return true;
+            
+            // Store the live NFL teams data globally for use in dropdowns
+            if (data && data.body) {
+                window.nflTeamsData = {};
+                
+                // Process each team and store roster data
+                data.body.forEach(team => {
+                    if (team.teamAbv && team.roster) {
+                        window.nflTeamsData[team.teamAbv] = {
+                            teamName: team.teamCity + ' ' + team.teamName,
+                            roster: team.roster.filter(player => player.pos === 'QB'),
+                            teamAbv: team.teamAbv
+                        };
+                    }
+                });
+                
+                console.log('✅ Live NFL roster data stored:', Object.keys(window.nflTeamsData).length + ' teams');
+                console.log('🏈 Sample data:', window.nflTeamsData);
+                return true;
+            } else {
+                console.log('❌ Tank01 API returned unexpected data structure');
+                return false;
+            }
         } else {
             console.log('❌ Tank01 API failed with status:', response.status);
             return false;
