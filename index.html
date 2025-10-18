@@ -968,23 +968,18 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 VERSION 2024-10-18-15:35 - FUNCTION SCOPE FIXED - showBettingRecommendations moved before generatePrediction!");
+            console.log("🔥 VERSION 2024-10-18-15:40 - INLINE SOLUTION - Betting recommendations inlined, no function calls!");
             console.log("✅ ALL DOM element access has null safety checks INCLUDING topValueBets, marketTrends, riskAssessment!");
             console.log("🎯 Tank01 API working perfectly - Cincinnati shows Joe Flacco #16 and Jake Browning #6!");
-            console.log("💥 FUNCTION SCOPE RESOLVED - showBettingRecommendations should now be available!");
+            console.log("💥 FUNCTION ISSUE ELIMINATED - All betting code is now inline in generatePrediction!");
             
             // EMERGENCY VERSION CHECK - If console still shows old version, force reload
             const currentTimestamp = Date.now();
             const expectedVersion = 'v2024-10-18-15-35-function-scope-fixed';
             console.log('🕐 Current timestamp:', currentTimestamp, 'Expected version:', expectedVersion);
             
-            // FUNCTION AVAILABILITY CHECK
-            console.log('🔍 Checking if showBettingRecommendations is available:', typeof showBettingRecommendations);
-            if (typeof showBettingRecommendations !== 'function') {
-                console.error('❌ showBettingRecommendations function NOT FOUND - cache issue!');
-            } else {
-                console.log('✅ showBettingRecommendations function is available!');
-            }
+            // FUNCTION ISSUE ELIMINATED - All betting code now inline
+            console.log('✅ No function calls needed - betting recommendations are inline in generatePrediction!');
             
             // Force cache clearing and version check
             const currentVersion = 'v2024-10-18-15-35-function-scope-fixed';
@@ -1187,140 +1182,7 @@
             homeTeamInfo.style.display = 'none';
         }
         
-        // Move showBettingRecommendations before generatePrediction to fix scope issue
-        function showBettingRecommendations(prediction, confidence) {
-            // Update the expandable card summaries with null safety
-            const bettingSummary = document.getElementById('betting-summary');
-            const practiceSummary = document.getElementById('practice-summary');
-            const healthSummary = document.getElementById('health-summary');
-            const gamesSummary = document.getElementById('games-summary');
-            
-            // Update betting insights summary
-            if (bettingSummary) {
-                bettingSummary.textContent = `${confidence}% conf, OVER ${prediction.passingYards - 15} yds`;
-            }
-            
-            // Update practice summary
-            if (practiceSummary) {
-                practiceSummary.textContent = 'Full participation this week';
-            }
-            
-            // Update health summary  
-            if (healthSummary) {
-                healthSummary.textContent = 'Healthy, no limitations';
-            }
-            
-            // Update games summary
-            if (gamesSummary) {
-                gamesSummary.textContent = `${prediction.passingYards} yds avg, ${prediction.touchdowns} TDs`;
-            }
-
-            // Update the detailed content in expandable sections
-            const topValueBets = document.getElementById('topValueBets');
-            const marketTrends = document.getElementById('marketTrends');
-            const riskAssessment = document.getElementById('riskAssessment');
-            
-            // Update top value bets with actual predictions - NULL SAFETY CHECK
-            if (topValueBets) {
-                topValueBets.innerHTML = `
-                <div style="margin-bottom: 8px;">
-                    <span style="color: #059669; font-weight: 600;">🎯 OVER ${prediction.passingYards - 15} Pass Yards</span>
-                </div>
-                <div style="font-size: 12px; color: #6b7280;">
-                    ML Confidence: ${confidence}% | Value Rating: ★★★★☆
-                </div>
-                <div style="font-size: 11px; color: #059669; margin-top: 4px;">
-                    Expected: ${prediction.passingYards} yards (${prediction.attempts} attempts)
-                </div>
-                `;
-            }
-            
-            // Update market trends with live data - NULL SAFETY CHECK
-            if (marketTrends) {
-                marketTrends.innerHTML = `
-                <div style="margin-bottom: 8px;">
-                    <span style="color: #0369a1; font-weight: 600;">📊 ${prediction.touchdowns}+ TDs Trending</span>
-                </div>
-                <div style="font-size: 12px; color: #6b7280;">
-                    ${confidence > 80 ? 'Strong' : 'Moderate'} consensus on TD props
-                </div>
-                <div style="font-size: 11px; color: #0369a1; margin-top: 4px;">
-                    Completion %: ${((prediction.completions / prediction.attempts) * 100).toFixed(1)}%
-                </div>
-                `;
-            }
-            
-            // Update risk assessment - NULL SAFETY CHECK
-            const riskLevelNew = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
-            const riskColorNew = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
-            
-            if (riskAssessment) {
-                riskAssessment.innerHTML = `
-                <div style="margin-bottom: 12px;">
-                    <div style="font-weight: 600; color: ${riskColorNew};">Risk Level: ${riskLevelNew}</div>
-                    <div style="font-size: 11px; color: #6b7280;">QB Rating: ${prediction.qbRating.toFixed(1)} | Turnovers: ${prediction.interceptions}</div>
-                </div>
-                `;
-            }
-            
-            // Update confidence meter with null safety
-            const confidenceLevel = document.getElementById('confidenceLevel');
-            const confidenceText = document.getElementById('confidenceText');
-            
-            if (confidenceLevel) {
-                confidenceLevel.style.width = confidence + '%';
-            }
-            if (confidenceText) {
-                confidenceText.textContent = confidence + '%';
-            }
-
-            const bettingCard = document.getElementById('betting-recommendations');
-            const recommendedBets = document.getElementById('recommended-bets');
-            const riskAssessmentOld = document.getElementById('risk-assessment');
-            const modelAccuracy = document.getElementById('model-accuracy');
-            const topFeature = document.getElementById('top-feature');
-            const mlConfidence = document.getElementById('ml-confidence');
-            
-            // Update ML insights with null safety
-            if (modelAccuracy) modelAccuracy.textContent = '87.3%';
-            if (topFeature) topFeature.textContent = 'Pass Defense';
-            if (mlConfidence) mlConfidence.textContent = confidence + '%';
-            
-            // Update recommended bets with null safety
-            if (recommendedBets) {
-                recommendedBets.innerHTML = `
-                    <div style="padding: 12px; background: #dcfce7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #16a34a;">
-                        <div style="font-weight: bold; color: #166534;">OVER ${prediction.passingYards - 15} Pass Yards</div>
-                        <div style="font-size: 12px; color: #166534;">Confidence: ${confidence}%</div>
-                    </div>
-                    <div style="padding: 12px; background: #fef3c7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #d97706;">
-                        <div style="font-weight: bold; color: #92400e;">OVER ${prediction.touchdowns - 0.5} TDs</div>
-                        <div style="font-size: 12px; color: #92400e;">Confidence: ${confidence - 10}%</div>
-                    </div>
-                `;
-            }
-            
-            // Update risk assessment with null safety
-            const riskLevel = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
-            const riskColor = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
-            
-            if (riskAssessmentOld) {
-                riskAssessmentOld.innerHTML = `
-                    <div style="padding: 12px; background: #f8fafc; border-radius: 6px; margin-bottom: 8px;">
-                        <div style="font-weight: bold; color: ${riskColor};">Risk Level: ${riskLevel}</div>
-                        <div style="font-size: 12px; color: #6b7280;">Based on model confidence and historical accuracy</div>
-                    </div>
-                    <div style="font-size: 12px; color: #6b7280;">
-                        <p><strong>Bankroll:</strong> Risk 2-3% per bet</p>
-                        <p><strong>Variance:</strong> Moderate</p>
-                    </div>
-                `;
-            }
-            
-            if (bettingCard) {
-                bettingCard.style.display = 'block';
-            }
-        }
+        // Betting recommendations functionality now inlined in generatePrediction
         
         function generatePrediction() {
             const teamSelect = document.getElementById('team-select');
@@ -1372,8 +1234,138 @@
                 // Update QB news
                 updateQBNews(qbName, teamName);
                 
-                // Show betting recommendations - now properly available
-                showBettingRecommendations(prediction, confidence);
+                // INLINE BETTING RECOMMENDATIONS - No function call needed
+                // Update the expandable card summaries with null safety
+                const bettingSummary = document.getElementById('betting-summary');
+                const practiceSummary = document.getElementById('practice-summary');
+                const healthSummary = document.getElementById('health-summary');
+                const gamesSummary = document.getElementById('games-summary');
+                
+                // Update betting insights summary
+                if (bettingSummary) {
+                    bettingSummary.textContent = `${confidence}% conf, OVER ${prediction.passingYards - 15} yds`;
+                }
+                
+                // Update practice summary
+                if (practiceSummary) {
+                    practiceSummary.textContent = 'Full participation this week';
+                }
+                
+                // Update health summary  
+                if (healthSummary) {
+                    healthSummary.textContent = 'Healthy, no limitations';
+                }
+                
+                // Update games summary
+                if (gamesSummary) {
+                    gamesSummary.textContent = `${prediction.passingYards} yds avg, ${prediction.touchdowns} TDs`;
+                }
+
+                // Update the detailed content in expandable sections
+                const topValueBets = document.getElementById('topValueBets');
+                const marketTrends = document.getElementById('marketTrends');
+                const riskAssessment = document.getElementById('riskAssessment');
+                
+                // Update top value bets with actual predictions - NULL SAFETY CHECK
+                if (topValueBets) {
+                    topValueBets.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #059669; font-weight: 600;">🎯 OVER ${prediction.passingYards - 15} Pass Yards</span>
+                    </div>
+                    <div style="font-size: 12px; color: #6b7280;">
+                        ML Confidence: ${confidence}% | Value Rating: ★★★★☆
+                    </div>
+                    <div style="font-size: 11px; color: #059669; margin-top: 4px;">
+                        Expected: ${prediction.passingYards} yards (${prediction.attempts} attempts)
+                    </div>
+                    `;
+                }
+                
+                // Update market trends with live data - NULL SAFETY CHECK
+                if (marketTrends) {
+                    marketTrends.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #0369a1; font-weight: 600;">📊 ${prediction.touchdowns}+ TDs Trending</span>
+                    </div>
+                    <div style="font-size: 12px; color: #6b7280;">
+                        ${confidence > 80 ? 'Strong' : 'Moderate'} consensus on TD props
+                    </div>
+                    <div style="font-size: 11px; color: #0369a1; margin-top: 4px;">
+                        Completion %: ${((prediction.completions / prediction.attempts) * 100).toFixed(1)}%
+                    </div>
+                    `;
+                }
+                
+                // Update risk assessment - NULL SAFETY CHECK
+                const riskLevelNew = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
+                const riskColorNew = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
+                
+                if (riskAssessment) {
+                    riskAssessment.innerHTML = `
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 600; color: ${riskColorNew};">Risk Level: ${riskLevelNew}</div>
+                        <div style="font-size: 11px; color: #6b7280;">QB Rating: ${prediction.qbRating.toFixed(1)} | Turnovers: ${prediction.interceptions}</div>
+                    </div>
+                    `;
+                }
+                
+                // Update confidence meter with null safety
+                const confidenceLevel = document.getElementById('confidenceLevel');
+                const confidenceTextEl = document.getElementById('confidenceText');
+                
+                if (confidenceLevel) {
+                    confidenceLevel.style.width = confidence + '%';
+                }
+                if (confidenceTextEl) {
+                    confidenceTextEl.textContent = confidence + '%';
+                }
+
+                const bettingCard = document.getElementById('betting-recommendations');
+                const recommendedBets = document.getElementById('recommended-bets');
+                const riskAssessmentOld = document.getElementById('risk-assessment');
+                const modelAccuracy = document.getElementById('model-accuracy');
+                const topFeature = document.getElementById('top-feature');
+                const mlConfidence = document.getElementById('ml-confidence');
+                
+                // Update ML insights with null safety
+                if (modelAccuracy) modelAccuracy.textContent = '87.3%';
+                if (topFeature) topFeature.textContent = 'Pass Defense';
+                if (mlConfidence) mlConfidence.textContent = confidence + '%';
+                
+                // Update recommended bets with null safety
+                if (recommendedBets) {
+                    recommendedBets.innerHTML = `
+                        <div style="padding: 12px; background: #dcfce7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #16a34a;">
+                            <div style="font-weight: bold; color: #166534;">OVER ${prediction.passingYards - 15} Pass Yards</div>
+                            <div style="font-size: 12px; color: #166534;">Confidence: ${confidence}%</div>
+                        </div>
+                        <div style="padding: 12px; background: #fef3c7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #d97706;">
+                            <div style="font-weight: bold; color: #92400e;">OVER ${prediction.touchdowns - 0.5} TDs</div>
+                            <div style="font-size: 12px; color: #92400e;">Confidence: ${confidence - 10}%</div>
+                        </div>
+                    `;
+                }
+                
+                // Update risk assessment with null safety
+                const riskLevel = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
+                const riskColor = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
+                
+                if (riskAssessmentOld) {
+                    riskAssessmentOld.innerHTML = `
+                        <div style="padding: 12px; background: #f8fafc; border-radius: 6px; margin-bottom: 8px;">
+                            <div style="font-weight: bold; color: ${riskColor};">Risk Level: ${riskLevel}</div>
+                            <div style="font-size: 12px; color: #6b7280;">Based on model confidence and historical accuracy</div>
+                        </div>
+                        <div style="font-size: 12px; color: #6b7280;">
+                            <p><strong>Bankroll:</strong> Risk 2-3% per bet</p>
+                            <p><strong>Variance:</strong> Moderate</p>
+                        </div>
+                    `;
+                }
+                
+                if (bettingCard) {
+                    bettingCard.style.display = 'block';
+                }
                 
                 // Update current week info
                 const currentWeekInfo = document.getElementById('current-week-info');
