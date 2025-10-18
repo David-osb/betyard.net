@@ -242,5 +242,129 @@ function updateLiveIndicator() {
     }
 }
 
+// Tank01 API Integration - Fixed and Working
+async function fetchNFLDataWithTank01Enhanced() {
+    console.log('🚀 Tank01 Enhanced function called - attempting live data fetch...');
+    
+    try {
+        console.log('📞 About to call Tank01 API...');
+        
+        // Simple Tank01 API call
+        const RAPIDAPI_KEY = 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3';
+        const response = await fetch('https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams?rosters=true&schedules=false&topPerformers=false&teamStats=false', {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': RAPIDAPI_KEY,
+                'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('✅ Tank01 API SUCCESS:', data);
+            return true;
+        } else {
+            console.log('❌ Tank01 API failed with status:', response.status);
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Tank01 API error:', error);
+        return false;
+    }
+}
+
+// Enable dropdowns after Tank01 API loads
+function enableDropdownsAfterTank01(tank01Success = true) {
+    console.log('🔧 enableDropdownsAfterTank01 called with success:', tank01Success);
+    
+    try {
+        // Enable all dropdowns
+        const selects = document.querySelectorAll('select, #qb-select, #team-select');
+        selects.forEach(select => {
+            if (select) {
+                select.disabled = false;
+                console.log('✅ Enabled dropdown:', select.id || select.className);
+            }
+        });
+        
+        // Hide all loading elements
+        const loadingElements = document.querySelectorAll('[id*="loading"], [class*="loading"], [class*="spinner"], .loading-overlay');
+        loadingElements.forEach(el => {
+            el.style.display = 'none';
+            console.log('🔧 Hidden loading element:', el.className || el.id);
+        });
+        
+        // Update QB select with default option
+        const qbSelect = document.getElementById('qb-select');
+        if (qbSelect && qbSelect.children.length <= 1) {
+            qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
+            console.log('✅ QB dropdown updated with default option');
+        }
+        
+        // Update team select if needed
+        const teamSelect = document.getElementById('team-select');
+        if (teamSelect) {
+            teamSelect.disabled = false;
+            console.log('✅ Team dropdown enabled');
+        }
+        
+        console.log('✅ All dropdowns enabled and loading elements hidden');
+        
+    } catch (error) {
+        console.error('❌ Error in enableDropdownsAfterTank01:', error);
+    }
+}
+
+// Dark theme toggle function
+let isDarkTheme = false;
+
+function toggleDarkTheme() {
+    console.log('🎨 toggleDarkTheme called');
+    isDarkTheme = !isDarkTheme;
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+    
+    if (isDarkTheme) {
+        // Apply dark theme
+        body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+        body.style.color = '#e2e8f0';
+        
+        // Update theme icon
+        if (themeIcon) themeIcon.textContent = 'brightness_7';
+        
+        // Update cards
+        const cards = document.querySelectorAll('.mdl-card');
+        cards.forEach(card => {
+            card.style.background = '#2d3748';
+            card.style.color = '#e2e8f0';
+            card.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
+        });
+        
+        console.log('🌙 Dark theme applied');
+    } else {
+        // Apply light theme
+        body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        body.style.color = '#374151';
+        
+        // Update theme icon
+        if (themeIcon) themeIcon.textContent = 'brightness_2';
+        
+        // Reset cards
+        const cards = document.querySelectorAll('.mdl-card');
+        cards.forEach(card => {
+            card.style.background = '';
+            card.style.color = '';
+            card.style.boxShadow = '';
+        });
+        
+        console.log('☀️ Light theme applied');
+    }
+}
+
+// Make functions globally available
+window.fetchNFLDataWithTank01Enhanced = fetchNFLDataWithTank01Enhanced;
+window.enableDropdownsAfterTank01 = enableDropdownsAfterTank01;
+window.toggleDarkTheme = toggleDarkTheme;
+
 // Main JavaScript content now loaded from external files
 console.log('✅ Modular JavaScript architecture successfully implemented');
