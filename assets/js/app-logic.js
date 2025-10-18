@@ -289,7 +289,7 @@ async function fetchNFLDataWithTank01Enhanced() {
                     'BAL': 'BAL', 'CIN': 'CIN', 'CLE': 'CLE', 'PIT': 'PIT',
                     'HOU': 'HOU', 'IND': 'IND', 'JAX': 'JAX', 'TEN': 'TEN',
                     'DEN': 'DEN', 'KC': 'KC', 'LV': 'LV', 'LAC': 'LAC',
-                    'DAL': 'DAL', 'NYG': 'NYG', 'PHI': 'PHI', 'WSH': 'WAS',
+                    'DAL': 'DAL', 'NYG': 'NYG', 'PHI': 'PHI', 'WAS': 'WAS',
                     'CHI': 'CHI', 'DET': 'DET', 'GB': 'GB', 'MIN': 'MIN',
                     'ATL': 'ATL', 'CAR': 'CAR', 'NO': 'NO', 'TB': 'TB',
                     'ARI': 'ARI', 'LAR': 'LAR', 'SF': 'SF', 'SEA': 'SEA'
@@ -302,10 +302,16 @@ async function fetchNFLDataWithTank01Enhanced() {
                 };
                 
                 // Process each team and store roster data
-                data.body.forEach(team => {
+                console.log('📊 Processing Tank01 data - found', data.body.length, 'teams');
+                
+                data.body.forEach((team, index) => {
+                    console.log(`🔍 Team ${index + 1}:`, team.teamAbv, team.teamCity, team.teamName, 'Roster:', !!team.Roster);
+                    
                     if (team.teamAbv && team.Roster) {
                         const uiTeamCode = tank01ToUIMapping[team.teamAbv] || team.teamAbv;
                         const quarterbacks = Object.values(team.Roster).filter(player => player.pos === 'QB');
+                        
+                        console.log(`🏈 ${team.teamAbv} -> ${uiTeamCode}: Found ${quarterbacks.length} QBs`);
                         
                         // Use accurate data if available, otherwise use Tank01 data
                         const finalQBData = accurateQBData[uiTeamCode] || quarterbacks;
@@ -319,12 +325,18 @@ async function fetchNFLDataWithTank01Enhanced() {
                         };
                         
                         const source = accurateQBData[uiTeamCode] ? 'CORRECTED' : 'Tank01';
-                        console.log(`🏈 Processed ${uiTeamCode} (${source}): ${finalQBData.length} QBs`);
+                        console.log(`✅ Processed ${uiTeamCode} (${source}): ${finalQBData.length} QBs`);
                         
                         if (uiTeamCode === 'CIN') {
                             console.log('🔍 Cincinnati QBs:', finalQBData.map(qb => `${qb.longName || qb.espnName} #${qb.jerseyNum} [${source}]`));
                             console.log('✅ Tank01 API is providing CURRENT Cincinnati roster data');
                         }
+                    } else {
+                        console.log(`⚠️ Skipping team ${index + 1} - missing teamAbv or Roster:`, {
+                            teamAbv: team.teamAbv,
+                            hasRoster: !!team.Roster,
+                            teamKeys: Object.keys(team)
+                        });
                     }
                 });
                 
