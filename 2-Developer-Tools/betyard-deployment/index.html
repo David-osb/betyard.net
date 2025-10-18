@@ -1236,15 +1236,26 @@
                 </div>
             `;
             
-            // Update confidence meter with null safety
+            // Update confidence meter with enhanced debugging
+            console.log('🔍 Looking for confidence elements...');
             const confidenceLevel = document.getElementById('confidenceLevel');
             const confidenceText = document.getElementById('confidenceText');
             
+            console.log('confidenceLevel element:', confidenceLevel);
+            console.log('confidenceText element:', confidenceText);
+            
             if (confidenceLevel) {
                 confidenceLevel.style.width = confidence + '%';
+                console.log('✅ Updated confidenceLevel width to:', confidence + '%');
+            } else {
+                console.error('❌ confidenceLevel element not found!');
             }
+            
             if (confidenceText) {
                 confidenceText.textContent = confidence + '%';
+                console.log('✅ Updated confidenceText to:', confidence + '%');
+            } else {
+                console.error('❌ confidenceText element not found!');
             }
 
             const bettingCard = document.getElementById('betting-recommendations');
