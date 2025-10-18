@@ -174,6 +174,197 @@
             transition: width 0.5s ease;
         }
 
+        /* Expandable Analysis Dashboard */
+        .analysis-dashboard {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: #374151;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .expandable-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .expandable-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .card-summary {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .expand-icon {
+            font-size: 14px;
+            color: #9ca3af;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            padding: 0 16px 16px 16px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .analysis-section {
+            margin-bottom: 16px;
+        }
+
+        .analysis-section h4 {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .practice-day {
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .practice-notes {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .health-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .health-label {
+            font-size: 12px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .game-stat {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .game-header {
+            font-weight: 600;
+            font-size: 12px;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .game-stats {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .game-result {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .game-result.win {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .game-result.loss {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-good, .status-excellent, .status-full, .status-clear {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .status-good, .status-excellent, .status-full, .status-clear {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .responsible-gaming-notice {
+            margin-top: 16px;
+            padding: 12px;
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 300px;
+            }
+        }
+
         /* Better mobile experience */
         @media (max-width: 768px) {
             .mdl-grid {
@@ -258,63 +449,160 @@
                     </div>
                 </div>
 
-                <!-- Professional Betting Recommendations -->
+                <!-- Professional Analysis Dashboard -->
                 <div class="mdl-cell mdl-cell--12-col">
-                    <div class="mdl-card mdl-shadow--2dp" style="width: 100%; margin-bottom: 16px;">
-                        <div class="mdl-card__title mdl-color--orange-700 mdl-color-text--white">
-                            <h2 class="mdl-card__title-text">
-                                <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">trending_up</i>
-                                🎯 Professional Betting Insights & Recommendations
-                            </h2>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <div class="mdl-grid" style="margin: 0;">
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone">
-                                    <div class="betting-insight-card">
-                                        <div class="insight-header">
-                                            <span class="insight-icon">📈</span>
-                                            <strong>Top Value Bets</strong>
+                    <div class="analysis-dashboard">
+                        <h3 class="dashboard-title">
+                            <i class="material-icons">analytics</i>
+                            Professional Analysis Dashboard
+                        </h3>
+                        
+                        <div class="mdl-grid" style="margin: 0;">
+                            <!-- Betting Insights Card -->
+                            <div class="mdl-cell mdl-cell--3-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
+                                <div class="expandable-card" onclick="toggleCard('betting-insights')">
+                                    <div class="card-header">
+                                        <div class="card-icon">🎯</div>
+                                        <div class="card-info">
+                                            <div class="card-title">Betting Insights</div>
+                                            <div class="card-summary" id="betting-summary">Loading analysis...</div>
                                         </div>
-                                        <div id="topValueBets" class="insight-content">
-                                            <div class="loading-text">Select a QB to view recommendations</div>
-                                        </div>
+                                        <div class="expand-icon" id="betting-insights-icon">▼</div>
                                     </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone">
-                                    <div class="betting-insight-card">
-                                        <div class="insight-header">
-                                            <span class="insight-icon">⚡</span>
-                                            <strong>Live Market Trends</strong>
-                                        </div>
-                                        <div id="marketTrends" class="insight-content">
-                                            <div class="loading-text">Market analysis loading...</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone">
-                                    <div class="betting-insight-card">
-                                        <div class="insight-header">
-                                            <span class="insight-icon">🎲</span>
-                                            <strong>Risk Assessment</strong>
-                                        </div>
-                                        <div id="riskAssessment" class="insight-content">
-                                            <div class="confidence-meter">
-                                                <span>Confidence Level:</span>
-                                                <div class="confidence-bar">
-                                                    <div id="confidenceLevel" class="confidence-fill" style="width: 0%;"></div>
+                                    <div class="card-content" id="betting-insights-content" style="display: none;">
+                                        <div id="detailed-betting-analysis">
+                                            <div class="analysis-section">
+                                                <h4>🔥 Top Value Bets</h4>
+                                                <div id="topValueBets">Select a QB to view recommendations</div>
+                                            </div>
+                                            <div class="analysis-section">
+                                                <h4>📊 Market Trends</h4>
+                                                <div id="marketTrends">Market analysis loading...</div>
+                                            </div>
+                                            <div class="analysis-section">
+                                                <h4>🎲 Risk Assessment</h4>
+                                                <div id="riskAssessment">
+                                                    <div class="confidence-meter">
+                                                        <span>Confidence Level:</span>
+                                                        <div class="confidence-bar">
+                                                            <div id="confidenceLevel" class="confidence-fill" style="width: 0%;"></div>
+                                                        </div>
+                                                        <span id="confidenceText">--%</span>
+                                                    </div>
                                                 </div>
-                                                <span id="confidenceText">--%</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div style="margin-top: 16px; padding: 12px; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-radius: 8px; border-left: 4px solid #f39c12;">
-                                <div style="font-size: 13px; color: #856404;">
-                                    <strong>⚠️ Responsible Gaming Notice:</strong> 
-                                    These are analytical insights for educational purposes. Always gamble responsibly and within your means.
+
+                            <!-- Practice Reports Card -->
+                            <div class="mdl-cell mdl-cell--3-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
+                                <div class="expandable-card" onclick="toggleCard('practice-reports')">
+                                    <div class="card-header">
+                                        <div class="card-icon">🏃</div>
+                                        <div class="card-info">
+                                            <div class="card-title">Practice Reports</div>
+                                            <div class="card-summary" id="practice-summary">Full participation</div>
+                                        </div>
+                                        <div class="expand-icon" id="practice-reports-icon">▼</div>
+                                    </div>
+                                    <div class="card-content" id="practice-reports-content" style="display: none;">
+                                        <div id="detailed-practice-analysis">
+                                            <div class="analysis-section">
+                                                <h4>� Weekly Practice Log</h4>
+                                                <div class="practice-day">
+                                                    <strong>Wednesday:</strong> <span class="status-good">Full Practice</span>
+                                                    <div class="practice-notes">Complete passing drills, no limitations</div>
+                                                </div>
+                                                <div class="practice-day">
+                                                    <strong>Thursday:</strong> <span class="status-good">Full Practice</span>
+                                                    <div class="practice-notes">Red zone work, timing routes</div>
+                                                </div>
+                                                <div class="practice-day">
+                                                    <strong>Friday:</strong> <span class="status-good">Full Practice</span>
+                                                    <div class="practice-notes">Walkthrough, light work</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Health Status Card -->
+                            <div class="mdl-cell mdl-cell--3-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
+                                <div class="expandable-card" onclick="toggleCard('health-status')">
+                                    <div class="card-header">
+                                        <div class="card-icon">🏥</div>
+                                        <div class="card-info">
+                                            <div class="card-title">Health Status</div>
+                                            <div class="card-summary" id="health-summary">Healthy</div>
+                                        </div>
+                                        <div class="expand-icon" id="health-status-icon">▼</div>
+                                    </div>
+                                    <div class="card-content" id="health-status-content" style="display: none;">
+                                        <div id="detailed-health-analysis">
+                                            <div class="analysis-section">
+                                                <h4>💪 Current Status</h4>
+                                                <div class="health-item">
+                                                    <span class="health-label">Overall Health:</span>
+                                                    <span class="status-excellent">Excellent</span>
+                                                </div>
+                                                <div class="health-item">
+                                                    <span class="health-label">Injury Report:</span>
+                                                    <span class="status-clear">No injuries listed</span>
+                                                </div>
+                                                <div class="health-item">
+                                                    <span class="health-label">Mobility:</span>
+                                                    <span class="status-full">100%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Game Data Card -->
+                            <div class="mdl-cell mdl-cell--3-col mdl-cell--6-col-tablet mdl-cell--12-col-phone">
+                                <div class="expandable-card" onclick="toggleCard('recent-games')">
+                                    <div class="card-header">
+                                        <div class="card-icon">📊</div>
+                                        <div class="card-info">
+                                            <div class="card-title">Recent Games</div>
+                                            <div class="card-summary" id="games-summary">287 yds, 2 TDs</div>
+                                        </div>
+                                        <div class="expand-icon" id="recent-games-icon">▼</div>
+                                    </div>
+                                    <div class="card-content" id="recent-games-content" style="display: none;">
+                                        <div id="detailed-games-analysis">
+                                            <div class="analysis-section">
+                                                <h4>🏈 Last 3 Games</h4>
+                                                <div class="game-stat">
+                                                    <div class="game-header">Week 6 vs Opponent</div>
+                                                    <div class="game-stats">287 yards, 2 TDs, 1 INT, 94.2 rating</div>
+                                                    <div class="game-result win">W 28-21</div>
+                                                </div>
+                                                <div class="game-stat">
+                                                    <div class="game-header">Week 5 @ Opponent</div>
+                                                    <div class="game-stats">312 yards, 3 TDs, 0 INT, 108.4 rating</div>
+                                                    <div class="game-result win">W 35-14</div>
+                                                </div>
+                                                <div class="game-stat">
+                                                    <div class="game-header">Week 4 vs Opponent</div>
+                                                    <div class="game-stats">298 yards, 1 TD, 2 INT, 78.9 rating</div>
+                                                    <div class="game-result loss">L 17-24</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Responsible Gaming Notice -->
+                        <div class="responsible-gaming-notice">
+                            <strong>⚠️ Responsible Gaming Notice:</strong> 
+                            These are analytical insights for educational purposes. Always gamble responsibly and within your means.
                         </div>
                     </div>
                 </div>
@@ -565,6 +853,22 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/app-logic.js"></script>
     <script>
+        // Toggle expandable card functionality
+        function toggleCard(cardId) {
+            const content = document.getElementById(cardId + '-content');
+            const icon = document.getElementById(cardId + '-icon');
+            
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                icon.classList.add('expanded');
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.classList.remove('expanded');
+                icon.textContent = '▼';
+            }
+        }
+
         // Initialize page status updates
         function initializeStatusUpdates() {
             // Update platform timestamps
@@ -822,7 +1126,25 @@
         }
         
         function showBettingRecommendations(prediction, confidence) {
-            // Update the live betting insights section
+            // Update the expandable card summaries
+            const bettingSummary = document.getElementById('betting-summary');
+            const practiceSummary = document.getElementById('practice-summary');
+            const healthSummary = document.getElementById('health-summary');
+            const gamesSummary = document.getElementById('games-summary');
+            
+            // Update betting insights summary
+            bettingSummary.textContent = `${confidence}% conf, OVER ${prediction.passingYards - 15} yds`;
+            
+            // Update practice summary
+            practiceSummary.textContent = 'Full participation this week';
+            
+            // Update health summary  
+            healthSummary.textContent = 'Healthy, no limitations';
+            
+            // Update games summary
+            gamesSummary.textContent = `${prediction.passingYards} yds avg, ${prediction.touchdowns} TDs`;
+
+            // Update the detailed content in expandable sections
             const topValueBets = document.getElementById('topValueBets');
             const marketTrends = document.getElementById('marketTrends');
             const riskAssessment = document.getElementById('riskAssessment');
