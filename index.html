@@ -963,14 +963,27 @@
                 qbSelect.disabled = false;
                 qbSelect.innerHTML = '<option value="">⏳ Loading quarterbacks...</option>';
                 
-                // First try to use LIVE Tank01 data
+                // Define corrected QB data for teams with known Tank01 issues
+                const correctedQBData = {
+                    'CIN': [
+                        {name: 'Joe Burrow', longName: 'Joe Burrow', number: 9, jerseyNum: '9', pos: 'QB', playerID: 'burrow_joe'},
+                        {name: 'Jake Browning', longName: 'Jake Browning', number: 6, jerseyNum: '6', pos: 'QB', playerID: 'browning_jake'}
+                    ]
+                };
+                
+                // First try to use LIVE Tank01 data, but check for corrections
                 if (window.nflTeamsData && window.nflTeamsData[teamSelect.value]) {
                     const team = window.nflTeamsData[teamSelect.value];
                     qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
                     
-                    if (team.roster && team.roster.length > 0) {
-                        console.log('🏈 Using LIVE Tank01 data for', teamSelect.value, ':', team.roster);
-                        team.roster.forEach(qb => {
+                    // Use corrected data if available, otherwise use Tank01 data
+                    let qbsToUse = correctedQBData[teamSelect.value] || team.roster;
+                    
+                    if (qbsToUse && qbsToUse.length > 0) {
+                        const dataSource = correctedQBData[teamSelect.value] ? 'CORRECTED' : 'LIVE Tank01';
+                        console.log(`🏈 Using ${dataSource} data for`, teamSelect.value, ':', qbsToUse);
+                        
+                        qbsToUse.forEach(qb => {
                             const displayName = qb.longName || qb.espnName || qb.name || 'Unknown Player';
                             const jerseyNumber = qb.jerseyNum || qb.number || '';
                             const position = qb.pos || 'QB';
@@ -979,10 +992,10 @@
                                 ${jerseyNumber ? '#' + jerseyNumber + ' ' : ''}${displayName} (${position})
                             </option>`;
                         });
-                        console.log('✅ Loaded', team.roster.length, 'QBs from live Tank01 data');
+                        console.log('✅ Loaded', qbsToUse.length, 'QBs from', dataSource, 'data');
                     } else {
                         console.log('⚠️ No QBs found in Tank01 data for', teamSelect.value);
-                        qbSelect.innerHTML += '<option value="starter">Starting QB</option><option value="backup">Backup QB</option>';
+                        qbSelect.innerHTML += '<option value="">❌ No QB data available</option>';
                     }
                 } else {
                     // Fallback to static data if Tank01 not available
@@ -990,7 +1003,7 @@
                     const staticQBData = {
                         'KC': [{name: 'Patrick Mahomes', number: 15}, {name: 'Carson Wentz', number: 11}],
                         'BUF': [{name: 'Josh Allen', number: 17}, {name: 'Matt Barkley', number: 2}],
-                        'CIN': [{name: 'Jake Browning', number: 6}, {name: 'AJ McCarron', number: 5}], // Current starter per your note
+                        'CIN': [{name: 'Joe Burrow', number: 9}, {name: 'Jake Browning', number: 6}], // Updated with current starter
                         'MIA': [{name: 'Tua Tagovailoa', number: 1}, {name: 'Mike White', number: 14}],
                         'NE': [{name: 'Drake Maye', number: 10}, {name: 'Jacoby Brissett', number: 7}],
                         'NYJ': [{name: 'Aaron Rodgers', number: 8}, {name: 'Tyrod Taylor', number: 2}],

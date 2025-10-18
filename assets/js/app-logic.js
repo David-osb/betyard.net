@@ -293,6 +293,9 @@ async function fetchNFLDataWithTank01Enhanced() {
                         };
                         
                         console.log(`🏈 Processed ${uiTeamCode} (Tank01: ${team.teamAbv}): ${quarterbacks.length} QBs`);
+                        if (uiTeamCode === 'CIN') {
+                            console.log('🔍 Cincinnati QBs from Tank01:', quarterbacks.map(qb => `${qb.longName || qb.espnName} #${qb.jerseyNum}`));
+                        }
                     }
                 });
                 
