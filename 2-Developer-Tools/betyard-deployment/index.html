@@ -908,10 +908,17 @@
                 </div>
             `;
             
-            // Update confidence level
+            // Update confidence level with null safety
             const confidence = 78; // Default confidence
-            document.getElementById('confidenceLevel').style.width = confidence + '%';
-            document.getElementById('confidenceText').textContent = confidence + '%';
+            const confidenceLevelEl = document.getElementById('confidenceLevel');
+            const confidenceTextEl = document.getElementById('confidenceText');
+            
+            if (confidenceLevelEl) {
+                confidenceLevelEl.style.width = confidence + '%';
+            }
+            if (confidenceTextEl) {
+                confidenceTextEl.textContent = confidence + '%';
+            }
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
@@ -1236,26 +1243,15 @@
                 </div>
             `;
             
-            // Update confidence meter with enhanced debugging
-            console.log('🔍 Looking for confidence elements...');
+            // Update confidence meter with null safety
             const confidenceLevel = document.getElementById('confidenceLevel');
             const confidenceText = document.getElementById('confidenceText');
             
-            console.log('confidenceLevel element:', confidenceLevel);
-            console.log('confidenceText element:', confidenceText);
-            
             if (confidenceLevel) {
                 confidenceLevel.style.width = confidence + '%';
-                console.log('✅ Updated confidenceLevel width to:', confidence + '%');
-            } else {
-                console.error('❌ confidenceLevel element not found!');
             }
-            
             if (confidenceText) {
                 confidenceText.textContent = confidence + '%';
-                console.log('✅ Updated confidenceText to:', confidence + '%');
-            } else {
-                console.error('❌ confidenceText element not found!');
             }
 
             const bettingCard = document.getElementById('betting-recommendations');
