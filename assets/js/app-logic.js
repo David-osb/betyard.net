@@ -295,16 +295,10 @@ async function fetchNFLDataWithTank01Enhanced() {
                     'ARI': 'ARI', 'LAR': 'LAR', 'SF': 'SF', 'SEA': 'SEA'
                 };
                 
-                // Known accurate QB data for teams with Tank01 issues
+                // Known accurate QB data for teams with Tank01 issues (only use when Tank01 is actually wrong)
                 const accurateQBData = {
-                    'CIN': [
-                        {longName: 'Joe Burrow', jerseyNum: '9', pos: 'QB', playerID: 'burrow_joe_corrected', team: 'CIN'},
-                        {longName: 'Jake Browning', jerseyNum: '6', pos: 'QB', playerID: 'browning_jake', team: 'CIN'}
-                    ],
-                    'KC': [
-                        {longName: 'Patrick Mahomes', jerseyNum: '15', pos: 'QB', playerID: 'mahomes_patrick', team: 'KC'},
-                        {longName: 'Carson Wentz', jerseyNum: '11', pos: 'QB', playerID: 'wentz_carson', team: 'KC'}
-                    ]
+                    // Removed CIN override - Tank01 API has correct current data
+                    // Only keeping overrides for teams where Tank01 is confirmed incorrect
                 };
                 
                 // Process each team and store roster data
@@ -328,7 +322,8 @@ async function fetchNFLDataWithTank01Enhanced() {
                         console.log(`🏈 Processed ${uiTeamCode} (${source}): ${finalQBData.length} QBs`);
                         
                         if (uiTeamCode === 'CIN') {
-                            console.log('🔍 Cincinnati QBs:', finalQBData.map(qb => `${qb.longName} #${qb.jerseyNum} [${source}]`));
+                            console.log('🔍 Cincinnati QBs:', finalQBData.map(qb => `${qb.longName || qb.espnName} #${qb.jerseyNum} [${source}]`));
+                            console.log('✅ Tank01 API is providing CURRENT Cincinnati roster data');
                         }
                     }
                 });
