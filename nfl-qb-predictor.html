@@ -1090,6 +1090,170 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* ==========================================
+           MODERN LAYOUT IMPROVEMENTS 
+           ========================================== */
+        
+        /* Clean Modern Header */
+        .mdl-layout__header {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        }
+        
+        .mdl-layout-title {
+            font-weight: 700 !important;
+            font-size: 1.5rem !important;
+            letter-spacing: -0.025em !important;
+        }
+        
+        /* Hide secondary header row for cleaner look */
+        .mdl-layout__header-row:nth-child(2) {
+            display: none !important;
+        }
+        
+        /* Modern Card Design */
+        .mdl-card {
+            border-radius: 16px !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06) !important;
+            border: 1px solid #e5e7eb !important;
+            transition: all 0.2s ease !important;
+            overflow: hidden !important;
+        }
+        
+        .mdl-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Clean Card Headers */
+        .mdl-card__title {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding: 20px 24px !important;
+        }
+        
+        .mdl-card__title-text {
+            font-size: 1.125rem !important;
+            font-weight: 600 !important;
+            color: #1f2937 !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        .mdl-card__title-text i {
+            margin-right: 8px !important;
+            font-size: 20px !important;
+        }
+        
+        /* Better Content Spacing */
+        .mdl-card__supporting-text {
+            padding: 24px !important;
+            line-height: 1.6 !important;
+        }
+        
+        /* Improved Form Elements */
+        .mdl-textfield {
+            width: 100% !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .mdl-textfield__input,
+        .mdl-textfield select {
+            border: 1px solid #d1d5db !important;
+            border-radius: 8px !important;
+            padding: 12px !important;
+            font-size: 14px !important;
+            transition: border-color 0.2s ease !important;
+        }
+        
+        .mdl-textfield__input:focus,
+        .mdl-textfield select:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+        }
+        
+        /* Modern Button Styles */
+        .mdl-button--raised {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            font-weight: 500 !important;
+            border: none !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .mdl-button--raised:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Clean Grid Layout */
+        .mdl-grid {
+            padding: 24px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+        }
+        
+        /* Improved Status Indicators */
+        .status-display {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+            border: 1px solid #bae6fd !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+            margin: 16px 0 !important;
+        }
+        
+        .status-display.success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+            border-color: #bbf7d0 !important;
+        }
+        
+        .status-display.warning {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+            border-color: #fde68a !important;
+        }
+        
+        .status-display.error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%) !important;
+            border-color: #fca5a5 !important;
+        }
+        
+        /* Better Mobile Experience */
+        @media (max-width: 768px) {
+            .mdl-grid {
+                padding: 16px !important;
+            }
+            
+            .mdl-card__title,
+            .mdl-card__supporting-text {
+                padding: 16px !important;
+            }
+            
+            .mdl-layout-title {
+                font-size: 1.25rem !important;
+            }
+        }
+        
+        /* Clean Loading States */
+        .loading-spinner {
+            border: 3px solid #f3f4f6 !important;
+            border-top: 3px solid #2563eb !important;
+            border-radius: 50% !important;
+            width: 24px !important;
+            height: 24px !important;
+            animation: spin 1s linear infinite !important;
+            margin: 0 auto !important;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         /* Injury Report Overlay Animation */
         @keyframes slideIn {
             from {
@@ -1158,8 +1322,8 @@
                     <i class="material-icons" id="theme-icon">brightness_2</i>
                 </button>
             </div>
-            <!-- Subtitle -->
-            <div class="mdl-layout__header-row" style="height: 48px; padding-left: 40px;">
+            <!-- Subtitle - Hidden for cleaner design -->
+            <div class="mdl-layout__header-row" style="display: none;">
                 <span class="mdl-color-text--indigo-100" style="font-size: 14px;">
                     Professional quarterback analysis & predictions with XGBoost ML
                 </span>
