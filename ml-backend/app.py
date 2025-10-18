@@ -331,10 +331,20 @@ def model_info():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    logger.info("Starting NFL QB Prediction ML Backend...")
+    import os
+    
+    # Get port from environment variable (Railway/Heroku sets this)
+    port = int(os.environ.get('PORT', 5000))
+    
+    logger.info("🚀 Starting NFL QB Prediction ML Backend...")
+    logger.info("🏈 XGBoost Model with Weather & Injury Intelligence")
+    logger.info("=" * 50)
+    logger.info(f"📡 Server running on port {port}")
     logger.info("Available endpoints:")
     logger.info("  GET  /health - Health check")
     logger.info("  POST /predict - QB performance prediction")
     logger.info("  GET  /model/info - Model information")
+    logger.info("=" * 50)
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Production ready settings for cloud deployment
+    app.run(host='0.0.0.0', port=port, debug=False)
