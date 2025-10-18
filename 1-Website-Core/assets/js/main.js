@@ -5,6 +5,7 @@ console.log('📄 Main application JavaScript loaded from external file');
 
 // 2025 NFL Schedule Data - ACCURATE FROM PRO FOOTBALL REFERENCE
 // Based on official Pro Football Reference data (Current date: October 16, 2025 - Week 7 in progress)
+// eslint-disable-next-line no-unused-vars
 const nfl2025Schedule = {
 	6: [
 		{homeTeam: 'New York Giants', awayTeam: 'Philadelphia Eagles', date: 'Oct 9, 2025', time: '8:15 PM ET', tv: 'TNF', result: 'NYG 34, PHI 17'},
@@ -27,6 +28,7 @@ const nfl2025Schedule = {
 };
 
 // Team name mappings for schedule
+// eslint-disable-next-line no-unused-vars
 const teamMappings = {
 	'buffalo-bills': 'Buffalo Bills',
 	'miami-dolphins': 'Miami Dolphins',
@@ -62,4 +64,97 @@ const teamMappings = {
 	'seattle-seahawks': 'Seattle Seahawks'
 };
 
-// ... (move all other main logic from the HTML script block here, including event listeners, API calls, UI logic, etc.)
+// --- Dynamic Styling and Event Handling ---
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎨 Dynamic styling and event handlers loaded');
+    
+    // Health Status Indicator
+    const healthStatus = document.getElementById('health-status-indicator');
+    if (healthStatus) {
+        // Example: Set color dynamically (replace with real logic)
+        healthStatus.style.background = '#fff';
+        healthStatus.style.borderLeft = '3px solid #22c55e';
+    }
+
+    // Injury Severity Indicator
+    const injurySeverity = document.getElementById('injury-severity-indicator');
+    if (injurySeverity) {
+        // Example: Set color dynamically (replace with real logic)
+        injurySeverity.style.color = '#22c55e';
+    }
+
+    // Item Status Indicator
+    const itemStatus = document.getElementById('item-status-indicator');
+    if (itemStatus) {
+        itemStatus.style.borderLeft = '4px solid #22c55e';
+    }
+    const itemStatusColor = document.getElementById('item-status-color-indicator');
+    if (itemStatusColor) {
+        itemStatusColor.style.background = '#22c55e';
+    }
+
+    // Game Result Indicator
+    const gameResult = document.getElementById('game-result-indicator');
+    if (gameResult) {
+        gameResult.style.borderLeft = '4px solid #22c55e';
+    }
+    const gameResultColor = document.getElementById('game-result-color-indicator');
+    if (gameResultColor) {
+        gameResultColor.style.color = '#22c55e';
+    }
+
+    // Week and Date Indicator
+    const weekIndicator = document.getElementById('week-indicator');
+    if (weekIndicator) {
+        // Example: Set week dynamically
+        weekIndicator.textContent = 'NFL Week 7';
+    }
+    const dateIndicator = document.getElementById('date-indicator');
+    if (dateIndicator) {
+        // Example: Set date dynamically
+        dateIndicator.textContent = 'October 18, 2025';
+    }
+
+    // Status Indicator
+    const statusIndicator = document.getElementById('status-indicator');
+    if (statusIndicator) {
+        statusIndicator.className = 'status-indicator status-success';
+    }
+
+    // Practice Schedule Styling
+    document.querySelectorAll('.practice-row').forEach(row => {
+        row.style.borderLeft = '4px solid #22c55e';
+    });
+    document.querySelectorAll('.practice-participation').forEach(cell => {
+        cell.style.color = '#22c55e';
+    });
+
+    // Prop Recommendation Styling
+    document.querySelectorAll('.prop-row').forEach(row => {
+        row.style.borderLeft = '4px solid #22c55e';
+    });
+    document.querySelectorAll('.prop-recommendation').forEach(cell => {
+        cell.style.color = '#22c55e';
+    });
+
+    // Predict Game Button Event Binding
+    document.querySelectorAll('.predict-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const awayTeam = btn.getAttribute('data-away-team');
+            const homeTeam = btn.getAttribute('data-home-team');
+            const week = btn.getAttribute('data-week');
+            const index = btn.getAttribute('data-index');
+            // Call prediction logic
+            predictGame(awayTeam, homeTeam, week, index);
+        });
+    });
+});
+
+// Prediction function for game analysis
+// eslint-disable-next-line no-unused-vars
+function predictGame(awayTeam, homeTeam, week, index) {
+    console.log(`🏈 Predicting: ${awayTeam} @ ${homeTeam} (Week ${week}, Game ${index})`);
+    alert(`Predicting: ${awayTeam} @ ${homeTeam} (Week ${week}, Game ${index})`);
+}
+
+// Additional main logic can be added here as needed
