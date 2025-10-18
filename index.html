@@ -1179,96 +1179,7 @@
             homeTeamInfo.style.display = 'none';
         }
         
-        function generatePrediction() {
-            const teamSelect = document.getElementById('team-select');
-            const qbSelect = document.getElementById('qb-select');
-            
-            if (teamSelect.value && qbSelect.value) {
-                const teamName = teamSelect.options[teamSelect.selectedIndex].text;
-                const qbName = qbSelect.options[qbSelect.selectedIndex].text;
-                
-                // Generate realistic prediction data
-                const prediction = {
-                    passingYards: Math.floor(Math.random() * 150) + 200,
-                    completions: Math.floor(Math.random() * 10) + 20,
-                    attempts: Math.floor(Math.random() * 15) + 30,
-                    touchdowns: Math.floor(Math.random() * 3) + 1,
-                    interceptions: Math.floor(Math.random() * 2),
-                    qbRating: Math.floor(Math.random() * 40) + 80
-                };
-                
-                // Update prediction display with null safety
-                const elements = {
-                    'passing-yards': prediction.passingYards,
-                    'completions': prediction.completions,
-                    'attempts': prediction.attempts,
-                    'touchdowns': prediction.touchdowns,
-                    'interceptions': prediction.interceptions,
-                    'qb-rating': prediction.qbRating.toFixed(1)
-                };
-                
-                Object.entries(elements).forEach(([id, value]) => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.textContent = value;
-                    }
-                });
-                
-                // Show confidence meter with null safety
-                const confidenceMeter = document.getElementById('confidence-meter');
-                const confidenceText = document.getElementById('confidence-text');
-                const confidence = Math.floor(Math.random() * 20) + 75;
-                
-                if (confidenceText) {
-                    confidenceText.textContent = confidence + '%';
-                }
-                if (confidenceMeter) {
-                    confidenceMeter.style.display = 'block';
-                }
-                
-                // Update QB news
-                updateQBNews(qbName, teamName);
-                
-                // Show betting recommendations with function check
-                if (typeof showBettingRecommendations === 'function') {
-                    showBettingRecommendations(prediction, confidence);
-                } else {
-                    console.log('⚠️ showBettingRecommendations function not found, skipping betting recommendations');
-                }
-                
-                // Update current week info
-                const currentWeekInfo = document.getElementById('current-week-info');
-                currentWeekInfo.innerHTML = `
-                    <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week 7</strong> - October 2024</p>
-                    <p style="color: #0369a1; font-size: 14px;">Game: ${teamName} vs Opponent</p>
-                    <p style="color: #0369a1; font-size: 14px;">Kickoff: Sunday 1:00 PM ET</p>
-                `;
-            }
-        }
-        
-        function updateQBNews(qbName, teamName) {
-            const qbNewsContent = document.getElementById('qb-news-content');
-            qbNewsContent.innerHTML = `
-                <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                    <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
-                    <p style="color: #374151; margin-bottom: 8px;">
-                        <strong>Injury Status:</strong> <span style="color: #10b981;">Healthy</span> - Full participation in practice
-                    </p>
-                    <p style="color: #374151; margin-bottom: 8px;">
-                        <strong>Recent Performance:</strong> 287 yards, 2 TDs, 1 INT in last game
-                    </p>
-                    <p style="color: #374151;">
-                        <strong>Matchup Analysis:</strong> Favorable matchup against opponent's 24th-ranked pass defense
-                    </p>
-                </div>
-                <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                    <p style="color: #92400e; font-size: 14px;">
-                        <strong>📰 Latest:</strong> ${qbName} expected to have strong performance based on recent form and matchup analysis
-                    </p>
-                </div>
-            `;
-        }
-        
+        // Move showBettingRecommendations before generatePrediction to fix scope issue
         function showBettingRecommendations(prediction, confidence) {
             // Update the expandable card summaries with null safety
             const bettingSummary = document.getElementById('betting-summary');
@@ -1401,6 +1312,92 @@
             if (bettingCard) {
                 bettingCard.style.display = 'block';
             }
+        }
+        
+        function generatePrediction() {
+            const teamSelect = document.getElementById('team-select');
+            const qbSelect = document.getElementById('qb-select');
+            
+            if (teamSelect.value && qbSelect.value) {
+                const teamName = teamSelect.options[teamSelect.selectedIndex].text;
+                const qbName = qbSelect.options[qbSelect.selectedIndex].text;
+                
+                // Generate realistic prediction data
+                const prediction = {
+                    passingYards: Math.floor(Math.random() * 150) + 200,
+                    completions: Math.floor(Math.random() * 10) + 20,
+                    attempts: Math.floor(Math.random() * 15) + 30,
+                    touchdowns: Math.floor(Math.random() * 3) + 1,
+                    interceptions: Math.floor(Math.random() * 2),
+                    qbRating: Math.floor(Math.random() * 40) + 80
+                };
+                
+                // Update prediction display with null safety
+                const elements = {
+                    'passing-yards': prediction.passingYards,
+                    'completions': prediction.completions,
+                    'attempts': prediction.attempts,
+                    'touchdowns': prediction.touchdowns,
+                    'interceptions': prediction.interceptions,
+                    'qb-rating': prediction.qbRating.toFixed(1)
+                };
+                
+                Object.entries(elements).forEach(([id, value]) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = value;
+                    }
+                });
+                
+                // Show confidence meter with null safety
+                const confidenceMeter = document.getElementById('confidence-meter');
+                const confidenceText = document.getElementById('confidence-text');
+                const confidence = Math.floor(Math.random() * 20) + 75;
+                
+                if (confidenceText) {
+                    confidenceText.textContent = confidence + '%';
+                }
+                if (confidenceMeter) {
+                    confidenceMeter.style.display = 'block';
+                }
+                
+                // Update QB news
+                updateQBNews(qbName, teamName);
+                
+                // Show betting recommendations - now properly available
+                showBettingRecommendations(prediction, confidence);
+                
+                // Update current week info
+                const currentWeekInfo = document.getElementById('current-week-info');
+                currentWeekInfo.innerHTML = `
+                    <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week 7</strong> - October 2024</p>
+                    <p style="color: #0369a1; font-size: 14px;">Game: ${teamName} vs Opponent</p>
+                    <p style="color: #0369a1; font-size: 14px;">Kickoff: Sunday 1:00 PM ET</p>
+                `;
+            }
+        }
+        
+        function updateQBNews(qbName, teamName) {
+            const qbNewsContent = document.getElementById('qb-news-content');
+            qbNewsContent.innerHTML = `
+                <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                    <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
+                    <p style="color: #374151; margin-bottom: 8px;">
+                        <strong>Injury Status:</strong> <span style="color: #10b981;">Healthy</span> - Full participation in practice
+                    </p>
+                    <p style="color: #374151; margin-bottom: 8px;">
+                        <strong>Recent Performance:</strong> 287 yards, 2 TDs, 1 INT in last game
+                    </p>
+                    <p style="color: #374151;">
+                        <strong>Matchup Analysis:</strong> Favorable matchup against opponent's 24th-ranked pass defense
+                    </p>
+                </div>
+                <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                    <p style="color: #92400e; font-size: 14px;">
+                        <strong>📰 Latest:</strong> ${qbName} expected to have strong performance based on recent form and matchup analysis
+                    </p>
+                </div>
+            `;
         }
     </script>
 </body>
