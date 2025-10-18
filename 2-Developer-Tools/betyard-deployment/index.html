@@ -1168,23 +1168,31 @@
         }
         
         function showBettingRecommendations(prediction, confidence) {
-            // Update the expandable card summaries
+            // Update the expandable card summaries with null safety
             const bettingSummary = document.getElementById('betting-summary');
             const practiceSummary = document.getElementById('practice-summary');
             const healthSummary = document.getElementById('health-summary');
             const gamesSummary = document.getElementById('games-summary');
             
             // Update betting insights summary
-            bettingSummary.textContent = `${confidence}% conf, OVER ${prediction.passingYards - 15} yds`;
+            if (bettingSummary) {
+                bettingSummary.textContent = `${confidence}% conf, OVER ${prediction.passingYards - 15} yds`;
+            }
             
             // Update practice summary
-            practiceSummary.textContent = 'Full participation this week';
+            if (practiceSummary) {
+                practiceSummary.textContent = 'Full participation this week';
+            }
             
             // Update health summary  
-            healthSummary.textContent = 'Healthy, no limitations';
+            if (healthSummary) {
+                healthSummary.textContent = 'Healthy, no limitations';
+            }
             
             // Update games summary
-            gamesSummary.textContent = `${prediction.passingYards} yds avg, ${prediction.touchdowns} TDs`;
+            if (gamesSummary) {
+                gamesSummary.textContent = `${prediction.passingYards} yds avg, ${prediction.touchdowns} TDs`;
+            }
 
             // Update the detailed content in expandable sections
             const topValueBets = document.getElementById('topValueBets');
@@ -1228,9 +1236,16 @@
                 </div>
             `;
             
-            // Update confidence meter
-            document.getElementById('confidenceLevel').style.width = confidence + '%';
-            document.getElementById('confidenceText').textContent = confidence + '%';
+            // Update confidence meter with null safety
+            const confidenceLevel = document.getElementById('confidenceLevel');
+            const confidenceText = document.getElementById('confidenceText');
+            
+            if (confidenceLevel) {
+                confidenceLevel.style.width = confidence + '%';
+            }
+            if (confidenceText) {
+                confidenceText.textContent = confidence + '%';
+            }
 
             const bettingCard = document.getElementById('betting-recommendations');
             const recommendedBets = document.getElementById('recommended-bets');
@@ -1239,39 +1254,45 @@
             const topFeature = document.getElementById('top-feature');
             const mlConfidence = document.getElementById('ml-confidence');
             
-            // Update ML insights
-            modelAccuracy.textContent = '87.3%';
-            topFeature.textContent = 'Pass Defense';
-            mlConfidence.textContent = confidence + '%';
+            // Update ML insights with null safety
+            if (modelAccuracy) modelAccuracy.textContent = '87.3%';
+            if (topFeature) topFeature.textContent = 'Pass Defense';
+            if (mlConfidence) mlConfidence.textContent = confidence + '%';
             
-            // Update recommended bets
-            recommendedBets.innerHTML = `
-                <div style="padding: 12px; background: #dcfce7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #16a34a;">
-                    <div style="font-weight: bold; color: #166534;">OVER ${prediction.passingYards - 15} Pass Yards</div>
-                    <div style="font-size: 12px; color: #166534;">Confidence: ${confidence}%</div>
-                </div>
-                <div style="padding: 12px; background: #fef3c7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #d97706;">
-                    <div style="font-weight: bold; color: #92400e;">OVER ${prediction.touchdowns - 0.5} TDs</div>
-                    <div style="font-size: 12px; color: #92400e;">Confidence: ${confidence - 10}%</div>
-                </div>
-            `;
+            // Update recommended bets with null safety
+            if (recommendedBets) {
+                recommendedBets.innerHTML = `
+                    <div style="padding: 12px; background: #dcfce7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #16a34a;">
+                        <div style="font-weight: bold; color: #166534;">OVER ${prediction.passingYards - 15} Pass Yards</div>
+                        <div style="font-size: 12px; color: #166534;">Confidence: ${confidence}%</div>
+                    </div>
+                    <div style="padding: 12px; background: #fef3c7; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #d97706;">
+                        <div style="font-weight: bold; color: #92400e;">OVER ${prediction.touchdowns - 0.5} TDs</div>
+                        <div style="font-size: 12px; color: #92400e;">Confidence: ${confidence - 10}%</div>
+                    </div>
+                `;
+            }
             
-            // Update risk assessment
+            // Update risk assessment with null safety
             const riskLevel = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
             const riskColor = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
             
-            riskAssessment.innerHTML = `
-                <div style="padding: 12px; background: #f8fafc; border-radius: 6px; margin-bottom: 8px;">
-                    <div style="font-weight: bold; color: ${riskColor};">Risk Level: ${riskLevel}</div>
-                    <div style="font-size: 12px; color: #6b7280;">Based on model confidence and historical accuracy</div>
-                </div>
-                <div style="font-size: 12px; color: #6b7280;">
-                    <p><strong>Bankroll:</strong> Risk 2-3% per bet</p>
-                    <p><strong>Variance:</strong> Moderate</p>
-                </div>
-            `;
+            if (riskAssessmentOld) {
+                riskAssessmentOld.innerHTML = `
+                    <div style="padding: 12px; background: #f8fafc; border-radius: 6px; margin-bottom: 8px;">
+                        <div style="font-weight: bold; color: ${riskColor};">Risk Level: ${riskLevel}</div>
+                        <div style="font-size: 12px; color: #6b7280;">Based on model confidence and historical accuracy</div>
+                    </div>
+                    <div style="font-size: 12px; color: #6b7280;">
+                        <p><strong>Bankroll:</strong> Risk 2-3% per bet</p>
+                        <p><strong>Variance:</strong> Moderate</p>
+                    </div>
+                `;
+            }
             
-            bettingCard.style.display = 'block';
+            if (bettingCard) {
+                bettingCard.style.display = 'block';
+            }
         }
     </script>
 </body>
