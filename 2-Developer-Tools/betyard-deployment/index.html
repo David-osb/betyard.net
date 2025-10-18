@@ -10,7 +10,7 @@
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
-    <meta name="timestamp" content="2024-10-18-15-00-NULL-SAFETY-FIX">
+    <meta name="timestamp" content="2024-10-18-15-15-FINAL-NULL-SAFETY-FIX">
     
     <!-- Kill service workers and force reload -->
     <script>
@@ -945,12 +945,12 @@
         }
 
         document.addEventListener("DOMContentLoaded", async function() {
-            console.log("🔥 VERSION 2024-10-18-15:00 - NULL SAFETY COMPREHENSIVE FIX - Using modular JavaScript!");
-            console.log("✅ ALL DOM element access has null safety checks!");
+            console.log("🔥 VERSION 2024-10-18-15:15 - FINAL NULL SAFETY FIX - showBettingRecommendations elements protected!");
+            console.log("✅ ALL DOM element access has null safety checks INCLUDING topValueBets, marketTrends, riskAssessment!");
             console.log("🎯 Tank01 API working perfectly - Cincinnati shows Joe Flacco #16 and Jake Browning #6!");
             
             // Force cache clearing and version check
-            const currentVersion = 'v2024-10-18-15-00-null-safety';
+            const currentVersion = 'v2024-10-18-15-15-final-null-safety';
             const lastVersion = localStorage.getItem('bety-cache-version');
             
             if (!lastVersion || lastVersion !== currentVersion) {
@@ -1268,8 +1268,9 @@
             const marketTrends = document.getElementById('marketTrends');
             const riskAssessment = document.getElementById('riskAssessment');
             
-            // Update top value bets with actual predictions
-            topValueBets.innerHTML = `
+            // Update top value bets with actual predictions - NULL SAFETY CHECK
+            if (topValueBets) {
+                topValueBets.innerHTML = `
                 <div style="margin-bottom: 8px;">
                     <span style="color: #059669; font-weight: 600;">🎯 OVER ${prediction.passingYards - 15} Pass Yards</span>
                 </div>
@@ -1279,10 +1280,12 @@
                 <div style="font-size: 11px; color: #059669; margin-top: 4px;">
                     Expected: ${prediction.passingYards} yards (${prediction.attempts} attempts)
                 </div>
-            `;
+                `;
+            }
             
-            // Update market trends with live data
-            marketTrends.innerHTML = `
+            // Update market trends with live data - NULL SAFETY CHECK
+            if (marketTrends) {
+                marketTrends.innerHTML = `
                 <div style="margin-bottom: 8px;">
                     <span style="color: #0369a1; font-weight: 600;">📊 ${prediction.touchdowns}+ TDs Trending</span>
                 </div>
@@ -1292,18 +1295,21 @@
                 <div style="font-size: 11px; color: #0369a1; margin-top: 4px;">
                     Completion %: ${((prediction.completions / prediction.attempts) * 100).toFixed(1)}%
                 </div>
-            `;
+                `;
+            }
             
-            // Update risk assessment
+            // Update risk assessment - NULL SAFETY CHECK
             const riskLevelNew = confidence > 85 ? 'Low' : confidence > 75 ? 'Medium' : 'High';
             const riskColorNew = confidence > 85 ? '#16a34a' : confidence > 75 ? '#d97706' : '#dc2626';
             
-            riskAssessment.innerHTML = `
+            if (riskAssessment) {
+                riskAssessment.innerHTML = `
                 <div style="margin-bottom: 12px;">
                     <div style="font-weight: 600; color: ${riskColorNew};">Risk Level: ${riskLevelNew}</div>
                     <div style="font-size: 11px; color: #6b7280;">QB Rating: ${prediction.qbRating.toFixed(1)} | Turnovers: ${prediction.interceptions}</div>
                 </div>
-            `;
+                `;
+            }
             
             // Update confidence meter with null safety
             const confidenceLevel = document.getElementById('confidenceLevel');
