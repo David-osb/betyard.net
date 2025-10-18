@@ -3,9 +3,32 @@
 
 class BetYardMLAPI {
     constructor() {
-        this.baseURL = 'http://localhost:5000';
+        // 🌐 CLOUD DEPLOYMENT READY
+        // Update this URL with your Railway/cloud deployment URL
+        this.baseURL = this.getMLBackendURL();
         this.isAvailable = false;
+        
+        console.log(`🔗 ML Backend URL: ${this.baseURL}`);
         this.checkBackendHealth();
+    }
+    
+    getMLBackendURL() {
+        // 🌐 Use ML_CONFIG if available
+        if (window.ML_CONFIG) {
+            const activeProvider = window.ML_CONFIG.ACTIVE;
+            const url = window.ML_CONFIG[activeProvider];
+            console.log(`🔧 Using ${activeProvider} provider: ${url}`);
+            return url;
+        }
+        
+        // 🚀 Fallback: Auto-detect environment
+        const isLocalDevelopment = window.location.hostname === 'localhost' || 
+                                  window.location.hostname === '127.0.0.1' ||
+                                  window.location.protocol === 'file:';
+                                  
+        return isLocalDevelopment 
+            ? 'http://localhost:5000' 
+            : 'https://betyard-ml-backend-production.up.railway.app';
     }
 
     async checkBackendHealth() {
