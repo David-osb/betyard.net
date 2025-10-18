@@ -1687,9 +1687,52 @@
             }
         }
         
-        // Make sure function is accessible globally
+        // Create the missing enableDropdownsAfterTank01 function
+        function enableDropdownsAfterTank01(tank01Success = true) {
+            console.log('🔧 enableDropdownsAfterTank01 called with success:', tank01Success);
+            
+            try {
+                // Enable all dropdowns
+                const selects = document.querySelectorAll('select, #qb-select, #team-select');
+                selects.forEach(select => {
+                    if (select) {
+                        select.disabled = false;
+                        console.log('✅ Enabled dropdown:', select.id || select.className);
+                    }
+                });
+                
+                // Hide all loading elements
+                const loadingElements = document.querySelectorAll('[id*="loading"], [class*="loading"], [class*="spinner"], .loading-overlay');
+                loadingElements.forEach(el => {
+                    el.style.display = 'none';
+                    console.log('🔧 Hidden loading element:', el.className || el.id);
+                });
+                
+                // Update QB select with default option
+                const qbSelect = document.getElementById('qb-select');
+                if (qbSelect && qbSelect.children.length <= 1) {
+                    qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
+                    console.log('✅ QB dropdown updated with default option');
+                }
+                
+                // Update team select if needed
+                const teamSelect = document.getElementById('team-select');
+                if (teamSelect) {
+                    teamSelect.disabled = false;
+                    console.log('✅ Team dropdown enabled');
+                }
+                
+                console.log('✅ All dropdowns enabled and loading elements hidden');
+                
+            } catch (error) {
+                console.error('❌ Error in enableDropdownsAfterTank01:', error);
+            }
+        }
+        
+        // Make sure functions are accessible globally
         window.fetchNFLDataWithTank01Enhanced = fetchNFLDataWithTank01Enhanced;
-        console.log('✅ ISOLATED SCRIPT: Tank01 function defined and globally accessible');
+        window.enableDropdownsAfterTank01 = enableDropdownsAfterTank01;
+        console.log('✅ ISOLATED SCRIPT: Tank01 and enableDropdowns functions defined and globally accessible');
     </script>
 
                 13: new Date(2025, 10, 24), // Week 13: Nov 24
