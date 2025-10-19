@@ -86,22 +86,21 @@ const NFL_2025_SCHEDULE = {
     ],
     games: {
         week7: [
-            { away: 'MIA', home: 'BUF', time: 'Thursday 8:15 PM ET' },
-            { away: 'NYJ', home: 'NE', time: 'Sunday 1:00 PM ET' },
-            { away: 'KC', home: 'DEN', time: 'Sunday 4:25 PM ET' },
-            { away: 'LAC', home: 'LV', time: 'Sunday 4:05 PM ET' },
-            { away: 'PHI', home: 'WSH', time: 'Sunday 1:00 PM ET' },
-            { away: 'NYG', home: 'DAL', time: 'Sunday 4:25 PM ET' },
-            { away: 'BAL', home: 'PIT', time: 'Sunday 1:00 PM ET' },
-            { away: 'CIN', home: 'CLE', time: 'Sunday 1:00 PM ET' },
-            { away: 'HOU', home: 'IND', time: 'Sunday 1:00 PM ET' },
-            { away: 'JAX', home: 'TEN', time: 'Sunday 1:00 PM ET' },
-            { away: 'GB', home: 'MIN', time: 'Sunday 1:00 PM ET' },
-            { away: 'DET', home: 'CHI', time: 'Sunday 1:00 PM ET' },
-            { away: 'SF', home: 'SEA', time: 'Sunday 4:25 PM ET' },
-            { away: 'LAR', home: 'ARI', time: 'Sunday 4:05 PM ET' },
-            { away: 'NO', home: 'ATL', time: 'Sunday 1:00 PM ET' },
-            { away: 'CAR', home: 'TB', time: 'Sunday 1:00 PM ET' }
+            { away: 'DEN', home: 'NO', time: 'Thursday 8:15 PM ET' },
+            { away: 'HOU', home: 'NE', time: 'Sunday 9:30 AM ET (London)' },
+            { away: 'TEN', home: 'BUF', time: 'Sunday 1:00 PM ET' },
+            { away: 'CLE', home: 'CIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'MIA', home: 'IND', time: 'Sunday 1:00 PM ET' },
+            { away: 'SEA', home: 'ATL', time: 'Sunday 1:00 PM ET' },
+            { away: 'PHI', home: 'MIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'DET', home: 'BAL', time: 'Sunday 1:00 PM ET' },
+            { away: 'GB', home: 'WSH', time: 'Sunday 1:00 PM ET' },
+            { away: 'JAX', home: 'PIT', time: 'Sunday 1:00 PM ET' },
+            { away: 'LAR', home: 'LV', time: 'Sunday 4:05 PM ET' },
+            { away: 'CAR', home: 'NYG', time: 'Sunday 4:25 PM ET' },
+            { away: 'KC', home: 'SF', time: 'Sunday 4:25 PM ET' },
+            { away: 'NYJ', home: 'DAL', time: 'Sunday 8:20 PM ET' },
+            { away: 'CHI', home: 'LAC', time: 'Monday 8:15 PM ET' }
         ]
     }
 };
