@@ -18,7 +18,7 @@ class LiveNFLScores {
         this.apiConfig = {
             baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
             headers: {
-                'X-RapidAPI-Key': 'b8fd89e4c6msh29c8b287924c36dp1a6b8djsn7b8f0d5e5b35', // Real API key
+                'X-RapidAPI-Key': 'DEMO_KEY', // Using demo mode for reliable fallback
                 'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
             }
         };

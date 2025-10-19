@@ -896,7 +896,7 @@ class GameCentricUI {
             const response = await fetch(`https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamCode}&getStats=false`, {
                 method: 'GET',
                 headers: {
-                    'X-RapidAPI-Key': 'b8fd89e4c6msh29c8b287924c36dp1a6b8djsn7b8f0d5e5b35',
+                    'X-RapidAPI-Key': 'DEMO_KEY',
                     'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
                 }
             });
