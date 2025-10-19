@@ -156,60 +156,87 @@ class NFLScheduleAPI {
     }
     
     async fetchCurrentLiveScores() {
-        const weekOptions = [8, 7, 6]; // Try current and recent weeks
-        const seasonOptions = [2025, 2024]; // Current and previous season
+        console.log('🔄 Fetching live scores using working Tank01 endpoints...');
         
-        for (const season of seasonOptions) {
-            for (const week of weekOptions) {
-                try {
-                    console.log(`🔄 Trying live scores: Week ${week}, Season ${season}...`);
-                    
-                    const response = await fetch(`${this.apiConfig.baseUrl}/getNFLScores?week=${week}&seasonType=reg&season=${season}`, {
-                        method: 'GET',
-                        headers: this.apiConfig.headers
-                    });
-                    
-                    if (response.ok) {
-                        const scoresData = await response.json();
-                        
-                        // Check if we have actual live/recent games
-                        if (scoresData.body && scoresData.body.length > 0) {
-                            this.cache.liveScores = { 
-                                data: scoresData, 
-                                expires: Date.now() + (10 * 60 * 1000), // 10 minutes for live data
-                                week: week,
-                                season: season
-                            };
-                            
-                            console.log(`✅ Live scores found: Week ${week}, Season ${season} - ${scoresData.body.length} games`);
-                            
-                            // Look for KC vs LV specifically
-                            const kcLvGame = scoresData.body.find(game => 
-                                (game.away === 'KC' && game.home === 'LV') || 
-                                (game.away === 'LV' && game.home === 'KC')
-                            );
-                            
-                            if (kcLvGame) {
-                                console.log('🏈 Found KC vs LV game:', kcLvGame);
-                            }
-                            
-                            window.dispatchEvent(new CustomEvent('nflLiveScoresUpdated', {
-                                detail: { scores: scoresData, week, season, timestamp: new Date() }
-                            }));
-                            
-                            return scoresData;
-                        }
-                    }
-                } catch (error) {
-                    console.warn(`⚠️ Live scores API error for Week ${week}, Season ${season}:`, error);
-                }
-                
-                // Small delay between attempts
-                await new Promise(resolve => setTimeout(resolve, 500));
+        // Since /getNFLScores doesn't exist, use daily schedule + box scores
+        try {
+            // First get today's schedule
+            const todaysGames = this.getTodaysGames();
+            if (!todaysGames || !todaysGames.body) {
+                console.log('⚠️ No daily schedule available for live scores');
+                return null;
             }
+            
+            const gameList = Array.isArray(todaysGames.body) ? todaysGames.body : [todaysGames.body];
+            const liveScoreData = { body: [] };
+            
+            console.log(`🎯 Checking ${gameList.length} games for live status...`);
+            
+            for (const game of gameList) {
+                if (game.gameID) {
+                    try {
+                        // Try to get box score for live data
+                        const response = await fetch(`${this.apiConfig.baseUrl}/getNFLBoxScore?gameID=${game.gameID}`, {
+                            method: 'GET',
+                            headers: this.apiConfig.headers
+                        });
+                        
+                        if (response.ok) {
+                            const boxScore = await response.json();
+                            if (boxScore.body) {
+                                // Merge schedule data with box score data
+                                const gameData = {
+                                    ...game,
+                                    awayPts: boxScore.body.awayPts || 0,
+                                    homePts: boxScore.body.homePts || 0,
+                                    quarter: boxScore.body.quarter || 'Pre',
+                                    gameClock: boxScore.body.gameClock || '',
+                                    gameStatus: boxScore.body.gameStatus || game.gameStatus || 'Scheduled'
+                                };
+                                
+                                liveScoreData.body.push(gameData);
+                                console.log(`✅ Live data for ${game.away} @ ${game.home}: ${gameData.gameStatus}`);
+                            }
+                        }
+                    } catch (error) {
+                        console.log(`ℹ️ No box score for ${game.away} @ ${game.home} (likely not started)`);
+                        // Add game with scheduled status
+                        liveScoreData.body.push({
+                            ...game,
+                            awayPts: 0,
+                            homePts: 0,
+                            quarter: 'Pre',
+                            gameClock: '',
+                            gameStatus: 'Scheduled'
+                        });
+                    }
+                    
+                    // Small delay to respect rate limits
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+            }
+            
+            if (liveScoreData.body.length > 0) {
+                this.cache.liveScores = { 
+                    data: liveScoreData, 
+                    expires: Date.now() + (2 * 60 * 1000), // 2 minutes for live data
+                    source: 'daily-schedule-plus-boxscores'
+                };
+                
+                console.log(`✅ Live scores compiled from ${liveScoreData.body.length} games using daily schedule + box scores`);
+                
+                window.dispatchEvent(new CustomEvent('nflLiveScoresUpdated', {
+                    detail: { scores: liveScoreData, source: 'composite', timestamp: new Date() }
+                }));
+                
+                return liveScoreData;
+            }
+            
+        } catch (error) {
+            console.warn('⚠️ Error compiling live scores:', error);
         }
         
-        console.log('⚠️ No live scores found for recent weeks');
+        console.log('⚠️ No live scores available from working endpoints');
         return null;
     }
     
