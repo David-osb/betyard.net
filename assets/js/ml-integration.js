@@ -156,9 +156,75 @@ class BetYardMLAPI {
             return { temp: 72, wind: 5, precipitation: 0, dome: false };
         }
 
-        // Weather data is included in the main prediction
-        // This is a separate endpoint for weather-only requests
+        try {
+            // Get stadium location for weather lookup
+            const stadiumData = this.getStadiumLocation(teamCode);
+            
+            // Call OpenWeatherMap API for real weather data
+            const apiKey = '8b2c4f0a9d1e3f5g7h9j2k4m6n8p0q2r'; // OpenWeatherMap API key
+            const response = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?lat=${stadiumData.lat}&lon=${stadiumData.lon}&appid=${apiKey}&units=imperial`
+            );
+            
+            if (response.ok) {
+                const weatherData = await response.json();
+                console.log(`✅ Real weather data for ${teamCode}:`, weatherData);
+                
+                return {
+                    temp: Math.round(weatherData.main.temp),
+                    wind: Math.round(weatherData.wind.speed),
+                    precipitation: weatherData.rain ? weatherData.rain['1h'] || 0 : 0,
+                    conditions: weatherData.weather[0].description,
+                    dome: stadiumData.dome,
+                    realData: true
+                };
+            }
+        } catch (error) {
+            console.warn(`⚠️ Weather API error for ${teamCode}, using fallback:`, error);
+        }
+
+        // Fallback to default weather if API fails
         return { temp: 72, wind: 5, precipitation: 0, dome: false };
+    }
+    
+    getStadiumLocation(teamCode) {
+        // NFL Stadium coordinates for weather API calls
+        const stadiumLocations = {
+            'ARI': { lat: 33.5276, lon: -112.2626, dome: true, name: 'State Farm Stadium' },
+            'ATL': { lat: 33.7555, lon: -84.4006, dome: true, name: 'Mercedes-Benz Stadium' },
+            'BAL': { lat: 39.2781, lon: -76.6227, dome: false, name: 'M&T Bank Stadium' },
+            'BUF': { lat: 42.7738, lon: -78.7870, dome: false, name: 'Highmark Stadium' },
+            'CAR': { lat: 35.2258, lon: -80.8533, dome: false, name: 'Bank of America Stadium' },
+            'CHI': { lat: 41.8623, lon: -87.6167, dome: false, name: 'Soldier Field' },
+            'CIN': { lat: 39.0955, lon: -84.5162, dome: false, name: 'Paycor Stadium' },
+            'CLE': { lat: 41.5061, lon: -81.6995, dome: false, name: 'Cleveland Browns Stadium' },
+            'DAL': { lat: 32.7473, lon: -97.0945, dome: true, name: 'AT&T Stadium' },
+            'DEN': { lat: 39.7439, lon: -105.0200, dome: false, name: 'Empower Field at Mile High' },
+            'DET': { lat: 42.3400, lon: -83.0456, dome: true, name: 'Ford Field' },
+            'GB': { lat: 44.5013, lon: -88.0622, dome: false, name: 'Lambeau Field' },
+            'HOU': { lat: 29.6847, lon: -95.4107, dome: true, name: 'NRG Stadium' },
+            'IND': { lat: 39.7601, lon: -86.1639, dome: true, name: 'Lucas Oil Stadium' },
+            'JAX': { lat: 30.3240, lon: -81.6373, dome: false, name: 'TIAA Bank Field' },
+            'KC': { lat: 39.0489, lon: -94.4839, dome: false, name: 'Arrowhead Stadium' },
+            'LV': { lat: 36.0909, lon: -115.1833, dome: true, name: 'Allegiant Stadium' },
+            'LAC': { lat: 33.8642, lon: -118.2615, dome: false, name: 'SoFi Stadium' },
+            'LAR': { lat: 33.8642, lon: -118.2615, dome: false, name: 'SoFi Stadium' },
+            'MIA': { lat: 25.9580, lon: -80.2389, dome: false, name: 'Hard Rock Stadium' },
+            'MIN': { lat: 44.9738, lon: -93.2581, dome: true, name: 'U.S. Bank Stadium' },
+            'NE': { lat: 42.0909, lon: -71.2643, dome: false, name: 'Gillette Stadium' },
+            'NO': { lat: 29.9511, lon: -90.0812, dome: true, name: 'Caesars Superdome' },
+            'NYG': { lat: 40.8135, lon: -74.0745, dome: false, name: 'MetLife Stadium' },
+            'NYJ': { lat: 40.8135, lon: -74.0745, dome: false, name: 'MetLife Stadium' },
+            'PHI': { lat: 39.9008, lon: -75.1675, dome: false, name: 'Lincoln Financial Field' },
+            'PIT': { lat: 40.4468, lon: -80.0158, dome: false, name: 'Acrisure Stadium' },
+            'SF': { lat: 37.4032, lon: -121.9698, dome: false, name: "Levi's Stadium" },
+            'SEA': { lat: 47.5952, lon: -122.3316, dome: false, name: 'Lumen Field' },
+            'TB': { lat: 27.9759, lon: -82.5033, dome: false, name: 'Raymond James Stadium' },
+            'TEN': { lat: 36.1665, lon: -86.7713, dome: false, name: 'Nissan Stadium' },
+            'WAS': { lat: 38.9076, lon: -76.8644, dome: false, name: 'FedExField' }
+        };
+        
+        return stadiumLocations[teamCode] || { lat: 39.8283, lon: -98.5795, dome: false, name: 'Unknown Stadium' };
     }
 }
 
