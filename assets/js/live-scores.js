@@ -432,7 +432,7 @@ class LiveNFLScores {
             },
             quarter: game.quarter || 'Pre',
             timeRemaining: game.gameClock || '',
-            status: this.mapGameStatus(game.gameStatus),
+            status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
             excitingPlay: null,
             isLive: this.scheduleAPI ? this.scheduleAPI.getLiveGames().includes(game.gameID) : false
         }));
@@ -451,8 +451,8 @@ class LiveNFLScores {
             game.awayTeam.score = parseInt(boxScore.body.awayPts) || 0;
             game.homeTeam.score = parseInt(boxScore.body.homePts) || 0;
             
-            // Update game status
-            game.status = this.mapGameStatus(boxScore.body.gameStatus);
+            // Update game status with time zone validation
+            game.status = this.mapGameStatus(boxScore.body.gameStatus, game.gameTime, game.awayTeam.code, game.homeTeam.code);
             game.quarter = boxScore.body.quarter || game.quarter;
             game.timeRemaining = boxScore.body.gameClock || '';
             
@@ -508,7 +508,7 @@ class LiveNFLScores {
             },
             quarter: game.quarter || 'Pre',
             timeRemaining: game.gameClock || '',
-            status: this.mapGameStatus(game.gameStatus),
+            status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
             excitingPlay: this.detectExcitingPlay(game)
         }));
     }
@@ -527,18 +527,75 @@ class LiveNFLScores {
         return teamNames[teamCode] || teamCode;
     }
     
-    mapGameStatus(apiStatus) {
-        // Map Tank01 API status to our format
+    mapGameStatus(apiStatus, gameTime, awayTeam, homeTeam) {
+        // Map Tank01 API status to our format with proper time zone conversion
         if (!apiStatus) return 'SCHEDULED';
         
+        // Get current time in Eastern Time (proper conversion)
+        const now = new Date();
+        
+        // Convert to Eastern Time properly accounting for DST
+        const easternTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+        const currentETHour = easternTime.getHours();
+        const currentETMinutes = easternTime.getMinutes();
+        const currentETTime = currentETHour + (currentETMinutes / 60);
+        
+        // Also get UTC for API comparison (Tank01 might use UTC)
+        const utcTime = now.getUTCHours() + (now.getUTCMinutes() / 60);
+        
+        console.log(`🕐 Time Zone Debug: Local=${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}, ET=${currentETHour}:${currentETMinutes.toString().padStart(2, '0')}, UTC=${Math.floor(utcTime)}:${((utcTime % 1) * 60).toFixed(0).padStart(2, '0')}`);
+        
+        // Parse game time to validate status makes sense
+        let gameStartHourET = null;
+        if (gameTime) {
+            if (gameTime.includes('1:00')) gameStartHourET = 13; // 1 PM ET
+            else if (gameTime.includes('4:05')) gameStartHourET = 16.08; // 4:05 PM ET
+            else if (gameTime.includes('4:25')) gameStartHourET = 16.42; // 4:25 PM ET
+            else if (gameTime.includes('8:20')) gameStartHourET = 20.33; // 8:20 PM ET
+        }
+        
         const status = apiStatus.toLowerCase();
+        let mappedStatus = 'SCHEDULED';
+        
         if (status.includes('live') || status.includes('progress') || status.includes('active')) {
-            return 'LIVE';
+            mappedStatus = 'LIVE';
+        } else if (status.includes('final') || status.includes('complete')) {
+            mappedStatus = 'FINAL';
         }
-        if (status.includes('final') || status.includes('complete')) {
-            return 'FINAL';
+        
+        // CRITICAL: Time zone validation for live games
+        if (gameStartHourET && mappedStatus === 'LIVE') {
+            // Check if current ET time supports live status
+            const timeUntilGameET = gameStartHourET - currentETTime;
+            
+            if (timeUntilGameET > 0.25) { // More than 15 minutes before start
+                console.warn(`� TIME ZONE ISSUE: ${awayTeam} @ ${homeTeam} shows LIVE but game doesn't start for ${(timeUntilGameET * 60).toFixed(0)} minutes (Current: ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET, Game: ${gameTime})`);
+                
+                // Check if this makes sense in other time zones
+                const pacificTime = currentETTime - 3; // ET to PT
+                const centralTime = currentETTime - 1; // ET to CT
+                
+                console.log(`🌐 Time Zone Check: PT=${Math.floor(pacificTime)}:${((pacificTime % 1) * 60).toFixed(0).padStart(2, '0')}, CT=${Math.floor(centralTime)}:${((centralTime % 1) * 60).toFixed(0).padStart(2, '0')}, UTC=${Math.floor(utcTime)}:${((utcTime % 1) * 60).toFixed(0).padStart(2, '0')}`);
+                
+                // Override to SCHEDULED if time doesn't make sense
+                return 'SCHEDULED';
+            }
         }
-        return 'SCHEDULED';
+        
+        // Special validation for KC vs LV (the reported issue)
+        if ((awayTeam === 'KC' && homeTeam === 'LV') || (awayTeam === 'LV' && homeTeam === 'KC')) {
+            if (mappedStatus === 'LIVE') {
+                const kcGameStartET = 13; // 1:00 PM ET
+                if (currentETTime < kcGameStartET) {
+                    console.warn(`🏈 KC vs LV TIME VALIDATION: API says LIVE but it's ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET (${(kcGameStartET - currentETTime) * 60} minutes until 1:00 PM ET start)`);
+                    return 'SCHEDULED';
+                } else {
+                    console.log(`✅ KC vs LV TIME VALIDATION: Game is properly live (started at 1:00 PM ET, now ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET)`);
+                }
+            }
+        }
+        
+        return mappedStatus;
     }
     
     detectExcitingPlay(game) {
