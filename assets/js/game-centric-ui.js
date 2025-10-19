@@ -891,7 +891,20 @@ class GameCentricUI {
     }
     
     async getPlayersForPosition(teamCode, position) {
-        // Try to get real NFL roster data from Tank01 API first
+        // Try to get real NFL roster data from the new Schedule API first
+        if (window.NFLScheduleAPI) {
+            const rosterData = window.NFLScheduleAPI.getTeamRoster(teamCode);
+            if (rosterData) {
+                console.log(`✅ Using cached roster data for ${teamCode}:`, rosterData);
+                
+                const realPlayers = this.processRealRosterData(rosterData, position);
+                if (realPlayers.length > 0) {
+                    return realPlayers;
+                }
+            }
+        }
+        
+        // Fallback to direct API call if not cached
         try {
             const response = await fetch(`https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamCode}&getStats=false`, {
                 method: 'GET',
@@ -903,7 +916,7 @@ class GameCentricUI {
             
             if (response.ok) {
                 const rosterData = await response.json();
-                console.log(`✅ Real NFL roster data for ${teamCode}:`, rosterData);
+                console.log(`✅ Direct API roster data for ${teamCode}:`, rosterData);
                 
                 // Process real roster data
                 const realPlayers = this.processRealRosterData(rosterData, position);
@@ -915,7 +928,7 @@ class GameCentricUI {
             console.warn(`⚠️ Tank01 roster API error for ${teamCode}, using fallback data:`, error);
         }
         
-        // Fallback to enhanced static data with real current NFL rosters
+        // Final fallback to enhanced static data with real current NFL rosters
         return this.getStaticPlayerData(teamCode, position);
     }
     
