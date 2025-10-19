@@ -891,32 +891,19 @@ class GameCentricUI {
     }
     
     async getPlayersForPosition(teamCode, position) {
-        // Try to get real NFL roster data from the new Schedule API first
-        if (window.NFLScheduleAPI) {
-            const rosterData = window.NFLScheduleAPI.getTeamRoster(teamCode);
-            if (rosterData) {
-                console.log(`✅ Using cached roster data for ${teamCode}:`, rosterData);
-                
-                const realPlayers = this.processRealRosterData(rosterData, position);
-                if (realPlayers.length > 0) {
-                    return realPlayers;
-                }
-            }
-        }
-        
-        // Fallback to direct API call if not cached
+        // Try to get real NFL roster data from Tank01 API first
         try {
             const response = await fetch(`https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamCode}&getStats=false`, {
                 method: 'GET',
                 headers: {
-                    'X-RapidAPI-Key': 'DEMO_KEY',
+                    'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
                     'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
                 }
             });
             
             if (response.ok) {
                 const rosterData = await response.json();
-                console.log(`✅ Direct API roster data for ${teamCode}:`, rosterData);
+                console.log(`✅ Real NFL roster data for ${teamCode}:`, rosterData);
                 
                 // Process real roster data
                 const realPlayers = this.processRealRosterData(rosterData, position);
@@ -928,7 +915,7 @@ class GameCentricUI {
             console.warn(`⚠️ Tank01 roster API error for ${teamCode}, using fallback data:`, error);
         }
         
-        // Final fallback to enhanced static data with real current NFL rosters
+        // Fallback to enhanced static data with real current NFL rosters
         return this.getStaticPlayerData(teamCode, position);
     }
     

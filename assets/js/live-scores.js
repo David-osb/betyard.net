@@ -14,11 +14,11 @@ class LiveNFLScores {
         this.games = [];
         this.lastUpdate = null;
         
-        // Tank01 API configuration
+        // Tank01 API configuration with your real key
         this.apiConfig = {
             baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
             headers: {
-                'X-RapidAPI-Key': 'DEMO_KEY', // Using demo mode for reliable fallback
+                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
                 'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
             }
         };

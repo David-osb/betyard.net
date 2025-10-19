@@ -10,16 +10,27 @@ class NFLScheduleAPI {
         this.apiConfig = {
             baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
             headers: {
-                'X-RapidAPI-Key': 'DEMO_KEY', // Using demo mode for reliable fallback
+                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
                 'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
             }
         };
         
-        // Local caching system
+        // API optimization settings
+        this.apiOptimization = {
+            requestQueue: [],
+            isProcessing: false,
+            rateLimitDelay: 1000, // 1 second between requests
+            maxRetries: 3,
+            backoffMultiplier: 2
+        };
+        
+        // Enhanced caching with expiration
         this.cache = {
-            dailySchedule: null,
+            dailySchedule: { data: null, expires: null },
             gameInfo: new Map(),
             rosters: new Map(),
+            liveScores: { data: null, expires: null },
+            playerStats: new Map(),
             lastScheduleFetch: null,
             lastRosterUpdate: null
         };
@@ -33,7 +44,10 @@ class NFLScheduleAPI {
     }
     
     init() {
-        console.log('🏈 NFL Schedule API: Initializing proper data flow...');
+        console.log('🏈 NFL Schedule API: Initializing enhanced data flow with your RapidAPI key...');
+        
+        // Initialize smart request queue processor
+        this.startRequestQueueProcessor();
         
         // Set up daily schedule fetching at 7am EST
         this.setupDailyScheduleFetch();
@@ -41,16 +55,272 @@ class NFLScheduleAPI {
         // Fetch today's schedule immediately
         this.fetchDailySchedule();
         
-        // Set up hourly roster updates
-        this.setupRosterUpdates();
+        // Set up intelligent roster updates
+        this.setupSmartRosterUpdates();
         
-        console.log('✅ NFL Schedule API: Ready with Tank01 best practices!');
+        // Add additional NFL data endpoints
+        this.setupEnhancedDataCollection();
+        
+        console.log('✅ NFL Schedule API: Enhanced system ready with maximum data collection!');
     }
     
     /**
-     * STEP 1: Daily Schedule Fetching (7am EST)
-     * Best practice: One call per day to get all games and gameIDs
+     * ENHANCED: Smart Request Queue Processor
+     * Maximizes API efficiency with intelligent queuing
      */
+    startRequestQueueProcessor() {
+        setInterval(() => {
+            if (!this.apiOptimization.isProcessing && this.apiOptimization.requestQueue.length > 0) {
+                this.processNextRequest();
+            }
+        }, this.apiOptimization.rateLimitDelay);
+    }
+    
+    async processNextRequest() {
+        if (this.apiOptimization.requestQueue.length === 0) return;
+        
+        this.apiOptimization.isProcessing = true;
+        const request = this.apiOptimization.requestQueue.shift();
+        
+        try {
+            await request.execute();
+            request.resolve();
+        } catch (error) {
+            if (request.retries < this.apiOptimization.maxRetries) {
+                request.retries++;
+                const delay = this.apiOptimization.rateLimitDelay * 
+                            Math.pow(this.apiOptimization.backoffMultiplier, request.retries);
+                setTimeout(() => {
+                    this.apiOptimization.requestQueue.unshift(request);
+                }, delay);
+            } else {
+                request.reject(error);
+            }
+        }
+        
+        this.apiOptimization.isProcessing = false;
+    }
+    
+    queueAPIRequest(executeFunction, priority = 1) {
+        return new Promise((resolve, reject) => {
+            const request = {
+                execute: executeFunction,
+                resolve,
+                reject,
+                retries: 0,
+                priority,
+                timestamp: Date.now()
+            };
+            
+            // Insert based on priority
+            const insertIndex = this.apiOptimization.requestQueue.findIndex(r => r.priority < priority);
+            if (insertIndex === -1) {
+                this.apiOptimization.requestQueue.push(request);
+            } else {
+                this.apiOptimization.requestQueue.splice(insertIndex, 0, request);
+            }
+        });
+    }
+    
+    /**
+     * ENHANCED: Additional NFL Data Collection
+     * Leverages more Tank01 endpoints for comprehensive data
+     */
+    setupEnhancedDataCollection() {
+        // Fetch NFL standings
+        this.queueAPIRequest(() => this.fetchNFLStandings(), 3);
+        
+        // Fetch player projections
+        this.queueAPIRequest(() => this.fetchPlayerProjections(), 2);
+        
+        // Fetch injury reports
+        this.queueAPIRequest(() => this.fetchInjuryReports(), 2);
+        
+        // Fetch weather data for outdoor games
+        this.queueAPIRequest(() => this.fetchGameWeather(), 2);
+        
+        console.log('📊 Enhanced data collection queued for maximum NFL insights');
+    }
+    
+    async fetchNFLStandings() {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLStandings?season=2025&seasonType=reg`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const standings = await response.json();
+                this.cache.standings = { data: standings, expires: Date.now() + (24 * 60 * 60 * 1000) };
+                console.log('✅ NFL Standings fetched and cached');
+                
+                window.dispatchEvent(new CustomEvent('nflStandingsUpdated', {
+                    detail: { standings, timestamp: new Date() }
+                }));
+                
+                return standings;
+            }
+        } catch (error) {
+            console.warn('⚠️ Standings API error:', error);
+        }
+        return null;
+    }
+    
+    async fetchPlayerProjections() {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLPlayerList?playerStats=true&getStats=true`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const projections = await response.json();
+                this.cache.playerProjections = { data: projections, expires: Date.now() + (6 * 60 * 60 * 1000) };
+                console.log('✅ Player projections fetched and cached');
+                
+                window.dispatchEvent(new CustomEvent('nflProjectionsUpdated', {
+                    detail: { projections, timestamp: new Date() }
+                }));
+                
+                return projections;
+            }
+        } catch (error) {
+            console.warn('⚠️ Player projections API error:', error);
+        }
+        return null;
+    }
+    
+    async fetchInjuryReports() {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLPlayerList?playerStats=true&getInjuredReserveOnly=false`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const injuries = await response.json();
+                this.cache.injuryReports = { data: injuries, expires: Date.now() + (2 * 60 * 60 * 1000) };
+                console.log('✅ Injury reports fetched and cached');
+                
+                window.dispatchEvent(new CustomEvent('nflInjuriesUpdated', {
+                    detail: { injuries, timestamp: new Date() }
+                }));
+                
+                return injuries;
+            }
+        } catch (error) {
+            console.warn('⚠️ Injury reports API error:', error);
+        }
+        return null;
+    }
+    
+    async fetchGameWeather() {
+        try {
+            // Get today's games first
+            const games = this.getTodaysGames();
+            if (!games || !games.body) return null;
+            
+            const gameList = Array.isArray(games.body) ? games.body : [games.body];
+            
+            for (const game of gameList) {
+                if (game.gameID) {
+                    const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGameInfo?gameID=${game.gameID}`, {
+                        method: 'GET',
+                        headers: this.apiConfig.headers
+                    });
+                    
+                    if (response.ok) {
+                        const gameInfo = await response.json();
+                        if (gameInfo.body && gameInfo.body.weather) {
+                            this.cache.gameWeather = this.cache.gameWeather || new Map();
+                            this.cache.gameWeather.set(game.gameID, {
+                                data: gameInfo.body.weather,
+                                expires: Date.now() + (60 * 60 * 1000)
+                            });
+                            
+                            console.log(`🌤️ Weather data cached for game ${game.gameID}`);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('⚠️ Weather API error:', error);
+        }
+        return null;
+    }
+    
+    /**
+     * ENHANCED: Smart Roster Updates with Priority System
+     */
+    setupSmartRosterUpdates() {
+        // Immediate priority update for today's game teams
+        this.updateGameDayRosters();
+        
+        // Smart scheduling based on game calendar
+        this.scheduleIntelligentRosterUpdates();
+    }
+    
+    async updateGameDayRosters() {
+        const todaysGames = this.getTodaysGames();
+        if (!todaysGames || !todaysGames.body) {
+            // Fallback to priority teams
+            await this.updatePriorityRosters();
+            return;
+        }
+        
+        const gameList = Array.isArray(todaysGames.body) ? todaysGames.body : [todaysGames.body];
+        const gameDayTeams = new Set();
+        
+        gameList.forEach(game => {
+            if (game.away) gameDayTeams.add(game.away);
+            if (game.home) gameDayTeams.add(game.home);
+        });
+        
+        console.log('🎯 Updating rosters for today\'s game teams:', Array.from(gameDayTeams));
+        
+        for (const teamID of gameDayTeams) {
+            await this.queueAPIRequest(() => this.fetchTeamRoster(teamID), 5); // High priority
+        }
+    }
+    
+    scheduleIntelligentRosterUpdates() {
+        // Update all teams weekly on Tuesday (roster moves day)
+        const now = new Date();
+        const nextTuesday = new Date();
+        nextTuesday.setDate(now.getDate() + (2 + 7 - now.getDay()) % 7);
+        nextTuesday.setHours(10, 0, 0, 0); // 10am EST Tuesday
+        
+        const timeUntilTuesday = nextTuesday.getTime() - now.getTime();
+        
+        setTimeout(() => {
+            this.updateAllTeamRosters();
+            
+            // Then weekly
+            setInterval(() => {
+                this.updateAllTeamRosters();
+            }, 7 * 24 * 60 * 60 * 1000); // Weekly
+        }, timeUntilTuesday);
+        
+        // Daily priority team updates
+        setInterval(() => {
+            this.updatePriorityRosters();
+        }, 24 * 60 * 60 * 1000); // Daily
+    }
+    
+    async updateAllTeamRosters() {
+        const allTeams = [
+            'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE',
+            'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC',
+            'LV', 'LAC', 'LAR', 'MIA', 'MIN', 'NE', 'NO', 'NYG',
+            'NYJ', 'PHI', 'PIT', 'SF', 'SEA', 'TB', 'TEN', 'WAS'
+        ];
+        
+        console.log('🔄 Weekly roster update: All 32 teams');
+        
+        for (const teamID of allTeams) {
+            await this.queueAPIRequest(() => this.fetchTeamRoster(teamID), 1); // Low priority
+        }
+    }
     setupDailyScheduleFetch() {
         const now = new Date();
         const est7am = new Date();
@@ -75,9 +345,17 @@ class NFLScheduleAPI {
     }
     
     async fetchDailySchedule() {
+        // Check cache first
+        if (this.cache.dailySchedule.data && 
+            this.cache.dailySchedule.expires && 
+            Date.now() < this.cache.dailySchedule.expires) {
+            console.log('📅 Using cached daily schedule');
+            return this.cache.dailySchedule.data;
+        }
+        
         try {
             const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-            console.log(`🔄 Fetching NFL schedule for ${today}...`);
+            console.log(`🔄 Fetching NFL schedule for ${today} with your RapidAPI key...`);
             
             const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${today}`, {
                 method: 'GET',
@@ -88,7 +366,11 @@ class NFLScheduleAPI {
                 const scheduleData = await response.json();
                 console.log('✅ Daily schedule fetched from Tank01:', scheduleData);
                 
-                this.cache.dailySchedule = scheduleData;
+                // Enhanced caching with expiration
+                this.cache.dailySchedule = {
+                    data: scheduleData,
+                    expires: Date.now() + (6 * 60 * 60 * 1000) // 6 hours
+                };
                 this.cache.lastScheduleFetch = new Date();
                 
                 // Process games and fetch detailed info
@@ -396,10 +678,10 @@ class NFLScheduleAPI {
     }
     
     /**
-     * Public API Methods
+     * ENHANCED: Public API Methods for Maximum Data Access
      */
     getTodaysGames() {
-        return this.cache.dailySchedule;
+        return this.cache.dailySchedule.data;
     }
     
     getGameInfo(gameID) {
@@ -413,6 +695,66 @@ class NFLScheduleAPI {
     
     getLiveGames() {
         return Array.from(this.liveGames);
+    }
+    
+    // Enhanced data access methods
+    getNFLStandings() {
+        return this.cache.standings && Date.now() < this.cache.standings.expires 
+            ? this.cache.standings.data : null;
+    }
+    
+    getPlayerProjections() {
+        return this.cache.playerProjections && Date.now() < this.cache.playerProjections.expires 
+            ? this.cache.playerProjections.data : null;
+    }
+    
+    getInjuryReports() {
+        return this.cache.injuryReports && Date.now() < this.cache.injuryReports.expires 
+            ? this.cache.injuryReports.data : null;
+    }
+    
+    getGameWeather(gameID) {
+        if (!this.cache.gameWeather) return null;
+        const weather = this.cache.gameWeather.get(gameID);
+        return weather && Date.now() < weather.expires ? weather.data : null;
+    }
+    
+    // Comprehensive data summary for ML and predictions
+    getComprehensiveGameData(gameID) {
+        const gameInfo = this.getGameInfo(gameID);
+        const weather = this.getGameWeather(gameID);
+        const standings = this.getNFLStandings();
+        const injuries = this.getInjuryReports();
+        
+        if (!gameInfo) return null;
+        
+        return {
+            gameInfo,
+            weather,
+            standings,
+            injuries,
+            homeTeamRoster: gameInfo.home ? this.getTeamRoster(gameInfo.home) : null,
+            awayTeamRoster: gameInfo.away ? this.getTeamRoster(gameInfo.away) : null,
+            isLive: this.liveGames.has(gameID),
+            lastUpdated: new Date()
+        };
+    }
+    
+    // API usage statistics
+    getAPIStats() {
+        return {
+            queuedRequests: this.apiOptimization.requestQueue.length,
+            isProcessing: this.apiOptimization.isProcessing,
+            cacheStats: {
+                scheduleExpires: this.cache.dailySchedule.expires,
+                rostersCount: this.cache.rosters.size,
+                gameInfoCount: this.cache.gameInfo.size,
+                hasStandings: !!this.cache.standings,
+                hasProjections: !!this.cache.playerProjections,
+                hasInjuries: !!this.cache.injuryReports
+            },
+            liveGamesCount: this.liveGames.size
+        };
     }
 }
 
