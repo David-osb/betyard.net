@@ -266,7 +266,19 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'model_loaded': ml_model.model is not None,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'version': 'v2024-10-18-json-fix'
+    })
+
+@app.route('/test', methods=['GET'])
+def test_json_fix():
+    """Test endpoint to verify JSON serialization fix is deployed"""
+    import numpy as np
+    test_float32 = np.float32(123.456)
+    return jsonify({
+        'test': 'JSON serialization fix',
+        'float32_converted': float(test_float32),
+        'status': 'working'
     })
 
 @app.route('/predict', methods=['POST'])
