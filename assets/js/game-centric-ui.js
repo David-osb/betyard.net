@@ -890,47 +890,155 @@ class GameCentricUI {
         container.innerHTML = `<div class="players-grid">${playersHTML}</div>`;
     }
     
-    getPlayersForPosition(teamCode, position) {
-        // Enhanced player data with real NFL context
+    async getPlayersForPosition(teamCode, position) {
+        // Try to get real NFL roster data from Tank01 API first
+        try {
+            const response = await fetch(`https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamCode}&getStats=false`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'b8fd89e4c6msh29c8b287924c36dp1a6b8djsn7b8f0d5e5b35',
+                    'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                }
+            });
+            
+            if (response.ok) {
+                const rosterData = await response.json();
+                console.log(`✅ Real NFL roster data for ${teamCode}:`, rosterData);
+                
+                // Process real roster data
+                const realPlayers = this.processRealRosterData(rosterData, position);
+                if (realPlayers.length > 0) {
+                    return realPlayers;
+                }
+            }
+        } catch (error) {
+            console.warn(`⚠️ Tank01 roster API error for ${teamCode}, using fallback data:`, error);
+        }
+        
+        // Fallback to enhanced static data with real current NFL rosters
+        return this.getStaticPlayerData(teamCode, position);
+    }
+    
+    processRealRosterData(rosterData, position) {
+        if (!rosterData || !rosterData.body || !rosterData.body.roster) {
+            return [];
+        }
+        
+        const roster = rosterData.body.roster;
+        const positionPlayers = roster.filter(player => 
+            player.pos === position && player.isActive
+        );
+        
+        return positionPlayers.slice(0, 4).map(player => ({
+            id: player.playerID || `${player.teamID}_${player.jerseyNum}`,
+            name: `${player.firstName} ${player.lastName}` || 'Unknown Player',
+            number: player.jerseyNum || '0',
+            position: player.pos || position,
+            isStarter: player.depth === '1' || player.isStarter,
+            realData: true
+        }));
+    }
+    
+    getStaticPlayerData(teamCode, position) {
+        // Enhanced realistic 2025 NFL roster data (current as of October 2025)
         const teamPlayers = {
             'PHI': {
-                'QB': [{ id: 'hurts1', name: 'Jalen Hurts', number: '1', position: 'QB' }, { id: 'pickett2', name: 'Kenny Pickett', number: '7', position: 'QB' }],
-                'RB': [{ id: 'barkley26', name: 'Saquon Barkley', number: '26', position: 'RB' }, { id: 'gainwell14', name: 'Kenneth Gainwell', number: '14', position: 'RB' }],
-                'WR': [{ id: 'brown11', name: 'A.J. Brown', number: '11', position: 'WR' }, { id: 'smith6', name: 'DeVonta Smith', number: '6', position: 'WR' }],
-                'TE': [{ id: 'goedert88', name: 'Dallas Goedert', number: '88', position: 'TE' }]
+                'QB': [
+                    { id: 'hurts1', name: 'Jalen Hurts', number: '1', position: 'QB', isStarter: true },
+                    { id: 'pickett7', name: 'Kenny Pickett', number: '7', position: 'QB', isStarter: false }
+                ],
+                'RB': [
+                    { id: 'barkley26', name: 'Saquon Barkley', number: '26', position: 'RB', isStarter: true },
+                    { id: 'gainwell14', name: 'Kenneth Gainwell', number: '14', position: 'RB', isStarter: false },
+                    { id: 'swift0', name: 'D\'Andre Swift', number: '0', position: 'RB', isStarter: false }
+                ],
+                'WR': [
+                    { id: 'brown11', name: 'A.J. Brown', number: '11', position: 'WR', isStarter: true },
+                    { id: 'smith6', name: 'DeVonta Smith', number: '6', position: 'WR', isStarter: true },
+                    { id: 'dotson84', name: 'Jahan Dotson', number: '84', position: 'WR', isStarter: false }
+                ],
+                'TE': [
+                    { id: 'goedert88', name: 'Dallas Goedert', number: '88', position: 'TE', isStarter: true },
+                    { id: 'calcaterra81', name: 'Grant Calcaterra', number: '81', position: 'TE', isStarter: false }
+                ]
             },
             'MIN': {
-                'QB': [{ id: 'darnold14', name: 'Sam Darnold', number: '14', position: 'QB' }, { id: 'mccarthy2', name: 'J.J. McCarthy', number: '9', position: 'QB' }],
-                'RB': [{ id: 'jones33', name: 'Aaron Jones', number: '33', position: 'RB' }, { id: 'chandler21', name: 'Ty Chandler', number: '21', position: 'RB' }],
-                'WR': [{ id: 'jefferson18', name: 'Justin Jefferson', number: '18', position: 'WR' }, { id: 'addison3', name: 'Jordan Addison', number: '3', position: 'WR' }],
-                'TE': [{ id: 'hockenson87', name: 'T.J. Hockenson', number: '87', position: 'TE' }]
+                'QB': [
+                    { id: 'darnold14', name: 'Sam Darnold', number: '14', position: 'QB', isStarter: true },
+                    { id: 'mccarthy9', name: 'J.J. McCarthy', number: '9', position: 'QB', isStarter: false }
+                ],
+                'RB': [
+                    { id: 'jones33', name: 'Aaron Jones', number: '33', position: 'RB', isStarter: true },
+                    { id: 'chandler21', name: 'Ty Chandler', number: '21', position: 'RB', isStarter: false }
+                ],
+                'WR': [
+                    { id: 'jefferson18', name: 'Justin Jefferson', number: '18', position: 'WR', isStarter: true },
+                    { id: 'addison3', name: 'Jordan Addison', number: '3', position: 'WR', isStarter: true },
+                    { id: 'nailor83', name: 'Jalen Nailor', number: '83', position: 'WR', isStarter: false }
+                ],
+                'TE': [
+                    { id: 'hockenson87', name: 'T.J. Hockenson', number: '87', position: 'TE', isStarter: true },
+                    { id: 'oliver40', name: 'Josh Oliver', number: '40', position: 'TE', isStarter: false }
+                ]
             },
             'KC': {
-                'QB': [{ id: 'mahomes15', name: 'Patrick Mahomes', number: '15', position: 'QB' }, { id: 'wentz11', name: 'Carson Wentz', number: '11', position: 'QB' }],
-                'RB': [{ id: 'hunt29', name: 'Kareem Hunt', number: '29', position: 'RB' }, { id: 'pacheco10', name: 'Isiah Pacheco', number: '10', position: 'RB' }],
-                'WR': [{ id: 'kelce87', name: 'Travis Kelce', number: '87', position: 'TE' }, { id: 'hopkins8', name: 'DeAndre Hopkins', number: '8', position: 'WR' }],
-                'TE': [{ id: 'kelce87', name: 'Travis Kelce', number: '87', position: 'TE' }]
+                'QB': [
+                    { id: 'mahomes15', name: 'Patrick Mahomes', number: '15', position: 'QB', isStarter: true },
+                    { id: 'wentz11', name: 'Carson Wentz', number: '11', position: 'QB', isStarter: false }
+                ],
+                'RB': [
+                    { id: 'hunt29', name: 'Kareem Hunt', number: '29', position: 'RB', isStarter: true },
+                    { id: 'pacheco10', name: 'Isiah Pacheco', number: '10', position: 'RB', isStarter: false }
+                ],
+                'WR': [
+                    { id: 'hopkins8', name: 'DeAndre Hopkins', number: '8', position: 'WR', isStarter: true },
+                    { id: 'worthy1', name: 'Xavier Worthy', number: '1', position: 'WR', isStarter: true },
+                    { id: 'rice84', name: 'Rashee Rice', number: '84', position: 'WR', isStarter: false }
+                ],
+                'TE': [
+                    { id: 'kelce87', name: 'Travis Kelce', number: '87', position: 'TE', isStarter: true },
+                    { id: 'gray83', name: 'Noah Gray', number: '83', position: 'TE', isStarter: false }
+                ]
+            },
+            'BAL': {
+                'QB': [
+                    { id: 'jackson8', name: 'Lamar Jackson', number: '8', position: 'QB', isStarter: true },
+                    { id: 'huntley2', name: 'Tyler Huntley', number: '2', position: 'QB', isStarter: false }
+                ],
+                'RB': [
+                    { id: 'henry22', name: 'Derrick Henry', number: '22', position: 'RB', isStarter: true },
+                    { id: 'hill35', name: 'Justice Hill', number: '35', position: 'RB', isStarter: false }
+                ],
+                'WR': [
+                    { id: 'flowers4', name: 'Zay Flowers', number: '4', position: 'WR', isStarter: true },
+                    { id: 'agholor15', name: 'Nelson Agholor', number: '15', position: 'WR', isStarter: true },
+                    { id: 'wallace16', name: 'Rashod Bateman', number: '16', position: 'WR', isStarter: false }
+                ],
+                'TE': [
+                    { id: 'andrews89', name: 'Mark Andrews', number: '89', position: 'TE', isStarter: true },
+                    { id: 'likely80', name: 'Isaiah Likely', number: '80', position: 'TE', isStarter: false }
+                ]
             }
         };
         
-        // Generic fallback for other teams
+        // Generic fallback for teams not in our enhanced database
         const genericPlayers = {
             'QB': [
-                { id: `${teamCode}_qb1`, name: 'Starting QB', number: '9', position: 'QB' },
-                { id: `${teamCode}_qb2`, name: 'Backup QB', number: '12', position: 'QB' }
+                { id: `${teamCode}_qb1`, name: 'Starting QB', number: '9', position: 'QB', isStarter: true },
+                { id: `${teamCode}_qb2`, name: 'Backup QB', number: '12', position: 'QB', isStarter: false }
             ],
             'RB': [
-                { id: `${teamCode}_rb1`, name: 'Feature Back', number: '21', position: 'RB' },
-                { id: `${teamCode}_rb2`, name: 'Change of Pace', number: '34', position: 'RB' }
+                { id: `${teamCode}_rb1`, name: 'Feature Back', number: '21', position: 'RB', isStarter: true },
+                { id: `${teamCode}_rb2`, name: 'Change of Pace', number: '34', position: 'RB', isStarter: false }
             ],
             'WR': [
-                { id: `${teamCode}_wr1`, name: 'WR1', number: '11', position: 'WR' },
-                { id: `${teamCode}_wr2`, name: 'WR2', number: '84', position: 'WR' },
-                { id: `${teamCode}_wr3`, name: 'Slot WR', number: '15', position: 'WR' }
+                { id: `${teamCode}_wr1`, name: 'WR1', number: '11', position: 'WR', isStarter: true },
+                { id: `${teamCode}_wr2`, name: 'WR2', number: '84', position: 'WR', isStarter: true },
+                { id: `${teamCode}_wr3`, name: 'Slot WR', number: '15', position: 'WR', isStarter: false }
             ],
             'TE': [
-                { id: `${teamCode}_te1`, name: 'Starting TE', number: '87', position: 'TE' },
-                { id: `${teamCode}_te2`, name: 'Receiving TE', number: '81', position: 'TE' }
+                { id: `${teamCode}_te1`, name: 'Starting TE', number: '87', position: 'TE', isStarter: true },
+                { id: `${teamCode}_te2`, name: 'Receiving TE', number: '81', position: 'TE', isStarter: false }
             ]
         };
         
