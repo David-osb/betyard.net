@@ -559,10 +559,18 @@ class LiveNFLScores {
             'ARI', 'LAR', 'SF', 'SEA'   // NFC West
         ];
         
+        // Get current time in ET (assuming ET for now)
+        const now = new Date();
+        const currentETHour = now.getHours();
+        const currentETMinutes = now.getMinutes();
+        const currentETTime = currentETHour + (currentETMinutes / 60);
+        
+        console.log(`🕐 Current ET Time: ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} (${currentETTime.toFixed(2)})`);
+        
         // Special Week 7 matchups (October 2025)
         const week7Matchups = [
             { away: 'PHI', home: 'MIN' }, // Eagles @ Vikings
-            { away: 'KC', home: 'LV' },   // Chiefs @ Raiders
+            { away: 'KC', home: 'LV' },   // Chiefs @ Raiders  
             { away: 'BAL', home: 'CLE' }, // Ravens @ Browns
             { away: 'BUF', home: 'MIA' }, // Bills @ Dolphins
             { away: 'DAL', home: 'SF' },  // Cowboys @ 49ers
@@ -583,15 +591,48 @@ class LiveNFLScores {
         const currentTime = new Date();
         const currentHour = currentTime.getHours();
         
-        // Use realistic Week 7 matchups
+        // Use realistic Week 7 matchups with proper timing
         week7Matchups.forEach((matchup, index) => {
             let status;
+            let gameTime;
+            let startHour;
             
-            // Create realistic game timing based on current time
-            if (currentHour >= 13 && currentHour < 17) { // 1-5 PM - main games
-                status = index < 6 ? 'LIVE' : 'SCHEDULED';
-            } else if (currentHour >= 17) { // After 5 PM - some final
-                status = index < 4 ? 'FINAL' : index < 7 ? 'LIVE' : 'SCHEDULED';
+            // Assign realistic start times
+            if (index < 5) {
+                gameTime = '1:00 ET';
+                startHour = 13; // 1 PM ET
+            } else if (index < 7) {
+                gameTime = '4:05 ET';
+                startHour = 16; // 4:05 PM ET  
+            } else if (index < 8) {
+                gameTime = '4:25 ET';
+                startHour = 16.4; // 4:25 PM ET
+            } else {
+                gameTime = '8:20 ET';
+                startHour = 20.3; // 8:20 PM ET
+            }
+            
+            // Determine status based on current time vs game start time
+            const gameEndTime = startHour + 3.5; // Games last ~3.5 hours
+            
+            console.log(`🏈 ${matchup.away} @ ${matchup.home}: Start ${startHour}, Current ${currentETTime.toFixed(2)}, End ${gameEndTime}`);
+            
+            if (currentETTime < (startHour - 0.25)) { // More than 15 minutes before start
+                status = 'SCHEDULED';
+            } else if (currentETTime >= startHour && currentETTime < gameEndTime) {
+                // Only show as live if it's actually game time
+                // For testing purposes, make specific games live/final
+                if (matchup.away === 'BUF' && matchup.home === 'MIA') {
+                    status = 'FINAL'; // This game is done
+                } else if (matchup.away === 'KC' && matchup.home === 'LV') {
+                    // KC vs LV 1pm game - only live if current time >= 1pm ET
+                    status = currentETTime >= 13 ? 'LIVE' : 'SCHEDULED';
+                } else {
+                    // Most other 1pm games should be scheduled until 1pm
+                    status = currentETTime >= startHour ? 'LIVE' : 'SCHEDULED';
+                }
+            } else if (currentETTime >= gameEndTime) {
+                status = 'FINAL';
             } else {
                 status = 'SCHEDULED';
             }
@@ -605,7 +646,7 @@ class LiveNFLScores {
                 awayScore: 0,
                 quarter: '',
                 timeRemaining: '',
-                gameTime: '',
+                gameTime: gameTime, // Use the assigned game time
                 lastPlay: ''
             };
             
@@ -639,8 +680,8 @@ class LiveNFLScores {
                     break;
                     
                 case 'SCHEDULED':
-                    const gameSlots = ['1:00 ET', '4:05 ET', '4:25 ET', '8:20 ET'];
-                    gameData.gameTime = gameSlots[Math.floor(Math.random() * gameSlots.length)];
+                    // Game time already set above based on slot
+                    gameData.quarter = 'Pre-Game';
                     break;
             }
             
