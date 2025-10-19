@@ -82,10 +82,10 @@ class LiveNFLScores {
             <style id="live-scores-styles">
                 .live-scores-container {
                     background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-                    border-radius: 12px;
-                    padding: 16px;
-                    margin-bottom: 16px;
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                    border-radius: 8px;
+                    padding: 12px;
+                    margin-bottom: 12px;
+                    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
                     overflow: hidden;
                 }
                 
@@ -93,21 +93,21 @@ class LiveNFLScores {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 12px;
+                    margin-bottom: 8px;
                 }
                 
                 .live-indicator {
                     display: flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 6px;
                     color: white;
                     font-weight: 600;
-                    font-size: 14px;
+                    font-size: 12px;
                 }
                 
                 .live-dot {
-                    width: 8px;
-                    height: 8px;
+                    width: 6px;
+                    height: 6px;
                     background: #ef4444;
                     border-radius: 50%;
                     animation: pulse-red 2s infinite;
@@ -120,37 +120,29 @@ class LiveNFLScores {
                 
                 .last-update {
                     color: rgba(255, 255, 255, 0.8);
-                    font-size: 12px;
+                    font-size: 10px;
                 }
                 
                 .live-games-scroll {
                     display: flex;
-                    gap: 12px;
+                    gap: 8px;
                     overflow-x: auto;
-                    padding-bottom: 8px;
-                    scrollbar-width: thin;
-                    scrollbar-color: rgba(255,255,255,0.3) transparent;
+                    padding-bottom: 4px;
+                    scrollbar-width: none; /* Hide scrollbar in Firefox */
+                    -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
                 }
                 
                 .live-games-scroll::-webkit-scrollbar {
-                    height: 4px;
+                    display: none; /* Hide scrollbar in Chrome/Safari */
                 }
                 
-                .live-games-scroll::-webkit-scrollbar-track {
-                    background: rgba(255,255,255,0.1);
-                    border-radius: 2px;
-                }
-                
-                .live-games-scroll::-webkit-scrollbar-thumb {
-                    background: rgba(255,255,255,0.3);
-                    border-radius: 2px;
-                }
+
                 
                 .game-card {
-                    min-width: 280px;
+                    min-width: 200px;
                     background: rgba(255, 255, 255, 0.95);
-                    border-radius: 8px;
-                    padding: 12px;
+                    border-radius: 6px;
+                    padding: 8px;
                     position: relative;
                     flex-shrink: 0;
                     transition: transform 0.2s ease;
@@ -162,11 +154,11 @@ class LiveNFLScores {
                 
                 .game-status {
                     text-align: center;
-                    font-size: 11px;
+                    font-size: 9px;
                     font-weight: 600;
-                    margin-bottom: 8px;
-                    padding: 4px 8px;
-                    border-radius: 12px;
+                    margin-bottom: 6px;
+                    padding: 2px 6px;
+                    border-radius: 8px;
                 }
                 
                 .status-live {
@@ -188,7 +180,7 @@ class LiveNFLScores {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 8px;
+                    margin-bottom: 6px;
                 }
                 
                 .team {
@@ -199,40 +191,40 @@ class LiveNFLScores {
                 }
                 
                 .team-name {
-                    font-size: 12px;
+                    font-size: 10px;
                     font-weight: 600;
                     color: #374151;
                 }
                 
                 .team-score {
-                    font-size: 20px;
+                    font-size: 16px;
                     font-weight: bold;
                     color: #1f2937;
                 }
                 
                 .vs-separator {
-                    font-size: 12px;
+                    font-size: 10px;
                     color: #6b7280;
                     font-weight: 500;
                 }
                 
                 .game-details {
                     text-align: center;
-                    font-size: 11px;
+                    font-size: 9px;
                     color: #6b7280;
                     border-top: 1px solid #e5e7eb;
-                    padding-top: 8px;
-                    margin-top: 8px;
+                    padding-top: 4px;
+                    margin-top: 4px;
                 }
                 
                 .quarter-time {
                     font-weight: 600;
                     color: #dc2626;
-                    margin-bottom: 4px;
+                    margin-bottom: 2px;
                 }
                 
                 .game-situation {
-                    font-size: 10px;
+                    font-size: 8px;
                     font-weight: 600;
                     color: #059669;
                 }
@@ -243,13 +235,14 @@ class LiveNFLScores {
                 }
                 
                 .game-time {
+                    font-size: 10px;
                     font-weight: 600;
                     color: #1f2937;
-                    margin-bottom: 4px;
+                    margin-bottom: 2px;
                 }
                 
                 .matchup-preview {
-                    font-size: 10px;
+                    font-size: 8px;
                     font-weight: 600;
                     color: #3b82f6;
                 }
@@ -308,17 +301,25 @@ class LiveNFLScores {
                 @media (max-width: 768px) {
                     .live-scores-container {
                         margin: 8px;
-                        padding: 12px;
+                        padding: 8px;
                     }
                     
                     .game-card {
-                        min-width: 240px;
+                        min-width: 160px;
                     }
                     
                     .live-scores-header {
-                        flex-direction: column;
+                        flex-direction: row;
                         gap: 8px;
-                        align-items: flex-start;
+                        align-items: center;
+                    }
+                    
+                    .live-indicator {
+                        font-size: 11px;
+                    }
+                    
+                    .last-update {
+                        font-size: 9px;
                     }
                 }
             </style>
