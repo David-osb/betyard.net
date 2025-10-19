@@ -3,7 +3,7 @@
  * Provides dynamic NFL week information based on current date
  */
 
-// NFL 2024 Season Schedule Data
+// NFL 2024-2025 Season Schedule Data
 const NFL_2024_SCHEDULE = {
     seasonStart: new Date('2024-09-05'), // Week 1 start
     weeks: [
@@ -61,6 +61,51 @@ const NFL_2024_SCHEDULE = {
     }
 };
 
+// NFL 2025-2026 Season Schedule Data
+const NFL_2025_SCHEDULE = {
+    seasonStart: new Date('2025-09-04'), // Week 1 start for 2025 season
+    weeks: [
+        { week: 1, start: '2025-09-04', end: '2025-09-10', title: 'Week 1 - September 2025' },
+        { week: 2, start: '2025-09-11', end: '2025-09-17', title: 'Week 2 - September 2025' },
+        { week: 3, start: '2025-09-18', end: '2025-09-24', title: 'Week 3 - September 2025' },
+        { week: 4, start: '2025-09-25', end: '2025-10-01', title: 'Week 4 - September/October 2025' },
+        { week: 5, start: '2025-10-02', end: '2025-10-08', title: 'Week 5 - October 2025' },
+        { week: 6, start: '2025-10-09', end: '2025-10-15', title: 'Week 6 - October 2025' },
+        { week: 7, start: '2025-10-16', end: '2025-10-22', title: 'Week 7 - October 2025' },
+        { week: 8, start: '2025-10-23', end: '2025-10-29', title: 'Week 8 - October 2025' },
+        { week: 9, start: '2025-10-30', end: '2025-11-05', title: 'Week 9 - November 2025' },
+        { week: 10, start: '2025-11-06', end: '2025-11-12', title: 'Week 10 - November 2025' },
+        { week: 11, start: '2025-11-13', end: '2025-11-19', title: 'Week 11 - November 2025' },
+        { week: 12, start: '2025-11-20', end: '2025-11-26', title: 'Week 12 - November 2025' },
+        { week: 13, start: '2025-11-27', end: '2025-12-03', title: 'Week 13 - December 2025' },
+        { week: 14, start: '2025-12-04', end: '2025-12-10', title: 'Week 14 - December 2025' },
+        { week: 15, start: '2025-12-11', end: '2025-12-17', title: 'Week 15 - December 2025' },
+        { week: 16, start: '2025-12-18', end: '2025-12-24', title: 'Week 16 - December 2025' },
+        { week: 17, start: '2025-12-25', end: '2025-12-31', title: 'Week 17 - December 2025' },
+        { week: 18, start: '2026-01-01', end: '2026-01-07', title: 'Week 18 - January 2026' }
+    ],
+    games: {
+        week7: [
+            { away: 'MIA', home: 'BUF', time: 'Thursday 8:15 PM ET' },
+            { away: 'NYJ', home: 'NE', time: 'Sunday 1:00 PM ET' },
+            { away: 'KC', home: 'DEN', time: 'Sunday 4:25 PM ET' },
+            { away: 'LAC', home: 'LV', time: 'Sunday 4:05 PM ET' },
+            { away: 'PHI', home: 'WSH', time: 'Sunday 1:00 PM ET' },
+            { away: 'NYG', home: 'DAL', time: 'Sunday 4:25 PM ET' },
+            { away: 'BAL', home: 'PIT', time: 'Sunday 1:00 PM ET' },
+            { away: 'CIN', home: 'CLE', time: 'Sunday 1:00 PM ET' },
+            { away: 'HOU', home: 'IND', time: 'Sunday 1:00 PM ET' },
+            { away: 'JAX', home: 'TEN', time: 'Sunday 1:00 PM ET' },
+            { away: 'GB', home: 'MIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'DET', home: 'CHI', time: 'Sunday 1:00 PM ET' },
+            { away: 'SF', home: 'SEA', time: 'Sunday 4:25 PM ET' },
+            { away: 'LAR', home: 'ARI', time: 'Sunday 4:05 PM ET' },
+            { away: 'NO', home: 'ATL', time: 'Sunday 1:00 PM ET' },
+            { away: 'CAR', home: 'TB', time: 'Sunday 1:00 PM ET' }
+        ]
+    }
+};
+
 // NFL Stadium Information
 const NFL_STADIUMS = {
     'ARI': { name: 'State Farm Stadium', city: 'Glendale, AZ', surface: 'Artificial Turf', capacity: '63,400' },
@@ -103,45 +148,82 @@ const NFL_STADIUMS = {
 function getCurrentNFLWeek() {
     const today = new Date();
     
-    // Check if we're in the NFL season
-    const seasonStart = new Date(NFL_2024_SCHEDULE.seasonStart);
-    const seasonEnd = new Date('2025-01-08'); // End of Week 18
+    // Check 2025-2026 season first
+    const season2025Start = new Date('2025-09-04');
+    const season2025End = new Date('2026-01-07');
     
-    if (today < seasonStart) {
-        return {
-            week: 0,
-            title: 'Preseason - August 2024',
-            status: 'preseason'
-        };
-    }
-    
-    if (today > seasonEnd) {
-        return {
-            week: 19,
-            title: 'Playoffs - January 2025',
-            status: 'playoffs'
-        };
-    }
-    
-    // Find current week
-    for (const weekData of NFL_2024_SCHEDULE.weeks) {
-        const weekStart = new Date(weekData.start);
-        const weekEnd = new Date(weekData.end);
-        
-        if (today >= weekStart && today <= weekEnd) {
-            return {
-                week: weekData.week,
-                title: weekData.title,
-                status: 'regular_season'
-            };
+    if (today >= season2025Start && today <= season2025End) {
+        // We're in the 2025-2026 season
+        for (const weekData of NFL_2025_SCHEDULE.weeks) {
+            const weekStart = new Date(weekData.start);
+            const weekEnd = new Date(weekData.end);
+            
+            if (today >= weekStart && today <= weekEnd) {
+                return {
+                    week: weekData.week,
+                    title: weekData.title,
+                    status: 'regular_season',
+                    season: '2025'
+                };
+            }
         }
     }
     
-    // Default fallback
+    // Check 2024-2025 season
+    const season2024Start = new Date('2024-09-05');
+    const season2024End = new Date('2025-01-08');
+    
+    if (today >= season2024Start && today <= season2024End) {
+        // We're in the 2024-2025 season
+        for (const weekData of NFL_2024_SCHEDULE.weeks) {
+            const weekStart = new Date(weekData.start);
+            const weekEnd = new Date(weekData.end);
+            
+            if (today >= weekStart && today <= weekEnd) {
+                return {
+                    week: weekData.week,
+                    title: weekData.title,
+                    status: 'regular_season',
+                    season: '2024'
+                };
+            }
+        }
+    }
+    
+    // Handle offseason periods
+    if (today < season2024Start) {
+        return {
+            week: 0,
+            title: 'Preseason - August 2024',
+            status: 'preseason',
+            season: '2024'
+        };
+    }
+    
+    if (today > season2024End && today < season2025Start) {
+        return {
+            week: 19,
+            title: 'Offseason - Spring 2025',
+            status: 'offseason',
+            season: '2025'
+        };
+    }
+    
+    if (today > season2025End) {
+        return {
+            week: 19,
+            title: 'Playoffs - January 2026',
+            status: 'playoffs',
+            season: '2025'
+        };
+    }
+    
+    // Default fallback - assume current 2025 season week 7
     return {
         week: 7,
-        title: 'Week 7 - October 2024',
-        status: 'regular_season'
+        title: 'Week 7 - October 2025',
+        status: 'regular_season',
+        season: '2025'
     };
 }
 
@@ -195,8 +277,16 @@ function getStadiumInfo(teamCode) {
 /**
  * Find a team's game for a specific week
  */
-function findTeamGame(teamCode, week) {
-    const gameWeek = NFL_2024_SCHEDULE.games[`week${week}`];
+function findTeamGame(teamCode, week, season = '2025') {
+    let schedule;
+    
+    if (season === '2025') {
+        schedule = NFL_2025_SCHEDULE.games;
+    } else {
+        schedule = NFL_2024_SCHEDULE.games;
+    }
+    
+    const gameWeek = schedule[`week${week}`];
     if (!gameWeek) return null;
     
     for (const game of gameWeek) {
@@ -218,7 +308,7 @@ function findTeamGame(teamCode, week) {
  */
 function updateCurrentWeekDisplay(selectedTeam = 'Team') {
     const currentWeek = getCurrentNFLWeek();
-    const teamGame = findTeamGame(selectedTeam, currentWeek.week);
+    const teamGame = findTeamGame(selectedTeam, currentWeek.week, currentWeek.season);
     
     const currentWeekInfo = document.getElementById('current-week-info');
     if (currentWeekInfo) {
@@ -231,8 +321,15 @@ function updateCurrentWeekDisplay(selectedTeam = 'Team') {
                 <p style="color: #0369a1; font-size: 14px;">Kickoff: ${teamGame.time}</p>
                 <p style="color: #0369a1; font-size: 14px;">Stadium: ${stadium.name}</p>
             `;
+        } else if (currentWeek.status === 'offseason') {
+            // Offseason period
+            currentWeekInfo.innerHTML = `
+                <p style="color: #0369a1; margin-bottom: 8px;"><strong>Offseason</strong> - Spring 2025</p>
+                <p style="color: #6b7280; font-size: 14px;">No games scheduled</p>
+                <p style="color: #6b7280; font-size: 14px;">2025 season starts September 4th</p>
+            `;
         } else {
-            // Bye week
+            // Bye week or no game data
             currentWeekInfo.innerHTML = `
                 <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week ${currentWeek.week}</strong> - ${currentWeek.title.split(' - ')[1]}</p>
                 <p style="color: #ff6b35; font-size: 14px; font-weight: bold;">BYE WEEK</p>
