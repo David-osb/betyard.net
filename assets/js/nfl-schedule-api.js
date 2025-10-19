@@ -135,7 +135,7 @@ class NFLScheduleAPI {
     
     /**
      * ENHANCED: Additional NFL Data Collection
-     * Focuses on VERIFIED working Tank01 endpoints only
+     * Focuses on VERIFIED working Tank01 endpoints + Live Scores
      */
     setupEnhancedDataCollection() {
         // Focus on verified working endpoints only
@@ -143,13 +143,74 @@ class NFLScheduleAPI {
         // Fetch comprehensive player data (5.2MB goldmine!)
         this.queueAPIRequest(() => this.fetchComprehensivePlayerData(), 3);
         
+        // Fetch live scores (KC vs LV confirmed active!)
+        this.queueAPIRequest(() => this.fetchCurrentLiveScores(), 4);
+        
         // Fetch all team rosters with stats
         this.queueAPIRequest(() => this.fetchEnhancedRosters(), 2);
         
         // Fetch team schedules for season context
         this.queueAPIRequest(() => this.fetchTeamSchedules(), 2);
         
-        console.log('📊 Enhanced data collection focused on verified working endpoints');
+        console.log('📊 Enhanced data collection focused on verified working endpoints + live scores');
+    }
+    
+    async fetchCurrentLiveScores() {
+        const weekOptions = [8, 7, 6]; // Try current and recent weeks
+        const seasonOptions = [2025, 2024]; // Current and previous season
+        
+        for (const season of seasonOptions) {
+            for (const week of weekOptions) {
+                try {
+                    console.log(`🔄 Trying live scores: Week ${week}, Season ${season}...`);
+                    
+                    const response = await fetch(`${this.apiConfig.baseUrl}/getNFLScores?week=${week}&seasonType=reg&season=${season}`, {
+                        method: 'GET',
+                        headers: this.apiConfig.headers
+                    });
+                    
+                    if (response.ok) {
+                        const scoresData = await response.json();
+                        
+                        // Check if we have actual live/recent games
+                        if (scoresData.body && scoresData.body.length > 0) {
+                            this.cache.liveScores = { 
+                                data: scoresData, 
+                                expires: Date.now() + (10 * 60 * 1000), // 10 minutes for live data
+                                week: week,
+                                season: season
+                            };
+                            
+                            console.log(`✅ Live scores found: Week ${week}, Season ${season} - ${scoresData.body.length} games`);
+                            
+                            // Look for KC vs LV specifically
+                            const kcLvGame = scoresData.body.find(game => 
+                                (game.away === 'KC' && game.home === 'LV') || 
+                                (game.away === 'LV' && game.home === 'KC')
+                            );
+                            
+                            if (kcLvGame) {
+                                console.log('🏈 Found KC vs LV game:', kcLvGame);
+                            }
+                            
+                            window.dispatchEvent(new CustomEvent('nflLiveScoresUpdated', {
+                                detail: { scores: scoresData, week, season, timestamp: new Date() }
+                            }));
+                            
+                            return scoresData;
+                        }
+                    }
+                } catch (error) {
+                    console.warn(`⚠️ Live scores API error for Week ${week}, Season ${season}:`, error);
+                }
+                
+                // Small delay between attempts
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        
+        console.log('⚠️ No live scores found for recent weeks');
+        return null;
     }
     
     async fetchComprehensivePlayerData() {
@@ -702,6 +763,18 @@ class NFLScheduleAPI {
         return Array.from(this.liveGames);
     }
     
+    getLiveScores() {
+        return this.cache.liveScores && Date.now() < this.cache.liveScores.expires 
+            ? this.cache.liveScores.data : null;
+    }
+    
+    getCurrentNFLWeek() {
+        if (this.cache.liveScores) {
+            return { week: this.cache.liveScores.week, season: this.cache.liveScores.season };
+        }
+        return null;
+    }
+    
     // Enhanced data access methods (verified working)
     getComprehensivePlayerData() {
         return this.cache.comprehensivePlayerData && Date.now() < this.cache.comprehensivePlayerData.expires 
@@ -720,27 +793,30 @@ class NFLScheduleAPI {
         return schedule && Date.now() < schedule.expires ? schedule.data : null;
     }
     
-    // ML-ready comprehensive data (using verified endpoints only)
+    // ML-ready comprehensive data (using verified endpoints + live scores)
     getVerifiedGameData(gameID) {
         const gameInfo = this.getGameInfo(gameID);
         const playerData = this.getComprehensivePlayerData();
+        const liveScores = this.getLiveScores();
         
         if (!gameInfo) return null;
         
         return {
             gameInfo,
             comprehensivePlayerData: playerData,
+            liveScores,
+            currentNFLWeek: this.getCurrentNFLWeek(),
             homeTeamRoster: gameInfo.home ? this.getEnhancedRoster(gameInfo.home) : null,
             awayTeamRoster: gameInfo.away ? this.getEnhancedRoster(gameInfo.away) : null,
             homeTeamSchedule: gameInfo.home ? this.getTeamSchedule(gameInfo.home) : null,
             awayTeamSchedule: gameInfo.away ? this.getTeamSchedule(gameInfo.away) : null,
             isLive: this.liveGames.has(gameID),
             lastUpdated: new Date(),
-            dataQuality: 'verified-endpoints'
+            dataQuality: 'verified-endpoints-with-live-scores'
         };
     }
     
-    // API usage statistics (updated for verified endpoints)
+    // API usage statistics (updated for verified endpoints + live scores)
     getAPIStats() {
         return {
             queuedRequests: this.apiOptimization.requestQueue.length,
@@ -751,10 +827,13 @@ class NFLScheduleAPI {
                 gameInfoCount: this.cache.gameInfo.size,
                 hasComprehensivePlayerData: !!this.cache.comprehensivePlayerData,
                 enhancedRostersCount: this.cache.enhancedRosters ? this.cache.enhancedRosters.size : 0,
-                teamSchedulesCount: this.cache.teamSchedules ? this.cache.teamSchedules.size : 0
+                teamSchedulesCount: this.cache.teamSchedules ? this.cache.teamSchedules.size : 0,
+                hasLiveScores: !!this.cache.liveScores,
+                liveScoresWeek: this.cache.liveScores ? this.cache.liveScores.week : null
             },
             liveGamesCount: this.liveGames.size,
-            dataVolume: this.cache.comprehensivePlayerData ? '5.2MB Player Dataset' : 'Not loaded'
+            dataVolume: this.cache.comprehensivePlayerData ? '5.2MB Player Dataset' : 'Not loaded',
+            specialFeatures: ['KC vs LV Live Game Detection', 'Multi-Week Score Fetching']
         };
     }
 }

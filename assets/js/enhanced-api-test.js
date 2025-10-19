@@ -22,10 +22,15 @@ class EnhancedAPITester {
             // HIGH-VALUE ENDPOINT (5.2MB of data!)
             { name: 'Player List', endpoint: '/getNFLPlayerList', params: { playerStats: 'true', getStats: 'true' } },
             
-            // Additional working variations to test
-            { name: 'Live Scores (Weekly)', endpoint: '/getNFLScores', params: { week: '7', seasonType: 'reg', season: '2025' } },
+            // LIVE SCORES - Multiple parameter combinations to find working one
+            { name: 'Live Scores (Current Week)', endpoint: '/getNFLScores', params: { week: '8', seasonType: 'reg', season: '2025' } },
+            { name: 'Live Scores (Week 7)', endpoint: '/getNFLScores', params: { week: '7', seasonType: 'reg', season: '2025' } },
+            { name: 'Live Scores (No Week)', endpoint: '/getNFLScores', params: { seasonType: 'reg', season: '2025' } },
+            { name: 'Live Scores (2024)', endpoint: '/getNFLScores', params: { week: '7', seasonType: 'reg', season: '2024' } },
+            
+            // Additional verified variations
             { name: 'Team Roster (KC)', endpoint: '/getNFLTeamRoster', params: { teamID: 'KC', getStats: 'true' } },
-            { name: 'Team Roster (CIN)', endpoint: '/getNFLTeamRoster', params: { teamID: 'CIN', getStats: 'false' } },
+            { name: 'Team Roster (LV)', endpoint: '/getNFLTeamRoster', params: { teamID: 'LV', getStats: 'false' } },
             { name: 'Player List (Minimal)', endpoint: '/getNFLPlayerList', params: { playerStats: 'false', getStats: 'false' } }
         ];
         
