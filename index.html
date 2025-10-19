@@ -656,8 +656,9 @@
                             <div class="mdl-grid">
                                 <!-- Team Selection -->
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <select class="mdl-textfield__input" id="team-select" disabled onchange="updateQBOptions()">
+                                    <div class="mdl-textfield mdl-js-textfield">
+                                        <label for="team-select" style="display: block; font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">NFL Team</label>
+                                        <select class="mdl-textfield__input" id="team-select" disabled onchange="updateQBOptions()" style="margin-top: 0;">
                                             <option value="">⏳ Loading Tank01 data...</option>
                                             
                                             <optgroup label="🏈 AFC EAST">
@@ -716,17 +717,16 @@
                                                 <option value="SEA">Seattle Seahawks</option>
                                             </optgroup>
                                         </select>
-                                        <label class="mdl-textfield__label" for="team-select">NFL Team</label>
                                     </div>
                                 </div>
 
                                 <!-- QB Selection -->
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <select class="mdl-textfield__input" id="qb-select" disabled onchange="generatePrediction()">
+                                    <div class="mdl-textfield mdl-js-textfield">
+                                        <label for="qb-select" style="display: block; font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">Quarterback</label>
+                                        <select class="mdl-textfield__input" id="qb-select" disabled onchange="generatePrediction()" style="margin-top: 0;">
                                             <option value="">⏳ Loading Tank01 data...</option>
                                         </select>
-                                        <label class="mdl-textfield__label" for="qb-select">Quarterback</label>
                                     </div>
                                 </div>
                             </div>
