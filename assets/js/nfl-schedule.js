@@ -1,0 +1,323 @@
+/**
+ * NFL Schedule and Week Calculation Module
+ * Provides dynamic NFL week information based on current date
+ */
+
+// NFL 2024 Season Schedule Data
+const NFL_2024_SCHEDULE = {
+    seasonStart: new Date('2024-09-05'), // Week 1 start
+    weeks: [
+        { week: 1, start: '2024-09-05', end: '2024-09-11', title: 'Week 1 - September 2024' },
+        { week: 2, start: '2024-09-12', end: '2024-09-18', title: 'Week 2 - September 2024' },
+        { week: 3, start: '2024-09-19', end: '2024-09-25', title: 'Week 3 - September 2024' },
+        { week: 4, start: '2024-09-26', end: '2024-10-02', title: 'Week 4 - September/October 2024' },
+        { week: 5, start: '2024-10-03', end: '2024-10-09', title: 'Week 5 - October 2024' },
+        { week: 6, start: '2024-10-10', end: '2024-10-16', title: 'Week 6 - October 2024' },
+        { week: 7, start: '2024-10-17', end: '2024-10-23', title: 'Week 7 - October 2024' },
+        { week: 8, start: '2024-10-24', end: '2024-10-30', title: 'Week 8 - October 2024' },
+        { week: 9, start: '2024-10-31', end: '2024-11-06', title: 'Week 9 - November 2024' },
+        { week: 10, start: '2024-11-07', end: '2024-11-13', title: 'Week 10 - November 2024' },
+        { week: 11, start: '2024-11-14', end: '2024-11-20', title: 'Week 11 - November 2024' },
+        { week: 12, start: '2024-11-21', end: '2024-11-27', title: 'Week 12 - November 2024' },
+        { week: 13, start: '2024-11-28', end: '2024-12-04', title: 'Week 13 - December 2024' },
+        { week: 14, start: '2024-12-05', end: '2024-12-11', title: 'Week 14 - December 2024' },
+        { week: 15, start: '2024-12-12', end: '2024-12-18', title: 'Week 15 - December 2024' },
+        { week: 16, start: '2024-12-19', end: '2024-12-25', title: 'Week 16 - December 2024' },
+        { week: 17, start: '2024-12-26', end: '2025-01-01', title: 'Week 17 - December 2024/January 2025' },
+        { week: 18, start: '2025-01-02', end: '2025-01-08', title: 'Week 18 - January 2025' }
+    ],
+    games: {
+        week7: [
+            { away: 'DEN', home: 'NO', time: 'Thursday 8:15 PM ET' },
+            { away: 'HOU', home: 'GB', time: 'Sunday 1:00 PM ET' },
+            { away: 'SEA', home: 'ATL', time: 'Sunday 1:00 PM ET' },
+            { away: 'TEN', home: 'BUF', time: 'Sunday 1:00 PM ET' },
+            { away: 'MIA', home: 'IND', time: 'Sunday 1:00 PM ET' },
+            { away: 'CLE', home: 'CIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'NE', home: 'JAX', time: 'Sunday 9:30 AM ET (London)' },
+            { away: 'LV', home: 'LAR', time: 'Sunday 4:05 PM ET' },
+            { away: 'PHI', home: 'NYG', time: 'Sunday 1:00 PM ET' },
+            { away: 'KC', home: 'SF', time: 'Sunday 4:25 PM ET' },
+            { away: 'DET', home: 'MIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'CAR', home: 'WSH', time: 'Sunday 4:05 PM ET' },
+            { away: 'NYJ', home: 'PIT', time: 'Sunday 8:20 PM ET' },
+            { away: 'LAC', home: 'ARI', time: 'Monday 9:00 PM ET' }
+        ],
+        week8: [
+            { away: 'NYJ', home: 'NE', time: 'Thursday 8:15 PM ET' },
+            { away: 'BAL', home: 'CLE', time: 'Sunday 1:00 PM ET' },
+            { away: 'ARI', home: 'MIA', time: 'Sunday 1:00 PM ET' },
+            { away: 'ATL', home: 'TB', time: 'Sunday 1:00 PM ET' },
+            { away: 'GB', home: 'JAX', time: 'Sunday 1:00 PM ET' },
+            { away: 'IND', home: 'HOU', time: 'Sunday 1:00 PM ET' },
+            { away: 'TEN', home: 'DET', time: 'Sunday 1:00 PM ET' },
+            { away: 'PHI', home: 'CIN', time: 'Sunday 1:00 PM ET' },
+            { away: 'CHI', home: 'WSH', time: 'Sunday 1:00 PM ET' },
+            { away: 'BUF', home: 'SEA', time: 'Sunday 4:05 PM ET' },
+            { away: 'LAR', home: 'MIN', time: 'Sunday 4:25 PM ET' },
+            { away: 'SF', home: 'DAL', time: 'Sunday 8:20 PM ET' },
+            { away: 'LV', home: 'KC', time: 'Monday 8:15 PM ET' }
+        ]
+    }
+};
+
+// NFL Stadium Information
+const NFL_STADIUMS = {
+    'ARI': { name: 'State Farm Stadium', city: 'Glendale, AZ', surface: 'Artificial Turf', capacity: '63,400' },
+    'ATL': { name: 'Mercedes-Benz Stadium', city: 'Atlanta, GA', surface: 'Artificial Turf', capacity: '71,000' },
+    'BAL': { name: 'M&T Bank Stadium', city: 'Baltimore, MD', surface: 'Artificial Turf', capacity: '71,008' },
+    'BUF': { name: 'Highmark Stadium', city: 'Orchard Park, NY', surface: 'Artificial Turf', capacity: '71,608' },
+    'CAR': { name: 'Bank of America Stadium', city: 'Charlotte, NC', surface: 'Artificial Turf', capacity: '75,523' },
+    'CHI': { name: 'Soldier Field', city: 'Chicago, IL', surface: 'Natural Grass', capacity: '61,500' },
+    'CIN': { name: 'Paycor Stadium', city: 'Cincinnati, OH', surface: 'Artificial Turf', capacity: '65,515' },
+    'CLE': { name: 'Cleveland Browns Stadium', city: 'Cleveland, OH', surface: 'Natural Grass', capacity: '67,431' },
+    'DAL': { name: 'AT&T Stadium', city: 'Arlington, TX', surface: 'Artificial Turf', capacity: '80,000' },
+    'DEN': { name: 'Empower Field at Mile High', city: 'Denver, CO', surface: 'Natural Grass', capacity: '76,125' },
+    'DET': { name: 'Ford Field', city: 'Detroit, MI', surface: 'Artificial Turf', capacity: '65,000' },
+    'GB': { name: 'Lambeau Field', city: 'Green Bay, WI', surface: 'Natural Grass', capacity: '81,441' },
+    'HOU': { name: 'NRG Stadium', city: 'Houston, TX', surface: 'Artificial Turf', capacity: '72,220' },
+    'IND': { name: 'Lucas Oil Stadium', city: 'Indianapolis, IN', surface: 'Artificial Turf', capacity: '67,000' },
+    'JAX': { name: 'TIAA Bank Field', city: 'Jacksonville, FL', surface: 'Natural Grass', capacity: '67,838' },
+    'KC': { name: 'Arrowhead Stadium', city: 'Kansas City, MO', surface: 'Natural Grass', capacity: '76,416' },
+    'LV': { name: 'Allegiant Stadium', city: 'Las Vegas, NV', surface: 'Artificial Turf', capacity: '65,000' },
+    'LAC': { name: 'SoFi Stadium', city: 'Los Angeles, CA', surface: 'Artificial Turf', capacity: '70,240' },
+    'LAR': { name: 'SoFi Stadium', city: 'Los Angeles, CA', surface: 'Artificial Turf', capacity: '70,240' },
+    'MIA': { name: 'Hard Rock Stadium', city: 'Miami Gardens, FL', surface: 'Natural Grass', capacity: '65,326' },
+    'MIN': { name: 'U.S. Bank Stadium', city: 'Minneapolis, MN', surface: 'Artificial Turf', capacity: '66,860' },
+    'NE': { name: 'Gillette Stadium', city: 'Foxborough, MA', surface: 'Artificial Turf', capacity: '65,878' },
+    'NO': { name: 'Caesars Superdome', city: 'New Orleans, LA', surface: 'Artificial Turf', capacity: '73,208' },
+    'NYG': { name: 'MetLife Stadium', city: 'East Rutherford, NJ', surface: 'Artificial Turf', capacity: '82,500' },
+    'NYJ': { name: 'MetLife Stadium', city: 'East Rutherford, NJ', surface: 'Artificial Turf', capacity: '82,500' },
+    'PIT': { name: 'Acrisure Stadium', city: 'Pittsburgh, PA', surface: 'Natural Grass', capacity: '68,400' },
+    'PHI': { name: 'Lincoln Financial Field', city: 'Philadelphia, PA', surface: 'Natural Grass', capacity: '69,596' },
+    'SF': { name: "Levi's Stadium", city: 'Santa Clara, CA', surface: 'Natural Grass', capacity: '68,500' },
+    'SEA': { name: 'Lumen Field', city: 'Seattle, WA', surface: 'Artificial Turf', capacity: '69,000' },
+    'TB': { name: 'Raymond James Stadium', city: 'Tampa, FL', surface: 'Natural Grass', capacity: '65,890' },
+    'TEN': { name: 'Nissan Stadium', city: 'Nashville, TN', surface: 'Natural Grass', capacity: '69,143' },
+    'WSH': { name: 'FedExField', city: 'Landover, MD', surface: 'Natural Grass', capacity: '82,000' }
+};
+
+/**
+ * Get current NFL week based on today's date
+ */
+function getCurrentNFLWeek() {
+    const today = new Date();
+    
+    // Check if we're in the NFL season
+    const seasonStart = new Date(NFL_2024_SCHEDULE.seasonStart);
+    const seasonEnd = new Date('2025-01-08'); // End of Week 18
+    
+    if (today < seasonStart) {
+        return {
+            week: 0,
+            title: 'Preseason - August 2024',
+            status: 'preseason'
+        };
+    }
+    
+    if (today > seasonEnd) {
+        return {
+            week: 19,
+            title: 'Playoffs - January 2025',
+            status: 'playoffs'
+        };
+    }
+    
+    // Find current week
+    for (const weekData of NFL_2024_SCHEDULE.weeks) {
+        const weekStart = new Date(weekData.start);
+        const weekEnd = new Date(weekData.end);
+        
+        if (today >= weekStart && today <= weekEnd) {
+            return {
+                week: weekData.week,
+                title: weekData.title,
+                status: 'regular_season'
+            };
+        }
+    }
+    
+    // Default fallback
+    return {
+        week: 7,
+        title: 'Week 7 - October 2024',
+        status: 'regular_season'
+    };
+}
+
+/**
+ * Get next game day for the current week
+ */
+function getNextGameDay() {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Most NFL games are on Sunday (0), some on Monday (1), Thursday (4)
+    let nextGameDay = 'Sunday';
+    let kickoffTime = '1:00 PM ET';
+    
+    if (dayOfWeek === 0) { // Today is Sunday
+        nextGameDay = 'Today';
+        kickoffTime = '1:00 PM ET';
+    } else if (dayOfWeek === 1) { // Today is Monday
+        nextGameDay = 'Tonight';
+        kickoffTime = '8:15 PM ET';
+    } else if (dayOfWeek === 4) { // Today is Thursday
+        nextGameDay = 'Tonight';
+        kickoffTime = '8:15 PM ET';
+    } else if (dayOfWeek < 4) { // Tuesday, Wednesday
+        nextGameDay = 'Thursday';
+        kickoffTime = '8:15 PM ET';
+    } else { // Friday, Saturday
+        nextGameDay = 'Sunday';
+        kickoffTime = '1:00 PM ET';
+    }
+    
+    return `${nextGameDay} ${kickoffTime}`;
+}
+
+/**
+ * Get stadium information for a team
+ */
+function getStadiumInfo(teamCode) {
+    const stadium = NFL_STADIUMS[teamCode];
+    if (!stadium) {
+        return {
+            name: 'NFL Stadium',
+            city: 'NFL City',
+            surface: 'Natural Grass',
+            capacity: '65,000'
+        };
+    }
+    return stadium;
+}
+
+/**
+ * Find a team's game for a specific week
+ */
+function findTeamGame(teamCode, week) {
+    const gameWeek = NFL_2024_SCHEDULE.games[`week${week}`];
+    if (!gameWeek) return null;
+    
+    for (const game of gameWeek) {
+        if (game.home === teamCode || game.away === teamCode) {
+            return {
+                matchup: `${game.away} @ ${game.home}`,
+                time: game.time,
+                home: game.home,
+                away: game.away,
+                isHome: game.home === teamCode
+            };
+        }
+    }
+    return null; // Bye week
+}
+
+/**
+ * Update the current week display
+ */
+function updateCurrentWeekDisplay(selectedTeam = 'Team') {
+    const currentWeek = getCurrentNFLWeek();
+    const teamGame = findTeamGame(selectedTeam, currentWeek.week);
+    
+    const currentWeekInfo = document.getElementById('current-week-info');
+    if (currentWeekInfo) {
+        if (teamGame) {
+            // Team has a game this week
+            const stadium = getStadiumInfo(teamGame.home);
+            currentWeekInfo.innerHTML = `
+                <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week ${currentWeek.week}</strong> - ${currentWeek.title.split(' - ')[1]}</p>
+                <p style="color: #0369a1; font-size: 14px;">Game: ${teamGame.matchup}</p>
+                <p style="color: #0369a1; font-size: 14px;">Kickoff: ${teamGame.time}</p>
+                <p style="color: #0369a1; font-size: 14px;">Stadium: ${stadium.name}</p>
+            `;
+        } else {
+            // Bye week
+            currentWeekInfo.innerHTML = `
+                <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week ${currentWeek.week}</strong> - ${currentWeek.title.split(' - ')[1]}</p>
+                <p style="color: #ff6b35; font-size: 14px; font-weight: bold;">BYE WEEK</p>
+                <p style="color: #0369a1; font-size: 14px;">No game scheduled</p>
+            `;
+        }
+    }
+}
+
+/**
+ * Update stadium information display
+ */
+function updateStadiumInfo(teamCode) {
+    const stadium = getStadiumInfo(teamCode);
+    
+    const stadiumInfoElement = document.querySelector('.info-sections .grid-item:first-child p');
+    if (stadiumInfoElement) {
+        stadiumInfoElement.innerHTML = `
+            <strong>${stadium.name}</strong><br>
+            ${stadium.city}<br>
+            Surface: ${stadium.surface}<br>
+            Capacity: ${stadium.capacity}
+        `;
+    }
+}
+
+/**
+ * Get mock weather conditions (to be replaced with real API)
+ */
+function getMockWeatherConditions() {
+    const conditions = [
+        { temp: '72°F', condition: 'Clear', wind: '5 mph SW' },
+        { temp: '45°F', condition: 'Cloudy', wind: '12 mph NW' },
+        { temp: '28°F', condition: 'Snow', wind: '18 mph N' },
+        { temp: '85°F', condition: 'Sunny', wind: '3 mph SE' },
+        { temp: '55°F', condition: 'Light Rain', wind: '8 mph W' }
+    ];
+    
+    return conditions[Math.floor(Math.random() * conditions.length)];
+}
+
+/**
+ * Update game conditions display
+ */
+function updateGameConditions() {
+    const weather = getMockWeatherConditions();
+    
+    const gameConditionsElement = document.querySelector('.info-sections .grid-item:nth-child(2) p');
+    if (gameConditionsElement) {
+        gameConditionsElement.innerHTML = `
+            Temperature: ${weather.temp}<br>
+            Conditions: ${weather.condition}<br>
+            Wind: ${weather.wind}<br>
+            Field: Professional turf
+        `;
+    }
+}
+
+/**
+ * Initialize NFL schedule module
+ */
+function initializeNFLSchedule() {
+    console.log('🏈 NFL Schedule module loaded');
+    console.log(`📅 Current NFL Week: ${getCurrentNFLWeek().week}`);
+    
+    // Update displays on load
+    updateCurrentWeekDisplay();
+    updateGameConditions();
+}
+
+// Export functions for global use
+window.NFLSchedule = {
+    getCurrentNFLWeek,
+    getNextGameDay,
+    getStadiumInfo,
+    findTeamGame,
+    updateCurrentWeekDisplay,
+    updateStadiumInfo,
+    updateGameConditions,
+    initializeNFLSchedule
+};
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeNFLSchedule);
+} else {
+    initializeNFLSchedule();
+}
