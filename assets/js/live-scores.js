@@ -42,37 +42,34 @@ class LiveNFLScores {
     }
     
     createLiveScoresWidget() {
-        // Find a good spot to inject the live scores (after the header)
-        const mainContent = document.querySelector('.mdl-layout__content');
-        if (!mainContent) return;
+        // Find the main grid container for seamless integration
+        const mainGrid = document.querySelector('.mdl-grid');
+        if (!mainGrid) return;
         
         const liveScoresHTML = `
-            <div id="live-scores-widget" class="live-scores-container" style="margin: 8px;">
-                <div class="live-scores-header">
-                    <div class="live-indicator">
-                        <span class="live-dot"></span>
-                        <span class="live-text">LIVE NFL SCORES</span>
+            <div class="mdl-cell mdl-cell--12-col">
+                <div id="live-scores-widget" class="live-scores-container">
+                    <div class="live-scores-header">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            <span class="live-text">LIVE NFL SCORES</span>
+                        </div>
+                        <div class="last-update">
+                            Updated: <span id="scores-timestamp">--:--</span>
+                        </div>
                     </div>
-                    <div class="last-update">
-                        Updated: <span id="scores-timestamp">--:--</span>
-                    </div>
-                </div>
-                <div id="live-games-container" class="live-games-scroll">
-                    <div class="loading-games">
-                        <i class="material-icons">sports_football</i>
-                        Loading live games...
+                    <div id="live-games-container" class="live-games-scroll">
+                        <div class="loading-games">
+                            <i class="material-icons">sports_football</i>
+                            Loading live games...
+                        </div>
                     </div>
                 </div>
             </div>
         `;
         
-        // Insert after any existing status bars
-        const statusBar = document.querySelector('.compact-status-bar');
-        if (statusBar) {
-            statusBar.insertAdjacentHTML('afterend', liveScoresHTML);
-        } else {
-            mainContent.insertAdjacentHTML('afterbegin', liveScoresHTML);
-        }
+        // Insert as the first item in the grid for seamless integration
+        mainGrid.insertAdjacentHTML('afterbegin', liveScoresHTML);
         
         this.addLiveScoresStyles();
     }
@@ -84,7 +81,7 @@ class LiveNFLScores {
                     background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
                     border-radius: 8px;
                     padding: 12px;
-                    margin-bottom: 12px;
+                    margin: 0;
                     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
                     overflow: hidden;
                 }
@@ -300,8 +297,9 @@ class LiveNFLScores {
                 /* Mobile optimizations */
                 @media (max-width: 768px) {
                     .live-scores-container {
-                        margin: 8px;
+                        margin: 0;
                         padding: 8px;
+                        border-radius: 8px;
                     }
                     
                     .game-card {

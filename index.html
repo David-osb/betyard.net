@@ -416,6 +416,12 @@
             scroll-behavior: smooth;
         }
         
+        /* Layout content - remove padding for seamless integration */
+        .mdl-layout__content {
+            padding: 0;
+            margin: 0;
+        }
+        
         /* Header mobile optimization */
         .mdl-layout__header {
             position: sticky;
@@ -438,12 +444,12 @@
         
         /* Grid system - mobile first */
         .mdl-grid {
-            padding: 8px;
+            padding: 0;
             max-width: 100%;
         }
         
         .mdl-cell {
-            margin: 4px;
+            margin: 8px;
         }
         
         /* Card improvements for mobile */
