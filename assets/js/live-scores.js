@@ -27,15 +27,19 @@ class LiveNFLScores {
     }
     
     async init() {
-        console.log('🏈 Live NFL Scores: Initializing...');
+        console.log('🏈 Live NFL Scores: Initializing with proper Tank01 data flow...');
+        
+        // Wait for NFL Schedule API to be ready
+        if (window.NFLScheduleAPI) {
+            this.scheduleAPI = window.NFLScheduleAPI;
+            console.log('✅ Connected to NFL Schedule API');
+        }
+        
+        // Listen for live NFL updates
+        this.setupEventListeners();
         
         // Create live scores widget
         this.createLiveScoresWidget();
-        
-        // Listen for live score updates from the schedule API
-        window.addEventListener('nflLiveScoreUpdate', (event) => {
-            this.handleLiveScoreUpdate(event.detail);
-        });
         
         // Start fetching live data
         await this.fetchLiveScores();
@@ -43,69 +47,27 @@ class LiveNFLScores {
         // Set up auto-refresh
         this.startAutoRefresh();
         
-        console.log('✅ Live NFL Scores: Ready!');
+        console.log('✅ Live NFL Scores: Ready with proper data flow!');
     }
     
-    handleLiveScoreUpdate(updateData) {
-        const { gameID, boxScore } = updateData;
-        console.log(`📊 Received live update for game ${gameID}:`, boxScore);
+    setupEventListeners() {
+        // Listen for schedule updates
+        window.addEventListener('nflScheduleUpdated', (event) => {
+            console.log('📅 Schedule updated, refreshing live scores...');
+            this.updateFromSchedule(event.detail.schedule);
+        });
         
-        // Find and update the specific game
-        const gameIndex = this.games.findIndex(game => game.gameId === gameID);
-        if (gameIndex !== -1) {
-            this.updateGameFromBoxScore(gameIndex, boxScore);
-            this.updateLiveScoresDisplay();
-        }
-    }
-    
-    updateGameFromBoxScore(gameIndex, boxScore) {
-        if (!boxScore.body) return;
+        // Listen for live game updates
+        window.addEventListener('nflLiveUpdate', (event) => {
+            console.log('🔴 Live update received:', event.detail);
+            this.updateLiveGame(event.detail.gameID, event.detail.boxScore);
+        });
         
-        const game = this.games[gameIndex];
-        const gameData = boxScore.body;
-        
-        // Update scores
-        if (gameData.awayPts !== undefined) game.awayTeam.score = parseInt(gameData.awayPts);
-        if (gameData.homePts !== undefined) game.homeTeam.score = parseInt(gameData.homePts);
-        
-        // Update quarter and time
-        if (gameData.quarter) game.quarter = gameData.quarter;
-        if (gameData.gameClock) game.timeRemaining = gameData.gameClock;
-        
-        // Update status
-        game.status = this.mapGameStatusFromBoxScore(gameData);
-        
-        // Detect exciting plays from box score
-        game.excitingPlay = this.detectExcitingPlayFromBoxScore(gameData);
-        
-        console.log(`✅ Updated game ${game.gameId} from live box score`);
-    }
-    
-    mapGameStatusFromBoxScore(gameData) {
-        if (gameData.gameStatus) {
-            const status = gameData.gameStatus.toLowerCase();
-            if (status.includes('final')) return 'FINAL';
-            if (status.includes('live') || status.includes('progress')) return 'LIVE';
-        }
-        
-        // If quarter information is available, assume it's live
-        if (gameData.quarter && gameData.quarter !== 'Pre') {
-            return 'LIVE';
-        }
-        
-        return 'SCHEDULED';
-    }
-    
-    detectExcitingPlayFromBoxScore(gameData) {
-        // Analyze box score for exciting plays
-        if (gameData.playerStats) {
-            // Look for recent touchdowns, turnovers, etc.
-            // This would require more detailed analysis of player stats
-            const plays = ['TOUCHDOWN', 'RED ZONE', 'TURNOVER', 'FIELD GOAL'];
-            return Math.random() > 0.8 ? plays[Math.floor(Math.random() * plays.length)] : null;
-        }
-        
-        return null;
+        // Listen for exciting plays
+        window.addEventListener('nflExcitingPlay', (event) => {
+            console.log('🔥 Exciting play:', event.detail);
+            this.highlightExcitingPlay(event.detail.gameID, event.detail.play);
+        });
     }
     
     createLiveScoresWidget() {
@@ -397,27 +359,20 @@ class LiveNFLScores {
     
     async fetchLiveScores() {
         try {
-            console.log('🔄 Fetching live NFL scores using proper Tank01 workflow...');
+            console.log('🔄 Fetching live NFL scores with proper data flow...');
             
-            // Use the new NFL Schedule API for proper data flow
-            if (window.NFLScheduleAPI) {
-                const todaysGames = window.NFLScheduleAPI.getTodaysGames();
-                
-                if (todaysGames && todaysGames.length > 0) {
-                    console.log('✅ Using real daily schedule data:', todaysGames);
-                    
-                    // Process real schedule data
-                    this.games = await this.processRealScheduleData(todaysGames);
-                    this.currentWeek = this.calculateCurrentWeek();
-                    this.lastUpdate = new Date();
-                    
+            // First, try to get data from our Schedule API
+            if (this.scheduleAPI) {
+                const todaysGames = this.scheduleAPI.getTodaysGames();
+                if (todaysGames && todaysGames.body) {
+                    console.log('✅ Using Schedule API data for live scores');
+                    this.processScheduleAPIData(todaysGames);
                     this.updateLiveScoresDisplay();
-                    console.log(`✅ Updated ${this.games.length} real NFL games from schedule API`);
                     return;
                 }
             }
             
-            // Try legacy Tank01 API call as fallback
+            // Fallback to direct API call if Schedule API not available
             try {
                 const response = await fetch(`${this.apiConfig.baseUrl}/getNFLScores?week=7&seasonType=reg&season=2025`, {
                     method: 'GET',
@@ -426,7 +381,7 @@ class LiveNFLScores {
                 
                 if (response.ok) {
                     const apiData = await response.json();
-                    console.log('✅ Fallback NFL data received from Tank01:', apiData);
+                    console.log('✅ Real NFL data received from Tank01:', apiData);
                     
                     // Process real API data
                     this.games = this.processRealNFLData(apiData);
@@ -441,7 +396,7 @@ class LiveNFLScores {
                 console.warn('⚠️ Tank01 API error, falling back to realistic mock data:', apiError);
             }
             
-            // Final fallback to realistic mock data if both APIs fail
+            // Final fallback to realistic mock data
             const liveData = this.generateRealisticGameData();
             this.games = liveData.games;
             this.currentWeek = liveData.week;
@@ -456,78 +411,79 @@ class LiveNFLScores {
         }
     }
     
-    async processRealScheduleData(scheduleData) {
-        // Process daily schedule data into our game format
-        const games = [];
+    processScheduleAPIData(todaysGames) {
+        if (!todaysGames || !todaysGames.body) return;
         
-        for (const game of scheduleData) {
-            // Get detailed game info if available
-            const gameInfo = window.NFLScheduleAPI.getGameInfo(game.gameID);
+        const games = Array.isArray(todaysGames.body) ? todaysGames.body : [todaysGames.body];
+        
+        this.games = games.map(game => ({
+            gameId: game.gameID,
+            gameTime: game.gameTime || 'TBD',
+            gameDate: new Date().toLocaleDateString(),
+            awayTeam: {
+                code: game.away || 'TBD',
+                name: this.getTeamName(game.away),
+                score: parseInt(game.awayPts) || 0
+            },
+            homeTeam: {
+                code: game.home || 'TBD', 
+                name: this.getTeamName(game.home),
+                score: parseInt(game.homePts) || 0
+            },
+            quarter: game.quarter || 'Pre',
+            timeRemaining: game.gameClock || '',
+            status: this.mapGameStatus(game.gameStatus),
+            excitingPlay: null,
+            isLive: this.scheduleAPI ? this.scheduleAPI.getLiveGames().includes(game.gameID) : false
+        }));
+        
+        this.currentWeek = 7;
+        this.lastUpdate = new Date();
+    }
+    
+    updateLiveGame(gameID, boxScore) {
+        // Update specific game with live box score data
+        const gameIndex = this.games.findIndex(g => g.gameId === gameID);
+        if (gameIndex !== -1 && boxScore.body) {
+            const game = this.games[gameIndex];
             
-            const gameObj = {
-                gameId: game.gameID,
-                gameTime: game.gameTime || 'TBD',
-                gameDate: new Date().toLocaleDateString(),
-                awayTeam: {
-                    code: game.away || 'TBD',
-                    name: this.getTeamName(game.away),
-                    score: parseInt(game.awayPts) || 0
-                },
-                homeTeam: {
-                    code: game.home || 'TBD', 
-                    name: this.getTeamName(game.home),
-                    score: parseInt(game.homePts) || 0
-                },
-                quarter: game.quarter || this.determineGameStatus(game),
-                timeRemaining: game.gameClock || '',
-                status: this.mapGameStatusFromSchedule(game),
-                excitingPlay: this.detectExcitingPlay(game),
-                gameTime_epoch: game.gameTime_epoch
-            };
+            // Update scores
+            game.awayTeam.score = parseInt(boxScore.body.awayPts) || 0;
+            game.homeTeam.score = parseInt(boxScore.body.homePts) || 0;
             
-            games.push(gameObj);
+            // Update game status
+            game.status = this.mapGameStatus(boxScore.body.gameStatus);
+            game.quarter = boxScore.body.quarter || game.quarter;
+            game.timeRemaining = boxScore.body.gameClock || '';
+            
+            // Refresh display
+            this.updateLiveScoresDisplay();
         }
-        
-        return games;
     }
     
-    determineGameStatus(game) {
-        if (!game.gameTime_epoch) return 'Pre';
-        
-        const now = Date.now() / 1000;
-        const gameTime = game.gameTime_epoch;
-        
-        if (now < gameTime) return 'Pre';
-        if (now > gameTime + (4 * 60 * 60)) return 'Final'; // 4 hours after start
-        
-        // Game is live - determine quarter based on elapsed time
-        const elapsed = (now - gameTime) / 60; // minutes
-        if (elapsed < 15) return '1st';
-        if (elapsed < 30) return '2nd';
-        if (elapsed < 45) return 'Half';
-        if (elapsed < 60) return '3rd';
-        if (elapsed < 75) return '4th';
-        return 'OT';
+    highlightExcitingPlay(gameID, play) {
+        // Highlight game with exciting play
+        const gameIndex = this.games.findIndex(g => g.gameId === gameID);
+        if (gameIndex !== -1) {
+            this.games[gameIndex].excitingPlay = play.type;
+            
+            // Refresh display to show excitement
+            this.updateLiveScoresDisplay();
+            
+            // Clear exciting play after 30 seconds
+            setTimeout(() => {
+                if (this.games[gameIndex]) {
+                    this.games[gameIndex].excitingPlay = null;
+                    this.updateLiveScoresDisplay();
+                }
+            }, 30000);
+        }
     }
     
-    mapGameStatusFromSchedule(game) {
-        if (!game.gameTime_epoch) return 'SCHEDULED';
-        
-        const now = Date.now() / 1000;
-        const gameTime = game.gameTime_epoch;
-        
-        if (now < gameTime) return 'SCHEDULED';
-        if (now > gameTime + (4 * 60 * 60)) return 'FINAL';
-        return 'LIVE';
-    }
-    
-    calculateCurrentWeek() {
-        // Calculate current NFL week based on date
-        const today = new Date();
-        const seasonStart = new Date(2025, 8, 5); // September 5, 2025
-        const diffTime = today - seasonStart;
-        const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
-        return Math.max(1, Math.min(diffWeeks, 18));
+    updateFromSchedule(schedule) {
+        // Update our games from the daily schedule fetch
+        this.processScheduleAPIData(schedule);
+        this.updateLiveScoresDisplay();
     }
     
     processRealNFLData(apiData) {
