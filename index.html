@@ -886,6 +886,7 @@
     <script src="assets/js/https-enforcement.js"></script>
     <script src="assets/js/xgboost-simulation.js"></script>
     <script src="assets/js/syntax-validation.js"></script>
+    <script src="assets/js/nfl-schedule.js"></script>
     <script src="assets/js/main.js?v=2024-10-18-15-35"></script>
     <script src="assets/js/app-logic.js?v=2024-10-18-15-35"></script>
     <script src="assets/js/ml-config.js?v=2024-10-18-16-30"></script>
@@ -1392,13 +1393,18 @@
                     bettingCard.style.display = 'block';
                 }
                 
-                // Update current week info
-                const currentWeekInfo = document.getElementById('current-week-info');
-                currentWeekInfo.innerHTML = `
-                    <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week 7</strong> - October 2024</p>
-                    <p style="color: #0369a1; font-size: 14px;">Game: ${teamName} vs Opponent</p>
-                    <p style="color: #0369a1; font-size: 14px;">Kickoff: Sunday 1:00 PM ET</p>
-                `;
+                // Update current week info using dynamic NFL schedule
+                if (window.NFLSchedule) {
+                    window.NFLSchedule.updateCurrentWeekDisplay(teamSelect.value);
+                } else {
+                    // Fallback if module not loaded yet
+                    const currentWeekInfo = document.getElementById('current-week-info');
+                    currentWeekInfo.innerHTML = `
+                        <p style="color: #0369a1; margin-bottom: 8px;"><strong>Week 7</strong> - October 2024</p>
+                        <p style="color: #0369a1; font-size: 14px;">Game: ${teamName} vs Opponent</p>
+                        <p style="color: #0369a1; font-size: 14px;">Kickoff: Sunday 1:00 PM ET</p>
+                    `;
+                }
             }
         }
         
