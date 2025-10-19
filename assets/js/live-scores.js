@@ -386,15 +386,20 @@ class LiveNFLScores {
                 }
             }
             
-            // Final fallback to realistic mock data
-            console.log('⚠️ Using mock data fallback (no live scores available)');
-            const liveData = this.generateRealisticGameData();
-            this.games = liveData.games;
-            this.currentWeek = liveData.week;
-            this.lastUpdate = new Date();
+            // Force real API data processing instead of mock fallback
+            console.log('🔄 No live scores available, using schedule data with timing validation...');
+            if (this.scheduleAPI) {
+                const todaysGames = this.scheduleAPI.getTodaysGames();
+                if (todaysGames && todaysGames.length > 0) {
+                    console.log(`📅 Processing ${todaysGames.length} scheduled games with timing validation`);
+                    this.processScheduleAPIData(todaysGames);
+                    return;
+                }
+            }
             
-            this.updateLiveScoresDisplay();
-            console.log(`✅ Updated ${this.games.length} games (mock data fallback)`);
+            // No data available - show error instead of mock data
+            console.warn('❌ No NFL data available from API');
+            this.showErrorState();
             
         } catch (error) {
             console.error('❌ Error fetching live scores:', error);
