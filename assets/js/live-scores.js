@@ -372,31 +372,22 @@ class LiveNFLScores {
                 }
             }
             
-            // Fallback to direct API call if Schedule API not available
-            try {
-                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLScores?week=7&seasonType=reg&season=2025`, {
-                    method: 'GET',
-                    headers: this.apiConfig.headers
-                });
-                
-                if (response.ok) {
-                    const apiData = await response.json();
-                    console.log('✅ Real NFL data received from Tank01:', apiData);
-                    
-                    // Process real API data
-                    this.games = this.processRealNFLData(apiData);
-                    this.currentWeek = 7; // Current week
+            // Use composite live scores from Schedule API if not available directly
+            if (this.scheduleAPI && this.scheduleAPI.getLiveScores) {
+                const liveScores = this.scheduleAPI.getLiveScores();
+                if (liveScores && liveScores.body) {
+                    console.log('✅ Using composite live scores from Schedule API');
+                    this.games = this.processRealNFLData(liveScores);
+                    this.currentWeek = 7;
                     this.lastUpdate = new Date();
-                    
                     this.updateLiveScoresDisplay();
-                    console.log(`✅ Updated ${this.games.length} real NFL games`);
+                    console.log(`✅ Updated ${this.games.length} games from composite live scores`);
                     return;
                 }
-            } catch (apiError) {
-                console.warn('⚠️ Tank01 API error, falling back to realistic mock data:', apiError);
             }
             
             // Final fallback to realistic mock data
+            console.log('⚠️ Using mock data fallback (no live scores available)');
             const liveData = this.generateRealisticGameData();
             this.games = liveData.games;
             this.currentWeek = liveData.week;
