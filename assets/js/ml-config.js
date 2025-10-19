@@ -6,12 +6,13 @@ const ML_CONFIG = {
     RAILWAY: 'https://betyard-ml-backend-production.up.railway.app',
     RENDER: 'https://betyard-ml-backend.onrender.com', 
     HEROKU: 'https://betyard-ml-backend.herokuapp.com',
+    FLY: 'https://betyard-ml-backend.fly.dev',
     
     // 🔧 Development
     LOCAL: 'http://localhost:5000',
     
-    // 🎯 Active Configuration
-    ACTIVE: 'RAILWAY' // Change this to your preferred provider
+    // 🎯 Active Configuration - LIVE ML BACKEND! 🔥
+    ACTIVE: 'RENDER' // ✅ LIVE: Your deployed ML backend with real XGBoost predictions!
 };
 
 // Export for use in ml-integration.js
