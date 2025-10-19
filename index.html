@@ -1228,13 +1228,13 @@
                     };
                 }
                 
-                // Update prediction display with null safety
+                // Update prediction display with null safety and proper formatting
                 const elements = {
-                    'passing-yards': prediction.passingYards,
-                    'completions': prediction.completions,
-                    'attempts': prediction.attempts,
-                    'touchdowns': prediction.touchdowns,
-                    'interceptions': prediction.interceptions,
+                    'passing-yards': Math.round(prediction.passingYards),
+                    'completions': Math.round(prediction.completions),
+                    'attempts': Math.round(prediction.attempts),
+                    'touchdowns': Math.round(prediction.touchdowns),
+                    'interceptions': Math.round(prediction.interceptions),
                     'qb-rating': prediction.qbRating.toFixed(1)
                 };
                 
