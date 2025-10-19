@@ -52,11 +52,24 @@ class BetYardMLAPI {
     async logModelInfo() {
         try {
             const response = await fetch(`${this.baseURL}/model/info`);
+            
+            if (!response.ok) {
+                console.log('⚠️ Model info endpoint not available (status:', response.status, ')');
+                return;
+            }
+            
             const data = await response.json();
+            
+            if (data.error) {
+                console.log('⚠️ Model info error:', data.error);
+                return;
+            }
+            
             console.log('📊 ML Model Info:', data);
             console.log('🎯 Feature Importance:', data.feature_importance);
         } catch (error) {
-            console.log('Could not fetch model info:', error);
+            // Silently handle model info errors - they're not critical
+            console.log('ℹ️ Model info not available');
         }
     }
 
