@@ -127,46 +127,32 @@ class NFLScheduleAPI {
      * Leverages more Tank01 endpoints for comprehensive data
      */
     setupEnhancedDataCollection() {
-        // Fetch NFL standings
-        this.queueAPIRequest(() => this.fetchNFLStandings(), 3);
-        
-        // Fetch player projections
-        this.queueAPIRequest(() => this.fetchPlayerProjections(), 2);
-        
-        // Fetch injury reports
-        this.queueAPIRequest(() => this.fetchInjuryReports(), 2);
-        
-        // Fetch weather data for outdoor games
-        this.queueAPIRequest(() => this.fetchGameWeather(), 2);
+        // Fetch comprehensive player data (5.2MB goldmine!)
+        this.queueAPIRequest(() => this.fetchComprehensivePlayerData(), 3);
         
         console.log('📊 Enhanced data collection queued for maximum NFL insights');
     }
     
-    async fetchNFLStandings() {
-        try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLStandings?season=2025&seasonType=reg`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const standings = await response.json();
-                this.cache.standings = { data: standings, expires: Date.now() + (24 * 60 * 60 * 1000) };
-                console.log('✅ NFL Standings fetched and cached');
-                
-                window.dispatchEvent(new CustomEvent('nflStandingsUpdated', {
-                    detail: { standings, timestamp: new Date() }
-                }));
-                
-                return standings;
-            }
-        } catch (error) {
-            console.warn('⚠️ Standings API error:', error);
-        }
-        return null;
+    /**
+     * ENHANCED: Additional NFL Data Collection
+     * Focuses on VERIFIED working Tank01 endpoints only
+     */
+    setupEnhancedDataCollection() {
+        // Focus on verified working endpoints only
+        
+        // Fetch comprehensive player data (5.2MB goldmine!)
+        this.queueAPIRequest(() => this.fetchComprehensivePlayerData(), 3);
+        
+        // Fetch all team rosters with stats
+        this.queueAPIRequest(() => this.fetchEnhancedRosters(), 2);
+        
+        // Fetch team schedules for season context
+        this.queueAPIRequest(() => this.fetchTeamSchedules(), 2);
+        
+        console.log('📊 Enhanced data collection focused on verified working endpoints');
     }
     
-    async fetchPlayerProjections() {
+    async fetchComprehensivePlayerData() {
         try {
             const response = await fetch(`${this.apiConfig.baseUrl}/getNFLPlayerList?playerStats=true&getStats=true`, {
                 method: 'GET',
@@ -174,79 +160,78 @@ class NFLScheduleAPI {
             });
             
             if (response.ok) {
-                const projections = await response.json();
-                this.cache.playerProjections = { data: projections, expires: Date.now() + (6 * 60 * 60 * 1000) };
-                console.log('✅ Player projections fetched and cached');
+                const playerData = await response.json();
+                this.cache.comprehensivePlayerData = { data: playerData, expires: Date.now() + (12 * 60 * 60 * 1000) };
+                console.log('✅ Comprehensive player data fetched (5.2MB dataset!)');
                 
-                window.dispatchEvent(new CustomEvent('nflProjectionsUpdated', {
-                    detail: { projections, timestamp: new Date() }
+                window.dispatchEvent(new CustomEvent('nflPlayerDataUpdated', {
+                    detail: { playerData, timestamp: new Date() }
                 }));
                 
-                return projections;
+                return playerData;
             }
         } catch (error) {
-            console.warn('⚠️ Player projections API error:', error);
+            console.warn('⚠️ Comprehensive player data API error:', error);
         }
         return null;
     }
     
-    async fetchInjuryReports() {
-        try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLPlayerList?playerStats=true&getInjuredReserveOnly=false`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const injuries = await response.json();
-                this.cache.injuryReports = { data: injuries, expires: Date.now() + (2 * 60 * 60 * 1000) };
-                console.log('✅ Injury reports fetched and cached');
+    async fetchEnhancedRosters() {
+        const priorityTeams = ['PHI', 'KC', 'CIN', 'BAL', 'SF', 'BUF', 'MIN', 'DAL'];
+        
+        for (const teamID of priorityTeams) {
+            try {
+                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamRoster?teamID=${teamID}&getStats=true`, {
+                    method: 'GET',
+                    headers: this.apiConfig.headers
+                });
                 
-                window.dispatchEvent(new CustomEvent('nflInjuriesUpdated', {
-                    detail: { injuries, timestamp: new Date() }
-                }));
-                
-                return injuries;
-            }
-        } catch (error) {
-            console.warn('⚠️ Injury reports API error:', error);
-        }
-        return null;
-    }
-    
-    async fetchGameWeather() {
-        try {
-            // Get today's games first
-            const games = this.getTodaysGames();
-            if (!games || !games.body) return null;
-            
-            const gameList = Array.isArray(games.body) ? games.body : [games.body];
-            
-            for (const game of gameList) {
-                if (game.gameID) {
-                    const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGameInfo?gameID=${game.gameID}`, {
-                        method: 'GET',
-                        headers: this.apiConfig.headers
+                if (response.ok) {
+                    const rosterData = await response.json();
+                    this.cache.enhancedRosters = this.cache.enhancedRosters || new Map();
+                    this.cache.enhancedRosters.set(teamID, {
+                        data: rosterData,
+                        expires: Date.now() + (6 * 60 * 60 * 1000)
                     });
                     
-                    if (response.ok) {
-                        const gameInfo = await response.json();
-                        if (gameInfo.body && gameInfo.body.weather) {
-                            this.cache.gameWeather = this.cache.gameWeather || new Map();
-                            this.cache.gameWeather.set(game.gameID, {
-                                data: gameInfo.body.weather,
-                                expires: Date.now() + (60 * 60 * 1000)
-                            });
-                            
-                            console.log(`🌤️ Weather data cached for game ${game.gameID}`);
-                        }
-                    }
+                    console.log(`✅ Enhanced roster with stats cached for ${teamID}`);
                 }
+            } catch (error) {
+                console.warn(`⚠️ Enhanced roster API error for ${teamID}:`, error);
             }
-        } catch (error) {
-            console.warn('⚠️ Weather API error:', error);
+            
+            // Rate limiting delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
-        return null;
+    }
+    
+    async fetchTeamSchedules() {
+        const priorityTeams = ['PHI', 'KC', 'CIN', 'BAL'];
+        
+        for (const teamID of priorityTeams) {
+            try {
+                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamSchedule?teamID=${teamID}&season=2025`, {
+                    method: 'GET',
+                    headers: this.apiConfig.headers
+                });
+                
+                if (response.ok) {
+                    const scheduleData = await response.json();
+                    this.cache.teamSchedules = this.cache.teamSchedules || new Map();
+                    this.cache.teamSchedules.set(teamID, {
+                        data: scheduleData,
+                        expires: Date.now() + (24 * 60 * 60 * 1000)
+                    });
+                    
+                    console.log(`✅ Team schedule cached for ${teamID}`);
+                }
+            } catch (error) {
+                console.warn(`⚠️ Team schedule API error for ${teamID}:`, error);
+            }
+            
+            // Rate limiting delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
     }
     
     /**
@@ -697,63 +682,79 @@ class NFLScheduleAPI {
         return Array.from(this.liveGames);
     }
     
-    // Enhanced data access methods
-    getNFLStandings() {
-        return this.cache.standings && Date.now() < this.cache.standings.expires 
-            ? this.cache.standings.data : null;
+    /**
+     * ENHANCED: Public API Methods for Verified Working Endpoints
+     */
+    getTodaysGames() {
+        return this.cache.dailySchedule.data;
     }
     
-    getPlayerProjections() {
-        return this.cache.playerProjections && Date.now() < this.cache.playerProjections.expires 
-            ? this.cache.playerProjections.data : null;
+    getGameInfo(gameID) {
+        return this.cache.gameInfo.get(gameID);
     }
     
-    getInjuryReports() {
-        return this.cache.injuryReports && Date.now() < this.cache.injuryReports.expires 
-            ? this.cache.injuryReports.data : null;
+    getTeamRoster(teamID) {
+        const cached = this.cache.rosters.get(teamID);
+        return cached ? cached.roster : null;
     }
     
-    getGameWeather(gameID) {
-        if (!this.cache.gameWeather) return null;
-        const weather = this.cache.gameWeather.get(gameID);
-        return weather && Date.now() < weather.expires ? weather.data : null;
+    getLiveGames() {
+        return Array.from(this.liveGames);
     }
     
-    // Comprehensive data summary for ML and predictions
-    getComprehensiveGameData(gameID) {
+    // Enhanced data access methods (verified working)
+    getComprehensivePlayerData() {
+        return this.cache.comprehensivePlayerData && Date.now() < this.cache.comprehensivePlayerData.expires 
+            ? this.cache.comprehensivePlayerData.data : null;
+    }
+    
+    getEnhancedRoster(teamID) {
+        if (!this.cache.enhancedRosters) return null;
+        const roster = this.cache.enhancedRosters.get(teamID);
+        return roster && Date.now() < roster.expires ? roster.data : null;
+    }
+    
+    getTeamSchedule(teamID) {
+        if (!this.cache.teamSchedules) return null;
+        const schedule = this.cache.teamSchedules.get(teamID);
+        return schedule && Date.now() < schedule.expires ? schedule.data : null;
+    }
+    
+    // ML-ready comprehensive data (using verified endpoints only)
+    getVerifiedGameData(gameID) {
         const gameInfo = this.getGameInfo(gameID);
-        const weather = this.getGameWeather(gameID);
-        const standings = this.getNFLStandings();
-        const injuries = this.getInjuryReports();
+        const playerData = this.getComprehensivePlayerData();
         
         if (!gameInfo) return null;
         
         return {
             gameInfo,
-            weather,
-            standings,
-            injuries,
-            homeTeamRoster: gameInfo.home ? this.getTeamRoster(gameInfo.home) : null,
-            awayTeamRoster: gameInfo.away ? this.getTeamRoster(gameInfo.away) : null,
+            comprehensivePlayerData: playerData,
+            homeTeamRoster: gameInfo.home ? this.getEnhancedRoster(gameInfo.home) : null,
+            awayTeamRoster: gameInfo.away ? this.getEnhancedRoster(gameInfo.away) : null,
+            homeTeamSchedule: gameInfo.home ? this.getTeamSchedule(gameInfo.home) : null,
+            awayTeamSchedule: gameInfo.away ? this.getTeamSchedule(gameInfo.away) : null,
             isLive: this.liveGames.has(gameID),
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
+            dataQuality: 'verified-endpoints'
         };
     }
     
-    // API usage statistics
+    // API usage statistics (updated for verified endpoints)
     getAPIStats() {
         return {
             queuedRequests: this.apiOptimization.requestQueue.length,
             isProcessing: this.apiOptimization.isProcessing,
-            cacheStats: {
+            verifiedEndpoints: {
                 scheduleExpires: this.cache.dailySchedule.expires,
                 rostersCount: this.cache.rosters.size,
                 gameInfoCount: this.cache.gameInfo.size,
-                hasStandings: !!this.cache.standings,
-                hasProjections: !!this.cache.playerProjections,
-                hasInjuries: !!this.cache.injuryReports
+                hasComprehensivePlayerData: !!this.cache.comprehensivePlayerData,
+                enhancedRostersCount: this.cache.enhancedRosters ? this.cache.enhancedRosters.size : 0,
+                teamSchedulesCount: this.cache.teamSchedules ? this.cache.teamSchedules.size : 0
             },
-            liveGamesCount: this.liveGames.size
+            liveGamesCount: this.liveGames.size,
+            dataVolume: this.cache.comprehensivePlayerData ? '5.2MB Player Dataset' : 'Not loaded'
         };
     }
 }

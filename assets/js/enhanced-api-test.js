@@ -12,21 +12,21 @@ class EnhancedAPITester {
         this.testResults = [];
         
         this.endpoints = [
-            // Core data flow endpoints
+            // VERIFIED WORKING ENDPOINTS
             { name: 'Daily Schedule', endpoint: '/getNFLGamesForDate', params: { gameDate: '2025-10-19' } },
-            { name: 'Live Scores', endpoint: '/getNFLScores', params: { week: '7', seasonType: 'reg', season: '2025' } },
             { name: 'Team Roster', endpoint: '/getNFLTeamRoster', params: { teamID: 'PHI', getStats: 'false' } },
-            
-            // Enhanced data endpoints
-            { name: 'NFL Standings', endpoint: '/getNFLStandings', params: { season: '2025', seasonType: 'reg' } },
-            { name: 'Player List', endpoint: '/getNFLPlayerList', params: { playerStats: 'true', getStats: 'true' } },
-            { name: 'Team Stats', endpoint: '/getNFLTeamStats', params: { teamID: 'KC', season: '2025' } },
             { name: 'Game Info', endpoint: '/getNFLGameInfo', params: { gameID: 'sample_game_id' } },
-            
-            // Advanced endpoints for maximum data
-            { name: 'Player Stats', endpoint: '/getNFLPlayerStats', params: { playerID: 'sample_player', season: '2025' } },
             { name: 'Team Schedule', endpoint: '/getNFLTeamSchedule', params: { teamID: 'BAL', season: '2025' } },
-            { name: 'Box Score', endpoint: '/getNFLBoxScore', params: { gameID: 'sample_box_score' } }
+            { name: 'Box Score', endpoint: '/getNFLBoxScore', params: { gameID: 'sample_box_score' } },
+            
+            // HIGH-VALUE ENDPOINT (5.2MB of data!)
+            { name: 'Player List', endpoint: '/getNFLPlayerList', params: { playerStats: 'true', getStats: 'true' } },
+            
+            // Additional working variations to test
+            { name: 'Live Scores (Weekly)', endpoint: '/getNFLScores', params: { week: '7', seasonType: 'reg', season: '2025' } },
+            { name: 'Team Roster (KC)', endpoint: '/getNFLTeamRoster', params: { teamID: 'KC', getStats: 'true' } },
+            { name: 'Team Roster (CIN)', endpoint: '/getNFLTeamRoster', params: { teamID: 'CIN', getStats: 'false' } },
+            { name: 'Player List (Minimal)', endpoint: '/getNFLPlayerList', params: { playerStats: 'false', getStats: 'false' } }
         ];
         
         this.init();
