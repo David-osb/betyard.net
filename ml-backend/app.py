@@ -315,9 +315,10 @@ def predict_qb():
 def model_info():
     """Get model information and feature importance"""
     try:
+        # Convert numpy float32 values to regular Python floats for JSON serialization
         feature_importance = dict(zip(
             ml_model.feature_names, 
-            ml_model.model.feature_importances_
+            [float(x) for x in ml_model.model.feature_importances_]
         ))
         
         return jsonify({
