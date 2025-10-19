@@ -239,21 +239,21 @@ class NFLMLModel:
         )
         
         return QBPrediction(
-            passing_yards=round(pred_yards, 1),
-            completions=round(completions, 1),
-            attempts=round(attempts, 1),
-            touchdowns=round(touchdowns, 1),
-            interceptions=round(interceptions, 1),
-            qb_rating=round(qb_rating, 1),
-            confidence=round(confidence, 1),
+            passing_yards=float(round(pred_yards, 1)),
+            completions=float(round(completions, 1)),
+            attempts=float(round(attempts, 1)),
+            touchdowns=float(round(touchdowns, 1)),
+            interceptions=float(round(interceptions, 1)),
+            qb_rating=float(round(qb_rating, 1)),
+            confidence=float(round(confidence, 1)),
             features_used={
-                'weather_temp': weather['temp'],
-                'weather_wind': weather['wind'],
-                'injury_factor': injury['impact_factor'],
-                'recent_form': qb_stats['recent_form']
+                'weather_temp': float(weather['temp']),
+                'weather_wind': float(weather['wind']),
+                'injury_factor': float(injury['impact_factor']),
+                'recent_form': float(qb_stats['recent_form'])
             },
-            weather_impact=round(features[0][-1], 2),
-            injury_adjustment=injury['impact_factor']
+            weather_impact=float(round(features[0][-1], 2)),
+            injury_adjustment=float(injury['impact_factor'])
         )
 
 # Initialize ML model
@@ -290,18 +290,19 @@ def predict_qb():
         return jsonify({
             'success': True,
             'prediction': {
-                'passing_yards': prediction.passing_yards,
-                'completions': prediction.completions,
-                'attempts': prediction.attempts,
-                'touchdowns': prediction.touchdowns,
-                'interceptions': prediction.interceptions,
-                'qb_rating': prediction.qb_rating,
-                'confidence': prediction.confidence
+                'passing_yards': float(prediction.passing_yards),
+                'completions': float(prediction.completions),
+                'attempts': float(prediction.attempts),
+                'touchdowns': float(prediction.touchdowns),
+                'interceptions': float(prediction.interceptions),
+                'qb_rating': float(prediction.qb_rating),
+                'confidence': float(prediction.confidence)
             },
             'metadata': {
-                'features_used': prediction.features_used,
-                'weather_impact': prediction.weather_impact,
-                'injury_adjustment': prediction.injury_adjustment,
+                'features_used': {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
+                                for k, v in prediction.features_used.items()},
+                'weather_impact': float(prediction.weather_impact),
+                'injury_adjustment': float(prediction.injury_adjustment),
                 'model_version': '1.0',
                 'timestamp': datetime.now().isoformat()
             }
