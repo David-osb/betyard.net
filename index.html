@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v4.2-NULL-SAFETY-FIX]</title>
     <meta name="description" content="Professional NFL Quarterback predictions with XGBoost ML, betting analysis, and value recommendations on BetYard.net">
     <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, xgboost, machine learning, value bets">
@@ -401,11 +401,343 @@
             }
         }
 
+        /* === MOBILE-FIRST RESPONSIVE DESIGN === */
+        
+        /* Base styles for mobile */
+        body {
+            font-size: 16px; /* Prevent zoom on iOS */
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlights */
+            overscroll-behavior: none; /* Prevent overscroll bounce */
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Header mobile optimization */
+        .mdl-layout__header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .mdl-layout__header-row {
+            padding: 0 16px;
+            min-height: 56px;
+        }
+        
+        .mdl-layout-title {
+            font-size: 18px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Grid system - mobile first */
+        .mdl-grid {
+            padding: 8px;
+            max-width: 100%;
+        }
+        
+        .mdl-cell {
+            margin: 4px;
+        }
+        
+        /* Card improvements for mobile */
+        .mdl-card {
+            margin: 8px 0;
+            min-height: auto;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .mdl-card__title {
+            padding: 16px;
+            min-height: auto;
+        }
+        
+        .mdl-card__supporting-text {
+            padding: 16px;
+            line-height: 1.6;
+        }
+        
+        /* Form elements mobile optimization */
+        select, input, button {
+            font-size: 16px; /* Prevent zoom on iOS */
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            transition: border-color 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        select:focus, input:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        
+        /* Button improvements */
+        .mdl-button {
+            min-height: 44px; /* Touch target size */
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Prediction results mobile styling */
+        .prediction-card {
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Status bar mobile optimization */
+        .compact-status-bar {
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            margin: 8px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .status-item {
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+        }
+        
+        /* Navigation improvements */
+        .mdl-navigation__link {
+            padding: 16px 24px;
+            font-size: 16px;
+            min-height: 44px;
+        }
+        
+        /* Table responsive */
+        .mdl-data-table {
+            width: 100%;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        /* Betting insights mobile */
+        .betting-insight-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 12px;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        /* Large screen optimizations */
+        @media (min-width: 769px) {
+            .mdl-grid {
+                padding: 24px;
+            }
+            
+            .mdl-layout__header-row {
+                padding: 0 40px;
+                min-height: 64px;
+            }
+            
+            .mdl-layout-title {
+                font-size: 24px;
+            }
+            
+            .compact-status-bar {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 16px 24px;
+                margin: 16px 24px;
+            }
+            
+            .status-item {
+                justify-content: flex-start;
+            }
+        }
+
         /* Better mobile experience */
         @media (max-width: 768px) {
             .mdl-grid {
                 padding: 8px !important;
             }
+            
+            /* Larger touch targets */
+            .mdl-button, button, select, input {
+                min-height: 44px;
+                font-size: 16px;
+            }
+            
+            /* Improved spacing */
+            .mdl-card {
+                margin: 8px 0;
+            }
+            
+            /* Better typography */
+            h1, h2, h3, h4, h5, h6 {
+                line-height: 1.3;
+                margin-bottom: 12px;
+            }
+            
+            /* Scrollable content */
+            .mdl-card__supporting-text {
+                max-height: none;
+                overflow: visible;
+            }
+            
+            /* Mobile-first statistic display improvements */
+            .stat-value {
+                font-size: 1.5em !important;
+                font-weight: bold;
+                margin-bottom: 4px;
+                line-height: 1.2;
+            }
+            
+            .stat-label {
+                font-size: 12px !important;
+                color: #666;
+                text-transform: uppercase;
+                line-height: 1.2;
+            }
+            
+            /* Better card spacing on mobile */
+            .mdl-card {
+                margin-bottom: 16px;
+            }
+            
+            .mdl-card__title {
+                padding: 16px;
+                min-height: auto;
+            }
+            
+            .mdl-card__supporting-text {
+                padding: 16px;
+                max-height: none; /* Remove height restrictions on mobile */
+            }
+            
+            /* Mobile stat grid improvements */
+            .mdl-cell[style*="text-align: center"] {
+                padding: 12px 8px !important;
+            }
+            
+            /* Responsive text sizes */
+            @media (max-width: 480px) {
+                .stat-value {
+                    font-size: 1.3em !important;
+                }
+                
+                .stat-label {
+                    font-size: 11px !important;
+                }
+                
+                .mdl-card__title-text {
+                    font-size: 16px;
+                    line-height: 1.3;
+                }
+            }
+            
+            /* Touch-friendly expandable cards */
+            .expandable-card {
+                min-height: 44px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+            
+            .expandable-card:hover {
+                background-color: #f8f9fa;
+            }
+            
+            /* Improved button styles for mobile */
+            .mdl-button--raised {
+                min-height: 48px;
+                font-size: 16px;
+                border-radius: 12px;
+                padding: 12px 24px;
+                text-transform: none;
+                font-weight: 600;
+            }
+            
+            /* Better spacing for mobile cards */
+            @media (max-width: 768px) {
+                .mdl-card__title {
+                    padding: 12px 16px;
+                }
+                
+                .mdl-card__supporting-text {
+                    padding: 12px 16px;
+                }
+                
+                .mdl-card__actions {
+                    padding: 12px 16px;
+                }
+            }
+
+        /* Fix dropdown label overlap - Override MDL styles */
+        .mdl-textfield {
+            position: relative !important;
+            padding-top: 0 !important;
+        }
+
+        .mdl-textfield label {
+            position: static !important;
+            transform: none !important;
+            font-size: 12px !important;
+            color: #666 !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+            display: block !important;
+        }
+
+        .mdl-textfield__input {
+            margin-top: 0 !important;
+            border-bottom: 1px solid #ddd !important;
+        }
+
+        .mdl-textfield.is-focused label,
+        .mdl-textfield.is-dirty label {
+            transform: none !important;
+            color: #666 !important;
+            font-size: 12px !important;
+        }
+
+        /* Ensure select dropdowns have proper spacing and mobile optimization */
+        #team-select, #qb-select {
+            width: 100% !important;
+            padding: 12px 16px !important;
+            border: 2px solid #e5e7eb !important;
+            border-radius: 8px !important;
+            background: white !important;
+            font-size: 16px !important; /* Prevent zoom on iOS */
+            appearance: none !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-position: right 12px center !important;
+            background-repeat: no-repeat !important;
+            background-size: 16px !important;
+            min-height: 44px !important; /* Touch target size */
+        }
+        
+        #team-select:focus, #qb-select:focus {
+            border-color: #3b82f6 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+        
+        /* Label improvements for mobile */
+        label {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
+            display: block !important;
+            color: #374151 !important;
         }
     </style>
 </head>
@@ -656,9 +988,9 @@
                             <div class="mdl-grid">
                                 <!-- Team Selection -->
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
-                                    <div class="mdl-textfield mdl-js-textfield">
+                                    <div style="margin-bottom: 20px;">
                                         <label for="team-select" style="display: block; font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">NFL Team</label>
-                                        <select class="mdl-textfield__input" id="team-select" disabled onchange="updateQBOptions()" style="margin-top: 0;">
+                                        <select id="team-select" disabled onchange="updateQBOptions()" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: white; font-size: 14px;">
                                             <option value="">⏳ Loading Tank01 data...</option>
                                             
                                             <optgroup label="🏈 AFC EAST">
@@ -722,9 +1054,9 @@
 
                                 <!-- QB Selection -->
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-phone">
-                                    <div class="mdl-textfield mdl-js-textfield">
+                                    <div style="margin-bottom: 20px;">
                                         <label for="qb-select" style="display: block; font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">Quarterback</label>
-                                        <select class="mdl-textfield__input" id="qb-select" disabled onchange="generatePrediction()" style="margin-top: 0;">
+                                        <select id="qb-select" disabled onchange="generatePrediction()" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background: white; font-size: 14px;">
                                             <option value="">⏳ Loading Tank01 data...</option>
                                         </select>
                                     </div>
