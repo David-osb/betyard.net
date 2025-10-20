@@ -463,6 +463,31 @@ class NFLScheduleAPI {
         // Fallback to realistic mock schedule
         return this.generateFallbackSchedule();
     }
+
+    // NEW: Fetch weekly schedule for smart NFL scheduling
+    async fetchWeeklySchedule(weekNumber) {
+        try {
+            console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
+            
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLWeeklySchedule?week=${weekNumber}&season=2024`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const weekData = await response.json();
+                console.log(`✅ Week ${weekNumber} schedule fetched:`, weekData);
+                
+                // Return games array if available
+                return weekData?.body || [];
+            } else {
+                throw new Error(`Week ${weekNumber} not available (${response.status})`);
+            }
+        } catch (error) {
+            console.log(`❌ Week ${weekNumber} fetch failed:`, error.message);
+            throw error;
+        }
+    }
     
     /**
      * STEP 2: Game Info Fetching

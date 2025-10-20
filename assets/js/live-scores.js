@@ -397,14 +397,54 @@ class LiveNFLScores {
                 }
             }
             
+            // Try upcoming NFL weeks before giving up
+            console.log('🔍 No current games, searching upcoming NFL weeks...');
+            const upcomingGames = await this.findUpcomingNFLGames();
+            if (upcomingGames) {
+                console.log('✅ Found upcoming NFL games');
+                this.processScheduleAPIData(upcomingGames);
+                return;
+            }
+            
             // No data available - show error instead of mock data
-            console.warn('❌ No NFL data available from API');
+            console.warn('❌ No NFL data available from any week');
             this.showErrorState();
             
         } catch (error) {
             console.error('❌ Error fetching live scores:', error);
             this.showErrorState();
         }
+    }
+
+    // Smart function to find upcoming NFL games across multiple weeks
+    async findUpcomingNFLGames() {
+        console.log('🏈 Searching NFL weeks 8-18 for upcoming games...');
+        
+        // Check weeks 8 through 18 (regular season)
+        for (let weekNum = 8; weekNum <= 18; weekNum++) {
+            try {
+                console.log(`🔍 Checking NFL Week ${weekNum}...`);
+                const weekData = await this.api.fetchWeeklySchedule(weekNum);
+                
+                if (weekData && weekData.length > 0) {
+                    // Check if any games are upcoming (not final)
+                    const upcomingGames = weekData.filter(game => {
+                        const status = game.gameStatus?.toLowerCase() || '';
+                        return !status.includes('final') && !status.includes('finished');
+                    });
+                    
+                    if (upcomingGames.length > 0) {
+                        console.log(`✅ Found ${upcomingGames.length} upcoming games in Week ${weekNum}`);
+                        return upcomingGames;
+                    }
+                }
+            } catch (error) {
+                console.log(`❌ Week ${weekNum} not available:`, error.message);
+            }
+        }
+        
+        console.log('⚠️ No upcoming games found in any NFL week');
+        return null;
     }
     
     processScheduleAPIData(todaysGames) {
