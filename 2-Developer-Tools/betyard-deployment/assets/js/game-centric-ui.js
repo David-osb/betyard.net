@@ -745,17 +745,28 @@ class GameCentricUI {
                 const awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
                 const homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
                 
+                // Get scores
+                const awayScore = game.awayScore || awayTeamObj.score || 0;
+                const homeScore = game.homeScore || homeTeamObj.score || 0;
+                
+                // SMART STATUS DETECTION: If game has scores but isn't LIVE, it's FINAL
+                let status = game.status;
+                if ((awayScore > 0 || homeScore > 0) && status !== 'LIVE') {
+                    console.log(`🔍 Game ${game.away || awayTeamObj.code} @ ${game.home || homeTeamObj.code} has scores (${awayScore}-${homeScore}) but status is ${status} - correcting to FINAL`);
+                    status = 'FINAL';
+                }
+                
                 const transformedGame = {
                     away: awayTeamObj.code || awayTeamObj.name || game.awayTeam,
                     home: homeTeamObj.code || homeTeamObj.name || game.homeTeam,
                     awayTeam: awayTeamObj,
                     homeTeam: homeTeamObj,
-                    status: game.status,
+                    status: status,  // Use corrected status
                     time: game.gameTime || game.time,
                     awayRecord: game.awayRecord || 'TBD',
                     homeRecord: game.homeRecord || 'TBD',
-                    awayScore: game.awayScore || awayTeamObj.score || 0,
-                    homeScore: game.homeScore || homeTeamObj.score || 0,
+                    awayScore: awayScore,
+                    homeScore: homeScore,
                     quarter: game.quarter || '',
                     timeRemaining: game.timeRemaining || '',
                     week: game.week || 'Current Week'
