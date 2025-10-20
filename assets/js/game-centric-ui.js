@@ -744,12 +744,13 @@ class GameCentricUI {
                 home: game.homeTeam,
                 status: game.status,
                 time: game.gameTime,
-                awayRecord: '5-1', // TODO: Get from API
-                homeRecord: '4-2', // TODO: Get from API
+                awayRecord: game.awayRecord || 'TBD', // Use real record or TBD
+                homeRecord: game.homeRecord || 'TBD', // Use real record or TBD
                 awayScore: game.awayScore,
                 homeScore: game.homeScore,
                 quarter: game.quarter,
-                timeRemaining: game.timeRemaining
+                timeRemaining: game.timeRemaining,
+                week: game.week || 'Current Week'
             }));
         }
         
@@ -791,7 +792,9 @@ class GameCentricUI {
                 break;
             case 'SCHEDULED':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time}</div>`;
-                gameInfo = `<div class="game-details">Week 7 • October 2025</div>`;
+                // Get current week dynamically
+                const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
+                gameInfo = `<div class="game-details">${currentWeekInfo.title} - October 2025</div>`;
                 break;
         }
         
@@ -1090,6 +1093,9 @@ class GameCentricUI {
         const positionData = this.predictionTypes[this.selectedPosition];
         const opponent = this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away;
         
+        // Get current week dynamically
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
+        
         // Show loading state
         container.innerHTML = `
             <div class="prediction-loading">
@@ -1108,7 +1114,7 @@ class GameCentricUI {
         const predictionsHTML = `
             <div class="prediction-summary">
                 <h3>🎯 ML Predictions for ${this.selectedPlayer.name}</h3>
-                <p><strong>${this.selectedTeam.code}</strong> vs <strong>${opponent}</strong> • Week 7</p>
+                <p><strong>${this.selectedTeam.code}</strong> vs <strong>${opponent}</strong> - ${currentWeekInfo.title}</p>
                 <div class="matchup-context">
                     ${this.getMatchupContext()}
                 </div>

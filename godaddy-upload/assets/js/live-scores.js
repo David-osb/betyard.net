@@ -386,25 +386,100 @@ class LiveNFLScores {
                 }
             }
             
-            // Force real API data processing instead of mock fallback
-            console.log('🔄 No live scores available, using schedule data with timing validation...');
+            // DEBUG: Check what schedule API data is available
+            console.log('� DEBUGGING API DATA:');
             if (this.scheduleAPI) {
                 const todaysGames = this.scheduleAPI.getTodaysGames();
-                if (todaysGames && todaysGames.length > 0) {
-                    console.log(`📅 Processing ${todaysGames.length} scheduled games with timing validation`);
+                console.log('� getTodaysGames():', todaysGames);
+                console.log('📅 Type:', typeof todaysGames);
+                console.log('📅 Is Array:', Array.isArray(todaysGames));
+                if (todaysGames) {
+                    console.log('📅 Has body:', !!todaysGames.body);
+                    if (todaysGames.body) {
+                        console.log('📅 Body length:', todaysGames.body.length);
+                        console.log('📅 Body type:', typeof todaysGames.body);
+                        console.log('📅 First game:', todaysGames.body[0]);
+                    }
+                }
+                
+                // Try processing whatever data we have
+                if (todaysGames) {
+                    console.log('� Processing available API data...');
                     this.processScheduleAPIData(todaysGames);
                     return;
                 }
             }
             
-            // No data available - show error instead of mock data
-            console.warn('❌ No NFL data available from API');
+            // Try upcoming NFL weeks before giving up
+            console.log('🔍 No current games, searching upcoming NFL weeks...');
+            const upcomingGames = await this.findUpcomingNFLGames();
+            if (upcomingGames) {
+                console.log('✅ Found upcoming NFL games');
+                this.processScheduleAPIData(upcomingGames);
+                return;
+            }
+            
+            // If absolutely no API data, show error - NO FALLBACKS
+            console.error('❌ CRITICAL: No NFL API data available from Tank01');
+            console.error('❌ Check API key, endpoint, or date format');
+            console.warn('❌ No NFL data available from any week');
             this.showErrorState();
             
         } catch (error) {
             console.error('❌ Error fetching live scores:', error);
             this.showErrorState();
         }
+    }
+
+    // Smart function to find upcoming NFL games across multiple weeks
+    async findUpcomingNFLGames() {
+        // Get current NFL week first
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
+        const startWeek = currentWeekInfo.week || 7;
+        
+        console.log(`🏈 Searching NFL weeks ${startWeek}-18 for current and upcoming games...`);
+        
+        // Check from current week through week 18 (regular season)
+        for (let weekNum = startWeek; weekNum <= 18; weekNum++) {
+            try {
+                console.log(`🔍 Checking NFL Week ${weekNum}...`);
+                const weekData = await this.scheduleAPI.fetchWeeklySchedule(weekNum);
+                
+                // Handle Tank01 API response format: {statusCode: 200, body: Array}
+                const games = weekData?.body || weekData;
+                if (games && games.length > 0) {
+                    console.log(`📊 Week ${weekNum} API returned ${games.length} games`);
+                    
+                    // Log first game structure to understand the data better
+                    if (games[0]) {
+                        console.log(`🔍 Sample game structure:`, {
+                            gameID: games[0].gameID,
+                            gameStatus: games[0].gameStatus,
+                            gameDate: games[0].gameDate,
+                            gameTime: games[0].gameTime,
+                            away: games[0].away,
+                            home: games[0].home
+                        });
+                    }
+                    
+                    // Be more intelligent about game filtering
+                    const validGames = games.filter(game => {
+                        // Accept games that have basic required data
+                        return game.gameID && (game.away || game.home);
+                    });
+                    
+                    if (validGames.length > 0) {
+                        console.log(`✅ Found ${validGames.length} valid games in Week ${weekNum}`);
+                        return { body: validGames }; // Return in expected format
+                    }
+                }
+            } catch (error) {
+                console.log(`❌ Week ${weekNum} not available:`, error.message);
+            }
+        }
+        
+        console.log('⚠️ No upcoming games found in any NFL week');
+        return null;
     }
     
     processScheduleAPIData(todaysGames) {
@@ -414,18 +489,12 @@ class LiveNFLScores {
         
         this.games = games.map(game => ({
             gameId: game.gameID,
-            gameTime: game.gameTime || 'TBD',
+            gameTime: this.formatGameTime(game.gameTime) || 'TBD',
             gameDate: new Date().toLocaleDateString(),
-            awayTeam: {
-                code: game.away || 'TBD',
-                name: this.getTeamName(game.away),
-                score: parseInt(game.awayPts) || 0
-            },
-            homeTeam: {
-                code: game.home || 'TBD', 
-                name: this.getTeamName(game.home),
-                score: parseInt(game.homePts) || 0
-            },
+            awayTeam: game.away || 'TBD',
+            homeTeam: game.home || 'TBD',
+            awayScore: parseInt(game.awayPts) || 0,
+            homeScore: parseInt(game.homePts) || 0,
             quarter: game.quarter || 'Pre',
             timeRemaining: game.gameClock || '',
             status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
@@ -435,6 +504,33 @@ class LiveNFLScores {
         
         this.currentWeek = 7;
         this.lastUpdate = new Date();
+        this.updateLiveScoresDisplay();
+    }
+
+    formatGameTime(gameTime) {
+        if (!gameTime) return 'TBD';
+        
+        // Handle different time formats from Tank01
+        try {
+            // If it's already in ET format (like "1:00 ET"), return as-is
+            if (gameTime.includes('ET') || gameTime.includes('EST') || gameTime.includes('EDT')) {
+                return gameTime;
+            }
+            
+            // If it's a time like "13:00", convert to ET format
+            if (gameTime.includes(':')) {
+                const [hours, minutes] = gameTime.split(':');
+                const hour24 = parseInt(hours);
+                const hour12 = hour24 > 12 ? hour24 - 12 : (hour24 === 0 ? 12 : hour24);
+                const period = hour24 >= 12 ? 'PM' : 'AM';
+                return `${hour12}:${minutes} ET`;
+            }
+            
+            return gameTime;
+        } catch (error) {
+            console.warn('Error formatting game time:', gameTime, error);
+            return gameTime || 'TBD';
+        }
     }
     
     updateLiveGame(gameID, boxScore) {
@@ -780,6 +876,9 @@ class LiveNFLScores {
         
         // Add game context information
         this.addGameContextInfo();
+        
+        // Update game-centric UI with current games
+        this.updateGameCentricUI();
     }
     
     addGameContextInfo() {
@@ -814,6 +913,40 @@ class LiveNFLScores {
                 }
             });
         }
+    }
+
+    updateGameCentricUI() {
+        // Find the most relevant game for the game-centric UI
+        const currentGame = this.findMostRelevantGame();
+        
+        if (window.gameCentricUI) {
+            console.log('🎯 Updating Game-Centric UI with current games');
+            
+            // Update the game-centric UI with all current games
+            window.gameCentricUI.updateWithLiveGames(this.games);
+        }
+    }
+
+    findMostRelevantGame() {
+        if (!this.games || this.games.length === 0) return null;
+        
+        // Priority 1: Live games
+        const liveGames = this.games.filter(game => game.status === 'LIVE');
+        if (liveGames.length > 0) {
+            console.log('🔴 Found live game for game-centric UI:', liveGames[0]);
+            return liveGames[0];
+        }
+        
+        // Priority 2: Games starting soon (SCHEDULED)
+        const upcomingGames = this.games.filter(game => game.status === 'SCHEDULED');
+        if (upcomingGames.length > 0) {
+            console.log('📅 Found upcoming game for game-centric UI:', upcomingGames[0]);
+            return upcomingGames[0];
+        }
+        
+        // Priority 3: Any game (fallback)
+        console.log('🎯 Using first available game for game-centric UI:', this.games[0]);
+        return this.games[0];
     }
     
     createGameCard(game) {
@@ -1024,6 +1157,8 @@ function selectGameTeams(awayTeam, homeTeam) {
             }
         }
     }
+    
+
 }
 
 // Initialize when DOM is ready

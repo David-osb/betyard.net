@@ -433,10 +433,14 @@ class LiveNFLScores {
 
     // Smart function to find upcoming NFL games across multiple weeks
     async findUpcomingNFLGames() {
-        console.log('🏈 Searching NFL weeks 8-18 for upcoming games...');
+        // Get current NFL week first
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
+        const startWeek = currentWeekInfo.week || 7;
         
-        // Check weeks 8 through 18 (regular season)
-        for (let weekNum = 8; weekNum <= 18; weekNum++) {
+        console.log(`🏈 Searching NFL weeks ${startWeek}-18 for current and upcoming games...`);
+        
+        // Check from current week through week 18 (regular season)
+        for (let weekNum = startWeek; weekNum <= 18; weekNum++) {
             try {
                 console.log(`🔍 Checking NFL Week ${weekNum}...`);
                 const weekData = await this.scheduleAPI.fetchWeeklySchedule(weekNum);
