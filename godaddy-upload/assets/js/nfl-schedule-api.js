@@ -470,8 +470,9 @@ class NFLScheduleAPI {
         const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
         const startWeek = currentWeekInfo.week || 7;
         
-        // 1. Try to get current week games (starting from current week)
-        for (let week = startWeek; week <= 18; week++) {
+        // 1. Try to get current week and next 2 weeks only (for predictions)
+        const endWeek = Math.min(startWeek + 2, 18); // Only check current + next 2 weeks
+        for (let week = startWeek; week <= endWeek; week++) {
             console.log(`📅 Checking Week ${week}...`);
             
             const weekGames = await this.fetchWeeklySchedule(week);
@@ -547,10 +548,10 @@ class NFLScheduleAPI {
         // Add today and next 21 days (covers current week + next 2-3 weeks)
         for (let i = 0; i < 21; i++) {
             const date = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
-            const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday, 4=Thursday
+            const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday, 4=Thursday, 6=Saturday
             
-            // Only add NFL game days (Thursday, Sunday, Monday)
-            if (dayOfWeek === 0 || dayOfWeek === 1 || dayOfWeek === 4) {
+            // Only add NFL game days (Thursday, Saturday, Sunday, Monday)
+            if (dayOfWeek === 0 || dayOfWeek === 1 || dayOfWeek === 4 || dayOfWeek === 6) {
                 dates.push(date.toISOString().split('T')[0]);
             }
         }
