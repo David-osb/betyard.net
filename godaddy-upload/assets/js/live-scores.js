@@ -509,8 +509,16 @@ class LiveNFLScores {
             gameId: game.gameID,
             gameTime: this.formatGameTime(game.gameTime) || 'TBD',
             gameDate: new Date().toLocaleDateString(),
-            awayTeam: game.away || 'TBD',
-            homeTeam: game.home || 'TBD',
+            awayTeam: {
+                code: game.away || 'TBD',
+                name: this.getTeamName(game.away),
+                score: parseInt(game.awayPts) || 0
+            },
+            homeTeam: {
+                code: game.home || 'TBD',
+                name: this.getTeamName(game.home),
+                score: parseInt(game.homePts) || 0
+            },
             awayScore: parseInt(game.awayPts) || 0,
             homeScore: parseInt(game.homePts) || 0,
             quarter: game.quarter || 'Pre',
@@ -525,7 +533,7 @@ class LiveNFLScores {
         for (let gameData of this.games) {
             if (gameData.status === 'FINAL' && gameData.awayScore === 0 && gameData.homeScore === 0) {
                 try {
-                    console.log(`🔄 Fetching REAL box score for ${gameData.awayTeam} @ ${gameData.homeTeam} (${gameData.gameId})`);
+                    console.log(`🔄 Fetching REAL box score for ${gameData.awayTeam.code} @ ${gameData.homeTeam.code} (${gameData.gameId})`);
                     
                     const boxScore = await this.scheduleAPI.fetchBoxScore(gameData.gameId);
                     if (boxScore && boxScore.body) {
@@ -539,7 +547,7 @@ class LiveNFLScores {
                             gameData.quarter = boxScore.body.quarter || 'FINAL';
                             gameData.status = 'FINAL';
                             
-                            console.log(`✅ Real final score retrieved: ${gameData.awayTeam} ${gameData.awayScore} - ${gameData.homeScore} ${gameData.homeTeam}`);
+                            console.log(`✅ Real final score retrieved: ${gameData.awayTeam.code} ${gameData.awayScore} - ${gameData.homeScore} ${gameData.homeTeam.code}`);
                         } else {
                             console.log(`⚠️ Box score API returned 0-0, game may not be completed yet`);
                             // Don't generate fake scores, leave as 0-0 and change status
