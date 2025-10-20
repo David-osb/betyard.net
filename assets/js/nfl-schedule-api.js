@@ -442,18 +442,6 @@ class NFLScheduleAPI {
                 this.cache.lastScheduleFetch = new Date();
                 
                 // Process games and fetch detailed info
-                await this.processScheduledGames(gamesData);
-                return gamesData;
-            }
-                
-                // Enhanced caching with expiration
-                this.cache.dailySchedule = {
-                    data: scheduleData,
-                    expires: Date.now() + (6 * 60 * 60 * 1000) // 6 hours
-                };
-                this.cache.lastScheduleFetch = new Date();
-                
-                // Process games and fetch detailed info
                 await this.processScheduledGames(scheduleData);
                 
                 // Dispatch custom event for other systems
@@ -461,7 +449,7 @@ class NFLScheduleAPI {
                     detail: { schedule: scheduleData, timestamp: new Date() }
                 }));
                 
-                return gamesData;
+                return scheduleData;
             }
         } catch (error) {
             console.error('❌ Error fetching NFL schedule:', error);
@@ -482,7 +470,7 @@ class NFLScheduleAPI {
         for (let week = 7; week <= 18; week++) {
             console.log(`📅 Checking Week ${week}...`);
             
-            const weekGames = await this.fetchWeekSchedule(week);
+            const weekGames = await this.fetchWeeklySchedule(week);
             if (weekGames && weekGames.body && weekGames.body.length > 0) {
                 console.log(`✅ Found ${weekGames.body.length} games in Week ${week}`);
                 return weekGames;
