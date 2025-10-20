@@ -774,6 +774,7 @@ class GameCentricUI {
                     homeTeam: homeTeamObj,
                     status: status,  // Use corrected status
                     time: game.gameTime || game.time,
+                    gameDate: game.gameDate || '',
                     awayRecord: game.awayRecord || 'TBD',
                     homeRecord: game.homeRecord || 'TBD',
                     awayScore: awayScore,
@@ -832,9 +833,19 @@ class GameCentricUI {
                 break;
             case 'SCHEDULED':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
-                // Get current week dynamically - use simple week number
-                const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
-                scoreDisplay = `<div style="text-align: center; font-size: 14px; color: #9ca3af; margin: 8px 0;">Week ${currentWeekInfo.week || 7} - October 2025</div>`;
+                // Use actual week and date from Tank01 game data
+                let weekDisplay = game.week ? `Week ${game.week}` : 'Upcoming Game';
+                if (game.gameDate) {
+                    // Parse gameDate if it's in YYYY-MM-DD format and make it readable
+                    const dateObj = new Date(game.gameDate);
+                    if (!isNaN(dateObj.getTime())) {
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const month = monthNames[dateObj.getMonth()];
+                        const day = dateObj.getDate();
+                        weekDisplay += ` - ${month} ${day}`;
+                    }
+                }
+                scoreDisplay = `<div style="text-align: center; font-size: 14px; color: #9ca3af; margin: 8px 0;">${weekDisplay}</div>`;
                 gameInfo = `<div class="game-details">${game.time || game.gameTime || 'TBD'}</div>`;
                 break;
             default:
