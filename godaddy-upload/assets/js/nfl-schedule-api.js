@@ -466,8 +466,12 @@ class NFLScheduleAPI {
     async fetchCurrentAndUpcomingGames() {
         console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
         
-        // 1. Try to get current week games (October 2025 = weeks 6-10)
-        for (let week = 6; week <= 18; week++) {
+        // Get current NFL week dynamically
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
+        const startWeek = currentWeekInfo.week || 7;
+        
+        // 1. Try to get current week games (starting from current week)
+        for (let week = startWeek; week <= 18; week++) {
             console.log(`📅 Checking Week ${week}...`);
             
             const weekGames = await this.fetchWeeklySchedule(week);
