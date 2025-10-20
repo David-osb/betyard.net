@@ -554,15 +554,22 @@ class NFLScheduleAPI {
 
     // NEW: Fetch weekly schedule for smart NFL scheduling
     async fetchWeeklySchedule(weekNumber) {
-        console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
-        
         try {
-            const weekData = await this.fetchWeekSchedule(weekNumber);
-            if (weekData && weekData.body) {
+            console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
+            
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${weekNumber}&season=2024`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const weekData = await response.json();
                 console.log(`✅ Week ${weekNumber} schedule fetched:`, weekData);
-                return weekData.body; // Return the games array
+                
+                // Return games array if available
+                return weekData?.body || [];
             } else {
-                throw new Error(`Week ${weekNumber} has no games`);
+                throw new Error(`Week ${weekNumber} not available (${response.status})`);
             }
         } catch (error) {
             console.log(`❌ Week ${weekNumber} fetch failed:`, error.message);
