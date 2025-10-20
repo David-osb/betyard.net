@@ -898,8 +898,16 @@ class LiveNFLScores {
             
             let gameData = {
                 gameId: `2025_week7_${matchup.away}_${matchup.home}`,
-                homeTeam: matchup.home,
-                awayTeam: matchup.away,
+                homeTeam: {
+                    code: matchup.home,
+                    name: this.getTeamName(matchup.home),
+                    score: 0
+                },
+                awayTeam: {
+                    code: matchup.away,
+                    name: this.getTeamName(matchup.away),
+                    score: 0
+                },
                 status: status,
                 homeScore: 0,
                 awayScore: 0,
@@ -1048,6 +1056,11 @@ class LiveNFLScores {
     }
     
     createGameCard(game) {
+        // DEBUG: Log team data structure
+        console.log('🔍 DEBUG - Game data:', game);
+        console.log('🔍 DEBUG - awayTeam:', game.awayTeam, 'type:', typeof game.awayTeam);
+        console.log('🔍 DEBUG - homeTeam:', game.homeTeam, 'type:', typeof game.homeTeam);
+        
         const statusClass = game.status.toLowerCase().replace(' ', '-');
         
         let statusDisplay = '';
