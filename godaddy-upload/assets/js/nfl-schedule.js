@@ -125,41 +125,21 @@ function getCurrentNFLWeek() {
         }
     }
     
-    // Check 2024-2025 season (past season, but keeping for reference)
-    const season2024Start = new Date('2024-09-05');
-    const season2024End = new Date('2025-01-08');
-    
-    if (today >= season2024Start && today <= season2024End) {
-        // We're in the 2024-2025 season (historical)
-        for (const weekData of NFL_2025_SCHEDULE.weeks) {
-            const weekStart = new Date(weekData.start);
-            const weekEnd = new Date(weekData.end);
-            
-            if (today >= weekStart && today <= weekEnd) {
-                return {
-                    week: weekData.week,
-                    title: weekData.title,
-                    status: 'regular_season',
-                    season: '2024'
-                };
-            }
-        }
-    }
-    
-    // Handle offseason periods
-    if (today < season2024Start) {
+    // Handle preseason period (before season starts)
+    if (today < season2025Start) {
         return {
             week: 0,
-            title: 'Preseason - August 2024',
+            title: 'Preseason - August 2025',
             status: 'preseason',
-            season: '2024'
+            season: '2025'
         };
     }
     
-    if (today > season2024End && today < season2025Start) {
+    // Handle offseason period (between seasons)
+    if (today < season2025Start) {
         return {
-            week: 19,
-            title: 'Offseason - Spring 2025',
+            week: 0,
+            title: 'Offseason - Summer 2025',
             status: 'offseason',
             season: '2025'
         };
