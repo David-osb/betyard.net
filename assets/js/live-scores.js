@@ -386,12 +386,25 @@ class LiveNFLScores {
                 }
             }
             
-            // Force real API data processing instead of mock fallback
-            console.log('🔄 No live scores available, using schedule data with timing validation...');
+            // DEBUG: Check what schedule API data is available
+            console.log('� DEBUGGING API DATA:');
             if (this.scheduleAPI) {
                 const todaysGames = this.scheduleAPI.getTodaysGames();
-                if (todaysGames && todaysGames.length > 0) {
-                    console.log(`📅 Processing ${todaysGames.length} scheduled games with timing validation`);
+                console.log('� getTodaysGames():', todaysGames);
+                console.log('📅 Type:', typeof todaysGames);
+                console.log('📅 Is Array:', Array.isArray(todaysGames));
+                if (todaysGames) {
+                    console.log('📅 Has body:', !!todaysGames.body);
+                    if (todaysGames.body) {
+                        console.log('📅 Body length:', todaysGames.body.length);
+                        console.log('📅 Body type:', typeof todaysGames.body);
+                        console.log('📅 First game:', todaysGames.body[0]);
+                    }
+                }
+                
+                // Try processing whatever data we have
+                if (todaysGames) {
+                    console.log('� Processing available API data...');
                     this.processScheduleAPIData(todaysGames);
                     return;
                 }
@@ -406,7 +419,9 @@ class LiveNFLScores {
                 return;
             }
             
-            // No data available - show error instead of mock data
+            // If absolutely no API data, show error - NO FALLBACKS
+            console.error('❌ CRITICAL: No NFL API data available from Tank01');
+            console.error('❌ Check API key, endpoint, or date format');
             console.warn('❌ No NFL data available from any week');
             this.showErrorState();
             
@@ -1064,6 +1079,8 @@ function selectGameTeams(awayTeam, homeTeam) {
             }
         }
     }
+    
+
 }
 
 // Initialize when DOM is ready
