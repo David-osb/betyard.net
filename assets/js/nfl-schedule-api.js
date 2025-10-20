@@ -427,17 +427,24 @@ class NFLScheduleAPI {
         }
         
         try {
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-            console.log(`🔄 Fetching NFL schedule for ${today} with your RapidAPI key...`);
+            // Smart NFL schedule fetching - get current/upcoming games
+            console.log('🏈 Fetching current and upcoming NFL games...');
             
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${today}`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const scheduleData = await response.json();
-                console.log('✅ Daily schedule fetched from Tank01:', scheduleData);
+            const gamesData = await this.fetchCurrentAndUpcomingGames();
+            if (gamesData) {
+                console.log('✅ Found NFL games:', gamesData);
+                
+                // Enhanced caching with expiration
+                this.cache.dailySchedule = {
+                    data: gamesData,
+                    expires: Date.now() + (6 * 60 * 60 * 1000) // 6 hours
+                };
+                this.cache.lastScheduleFetch = new Date();
+                
+                // Process games and fetch detailed info
+                await this.processScheduledGames(gamesData);
+                return gamesData;
+            }
                 
                 // Enhanced caching with expiration
                 this.cache.dailySchedule = {
@@ -454,14 +461,107 @@ class NFLScheduleAPI {
                     detail: { schedule: scheduleData, timestamp: new Date() }
                 }));
                 
-                return scheduleData;
+                return gamesData;
             }
         } catch (error) {
-            console.warn('⚠️ Schedule API error, using fallback data:', error);
+            console.error('❌ Error fetching NFL schedule:', error);
+            return null;
         }
         
-        // Fallback to realistic mock schedule
-        return this.generateFallbackSchedule();
+        return null;
+    }
+    
+    /**
+     * Fetch current and upcoming NFL games intelligently
+     * Priority: Current games > Today's games > Next week's games
+     */
+    async fetchCurrentAndUpcomingGames() {
+        console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
+        
+        // 1. Try to get current week games 
+        for (let week = 7; week <= 18; week++) {
+            console.log(`📅 Checking Week ${week}...`);
+            
+            const weekGames = await this.fetchWeekSchedule(week);
+            if (weekGames && weekGames.body && weekGames.body.length > 0) {
+                console.log(`✅ Found ${weekGames.body.length} games in Week ${week}`);
+                return weekGames;
+            }
+        }
+        
+        // 2. Try specific dates around current time
+        const datesToTry = this.generateGameDates();
+        for (let date of datesToTry) {
+            console.log(`📅 Checking date: ${date}`);
+            
+            const dayGames = await this.fetchDateSchedule(date);
+            if (dayGames && dayGames.body && dayGames.body.length > 0) {
+                console.log(`✅ Found ${dayGames.body.length} games on ${date}`);
+                return dayGames;
+            }
+        }
+        
+        console.error('❌ No NFL games found in current or upcoming weeks');
+        return null;
+    }
+    
+    /**
+     * Fetch NFL schedule for a specific week
+     */
+    async fetchWeekSchedule(week) {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2024`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(`⚠️ Week ${week} fetch failed:`, error.message);
+        }
+        return null;
+    }
+    
+    /**
+     * Fetch NFL schedule for a specific date
+     */
+    async fetchDateSchedule(date) {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${date}`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(`⚠️ Date ${date} fetch failed:`, error.message);
+        }
+        return null;
+    }
+    
+    /**
+     * Generate probable NFL game dates
+     */
+    generateGameDates() {
+        const dates = [];
+        const today = new Date();
+        
+        // Add today and next 14 days
+        for (let i = 0; i < 14; i++) {
+            const date = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
+            dates.push(date.toISOString().split('T')[0]);
+        }
+        
+        // Add known NFL dates
+        dates.push('2024-10-20', '2024-10-27', '2024-11-03', '2024-11-10', '2024-12-22');
+        
+        return dates;
     }
     
     /**
