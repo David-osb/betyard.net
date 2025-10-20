@@ -14,6 +14,7 @@ class LiveNFLScores {
         this.games = [];
         this.lastUpdate = null;
         this.finalGamesCache = new Set(); // Cache final game IDs to prevent re-updates
+        this.lastGameSignature = null; // Track game changes to avoid redundant updates
         
         // Tank01 API configuration with your real key
         this.apiConfig = {
@@ -985,10 +986,21 @@ class LiveNFLScores {
         const currentGame = this.findMostRelevantGame();
         
         if (window.gameCentricUI) {
-            console.log('🎯 Updating Game-Centric UI with current games');
+            // Only update if games have actually changed
+            const gamesSignature = JSON.stringify(this.games.map(g => ({
+                id: `${g.away}-${g.home}`,
+                status: g.status,
+                awayScore: g.awayScore,
+                homeScore: g.homeScore
+            })));
             
-            // Update the game-centric UI with all current games
-            window.gameCentricUI.updateWithLiveGames(this.games);
+            if (this.lastGameSignature !== gamesSignature) {
+                console.log('🎯 Updating Game-Centric UI with changed games');
+                window.gameCentricUI.updateWithLiveGames(this.games);
+                this.lastGameSignature = gamesSignature;
+            } else {
+                console.log('✅ Games unchanged, skipping Game-Centric UI update');
+            }
         }
     }
 
@@ -1015,11 +1027,6 @@ class LiveNFLScores {
     }
     
     createGameCard(game) {
-        // DEBUG: Log team data structure
-        console.log('🔍 DEBUG - Game data:', game);
-        console.log('🔍 DEBUG - awayTeam:', game.awayTeam, 'type:', typeof game.awayTeam);
-        console.log('🔍 DEBUG - homeTeam:', game.homeTeam, 'type:', typeof game.homeTeam);
-        
         const statusClass = game.status.toLowerCase().replace(' ', '-');
         
         let statusDisplay = '';

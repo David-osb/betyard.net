@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Backend Connection Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #00ff00;
+            border-radius: 4px;
+        }
+        .error {
+            border-left-color: #ff0000;
+            color: #ff6666;
+        }
+        .success {
+            border-left-color: #00ff00;
+            color: #00ff00;
+        }
+        .warning {
+            border-left-color: #ffaa00;
+            color: #ffaa00;
+        }
+        button {
+            background: #00ff00;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        h1 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        h2 {
+            color: #00aaff;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 ML Backend Connection Test</h1>
+    <p>This page tests the connection to your ML backend and verifies the integration is working.</p>
+    
+    <div>
+        <button onclick="testHealthEndpoint()">1. Test Health Endpoint</button>
+        <button onclick="testMLPrediction()">2. Test ML Prediction</button>
+        <button onclick="testModelInfo()">3. Test Model Info</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <h2>📋 What to Check:</h2>
+    <div class="test-result">
+        <strong>✅ Success Indicators:</strong>
+        <ul>
+            <li>Health check returns "healthy" status</li>
+            <li>model_loaded is true</li>
+            <li>Prediction returns valid passing_yards, touchdowns, etc.</li>
+            <li>Confidence is between 0-100</li>
+        </ul>
+    </div>
+    
+    <div class="test-result warning">
+        <strong>⚠️ If Tests Fail:</strong>
+        <ul>
+            <li>Make sure ML backend is running: <code>python ml-backend/app.py</code></li>
+            <li>Check it's running on port 5000: <code>http://localhost:5000/health</code></li>
+            <li>Look for Flask console messages</li>
+            <li>Check Windows Firewall isn't blocking port 5000</li>
+        </ul>
+    </div>
+    
+    <script src="assets/js/ml-config.js"></script>
+    <script src="assets/js/ml-integration.js"></script>
+    
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(type, title, content) {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `
+                <h3>${title}</h3>
+                <pre>${content}</pre>
+                <p><small>Time: ${new Date().toLocaleTimeString()}</small></p>
+            `;
+            resultsDiv.appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        async function testHealthEndpoint() {
+            addResult('info', '🔍 Testing Health Endpoint...', 'Sending request to /health');
+            
+            try {
+                const url = window.BetYardML ? window.BetYardML.baseURL : 'http://localhost:5000';
+                const response = await fetch(`${url}/health`);
+                const data = await response.json();
+                
+                if (data.status === 'healthy' && data.model_loaded) {
+                    addResult('success', '✅ Health Check PASSED', JSON.stringify(data, null, 2));
+                } else {
+                    addResult('warning', '⚠️ Health Check - Issues Detected', JSON.stringify(data, null, 2));
+                }
+            } catch (error) {
+                addResult('error', '❌ Health Check FAILED', error.toString());
+            }
+        }
+        
+        async function testMLPrediction() {
+            addResult('info', '🧠 Testing ML Prediction...', 'Requesting prediction for Patrick Mahomes (KC)');
+            
+            try {
+                if (!window.BetYardML) {
+                    throw new Error('BetYardML not loaded! Check script order in index.html');
+                }
+                
+                const prediction = await window.BetYardML.getPrediction('Patrick Mahomes', 'KC');
+                
+                if (prediction.passing_yards && prediction.touchdowns !== undefined) {
+                    addResult('success', '✅ ML Prediction PASSED', JSON.stringify(prediction, null, 2));
+                } else {
+                    addResult('warning', '⚠️ Prediction returned but incomplete', JSON.stringify(prediction, null, 2));
+                }
+            } catch (error) {
+                addResult('error', '❌ ML Prediction FAILED', error.toString());
+            }
+        }
+        
+        async function testModelInfo() {
+            addResult('info', '📊 Testing Model Info...', 'Requesting model information');
+            
+            try {
+                const url = window.BetYardML ? window.BetYardML.baseURL : 'http://localhost:5000';
+                const response = await fetch(`${url}/model/info`);
+                const data = await response.json();
+                
+                if (data.feature_importance) {
+                    addResult('success', '✅ Model Info PASSED', JSON.stringify(data, null, 2));
+                } else {
+                    addResult('warning', '⚠️ Model info incomplete', JSON.stringify(data, null, 2));
+                }
+            } catch (error) {
+                addResult('error', '❌ Model Info FAILED', error.toString());
+            }
+        }
+        
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+        
+        // Auto-run health check on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                addResult('info', '🚀 Auto-Running Initial Tests', 'Testing ML backend connection...');
+                testHealthEndpoint();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

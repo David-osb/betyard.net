@@ -10,20 +10,36 @@
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
-    <meta http-equiv="last-modified" content="Sat, 19 Oct 2025 12:00:00 GMT">
-    <meta name="timestamp" content="2025-10-19-proper-data-flow-1729351000">
+    <meta http-equiv="last-modified" content="Sun, 20 Oct 2025 14:00:00 GMT">
+    <meta name="timestamp" content="2025-10-20-ml-script-order-fix-1729472400000">
     
     <!-- Kill service workers and force reload -->
     <script>
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2025-10-19-proper-data-flow-1729351000';
+        const EXPECTED_VERSION = 'v2025-10-20-ml-script-order-fix-1729472400000';
+        
+        // AGGRESSIVE CACHE CLEARING
+        console.log('🧹 Clearing all caches...');
+        localStorage.clear();
+        sessionStorage.clear();
         
         // Kill service workers
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
                     registration.unregister();
+                    console.log('🗑️ Service worker unregistered');
+                }
+            });
+        }
+        
+        // Kill all caches
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) {
+                    caches.delete(name);
+                    console.log('🗑️ Cache deleted:', name);
                 }
             });
         }
@@ -31,28 +47,19 @@
         // Force reload if wrong version in cache
         const lastKnownVersion = localStorage.getItem('last-known-version');
         if (lastKnownVersion && lastKnownVersion !== EXPECTED_VERSION) {
-            console.log('🔄 FORCING IMMEDIATE RELOAD - Proper NFL data flow implemented with Tank01 best practices');
-            localStorage.clear();
-            sessionStorage.clear();
+            console.log('🔄 FORCING IMMEDIATE RELOAD - Cache refresh for ML backend fix');
             window.location.reload(true);
         }
         
         // Set version for next check
         localStorage.setItem('last-known-version', EXPECTED_VERSION);
         
-        // NUCLEAR OPTION - Add cache buster to current URL if not present
-        if (!window.location.search.includes('cb=')) {
+        // Add timestamp to URL if not present
+        if (!window.location.search.includes('refresh=')) {
             const separator = window.location.search ? '&' : '?';
             const timestamp = Date.now();
-            console.log('🚨 FORCING NUCLEAR CACHE REFRESH - Adding timestamp:', timestamp);
-            window.location.href = window.location.href + separator + 'cb=' + timestamp;
-        }
-        
-        // Additional force refresh for persistent cache issues
-        if (window.location.search.includes('cb=1760876341029')) {
-            console.log('🔥 DETECTED OLD CACHE BUSTER - Forcing immediate refresh');
-            const newTimestamp = Date.now();
-            window.location.href = window.location.href.replace('cb=1760876341029', 'cb=' + newTimestamp);
+            console.log('🚨 Adding fresh timestamp:', timestamp);
+            window.location.href = window.location.href.split('?')[0] + '?refresh=' + timestamp;
         }
     </script>
     <meta http-equiv="pragma" content="no-cache">
@@ -1251,12 +1258,12 @@
     <script src="assets/js/syntax-validation.js"></script>
     <script src="assets/js/nfl-schedule.js"></script>
     <script src="assets/js/nfl-schedule-api.js?v=2025-10-19-GAME-STATUS-FIX&t=1729380000"></script>
-    <script src="assets/js/live-scores.js?v=2025-10-19-DATA-CONSISTENCY-FIX&t=1760929590"></script>
-    <script src="assets/js/game-centric-ui.js?v=2025-10-19-GAME-UI-OBJECT-FIX&t=1760929831"></script>
+    <script src="assets/js/ml-config.js?v=2025-10-20-ML-FIX&t=1729465300000"></script>
+    <script src="assets/js/ml-integration.js?v=2025-10-20-ML-FIX&t=1729465300000"></script>
+    <script src="assets/js/live-scores.js?v=2025-10-20-UPDATE-FIX&t=1729465300000"></script>
+    <script src="assets/js/game-centric-ui.js?v=2025-10-20-ML-READY&t=1729465300000"></script>
     <script src="assets/js/main.js?v=2024-10-18-15-35&t=1729350000"></script>
     <script src="assets/js/app-logic.js?v=2024-10-18-15-35&t=1729350000"></script>
-    <script src="assets/js/ml-config.js?v=2024-10-18-16-30&t=1729350000"></script>
-    <script src="assets/js/ml-integration.js?v=2024-10-18-16-30&t=1729350000"></script>
     <script src="assets/js/enhanced-api-test.js?v=2025-10-19-CONSOLE-ONLY&t=1760930271"></script>
     <script>
         // Toggle expandable card functionality
