@@ -898,8 +898,16 @@ class LiveNFLScores {
             
             let gameData = {
                 gameId: `2025_week7_${matchup.away}_${matchup.home}`,
-                homeTeam: matchup.home,
-                awayTeam: matchup.away,
+                homeTeam: {
+                    code: matchup.home,
+                    name: this.getTeamName(matchup.home),
+                    score: 0
+                },
+                awayTeam: {
+                    code: matchup.away,
+                    name: this.getTeamName(matchup.away),
+                    score: 0
+                },
                 status: status,
                 homeScore: 0,
                 awayScore: 0,
