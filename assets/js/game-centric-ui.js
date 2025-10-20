@@ -745,34 +745,21 @@ class GameCentricUI {
                 const awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
                 const homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
                 
-                // Get scores
+                // Get scores directly from Tank01 data
                 const awayScore = game.awayScore || awayTeamObj.score || 0;
                 const homeScore = game.homeScore || homeTeamObj.score || 0;
                 
-                // ENHANCED STATUS DETECTION: Handle various API status formats
-                let status = game.status ? game.status.toUpperCase() : 'SCHEDULED';
+                // TRUST TANK01 STATUS - Already processed by live-scores.js mapGameStatus()
+                const status = game.status || 'SCHEDULED';
                 
-                // Normalize status variations
-                if (status.includes('LIVE') || status.includes('PROGRESS') || status.includes('ACTIVE') || status.includes('INPROGRESS')) {
-                    status = 'LIVE';
-                } else if (status.includes('FINAL') || status.includes('COMPLETE') || status.includes('ENDED')) {
-                    status = 'FINAL';
-                } else if (status.includes('SCHEDULED') || status.includes('UPCOMING') || status.includes('PRE')) {
-                    status = 'SCHEDULED';
-                }
-                
-                // SMART STATUS DETECTION: If game has scores but isn't LIVE, it's FINAL
-                if ((awayScore > 0 || homeScore > 0) && status !== 'LIVE') {
-                    console.log(`🔍 Game ${game.away || awayTeamObj.code} @ ${game.home || homeTeamObj.code} has scores (${awayScore}-${homeScore}) but status is ${status} - correcting to FINAL`);
-                    status = 'FINAL';
-                }
+                console.log(`🎯 Game: ${game.away || awayTeamObj.code} (${awayScore}) @ ${game.home || homeTeamObj.code} (${homeScore}) - Status from Tank01: ${status}`);
                 
                 const transformedGame = {
                     away: awayTeamObj.code || awayTeamObj.name || game.awayTeam,
                     home: homeTeamObj.code || homeTeamObj.name || game.homeTeam,
                     awayTeam: awayTeamObj,
                     homeTeam: homeTeamObj,
-                    status: status,  // Use corrected status
+                    status: status,  // Use Tank01 status directly
                     time: game.gameTime || game.time,
                     gameDate: game.gameDate || '',
                     awayRecord: game.awayRecord || 'TBD',
