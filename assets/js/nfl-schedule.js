@@ -293,32 +293,51 @@ function updateStadiumInfo(teamCode) {
 }
 
 /**
- * NO MOCK WEATHER - Real weather API data required
+ * Get real weather conditions using Weather API (Open-Meteo - FREE!)
  */
-function getRealWeatherConditions() {
-    console.error('❌ NO MOCK WEATHER DATA - Real weather API integration required');
-    return null;
+async function getRealWeatherConditions(homeTeam) {
+    if (!window.WeatherAPI) {
+        console.warn('⚠️ Weather API not loaded');
+        return null;
+    }
+    
+    try {
+        const weather = await window.WeatherAPI.getStadiumWeather(homeTeam);
+        return weather;
+    } catch (error) {
+        console.error('Weather API error:', error);
+        return null;
+    }
 }
 
 /**
- * Update game conditions display - REAL DATA ONLY
+ * Update game conditions display with real weather
  */
-function updateGameConditions() {
-    const weather = getRealWeatherConditions();
+async function updateGameConditions(homeTeam) {
+    if (!homeTeam) {
+        console.log('⚠️ No home team specified for weather lookup');
+        return;
+    }
+
+    const weather = await getRealWeatherConditions(homeTeam);
     
     if (!weather) {
-        console.log('⚠️ No real weather data available');
+        // Weather data not available - silently skip
         return;
     }
     
     const gameConditionsElement = document.querySelector('.info-sections .grid-item:nth-child(2) p');
     if (gameConditionsElement) {
+        const emoji = window.WeatherAPI.getWeatherEmoji(weather.condition);
         gameConditionsElement.innerHTML = `
-            Temperature: ${weather.temp}<br>
-            Conditions: ${weather.condition}<br>
-            Wind: ${weather.wind}<br>
-            Field: Professional turf
+            <strong>${emoji} ${weather.city}, ${weather.state}</strong><br>
+            Temperature: ${weather.temp}°F (Feels like ${weather.feelsLike}°F)<br>
+            Conditions: ${weather.description}<br>
+            Wind: ${weather.windSpeed} mph ${weather.windDirection}<br>
+            Humidity: ${weather.humidity}%<br>
+            Visibility: ${weather.visibility} miles
         `;
+        console.log(`✅ Weather updated for ${weather.city}`);
     }
 }
 
