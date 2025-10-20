@@ -52,9 +52,9 @@ class LiveNFLScores {
     
     setupEventListeners() {
         // Listen for schedule updates
-        window.addEventListener('nflScheduleUpdated', (event) => {
+        window.addEventListener('nflScheduleUpdated', async (event) => {
             console.log('📅 Schedule updated, refreshing live scores...');
-            this.updateFromSchedule(event.detail.schedule);
+            await this.updateFromSchedule(event.detail.schedule);
         });
         
         // Listen for live game updates
@@ -366,7 +366,7 @@ class LiveNFLScores {
                 const todaysGames = this.scheduleAPI.getTodaysGames();
                 if (todaysGames && todaysGames.body) {
                     console.log('✅ Using Schedule API data for live scores');
-                    this.processScheduleAPIData(todaysGames);
+                    await this.processScheduleAPIData(todaysGames);
                     this.updateLiveScoresDisplay();
                     return;
                 }
@@ -415,7 +415,7 @@ class LiveNFLScores {
             const upcomingGames = await this.findUpcomingNFLGames();
             if (upcomingGames) {
                 console.log('✅ Found upcoming NFL games');
-                this.processScheduleAPIData(upcomingGames);
+                await this.processScheduleAPIData(upcomingGames);
                 return;
             }
             
@@ -482,7 +482,7 @@ class LiveNFLScores {
         return null;
     }
     
-    processScheduleAPIData(todaysGames) {
+    async processScheduleAPIData(todaysGames) {
         if (!todaysGames || !todaysGames.body) return;
         
         const games = Array.isArray(todaysGames.body) ? todaysGames.body : [todaysGames.body];
@@ -502,20 +502,43 @@ class LiveNFLScores {
             isLive: this.scheduleAPI ? this.scheduleAPI.getLiveGames().includes(game.gameID) : false
         }));
         
-        // For games marked as FINAL but with 0-0 scores, generate realistic final scores
+        // For games marked as FINAL, try to get real box scores first
         for (let gameData of this.games) {
             if (gameData.status === 'FINAL' && gameData.awayScore === 0 && gameData.homeScore === 0) {
-                // Generate realistic scores for completed games
-                gameData.homeScore = Math.floor(Math.random() * 21) + 17; // 17-37 points
-                gameData.awayScore = Math.floor(Math.random() * 21) + 17; // 17-37 points
-                
-                // Adjust for overtime games occasionally
-                if (Math.random() < 0.15) {
-                    gameData.quarter = 'FINAL/OT';
-                    gameData.homeScore += 3; // Field goal in OT
+                try {
+                    console.log(`🔄 Fetching real box score for ${gameData.awayTeam} @ ${gameData.homeTeam} (${gameData.gameId})`);
+                    
+                    const boxScore = await this.scheduleAPI.fetchBoxScore(gameData.gameId);
+                    if (boxScore && boxScore.body) {
+                        // Use real API data for final scores
+                        const awayScore = parseInt(boxScore.body.awayPts) || 0;
+                        const homeScore = parseInt(boxScore.body.homePts) || 0;
+                        
+                        if (awayScore > 0 || homeScore > 0) {
+                            gameData.awayScore = awayScore;
+                            gameData.homeScore = homeScore;
+                            gameData.quarter = boxScore.body.quarter || 'FINAL';
+                            gameData.status = 'FINAL';
+                            
+                            console.log(`✅ Real final score retrieved: ${gameData.awayTeam} ${gameData.awayScore} - ${gameData.homeScore} ${gameData.homeTeam}`);
+                        } else {
+                            console.log(`⚠️ Box score API returned 0-0, game may not be completed yet`);
+                            // Don't generate fake scores, leave as 0-0 and change status
+                            gameData.status = 'SCHEDULED';
+                        }
+                    } else {
+                        console.log(`⚠️ No box score data available for ${gameData.gameId}`);
+                        // Don't generate fake scores, leave as 0-0
+                        gameData.status = 'SCHEDULED';
+                    }
+                } catch (error) {
+                    console.log(`⚠️ Error fetching box score for ${gameData.gameId}:`, error.message);
+                    // Don't generate fake scores, leave as 0-0
+                    gameData.status = 'SCHEDULED';
                 }
                 
-                console.log(`🎯 Generated realistic final score: ${gameData.awayTeam} ${gameData.awayScore} - ${gameData.homeScore} ${gameData.homeTeam}`);
+                // Small delay to respect API rate limits
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
         }
         
@@ -604,9 +627,9 @@ class LiveNFLScores {
         }
     }
     
-    updateFromSchedule(schedule) {
+    async updateFromSchedule(schedule) {
         // Update our games from the daily schedule fetch
-        this.processScheduleAPIData(schedule);
+        await this.processScheduleAPIData(schedule);
         this.updateLiveScoresDisplay();
     }
     
