@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-BetYard NFL QB Prediction ML Backend
-Real XGBoost model serving predictions via Flask API
+BetYard NFL Multi-Position Prediction ML Backend
+Real XGBoost models for QB, RB, WR, TE predictions via Flask API
 """
 
 from flask import Flask, request, jsonify
@@ -26,18 +26,35 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests from frontend
 
 @dataclass
-class QBPrediction:
-    """QB performance prediction with confidence metrics"""
-    passing_yards: float
-    completions: float
-    attempts: float
-    touchdowns: float
-    interceptions: float
-    qb_rating: float
-    confidence: float
-    features_used: Dict
-    weather_impact: float
-    injury_adjustment: float
+class PlayerPrediction:
+    """Universal player performance prediction with confidence metrics"""
+    # QB stats
+    passing_yards: Optional[float] = None
+    completions: Optional[float] = None
+    attempts: Optional[float] = None
+    
+    # RB stats
+    rushing_yards: Optional[float] = None
+    rushing_attempts: Optional[float] = None
+    
+    # WR/TE stats
+    receiving_yards: Optional[float] = None
+    receptions: Optional[float] = None
+    targets: Optional[float] = None
+    
+    # Common stats
+    touchdowns: float = 0
+    interceptions: Optional[float] = None
+    fumbles: Optional[float] = None
+    qb_rating: Optional[float] = None
+    fantasy_points: Optional[float] = None
+    
+    # Metadata
+    confidence: float = 0.85
+    features_used: Dict = None
+    weather_impact: float = 1.0
+    injury_adjustment: float = 1.0
+    position: str = "QB"
 
 class NFLWeatherService:
     """Fetch weather data for NFL games"""
@@ -99,41 +116,83 @@ class NFLInjuryService:
         }
 
 class NFLMLModel:
-    """XGBoost model for NFL QB predictions"""
+    """XGBoost models for NFL multi-position predictions"""
     
     def __init__(self):
-        self.model = None
-        self.feature_names = [
-            'recent_form', 'home_advantage', 'opponent_defense_rank',
-            'temperature', 'wind_speed', 'injury_factor', 'experience',
-            'season_avg_yards', 'season_avg_tds', 'weather_impact'
-        ]
+        self.models = {}  # Store models for each position
+        self.feature_names = {
+            'QB': ['recent_form', 'home_advantage', 'opponent_defense_rank',
+                   'temperature', 'wind_speed', 'injury_factor', 'experience',
+                   'season_avg_yards', 'season_avg_tds', 'weather_impact'],
+            'RB': ['recent_form', 'home_advantage', 'opponent_rush_defense_rank',
+                   'temperature', 'injury_factor', 'experience',
+                   'season_avg_yards', 'season_avg_tds', 'carries_per_game'],
+            'WR': ['recent_form', 'home_advantage', 'opponent_pass_defense_rank',
+                   'temperature', 'wind_speed', 'injury_factor', 'experience',
+                   'season_avg_yards', 'season_avg_receptions', 'target_share'],
+            'TE': ['recent_form', 'home_advantage', 'opponent_pass_defense_rank',
+                   'temperature', 'injury_factor', 'experience',
+                   'season_avg_yards', 'season_avg_receptions', 'blocking_snaps']
+        }
         self.weather_service = NFLWeatherService()
         self.injury_service = NFLInjuryService()
         
-        # Initialize or load model
-        self._initialize_model()
+        # Initialize or load models for all positions
+        self._initialize_models()
     
-    def _initialize_model(self):
-        """Initialize XGBoost model with trained weights or create new one"""
-        model_path = 'qb_model.pkl'
+    def _initialize_models(self):
+        """Initialize XGBoost models for all positions"""
+        positions = ['QB', 'RB', 'WR', 'TE']
         
-        if os.path.exists(model_path):
-            logger.info("Loading existing model...")
-            with open(model_path, 'rb') as f:
-                self.model = pickle.load(f)
-        else:
-            logger.info("Creating new XGBoost model...")
-            self._create_and_train_model()
+        for position in positions:
+            model_path = f'{position.lower()}_model.pkl'
+            
+            if os.path.exists(model_path):
+                logger.info(f"Loading existing {position} model...")
+                with open(model_path, 'rb') as f:
+                    self.models[position] = pickle.load(f)
+            else:
+                logger.info(f"Creating new {position} model...")
+                self._create_and_train_model(position)
     
-    def _create_and_train_model(self):
-        """Create and train XGBoost model with synthetic historical data"""
-        logger.info("Generating training data...")
+    def _create_and_train_model(self, position: str):
+        """Create and train XGBoost model for specific position"""
+        logger.info(f"Generating training data for {position}...")
         
-        # Generate synthetic historical QB performance data
         n_samples = 5000
-        np.random.seed(42)
+        np.random.seed(42 + hash(position) % 100)
         
+        if position == 'QB':
+            X, y = self._generate_qb_training_data(n_samples)
+        elif position == 'RB':
+            X, y = self._generate_rb_training_data(n_samples)
+        elif position == 'WR':
+            X, y = self._generate_wr_training_data(n_samples)
+        elif position == 'TE':
+            X, y = self._generate_te_training_data(n_samples)
+        else:
+            raise ValueError(f"Unknown position: {position}")
+        
+        # Train XGBoost model
+        logger.info(f"Training {position} XGBoost model...")
+        model = xgb.XGBRegressor(
+            n_estimators=100,
+            max_depth=6,
+            learning_rate=0.1,
+            random_state=42
+        )
+        
+        model.fit(X, y)
+        self.models[position] = model
+        
+        # Save model
+        with open(f'{position.lower()}_model.pkl', 'wb') as f:
+            pickle.dump(model, f)
+        
+        logger.info(f"{position} model training completed and saved!")
+    
+    def _generate_qb_training_data(self, n_samples):
+        """Generate realistic QB training data based on NFL stats"""
         # Features
         recent_form = np.random.normal(0.7, 0.2, n_samples)
         home_advantage = np.random.choice([0, 1], n_samples, p=[0.5, 0.5])
@@ -147,39 +206,103 @@ class NFLMLModel:
         weather_impact = np.where(temperature < 32, 0.8, 
                          np.where(wind_speed > 15, 0.85, 1.0))
         
-        # Create feature matrix
         X = np.column_stack([
             recent_form, home_advantage, opponent_defense_rank,
             temperature, wind_speed, injury_factor, experience,
             season_avg_yards, season_avg_tds, weather_impact
         ])
         
-        # Target: passing yards (realistic NFL distribution)
+        # Target: passing yards (NFL average ~260 yards/game)
         base_yards = (season_avg_yards * recent_form * injury_factor * weather_impact +
                      home_advantage * 15 - (opponent_defense_rank - 16) * 3)
-        
         y = np.clip(base_yards + np.random.normal(0, 25, n_samples), 100, 500)
         
-        # Train XGBoost model
-        logger.info("Training XGBoost model...")
-        self.model = xgb.XGBRegressor(
-            n_estimators=100,
-            max_depth=6,
-            learning_rate=0.1,
-            random_state=42
-        )
+        return X, y
+    
+    def _generate_rb_training_data(self, n_samples):
+        """Generate realistic RB training data based on NFL stats"""
+        recent_form = np.random.normal(0.7, 0.2, n_samples)
+        home_advantage = np.random.choice([0, 1], n_samples, p=[0.5, 0.5])
+        opponent_rush_defense_rank = np.random.uniform(1, 32, n_samples)
+        temperature = np.random.normal(65, 20, n_samples)
+        injury_factor = np.random.choice([1.0, 0.9, 0.8, 0.6], n_samples, p=[0.7, 0.2, 0.07, 0.03])
+        experience = np.random.uniform(1, 15, n_samples)
+        season_avg_yards = np.random.normal(70, 30, n_samples)  # RB avg ~70 yards/game
+        season_avg_tds = np.random.normal(0.6, 0.4, n_samples)
+        carries_per_game = np.random.normal(15, 5, n_samples)
         
-        self.model.fit(X, y)
+        X = np.column_stack([
+            recent_form, home_advantage, opponent_rush_defense_rank,
+            temperature, injury_factor, experience,
+            season_avg_yards, season_avg_tds, carries_per_game
+        ])
         
-        # Save model
-        with open('qb_model.pkl', 'wb') as f:
-            pickle.dump(self.model, f)
+        # Target: rushing yards (NFL RB average ~70 yards/game)
+        base_yards = (season_avg_yards * recent_form * injury_factor +
+                     home_advantage * 8 - (opponent_rush_defense_rank - 16) * 2 +
+                     carries_per_game * 2.5)
+        y = np.clip(base_yards + np.random.normal(0, 20, n_samples), 10, 250)
         
-        logger.info("Model training completed and saved!")
+        return X, y
+    
+    def _generate_wr_training_data(self, n_samples):
+        """Generate realistic WR training data based on NFL stats"""
+        recent_form = np.random.normal(0.7, 0.2, n_samples)
+        home_advantage = np.random.choice([0, 1], n_samples, p=[0.5, 0.5])
+        opponent_pass_defense_rank = np.random.uniform(1, 32, n_samples)
+        temperature = np.random.normal(65, 20, n_samples)
+        wind_speed = np.random.exponential(8, n_samples)
+        injury_factor = np.random.choice([1.0, 0.9, 0.8, 0.6], n_samples, p=[0.7, 0.2, 0.07, 0.03])
+        experience = np.random.uniform(1, 15, n_samples)
+        season_avg_yards = np.random.normal(60, 25, n_samples)  # WR avg ~60 yards/game
+        season_avg_receptions = np.random.normal(5, 2, n_samples)
+        target_share = np.random.normal(0.20, 0.08, n_samples)
+        
+        weather_impact = np.where(wind_speed > 15, 0.85, 1.0)
+        
+        X = np.column_stack([
+            recent_form, home_advantage, opponent_pass_defense_rank,
+            temperature, wind_speed, injury_factor, experience,
+            season_avg_yards, season_avg_receptions, target_share
+        ])
+        
+        # Target: receiving yards (NFL WR average ~60 yards/game)
+        base_yards = (season_avg_yards * recent_form * injury_factor * weather_impact +
+                     home_advantage * 8 - (opponent_pass_defense_rank - 16) * 2.5 +
+                     target_share * 150)
+        y = np.clip(base_yards + np.random.normal(0, 20, n_samples), 5, 200)
+        
+        return X, y
+    
+    def _generate_te_training_data(self, n_samples):
+        """Generate realistic TE training data based on NFL stats"""
+        recent_form = np.random.normal(0.7, 0.2, n_samples)
+        home_advantage = np.random.choice([0, 1], n_samples, p=[0.5, 0.5])
+        opponent_pass_defense_rank = np.random.uniform(1, 32, n_samples)
+        temperature = np.random.normal(65, 20, n_samples)
+        injury_factor = np.random.choice([1.0, 0.9, 0.8, 0.6], n_samples, p=[0.7, 0.2, 0.07, 0.03])
+        experience = np.random.uniform(1, 15, n_samples)
+        season_avg_yards = np.random.normal(45, 20, n_samples)  # TE avg ~45 yards/game
+        season_avg_receptions = np.random.normal(4, 1.5, n_samples)
+        blocking_snaps = np.random.normal(0.35, 0.15, n_samples)  # % of snaps blocking
+        
+        X = np.column_stack([
+            recent_form, home_advantage, opponent_pass_defense_rank,
+            temperature, injury_factor, experience,
+            season_avg_yards, season_avg_receptions, blocking_snaps
+        ])
+        
+        # Target: receiving yards (NFL TE average ~45 yards/game)
+        base_yards = (season_avg_yards * recent_form * injury_factor +
+                     home_advantage * 6 - (opponent_pass_defense_rank - 16) * 1.5 -
+                     blocking_snaps * 25)  # More blocking = fewer receiving yards
+        y = np.clip(base_yards + np.random.normal(0, 15, n_samples), 5, 150)
+        
+        return X, y
     
     def predict_qb_performance(self, qb_name: str, team_code: str, 
                              opponent_code: str = None, 
-                             date: str = None) -> QBPrediction:
+                             date: str = None) -> PlayerPrediction:
         """Predict QB performance using real ML model"""
         
         # Get real-time data
@@ -208,8 +331,8 @@ class NFLMLModel:
             1.0 if weather['dome'] else max(0.7, 1 - weather['wind']/50 - abs(weather['temp']-70)/100)
         ]])
         
-        # Make prediction
-        pred_yards = self.model.predict(features)[0]
+        # Make prediction using QB model
+        pred_yards = self.models['QB'].predict(features)[0]
         
         # Calculate other stats based on yards
         attempts = np.clip(pred_yards / 7.5 + np.random.normal(0, 3), 25, 55)
@@ -232,13 +355,13 @@ class NFLMLModel:
         ) * 100)
         
         # Calculate confidence based on feature importance
-        feature_importance = self.model.feature_importances_
+        feature_importance = self.models['QB'].feature_importances_
         confidence = np.clip(
             np.dot(features[0], feature_importance) * 100 + 
             np.random.normal(0, 5), 60, 95
         )
         
-        return QBPrediction(
+        return PlayerPrediction(
             passing_yards=float(round(pred_yards, 1)),
             completions=float(round(completions, 1)),
             attempts=float(round(attempts, 1)),
@@ -246,15 +369,176 @@ class NFLMLModel:
             interceptions=float(round(interceptions, 1)),
             qb_rating=float(round(qb_rating, 1)),
             confidence=float(round(confidence, 1)),
-            features_used={
-                'weather_temp': float(weather['temp']),
-                'weather_wind': float(weather['wind']),
-                'injury_factor': float(injury['impact_factor']),
-                'recent_form': float(qb_stats['recent_form'])
-            },
-            weather_impact=float(round(features[0][-1], 2)),
-            injury_adjustment=float(injury['impact_factor'])
+            position='QB'
         )
+    
+    def predict_rb_performance(self, rb_name: str, team_code: str, 
+                             opponent_code: str = None, 
+                             date: str = None) -> PlayerPrediction:
+        """Predict RB performance using real ML model"""
+        
+        # Get real-time data
+        weather = self.weather_service.get_game_weather(team_code, date)
+        injury = self.injury_service.get_qb_injury_status(rb_name, team_code)  # Reuse injury service
+        
+        # Mock RB historical stats
+        rb_stats = {
+            'recent_form': np.random.normal(0.75, 0.15),
+            'season_avg_yards': np.random.normal(70, 25),
+            'season_avg_tds': np.random.normal(0.6, 0.3),
+            'experience': np.random.uniform(1, 12),
+            'carries_per_game': np.random.normal(15, 5)
+        }
+        
+        # Create feature vector for RB model
+        features = np.array([[
+            rb_stats['recent_form'],
+            1,  # home_advantage (mock)
+            np.random.uniform(5, 25),  # opponent_rush_defense_rank
+            weather['temp'],
+            injury['impact_factor'],
+            rb_stats['experience'],
+            rb_stats['season_avg_yards'],
+            rb_stats['season_avg_tds'],
+            rb_stats['carries_per_game']
+        ]])
+        
+        # Make prediction using RB model
+        pred_yards = self.models['RB'].predict(features)[0]
+        
+        # Calculate derived stats
+        attempts = np.clip(rb_stats['carries_per_game'] + np.random.normal(0, 3), 8, 30)
+        touchdowns = max(0, pred_yards / 100 + np.random.normal(0, 0.5))
+        
+        # Calculate confidence
+        feature_importance = self.models['RB'].feature_importances_
+        confidence = np.clip(
+            np.dot(features[0], feature_importance) * 100 + 
+            np.random.normal(0, 5), 60, 95
+        )
+        
+        return PlayerPrediction(
+            rushing_yards=float(round(pred_yards, 1)),
+            rushing_attempts=float(round(attempts, 1)),
+            touchdowns=float(round(touchdowns, 1)),
+            fantasy_points=float(round(pred_yards * 0.1 + touchdowns * 6, 1)),
+            confidence=float(round(confidence, 1)),
+            position='RB'
+        )
+    
+    def predict_wr_performance(self, wr_name: str, team_code: str, 
+                             opponent_code: str = None, 
+                             date: str = None) -> PlayerPrediction:
+        """Predict WR performance using real ML model"""
+        
+        # Get real-time data
+        weather = self.weather_service.get_game_weather(team_code, date)
+        injury = self.injury_service.get_qb_injury_status(wr_name, team_code)
+        
+        # Mock WR historical stats
+        wr_stats = {
+            'recent_form': np.random.normal(0.75, 0.15),
+            'season_avg_yards': np.random.normal(60, 20),
+            'season_avg_receptions': np.random.normal(5, 2),
+            'experience': np.random.uniform(1, 12),
+            'target_share': np.random.normal(0.20, 0.08)
+        }
+        
+        # Create feature vector for WR model
+        features = np.array([[
+            wr_stats['recent_form'],
+            1,  # home_advantage (mock)
+            np.random.uniform(5, 25),  # opponent_pass_defense_rank
+            weather['temp'],
+            weather['wind'],
+            injury['impact_factor'],
+            wr_stats['experience'],
+            wr_stats['season_avg_yards'],
+            wr_stats['season_avg_receptions'],
+            wr_stats['target_share']
+        ]])
+        
+        # Make prediction using WR model
+        pred_yards = self.models['WR'].predict(features)[0]
+        
+        # Calculate derived stats
+        targets = np.clip(wr_stats['target_share'] * 40 + np.random.normal(0, 2), 3, 15)
+        receptions = targets * np.clip(np.random.normal(0.65, 0.1), 0.4, 0.85)
+        touchdowns = max(0, pred_yards / 150 + np.random.normal(0, 0.4))
+        
+        # Calculate confidence
+        feature_importance = self.models['WR'].feature_importances_
+        confidence = np.clip(
+            np.dot(features[0], feature_importance) * 100 + 
+            np.random.normal(0, 5), 60, 95
+        )
+        
+        return PlayerPrediction(
+            receiving_yards=float(round(pred_yards, 1)),
+            receptions=float(round(receptions, 1)),
+            targets=float(round(targets, 1)),
+            touchdowns=float(round(touchdowns, 1)),
+            fantasy_points=float(round(pred_yards * 0.1 + receptions * 0.5 + touchdowns * 6, 1)),
+            confidence=float(round(confidence, 1)),
+            position='WR'
+        )
+    
+    def predict_te_performance(self, te_name: str, team_code: str, 
+                             opponent_code: str = None, 
+                             date: str = None) -> PlayerPrediction:
+        """Predict TE performance using real ML model"""
+        
+        # Get real-time data
+        weather = self.weather_service.get_game_weather(team_code, date)
+        injury = self.injury_service.get_qb_injury_status(te_name, team_code)
+        
+        # Mock TE historical stats
+        te_stats = {
+            'recent_form': np.random.normal(0.75, 0.15),
+            'season_avg_yards': np.random.normal(45, 18),
+            'season_avg_receptions': np.random.normal(4, 1.5),
+            'experience': np.random.uniform(1, 12),
+            'blocking_snaps': np.random.normal(0.35, 0.15)
+        }
+        
+        # Create feature vector for TE model
+        features = np.array([[
+            te_stats['recent_form'],
+            1,  # home_advantage (mock)
+            np.random.uniform(5, 25),  # opponent_pass_defense_rank
+            weather['temp'],
+            injury['impact_factor'],
+            te_stats['experience'],
+            te_stats['season_avg_yards'],
+            te_stats['season_avg_receptions'],
+            te_stats['blocking_snaps']
+        ]])
+        
+        # Make prediction using TE model
+        pred_yards = self.models['TE'].predict(features)[0]
+        
+        # Calculate derived stats
+        targets = np.clip(np.random.normal(6, 2), 2, 12)
+        receptions = targets * np.clip(np.random.normal(0.65, 0.1), 0.4, 0.85)
+        touchdowns = max(0, pred_yards / 120 + np.random.normal(0, 0.4))
+        
+        # Calculate confidence
+        feature_importance = self.models['TE'].feature_importances_
+        confidence = np.clip(
+            np.dot(features[0], feature_importance) * 100 + 
+            np.random.normal(0, 5), 60, 95
+        )
+        
+        return PlayerPrediction(
+            receiving_yards=float(round(pred_yards, 1)),
+            receptions=float(round(receptions, 1)),
+            targets=float(round(targets, 1)),
+            touchdowns=float(round(touchdowns, 1)),
+            fantasy_points=float(round(pred_yards * 0.1 + receptions * 0.5 + touchdowns * 6, 1)),
+            confidence=float(round(confidence, 1)),
+            position='TE'
+        )
+
 
 # Initialize ML model
 logger.info("Initializing NFL ML Model...")
@@ -265,9 +549,14 @@ def health_check():
     """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
-        'model_loaded': ml_model.model is not None,
+        'models_loaded': {
+            'QB': 'QB' in ml_model.models,
+            'RB': 'RB' in ml_model.models,
+            'WR': 'WR' in ml_model.models,
+            'TE': 'TE' in ml_model.models
+        },
         'timestamp': datetime.now().isoformat(),
-        'version': 'v2024-10-18-json-fix'
+        'version': 'v2024-10-20-multi-position'
     })
 
 @app.route('/test', methods=['GET'])
@@ -282,40 +571,72 @@ def test_json_fix():
     })
 
 @app.route('/predict', methods=['POST'])
-def predict_qb():
-    """Main prediction endpoint"""
+def predict_player():
+    """Main prediction endpoint - supports all positions (QB, RB, WR, TE)"""
     try:
         data = request.get_json()
         
-        qb_name = data.get('qb_name')
+        player_name = data.get('player_name') or data.get('qb_name')  # Support legacy field
         team_code = data.get('team_code')
         opponent_code = data.get('opponent_code')
+        position = data.get('position', 'QB').upper()
         
-        if not qb_name or not team_code:
-            return jsonify({'error': 'Missing required fields'}), 400
+        if not player_name or not team_code:
+            return jsonify({'error': 'Missing required fields: player_name, team_code'}), 400
         
-        # Generate prediction
-        prediction = ml_model.predict_qb_performance(
-            qb_name, team_code, opponent_code
-        )
+        if position not in ['QB', 'RB', 'WR', 'TE']:
+            return jsonify({'error': f'Invalid position: {position}. Must be QB, RB, WR, or TE'}), 400
+        
+        # Route to appropriate prediction function
+        if position == 'QB':
+            prediction = ml_model.predict_qb_performance(player_name, team_code, opponent_code)
+        elif position == 'RB':
+            prediction = ml_model.predict_rb_performance(player_name, team_code, opponent_code)
+        elif position == 'WR':
+            prediction = ml_model.predict_wr_performance(player_name, team_code, opponent_code)
+        elif position == 'TE':
+            prediction = ml_model.predict_te_performance(player_name, team_code, opponent_code)
+        
+        # Build response with only non-None fields
+        response_prediction = {
+            'position': prediction.position,
+            'confidence': float(prediction.confidence),
+            'fantasy_points': float(prediction.fantasy_points) if prediction.fantasy_points else None
+        }
+        
+        # Add position-specific stats
+        if prediction.passing_yards is not None:
+            response_prediction['passing_yards'] = float(prediction.passing_yards)
+            response_prediction['completions'] = float(prediction.completions)
+            response_prediction['attempts'] = float(prediction.attempts)
+        
+        if prediction.rushing_yards is not None:
+            response_prediction['rushing_yards'] = float(prediction.rushing_yards)
+            response_prediction['rushing_attempts'] = float(prediction.rushing_attempts)
+        
+        if prediction.receiving_yards is not None:
+            response_prediction['receiving_yards'] = float(prediction.receiving_yards)
+            response_prediction['receptions'] = float(prediction.receptions)
+            response_prediction['targets'] = float(prediction.targets)
+        
+        if prediction.touchdowns is not None:
+            response_prediction['touchdowns'] = float(prediction.touchdowns)
+        
+        if prediction.interceptions is not None:
+            response_prediction['interceptions'] = float(prediction.interceptions)
+        
+        if prediction.qb_rating is not None:
+            response_prediction['qb_rating'] = float(prediction.qb_rating)
         
         return jsonify({
             'success': True,
-            'prediction': {
-                'passing_yards': float(prediction.passing_yards),
-                'completions': float(prediction.completions),
-                'attempts': float(prediction.attempts),
-                'touchdowns': float(prediction.touchdowns),
-                'interceptions': float(prediction.interceptions),
-                'qb_rating': float(prediction.qb_rating),
-                'confidence': float(prediction.confidence)
-            },
+            'prediction': response_prediction,
             'metadata': {
-                'features_used': {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
-                                for k, v in prediction.features_used.items()},
-                'weather_impact': float(prediction.weather_impact),
-                'injury_adjustment': float(prediction.injury_adjustment),
-                'model_version': '1.0',
+                'player_name': player_name,
+                'team': team_code,
+                'opponent': opponent_code,
+                'position': position,
+                'model_version': '2.0',
                 'timestamp': datetime.now().isoformat()
             }
         })
@@ -328,19 +649,24 @@ def predict_qb():
 def model_info():
     """Get model information and feature importance"""
     try:
-        # Convert numpy float32 values to regular Python floats for JSON serialization
-        feature_importance = dict(zip(
-            ml_model.feature_names, 
-            [float(x) for x in ml_model.model.feature_importances_]
-        ))
-        
-        return jsonify({
-            'model_type': 'XGBoost Regressor',
-            'features': ml_model.feature_names,
-            'feature_importance': feature_importance,
+        model_info_response = {
+            'model_type': 'XGBoost Regressor (Multi-Position)',
+            'supported_positions': ['QB', 'RB', 'WR', 'TE'],
             'training_samples': 5000,
-            'version': '1.0'
-        })
+            'version': '2.0'
+        }
+        
+        # Add feature importance for each position
+        for position in ['QB', 'RB', 'WR', 'TE']:
+            if position in ml_model.models:
+                feature_importance = dict(zip(
+                    ml_model.feature_names[position], 
+                    [float(x) for x in ml_model.models[position].feature_importances_]
+                ))
+                model_info_response[f'{position}_features'] = ml_model.feature_names[position]
+                model_info_response[f'{position}_feature_importance'] = feature_importance
+        
+        return jsonify(model_info_response)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -350,13 +676,13 @@ if __name__ == '__main__':
     # Get port from environment variable (Railway/Heroku sets this)
     port = int(os.environ.get('PORT', 5000))
     
-    logger.info("🚀 Starting NFL QB Prediction ML Backend...")
-    logger.info("🏈 XGBoost Model with Weather & Injury Intelligence")
+    logger.info("🚀 Starting NFL Multi-Position Prediction ML Backend...")
+    logger.info("🏈 XGBoost Models: QB, RB, WR, TE")
     logger.info("=" * 50)
     logger.info(f"📡 Server running on port {port}")
     logger.info("Available endpoints:")
     logger.info("  GET  /health - Health check")
-    logger.info("  POST /predict - QB performance prediction")
+    logger.info("  POST /predict - Player performance prediction (all positions)")
     logger.info("  GET  /model/info - Model information")
     logger.info("=" * 50)
     
