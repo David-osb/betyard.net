@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌤️ Weather API Test - Open-Meteo</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        .test-controls {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        select, button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .weather-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .weather-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .weather-emoji {
+            font-size: 48px;
+        }
+        .weather-location {
+            flex: 1;
+        }
+        .weather-location h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .weather-location p {
+            margin: 5px 0 0 0;
+            opacity: 0.8;
+        }
+        .weather-main {
+            display: flex;
+            gap: 40px;
+            margin: 20px 0;
+        }
+        .temp-display {
+            font-size: 64px;
+            font-weight: bold;
+        }
+        .condition-display {
+            font-size: 24px;
+            opacity: 0.9;
+        }
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .detail-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .detail-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        .detail-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .console-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .loading {
+            text-align: center;
+            font-size: 24px;
+            padding: 40px;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .team-btn {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .team-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ NFL Stadium Weather Test</h1>
+        <p class="subtitle">Open-Meteo API Integration - FREE, No API Key Required!</p>
+
+        <div class="test-controls">
+            <select id="teamSelect">
+                <option value="">Select NFL Team...</option>
+                <option value="ARI">Arizona Cardinals</option>
+                <option value="ATL">Atlanta Falcons</option>
+                <option value="BAL">Baltimore Ravens</option>
+                <option value="BUF">Buffalo Bills</option>
+                <option value="CAR">Carolina Panthers</option>
+                <option value="CHI">Chicago Bears</option>
+                <option value="CIN">Cincinnati Bengals</option>
+                <option value="CLE">Cleveland Browns</option>
+                <option value="DAL">Dallas Cowboys</option>
+                <option value="DEN">Denver Broncos</option>
+                <option value="DET">Detroit Lions</option>
+                <option value="GB">Green Bay Packers</option>
+                <option value="HOU">Houston Texans</option>
+                <option value="IND">Indianapolis Colts</option>
+                <option value="JAX">Jacksonville Jaguars</option>
+                <option value="KC">Kansas City Chiefs</option>
+                <option value="LV">Las Vegas Raiders</option>
+                <option value="LAC">Los Angeles Chargers</option>
+                <option value="LAR">Los Angeles Rams</option>
+                <option value="MIA">Miami Dolphins</option>
+                <option value="MIN">Minnesota Vikings</option>
+                <option value="NE">New England Patriots</option>
+                <option value="NO">New Orleans Saints</option>
+                <option value="NYG">New York Giants</option>
+                <option value="NYJ">New York Jets</option>
+                <option value="PHI">Philadelphia Eagles</option>
+                <option value="PIT">Pittsburgh Steelers</option>
+                <option value="SF">San Francisco 49ers</option>
+                <option value="SEA">Seattle Seahawks</option>
+                <option value="TB">Tampa Bay Buccaneers</option>
+                <option value="TEN">Tennessee Titans</option>
+                <option value="WSH">Washington Commanders</option>
+            </select>
+            <button onclick="getWeather()">Get Weather</button>
+            <button onclick="testMultiple()">Test 5 Random Teams</button>
+        </div>
+
+        <div id="weatherDisplay"></div>
+        
+        <div class="console-output" id="console">
+            <div>🌤️ Weather API Test Console</div>
+            <div>Ready to fetch weather data...</div>
+            <div>---</div>
+        </div>
+    </div>
+
+    <!-- Load Weather API -->
+    <script src="assets/js/weather-api.js"></script>
+
+    <script>
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff5252' : type === 'success' ? '#4CAF50' : '#00ff00';
+            console.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+        }
+
+        async function getWeather() {
+            const teamCode = document.getElementById('teamSelect').value;
+            if (!teamCode) {
+                alert('Please select a team');
+                return;
+            }
+
+            const display = document.getElementById('weatherDisplay');
+            display.innerHTML = '<div class="loading">⏳ Loading weather data...</div>';
+            
+            log(`Fetching weather for team: ${teamCode}`);
+
+            try {
+                const weather = await window.WeatherAPI.getStadiumWeather(teamCode);
+                
+                if (!weather) {
+                    throw new Error('No weather data returned');
+                }
+
+                log(`✅ Weather received for ${weather.city}`, 'success');
+                log(`Temp: ${weather.temp}°F, Condition: ${weather.description}`, 'success');
+
+                const emoji = window.WeatherAPI.getWeatherEmoji(weather.condition);
+                
+                display.innerHTML = `
+                    <div class="weather-card">
+                        <div class="weather-header">
+                            <div class="weather-emoji">${emoji}</div>
+                            <div class="weather-location">
+                                <h2>${weather.city}, ${weather.state}</h2>
+                                <p>Updated: ${weather.timestamp.toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+
+                        <div class="weather-main">
+                            <div>
+                                <div class="temp-display">${weather.temp}°F</div>
+                                <div class="condition-display">${weather.description}</div>
+                            </div>
+                        </div>
+
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Feels Like</div>
+                                <div class="detail-value">${weather.feelsLike}°F</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Wind</div>
+                                <div class="detail-value">${weather.windSpeed} mph ${weather.windDirection}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Humidity</div>
+                                <div class="detail-value">${weather.humidity}%</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Cloud Cover</div>
+                                <div class="detail-value">${weather.cloudCover}%</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Precipitation</div>
+                                <div class="detail-value">${weather.precipitation} in</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                display.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Weather Fetch Failed</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMultiple() {
+            const teams = ['KC', 'SF', 'BUF', 'GB', 'MIA'];
+            log('🧪 Testing multiple teams...');
+            
+            for (const team of teams) {
+                document.getElementById('teamSelect').value = team;
+                await getWeather();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            log('✅ Multi-team test complete!', 'success');
+        }
+
+        // Log initial state
+        log('Weather API loaded successfully');
+        log('Open-Meteo API ready (FREE - No API key required!)');
+    </script>
+</body>
+</html>

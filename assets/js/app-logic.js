@@ -309,16 +309,25 @@ async function fetchNFLDataWithTank01Enhanced() {
                     
                     if (team.teamAbv && team.Roster) {
                         const uiTeamCode = tank01ToUIMapping[team.teamAbv] || team.teamAbv;
-                        const quarterbacks = Object.values(team.Roster).filter(player => player.pos === 'QB');
                         
-                        console.log(`🏈 ${team.teamAbv} -> ${uiTeamCode}: Found ${quarterbacks.length} QBs`);
+                        // Extract ALL player positions from Tank01 API
+                        const quarterbacks = Object.values(team.Roster).filter(player => player.pos === 'QB');
+                        const runningbacks = Object.values(team.Roster).filter(player => player.pos === 'RB');
+                        const wideReceivers = Object.values(team.Roster).filter(player => player.pos === 'WR');
+                        const tightEnds = Object.values(team.Roster).filter(player => player.pos === 'TE');
+                        
+                        console.log(`🏈 ${team.teamAbv} -> ${uiTeamCode}: Found ${quarterbacks.length} QBs, ${runningbacks.length} RBs, ${wideReceivers.length} WRs, ${tightEnds.length} TEs`);
                         
                         // Use accurate data if available, otherwise use Tank01 data
                         const finalQBData = accurateQBData[uiTeamCode] || quarterbacks;
                         
                         window.nflTeamsData[uiTeamCode] = {
                             teamName: team.teamCity + ' ' + team.teamName,
-                            roster: finalQBData,
+                            roster: finalQBData, // Keep for backwards compatibility
+                            quarterbacks: finalQBData,
+                            runningbacks: runningbacks,
+                            wideReceivers: wideReceivers,
+                            tightEnds: tightEnds,
                             teamAbv: uiTeamCode,
                             tank01Abv: team.teamAbv,
                             dataSource: accurateQBData[uiTeamCode] ? 'CORRECTED' : 'TANK01'
@@ -363,11 +372,14 @@ function enableDropdownsAfterTank01(tank01Success = true) {
     
     try {
         // Enable all dropdowns
-        const selects = document.querySelectorAll('select, #qb-select, #team-select');
+        const selects = document.querySelectorAll('select, #player-select, #position-select, #team-select');
         selects.forEach(select => {
             if (select) {
-                select.disabled = false;
-                console.log('✅ Enabled dropdown:', select.id || select.className);
+                // Only enable team select initially, others enabled by user interaction
+                if (select.id === 'team-select') {
+                    select.disabled = false;
+                    console.log('✅ Enabled dropdown:', select.id || select.className);
+                }
             }
         });
         
@@ -378,11 +390,18 @@ function enableDropdownsAfterTank01(tank01Success = true) {
             console.log('🔧 Hidden loading element:', el.className || el.id);
         });
         
-        // Update QB select with default option
-        const qbSelect = document.getElementById('qb-select');
-        if (qbSelect && qbSelect.children.length <= 1) {
-            qbSelect.innerHTML = '<option value="">Select a quarterback...</option>';
-            console.log('✅ QB dropdown updated with default option');
+        // Update player select with default option
+        const playerSelect = document.getElementById('player-select');
+        if (playerSelect && playerSelect.children.length <= 1) {
+            playerSelect.innerHTML = '<option value="">Select team & position first...</option>';
+            console.log('✅ Player dropdown updated with default option');
+        }
+        
+        // Update position select
+        const positionSelect = document.getElementById('position-select');
+        if (positionSelect) {
+            positionSelect.disabled = true; // Will be enabled when team is selected
+            console.log('✅ Position dropdown ready (disabled until team selected)');
         }
         
         // Update team select with default option and clear loading text
