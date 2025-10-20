@@ -466,8 +466,8 @@ class NFLScheduleAPI {
     async fetchCurrentAndUpcomingGames() {
         console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
         
-        // 1. Try to get current week games 
-        for (let week = 7; week <= 18; week++) {
+        // 1. Try to get current week games (October 2025 = weeks 6-10)
+        for (let week = 6; week <= 18; week++) {
             console.log(`📅 Checking Week ${week}...`);
             
             const weekGames = await this.fetchWeeklySchedule(week);
@@ -546,8 +546,8 @@ class NFLScheduleAPI {
             dates.push(date.toISOString().split('T')[0]);
         }
         
-        // Add known NFL dates
-        dates.push('2024-10-20', '2024-10-27', '2024-11-03', '2024-11-10', '2024-12-22');
+        // Add known NFL dates for 2025 season (October 2025 onwards)
+        dates.push('2025-10-19', '2025-10-20', '2025-10-26', '2025-10-27', '2025-11-02', '2025-11-03', '2025-11-09', '2025-11-10');
         
         return dates;
     }

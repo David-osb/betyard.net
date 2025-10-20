@@ -872,6 +872,9 @@ class LiveNFLScores {
         
         // Add game context information
         this.addGameContextInfo();
+        
+        // Update game-centric UI with current games
+        this.updateGameCentricUI();
     }
     
     addGameContextInfo() {
@@ -906,6 +909,40 @@ class LiveNFLScores {
                 }
             });
         }
+    }
+
+    updateGameCentricUI() {
+        // Find the most relevant game for the game-centric UI
+        const currentGame = this.findMostRelevantGame();
+        
+        if (window.gameCentricUI) {
+            console.log('🎯 Updating Game-Centric UI with current games');
+            
+            // Update the game-centric UI with all current games
+            window.gameCentricUI.updateWithLiveGames(this.games);
+        }
+    }
+
+    findMostRelevantGame() {
+        if (!this.games || this.games.length === 0) return null;
+        
+        // Priority 1: Live games
+        const liveGames = this.games.filter(game => game.status === 'LIVE');
+        if (liveGames.length > 0) {
+            console.log('🔴 Found live game for game-centric UI:', liveGames[0]);
+            return liveGames[0];
+        }
+        
+        // Priority 2: Games starting soon (SCHEDULED)
+        const upcomingGames = this.games.filter(game => game.status === 'SCHEDULED');
+        if (upcomingGames.length > 0) {
+            console.log('📅 Found upcoming game for game-centric UI:', upcomingGames[0]);
+            return upcomingGames[0];
+        }
+        
+        // Priority 3: Any game (fallback)
+        console.log('🎯 Using first available game for game-centric UI:', this.games[0]);
+        return this.games[0];
     }
     
     createGameCard(game) {
