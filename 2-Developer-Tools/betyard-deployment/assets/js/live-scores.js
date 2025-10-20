@@ -670,25 +670,39 @@ class LiveNFLScores {
             throw new Error('Invalid API response format');
         }
         
-        return apiData.body.map(game => ({
-            gameId: game.gameID || null, // NO FAKE IDs - Real API data only
-            gameTime: game.gameTime || 'TBD',
-            gameDate: game.gameDate || new Date().toLocaleDateString(),
-            awayTeam: {
-                code: game.away || 'TBD',
-                name: this.getTeamName(game.away),
-                score: parseInt(game.awayPts) || 0
-            },
-            homeTeam: {
-                code: game.home || 'TBD', 
-                name: this.getTeamName(game.home),
-                score: parseInt(game.homePts) || 0
-            },
-            quarter: game.quarter || 'Pre',
-            timeRemaining: game.gameClock || '',
-            status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
-            excitingPlay: this.detectExcitingPlay(game)
-        }));
+        return apiData.body.map(game => {
+            // Get status from Tank01
+            const status = this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home);
+            
+            // Get scores from Tank01 - use actual API values
+            const awayScore = parseInt(game.awayPts) || 0;
+            const homeScore = parseInt(game.homePts) || 0;
+            
+            console.log(`📊 Tank01 Game: ${game.away} (${awayScore}) @ ${game.home} (${homeScore}) - Status: ${game.gameStatus} → ${status}`);
+            
+            return {
+                gameId: game.gameID || null,
+                gameTime: game.gameTime || 'TBD',
+                gameDate: game.gameDate || new Date().toLocaleDateString(),
+                week: game.gameWeek || game.week || null,
+                awayTeam: {
+                    code: game.away || 'TBD',
+                    name: this.getTeamName(game.away),
+                    score: awayScore
+                },
+                homeTeam: {
+                    code: game.home || 'TBD', 
+                    name: this.getTeamName(game.home),
+                    score: homeScore
+                },
+                quarter: game.quarter || 'Pre',
+                timeRemaining: game.gameClock || '',
+                status: status,
+                awayScore: awayScore,  // Add explicit score fields for game-centric-ui
+                homeScore: homeScore,
+                excitingPlay: this.detectExcitingPlay(game)
+            };
+        });
     }
     
     getTeamName(teamCode) {
@@ -706,64 +720,24 @@ class LiveNFLScores {
     }
     
     mapGameStatus(apiStatus, gameTime, awayTeam, homeTeam) {
-        // Map Tank01 API status to our format with proper time zone conversion
+        // Map Tank01 API status to our format - TRUST THE API
         console.log(`🔍 mapGameStatus called: ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}, API status: ${apiStatus || 'N/A'}, gameTime: ${gameTime || 'N/A'}`);
         
         if (!apiStatus) return 'SCHEDULED';
         
-        // Validate team names to prevent undefined access
-        const safeAwayTeam = awayTeam || 'UNK';
-        const safeHomeTeam = homeTeam || 'UNK';
-        
-        // Get current time in Eastern Time (proper conversion)
-        const now = new Date();
-        
-        // Convert to Eastern Time properly accounting for DST
-        const easternTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-        const currentETHour = easternTime.getHours();
-        const currentETMinutes = easternTime.getMinutes();
-        const currentETTime = currentETHour + (currentETMinutes / 60);
-        
-        // Also get UTC for API comparison (Tank01 might use UTC)
-        const utcTime = now.getUTCHours() + (now.getUTCMinutes() / 60);
-        
-        console.log(`🕐 Time Zone Debug: Local=${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}, ET=${currentETHour}:${currentETMinutes.toString().padStart(2, '0')}, UTC=${Math.floor(utcTime)}:${((utcTime % 1) * 60).toFixed(0).padStart(2, '0')}`);
-        
-        // Parse game time to validate status makes sense
-        let gameStartHourET = null;
-        if (gameTime) {
-            if (gameTime.includes('1:00')) gameStartHourET = 13; // 1 PM ET
-            else if (gameTime.includes('4:05')) gameStartHourET = 16.08; // 4:05 PM ET
-            else if (gameTime.includes('4:25')) gameStartHourET = 16.42; // 4:25 PM ET
-            else if (gameTime.includes('8:20')) gameStartHourET = 20.33; // 8:20 PM ET
-        }
-        
         const status = apiStatus.toLowerCase();
         let mappedStatus = 'SCHEDULED';
         
-        if (status.includes('live') || status.includes('progress') || status.includes('active')) {
+        // Map various Tank01 status formats to our 3 states
+        if (status.includes('live') || status.includes('progress') || status.includes('active') || status.includes('inprogress')) {
             mappedStatus = 'LIVE';
-        } else if (status.includes('final') || status.includes('complete')) {
+        } else if (status.includes('final') || status.includes('complete') || status.includes('ended')) {
             mappedStatus = 'FINAL';
+        } else if (status.includes('scheduled') || status.includes('upcoming') || status.includes('pre')) {
+            mappedStatus = 'SCHEDULED';
         }
         
-        // CRITICAL: Time zone validation for live games
-        if (gameStartHourET && mappedStatus === 'LIVE') {
-            // Check if current ET time supports live status
-            const timeUntilGameET = gameStartHourET - currentETTime;
-            
-            if (timeUntilGameET > 0.25) { // More than 15 minutes before start
-                console.warn(`⏰ TIME ZONE ISSUE: ${awayTeam} @ ${homeTeam} shows LIVE but game doesn't start for ${(timeUntilGameET * 60).toFixed(0)} minutes (Current: ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET, Game: ${gameTime})`);
-                
-                // Override to SCHEDULED if time doesn't make sense
-                console.log(`🔄 OVERRIDING: ${awayTeam} @ ${homeTeam} LIVE → SCHEDULED due to timing`);
-                return 'SCHEDULED';
-            }
-        }
-        
-        // REMOVED DATE-SPECIFIC OVERRIDES - Use real API status
-        // Trust the Tank01 API status for all games
-        console.log(`✅ Using Tank01 API status for ${safeAwayTeam} @ ${safeHomeTeam}: ${mappedStatus}`);
+        console.log(`✅ Tank01 status for ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}: ${apiStatus} → ${mappedStatus}`);
         
         return mappedStatus;
     }
