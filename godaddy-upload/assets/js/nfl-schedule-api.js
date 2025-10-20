@@ -687,6 +687,12 @@ class NFLScheduleAPI {
             if (response.ok) {
                 const boxScore = await response.json();
                 
+                // Validate response structure
+                if (!boxScore || typeof boxScore !== 'object') {
+                    console.warn(`⚠️ Invalid box score response for ${gameID}: not an object`);
+                    return null;
+                }
+                
                 // Process player stats with playerID mapping
                 if (boxScore.body && boxScore.body.playerStats) {
                     try {
@@ -714,6 +720,11 @@ class NFLScheduleAPI {
                 }));
                 
                 return boxScore;
+            } else {
+                // Handle non-OK HTTP responses
+                const errorText = await response.text();
+                console.warn(`⚠️ Box score API HTTP ${response.status} for ${gameID}: ${errorText}`);
+                return null;
             }
         } catch (error) {
             // "no game" error is expected before game starts
