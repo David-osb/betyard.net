@@ -386,32 +386,34 @@ class LiveNFLScores {
                 }
             }
             
-            // Force real API data processing instead of mock fallback
-            console.log('🔄 No live scores available, using schedule data with timing validation...');
+            // DEBUG: Check what schedule API data is available
+            console.log('� DEBUGGING API DATA:');
             if (this.scheduleAPI) {
-                let todaysGames = this.scheduleAPI.getTodaysGames();
-                console.log(`🔍 Debug: getTodaysGames() returned:`, todaysGames);
-                
-                if (!todaysGames || todaysGames.length === 0) {
-                    console.log('📅 No games today, trying recent schedule data...');
-                    // Try to get any recent schedule data for testing
-                    const recentSchedule = this.scheduleAPI.getLastScheduleData();
-                    if (recentSchedule && recentSchedule.body && recentSchedule.body.length > 0) {
-                        console.log(`📅 Using recent schedule data: ${recentSchedule.body.length} games`);
-                        todaysGames = recentSchedule;
+                const todaysGames = this.scheduleAPI.getTodaysGames();
+                console.log('� getTodaysGames():', todaysGames);
+                console.log('📅 Type:', typeof todaysGames);
+                console.log('📅 Is Array:', Array.isArray(todaysGames));
+                if (todaysGames) {
+                    console.log('📅 Has body:', !!todaysGames.body);
+                    if (todaysGames.body) {
+                        console.log('📅 Body length:', todaysGames.body.length);
+                        console.log('📅 Body type:', typeof todaysGames.body);
+                        console.log('📅 First game:', todaysGames.body[0]);
                     }
                 }
                 
-                if (todaysGames && ((Array.isArray(todaysGames) && todaysGames.length > 0) ||(todaysGames.body && todaysGames.body.length > 0))) {
-                    console.log(`📅 Processing scheduled games with timing validation`);
+                // Try processing whatever data we have
+                if (todaysGames) {
+                    console.log('� Processing available API data...');
                     this.processScheduleAPIData(todaysGames);
                     return;
                 }
             }
             
-            // No data available - create minimal test data with timing validation
-            console.warn('⚠️ No NFL API data available, creating test game for timing validation');
-            this.createTestGameWithTimingValidation();
+            // If absolutely no API data, show error - NO FALLBACKS
+            console.error('❌ CRITICAL: No NFL API data available from Tank01');
+            console.error('❌ Check API key, endpoint, or date format');
+            this.showErrorState();
             
         } catch (error) {
             console.error('❌ Error fetching live scores:', error);
@@ -1037,49 +1039,90 @@ function selectGameTeams(awayTeam, homeTeam) {
         }
     }
     
-    createTestGameWithTimingValidation() {
-        // Create minimal test data with proper timing validation
-        console.log('🧪 Creating test KC vs LV game for timing validation...');
+    /**
+     * Smart NFL schedule fetching - get current and upcoming games
+     * Priority: Current week → Next weeks → Any available games
+     */
+    async getSmartNFLSchedule() {
+        console.log('🧠 Smart NFL scheduling: Finding current or upcoming games...');
         
-        const testGame = {
-            gameID: 'TEST_KC_LV',
-            gameTime: '1:00 ET',
-            gameStatus: 'Live', // This should be overridden by timing validation
-            away: 'KC',
-            home: 'LV',
-            awayPts: '0',
-            homePts: '0'
-        };
-        
-        // Process through timing validation
-        const processedGame = {
-            gameId: testGame.gameID,
-            gameTime: testGame.gameTime,
-            gameDate: new Date().toLocaleDateString(),
-            awayTeam: {
-                code: testGame.away,
-                name: this.getTeamName(testGame.away),
-                score: parseInt(testGame.awayPts) || 0
-            },
-            homeTeam: {
-                code: testGame.home,
-                name: this.getTeamName(testGame.home),
-                score: parseInt(testGame.homePts) || 0
-            },
-            quarter: 'Pre',
-            timeRemaining: '',
-            // CRITICAL: This calls our timing validation
-            status: this.mapGameStatus(testGame.gameStatus, testGame.gameTime, testGame.away, testGame.home),
-            excitingPlay: null,
-            isLive: false
-        };
-        
-        this.games = [processedGame];
-        this.currentWeek = 7;
-        this.lastUpdate = new Date();
-        
-        this.updateLiveScoresDisplay();
-        console.log('✅ Test game created with timing validation applied');
+        try {
+            // Method 1: Try direct Tank01 API calls for multiple weeks
+            const apiConfig = {
+                baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
+                headers: {
+                    'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
+                    'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                }
+            };
+            
+            // Try current NFL weeks (Week 8, 9, 10, etc.)
+            for (let week = 8; week <= 18; week++) {
+                console.log(`📅 Checking NFL Week ${week}...`);
+                
+                try {
+                    const response = await fetch(`${apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2024`, {
+                        method: 'GET',
+                        headers: apiConfig.headers
+                    });
+                    
+                    if (response.ok) {
+                        const weekData = await response.json();
+                        if (weekData && weekData.body && weekData.body.length > 0) {
+                            console.log(`✅ Found ${weekData.body.length} games in Week ${week}!`);
+                            return weekData;
+                        } else {
+                            console.log(`📅 Week ${week}: No games`);
+                        }
+                    } else {
+                        console.log(`⚠️ Week ${week}: API error ${response.status}`);
+                    }
+                } catch (weekError) {
+                    console.log(`⚠️ Week ${week}: ${weekError.message}`);
+                }
+            }
+            
+            // Method 2: Try specific upcoming dates
+            const upcomingDates = [
+                '2024-10-27', // Next Sunday
+                '2024-11-03', // Following Sunday  
+                '2024-11-10', // Week after
+                '2024-12-15', // Late season
+                '2024-12-22'  // Late season
+            ];
+            
+            for (let date of upcomingDates) {
+                console.log(`📅 Checking date: ${date}`);
+                
+                try {
+                    const response = await fetch(`${apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${date}`, {
+                        method: 'GET',
+                        headers: apiConfig.headers
+                    });
+                    
+                    if (response.ok) {
+                        const dateData = await response.json();
+                        if (dateData && dateData.body && dateData.body.length > 0) {
+                            console.log(`✅ Found ${dateData.body.length} games on ${date}!`);
+                            return dateData;
+                        } else {
+                            console.log(`📅 ${date}: No games`);
+                        }
+                    } else {
+                        console.log(`⚠️ ${date}: API error ${response.status}`);
+                    }
+                } catch (dateError) {
+                    console.log(`⚠️ ${date}: ${dateError.message}`);
+                }
+            }
+            
+            console.error('❌ No NFL games found in any week or date checked');
+            return null;
+            
+        } catch (error) {
+            console.error('❌ Smart scheduling error:', error);
+            return null;
+        }
     }
 }
 
