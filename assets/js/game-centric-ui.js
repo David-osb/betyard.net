@@ -765,17 +765,9 @@ class GameCentricUI {
             });
         }
         
-        // Fallback static data
-        return [
-            { away: 'PHI', home: 'MIN', status: 'SCHEDULED', time: '1:00 ET', awayRecord: '5-1', homeRecord: '4-2' },
-            { away: 'KC', home: 'LV', status: 'LIVE', quarter: '2nd', time: '8:42', awayRecord: '6-0', homeRecord: '2-4', awayScore: 14, homeScore: 7 },
-            { away: 'BAL', home: 'CLE', status: 'SCHEDULED', time: '1:00 ET', awayRecord: '5-1', homeRecord: '1-5' },
-            { away: 'BUF', home: 'MIA', status: 'FINAL', awayRecord: '5-1', homeRecord: '2-4', awayScore: 28, homeScore: 21 },
-            { away: 'DAL', home: 'SF', status: 'SCHEDULED', time: '4:25 ET', awayRecord: '3-3', homeRecord: '3-3' },
-            { away: 'TB', home: 'ATL', status: 'SCHEDULED', time: '1:00 ET', awayRecord: '4-2', homeRecord: '4-2' },
-            { away: 'DET', home: 'GB', status: 'SCHEDULED', time: '4:25 ET', awayRecord: '5-1', homeRecord: '4-2' },
-            { away: 'LAR', home: 'SEA', status: 'SCHEDULED', time: '4:05 ET', awayRecord: '2-4', homeRecord: '4-2' }
-        ];
+        // Fallback static data - NO REAL DATA AVAILABLE, RETURN EMPTY
+        console.log('⚠️ No live games data - returning empty array until real data arrives');
+        return [];
     }
 
     updateWithLiveGames(games) {
