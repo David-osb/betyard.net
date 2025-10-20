@@ -753,13 +753,7 @@ class LiveNFLScores {
             const timeUntilGameET = gameStartHourET - currentETTime;
             
             if (timeUntilGameET > 0.25) { // More than 15 minutes before start
-                console.warn(`� TIME ZONE ISSUE: ${awayTeam} @ ${homeTeam} shows LIVE but game doesn't start for ${(timeUntilGameET * 60).toFixed(0)} minutes (Current: ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET, Game: ${gameTime})`);
-                
-                // Check if this makes sense in other time zones
-                const pacificTime = currentETTime - 3; // ET to PT
-                const centralTime = currentETTime - 1; // ET to CT
-                
-                console.log(`🌐 Time Zone Check: PT=${Math.floor(pacificTime)}:${((pacificTime % 1) * 60).toFixed(0).padStart(2, '0')}, CT=${Math.floor(centralTime)}:${((centralTime % 1) * 60).toFixed(0).padStart(2, '0')}, UTC=${Math.floor(utcTime)}:${((utcTime % 1) * 60).toFixed(0).padStart(2, '0')}`);
+                console.warn(`⏰ TIME ZONE ISSUE: ${awayTeam} @ ${homeTeam} shows LIVE but game doesn't start for ${(timeUntilGameET * 60).toFixed(0)} minutes (Current: ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET, Game: ${gameTime})`);
                 
                 // Override to SCHEDULED if time doesn't make sense
                 console.log(`🔄 OVERRIDING: ${awayTeam} @ ${homeTeam} LIVE → SCHEDULED due to timing`);
@@ -767,36 +761,9 @@ class LiveNFLScores {
             }
         }
         
-        // Special validation for KC vs LV (the reported issue)
-        if ((awayTeam === 'KC' && homeTeam === 'LV') || (awayTeam === 'LV' && homeTeam === 'KC')) {
-            if (mappedStatus === 'LIVE') {
-                const kcGameStartET = 13; // 1:00 PM ET
-                if (currentETTime < kcGameStartET) {
-                    console.warn(`🏈 KC vs LV TIME VALIDATION: API says LIVE but it's ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET (${(kcGameStartET - currentETTime) * 60} minutes until 1:00 PM ET start)`);
-                    console.log(`🔄 KC OVERRIDE: LIVE → SCHEDULED`);
-                    return 'SCHEDULED';
-                } else {
-                    console.log(`✅ KC vs LV TIME VALIDATION: Game is properly live (started at 1:00 PM ET, now ${currentETHour}:${currentETMinutes.toString().padStart(2, '0')} ET)`);
-                }
-            }
-        }
-        
-        // SPECIAL OVERRIDE FOR OCTOBER 19, 2025: 
-        // Most games should be FINAL by now except Falcons vs 49ers
-        if (mappedStatus === 'LIVE') {
-            console.log(`🔍 LIVE GAME DETECTED: ${safeAwayTeam} @ ${safeHomeTeam}`);
-            if ((safeAwayTeam === 'ATL' && safeHomeTeam === 'SF') || 
-                (safeAwayTeam === 'SF' && safeHomeTeam === 'ATL') ||
-                (safeAwayTeam.includes('ATL') || safeHomeTeam.includes('ATL')) && 
-                (safeAwayTeam.includes('SF') || safeHomeTeam.includes('SF'))) {
-                console.log(`🔴 CONFIRMED LIVE: ${safeAwayTeam} @ ${safeHomeTeam} (Falcons vs 49ers match)`);
-                return 'LIVE';
-            } else {
-                // Force other "live" games to FINAL
-                console.log(`⏰ FORCED TO FINAL: ${safeAwayTeam} @ ${safeHomeTeam} (only Falcons vs 49ers should be live)`);
-                return 'FINAL';
-            }
-        }
+        // REMOVED DATE-SPECIFIC OVERRIDES - Use real API status
+        // Trust the Tank01 API status for all games
+        console.log(`✅ Using Tank01 API status for ${safeAwayTeam} @ ${safeHomeTeam}: ${mappedStatus}`);
         
         return mappedStatus;
     }

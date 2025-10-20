@@ -910,25 +910,50 @@ class GameCentricUI {
         container.innerHTML = positionsHTML;
     }
     
-    selectPosition(position) {
+    async selectPosition(position) {
         this.selectedPosition = position;
         
         // Mark position as selected
         document.querySelectorAll('.position-option').forEach(el => el.classList.remove('selected'));
         event.currentTarget.classList.add('selected');
         
-        // Update player selection
-        this.updatePlayerSelection();
+        // Update player selection (await the async function)
+        await this.updatePlayerSelection();
         
         console.log('🎯 Position selected:', this.selectedPosition);
     }
     
-    updatePlayerSelection() {
+    async updatePlayerSelection() {
         const container = document.getElementById('player-selection-container');
-        if (!container || !this.selectedTeam || !this.selectedPosition) return;
+        if (!container || !this.selectedTeam || !this.selectedPosition) {
+            console.warn('⚠️ Missing container, team, or position for player selection');
+            return;
+        }
         
-        // Mock player data based on position
-        const players = this.getPlayersForPosition(this.selectedTeam.code, this.selectedPosition);
+        console.log(`🔄 Updating player selection for ${this.selectedTeam.code} ${this.selectedPosition}`);
+        
+        // Show loading state
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="font-size: 24px; margin-bottom: 16px;">⏳</div>
+                <div style="color: #6b7280;">Loading ${this.selectedPosition} players...</div>
+            </div>
+        `;
+        
+        // Get player data (await the async function)
+        const players = await this.getPlayersForPosition(this.selectedTeam.code, this.selectedPosition);
+        
+        console.log(`✅ Got ${players.length} players for ${this.selectedPosition}`);
+        
+        if (players.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 24px; margin-bottom: 16px;">❌</div>
+                    <div style="color: #6b7280;">No ${this.selectedPosition} players found for ${this.selectedTeam.code}</div>
+                </div>
+            `;
+            return;
+        }
         
         const playersHTML = players.map(player => `
             <div class="player-option" onclick="gameCentricUI.selectPlayer('${player.id}', '${player.name}')">
