@@ -685,7 +685,13 @@ class NFLScheduleAPI {
             });
             
             if (response.ok) {
-                const boxScore = await response.json();
+                let boxScore;
+                try {
+                    boxScore = await response.json();
+                } catch (jsonError) {
+                    console.warn(`⚠️ Invalid JSON in box score response for ${gameID}:`, jsonError.message);
+                    return null;
+                }
                 
                 // Validate response structure
                 if (!boxScore || typeof boxScore !== 'object') {

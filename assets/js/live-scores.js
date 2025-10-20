@@ -33,6 +33,24 @@ class LiveNFLScores {
         if (window.NFLScheduleAPI) {
             this.scheduleAPI = window.NFLScheduleAPI;
             console.log('✅ Connected to NFL Schedule API');
+        } else {
+            // Wait for schedule API to load
+            console.log('⏳ Waiting for NFL Schedule API to load...');
+            const waitForAPI = setInterval(() => {
+                if (window.NFLScheduleAPI) {
+                    this.scheduleAPI = window.NFLScheduleAPI;
+                    console.log('✅ Connected to NFL Schedule API (delayed)');
+                    clearInterval(waitForAPI);
+                }
+            }, 100);
+            
+            // Timeout after 10 seconds
+            setTimeout(() => {
+                if (!this.scheduleAPI) {
+                    console.error('❌ Failed to connect to NFL Schedule API after 10 seconds');
+                    clearInterval(waitForAPI);
+                }
+            }, 10000);
         }
         
         // Listen for live NFL updates
