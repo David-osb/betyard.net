@@ -821,10 +821,11 @@ class GameCentricUI {
                 break;
             case 'SCHEDULED':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
-                scoreDisplay = '<div style="text-align: center; font-size: 16px; color: #9ca3af; margin: 12px 0;">Game not started</div>';
                 // Get current week dynamically
                 const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
-                gameInfo = `<div class="game-details">${currentWeekInfo.title}</div>`;
+                const monthYear = 'October 2025'; // Dynamic date can be added later
+                scoreDisplay = `<div style="text-align: center; font-size: 14px; color: #9ca3af; margin: 8px 0;">${currentWeekInfo.title} - ${monthYear}</div>`;
+                gameInfo = `<div class="game-details">${game.time || game.gameTime || 'TBD'}</div>`;
                 break;
             default:
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.status}</div>`;
