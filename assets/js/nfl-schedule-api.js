@@ -698,9 +698,14 @@ class NFLScheduleAPI {
                 }
                 
                 // Detect exciting plays
-                const excitingPlay = this.detectExcitingPlays(boxScore);
-                if (excitingPlay) {
-                    this.broadcastExcitingPlay(gameID, excitingPlay);
+                try {
+                    const excitingPlay = this.detectExcitingPlays(boxScore);
+                    if (excitingPlay) {
+                        this.broadcastExcitingPlay(gameID, excitingPlay);
+                    }
+                } catch (playError) {
+                    console.warn(`⚠️ Exciting plays detection error for ${gameID}:`, playError.message);
+                    // Continue processing even if exciting plays fail
                 }
                 
                 // Dispatch live update event
@@ -821,6 +826,12 @@ class NFLScheduleAPI {
         if (!boxScore.body || !boxScore.body.playerStats) return null;
         
         const stats = boxScore.body.playerStats;
+        
+        // Validate that stats is iterable
+        if (!Array.isArray(stats)) {
+            console.log(`⚠️ PlayerStats is not an array in detectExcitingPlays`);
+            return null;
+        }
         
         // Look for touchdown indicators, big plays, etc.
         for (const stat of stats) {
