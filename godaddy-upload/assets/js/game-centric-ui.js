@@ -783,44 +783,65 @@ class GameCentricUI {
         const statusClass = game.status.toLowerCase();
         let statusBadge = '';
         let gameInfo = '';
+        let scoreDisplay = '';
+        
+        // Get team names from the game data
+        const awayTeamName = game.awayTeam?.name || game.awayTeam?.code || game.away || 'TBD';
+        const homeTeamName = game.homeTeam?.name || game.homeTeam?.code || game.home || 'TBD';
+        const awayTeamCode = game.awayTeam?.code || game.away;
+        const homeTeamCode = game.homeTeam?.code || game.home;
+        
+        // Use REAL live scores from the game data
+        const awayScore = game.awayScore || game.awayTeam?.score || 0;
+        const homeScore = game.homeScore || game.homeTeam?.score || 0;
+        
+        console.log(`🎯 Creating game card: ${awayTeamName} (${awayScore}) @ ${homeTeamName} (${homeScore}) - Status: ${game.status}`);
         
         switch (game.status) {
             case 'LIVE':
-                statusBadge = `<div class="game-status-badge status-live">🔴 LIVE - ${game.quarter} ${game.time}</div>`;
-                gameInfo = `<div class="game-details">Score: ${game.awayTeam.name || game.awayTeam.code || game.awayTeam} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>`;
+                statusBadge = `<div class="game-status-badge status-live">🔴 LIVE ${game.quarter ? '- ' + game.quarter : ''} ${game.timeRemaining || ''}</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #dc2626; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                gameInfo = `<div class="game-details">Live Score</div>`;
                 break;
             case 'FINAL':
-                statusBadge = `<div class="game-status-badge status-final">FINAL</div>`;
-                gameInfo = `<div class="game-details">Final: ${game.awayTeam.name || game.awayTeam.code || game.awayTeam} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>`;
+                statusBadge = `<div class="game-status-badge status-final">FINAL${game.quarter && game.quarter.includes('OT') ? ' (OT)' : ''}</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #6b7280; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                gameInfo = `<div class="game-details">Final Score</div>`;
                 break;
             case 'SCHEDULED':
-                statusBadge = `<div class="game-status-badge status-scheduled">${game.time}</div>`;
+                statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
+                scoreDisplay = '<div style="text-align: center; font-size: 16px; color: #9ca3af; margin: 12px 0;">Game not started</div>';
                 // Get current week dynamically
                 const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
                 gameInfo = `<div class="game-details">${currentWeekInfo.title}</div>`;
                 break;
+            default:
+                statusBadge = `<div class="game-status-badge status-scheduled">${game.status}</div>`;
+                scoreDisplay = '';
+                gameInfo = `<div class="game-details">Status: ${game.status}</div>`;
         }
         
         return `
-            <div class="game-option" onclick="gameCentricUI.selectGame('${game.awayTeam.code || game.awayTeam}', '${game.homeTeam.code || game.homeTeam}', '${game.status}')">
+            <div class="game-option" onclick="gameCentricUI.selectGame('${awayTeamCode}', '${homeTeamCode}', '${game.status}')">
                 <div class="game-header">
                     ${statusBadge}
                 </div>
                 
                 <div class="matchup-display">
                     <div class="team-info">
-                        <div class="team-name">${game.awayTeam.name || game.awayTeam.code || game.awayTeam}</div>
-                        <div class="team-record">${game.awayRecord}</div>
+                        <div class="team-name">${awayTeamName}</div>
+                        <div class="team-record">${game.awayRecord || ''}</div>
                     </div>
                     
                     <div class="vs-separator">@</div>
                     
                     <div class="team-info">
-                        <div class="team-name">${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>
-                        <div class="team-record">${game.homeRecord}</div>
+                        <div class="team-name">${homeTeamName}</div>
+                        <div class="team-record">${game.homeRecord || ''}</div>
                     </div>
                 </div>
                 
+                ${scoreDisplay}
                 ${gameInfo}
             </div>
         `;
@@ -922,31 +943,49 @@ class GameCentricUI {
     }
     
     async getPlayersForPosition(teamCode, position) {
-        // Try to get real NFL roster data from Tank01 API first
-        try {
-            const response = await fetch(`https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster?teamID=${teamCode}&getStats=false`, {
-                method: 'GET',
-                headers: {
-                    'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
-                    'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
-                }
-            });
+        // Use the already-loaded window.nflTeamsData from Tank01 API
+        console.log(`🔍 Getting ${position} players for ${teamCode} from window.nflTeamsData`);
+        
+        if (window.nflTeamsData && window.nflTeamsData[teamCode]) {
+            const team = window.nflTeamsData[teamCode];
+            let players = [];
             
-            if (response.ok) {
-                const rosterData = await response.json();
-                console.log(`✅ Real NFL roster data for ${teamCode}:`, rosterData);
-                
-                // Process real roster data
-                const realPlayers = this.processRealRosterData(rosterData, position);
-                if (realPlayers.length > 0) {
-                    return realPlayers;
-                }
+            // Get players based on position
+            switch(position) {
+                case 'QB':
+                    players = team.quarterbacks || team.roster || [];
+                    break;
+                case 'RB':
+                    players = team.runningbacks || [];
+                    break;
+                case 'WR':
+                    players = team.wideReceivers || [];
+                    break;
+                case 'TE':
+                    players = team.tightEnds || [];
+                    break;
             }
-        } catch (error) {
-            console.warn(`⚠️ Tank01 roster API error for ${teamCode}, using fallback data:`, error);
+            
+            if (players && players.length > 0) {
+                console.log(`✅ Found ${players.length} ${position} players for ${teamCode}:`, players);
+                
+                // Convert Tank01 player data to our format
+                return players.slice(0, 6).map((player, index) => ({
+                    id: player.playerID || `${teamCode}_${position}_${index}`,
+                    name: player.longName || player.espnName || player.name || 'Unknown Player',
+                    number: player.jerseyNum || player.number || '0',
+                    position: player.pos || position,
+                    isStarter: index === 0, // First player is typically starter
+                    realData: true
+                }));
+            } else {
+                console.warn(`⚠️ No ${position} players found in window.nflTeamsData for ${teamCode}`);
+            }
+        } else {
+            console.warn(`⚠️ window.nflTeamsData not available for ${teamCode}`);
         }
         
-        // Fallback to enhanced static data with real current NFL rosters
+        // Fallback to enhanced static data only if no real data
         return this.getStaticPlayerData(teamCode, position);
     }
     
