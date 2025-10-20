@@ -1193,30 +1193,16 @@ class GameCentricUI {
             const range = ranges[stat];
             if (!range) return { stat, value: 'N/A', confidence: 0, trend: 'neutral', trendText: '' };
             
-            const value = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-            const confidence = Math.floor(Math.random() * 25) + 70; // 70-95%
-            
-            // Generate trend
-            const trendRoll = Math.random();
-            let trend, trendText;
-            if (trendRoll < 0.3) {
-                trend = 'trending-up';
-                trendText = '📈 Trending Up';
-            } else if (trendRoll < 0.6) {
-                trend = 'trending-down';
-                trendText = '📉 Below Average';
-            } else {
-                trend = 'neutral';
-                trendText = '➡️ On Track';
-            }
+            // NO FAKE DATA - Only real ML predictions
+            console.error('❌ NO MOCK PREDICTIONS - Real ML backend required for stat predictions');
             
             return {
                 stat,
-                value,
+                value: 'REAL_DATA_REQUIRED',
                 unit: range.unit,
-                confidence,
-                trend,
-                trendText
+                confidence: 0,
+                trend: 'unavailable',
+                trendText: '❌ Real data only'
             };
         });
     }
@@ -1231,7 +1217,9 @@ class GameCentricUI {
             '🛡️ Defensive battle expected'
         ];
         
-        return contexts[Math.floor(Math.random() * contexts.length)];
+        // NO RANDOM CONTEXT - Real analysis data only
+        console.error('❌ NO MOCK CONTEXT - Real game analysis required');
+        return 'Real-time analysis unavailable';
     }
     
     generateBettingInsights(predictions) {

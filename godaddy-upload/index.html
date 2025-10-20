@@ -1236,9 +1236,9 @@
     <script src="assets/js/xgboost-simulation.js"></script>
     <script src="assets/js/syntax-validation.js"></script>
     <script src="assets/js/nfl-schedule.js"></script>
-    <script src="assets/js/nfl-schedule-api.js?v=2025-10-19-LIVE-FIX&t=1760887999"></script>
-    <script src="assets/js/live-scores.js?v=2025-10-19-NO-MOCK&t=1760888888"></script>
-    <script src="assets/js/game-centric-ui.js?v=2025-10-19-final-fix&t=1729350000"></script>
+    <script src="assets/js/nfl-schedule-api.js?v=2025-10-19-GAME-CENTRIC-SYNC&t=1761666666"></script>
+    <script src="assets/js/live-scores.js?v=2025-10-19-GAME-CENTRIC-SYNC&t=1761666666"></script>
+    <script src="assets/js/game-centric-ui.js?v=2025-10-19-GAME-CENTRIC-SYNC&t=1761666666"></script>
     <script src="assets/js/main.js?v=2024-10-18-15-35&t=1729350000"></script>
     <script src="assets/js/app-logic.js?v=2024-10-18-15-35&t=1729350000"></script>
     <script src="assets/js/ml-config.js?v=2024-10-18-16-30&t=1729350000"></script>
@@ -1437,50 +1437,9 @@
                         qbSelect.innerHTML += '<option value="">❌ No QB data available</option>';
                     }
                 } else {
-                    // Fallback to static data if Tank01 not available
-                    console.log('⚠️ Using fallback static data for', teamSelect.value);
-                    const staticQBData = {
-                        'KC': [{name: 'Patrick Mahomes', number: 15}, {name: 'Carson Wentz', number: 11}],
-                        'BUF': [{name: 'Josh Allen', number: 17}, {name: 'Matt Barkley', number: 2}],
-                        'CIN': [{name: 'Jake Browning', number: 6}, {name: 'Joe Flacco', number: 16}], // Current active roster
-                        'MIA': [{name: 'Tua Tagovailoa', number: 1}, {name: 'Mike White', number: 14}],
-                        'NE': [{name: 'Drake Maye', number: 10}, {name: 'Jacoby Brissett', number: 7}],
-                        'NYJ': [{name: 'Aaron Rodgers', number: 8}, {name: 'Tyrod Taylor', number: 2}],
-                        'BAL': [{name: 'Lamar Jackson', number: 8}, {name: 'Josh Johnson', number: 17}],
-                        'CLE': [{name: 'Deshaun Watson', number: 4}, {name: 'Jameis Winston', number: 5}],
-                        'PIT': [{name: 'Russell Wilson', number: 3}, {name: 'Justin Fields', number: 2}],
-                        'HOU': [{name: 'C.J. Stroud', number: 7}, {name: 'Davis Mills', number: 10}],
-                        'IND': [{name: 'Anthony Richardson', number: 5}, {name: 'Joe Flacco', number: 15}],
-                        'JAX': [{name: 'Trevor Lawrence', number: 16}, {name: 'Mac Jones', number: 10}],
-                        'TEN': [{name: 'Will Levis', number: 8}, {name: 'Mason Rudolph', number: 11}],
-                        'DEN': [{name: 'Bo Nix', number: 10}, {name: 'Jarrett Stidham', number: 4}],
-                        'LV': [{name: 'Gardner Minshew', number: 15}, {name: 'Aidan O\'Connell', number: 12}],
-                        'LAC': [{name: 'Justin Herbert', number: 10}, {name: 'Taylor Heinicke', number: 4}],
-                        'DAL': [{name: 'Dak Prescott', number: 4}, {name: 'Cooper Rush', number: 10}],
-                        'NYG': [{name: 'Daniel Jones', number: 8}, {name: 'Drew Lock', number: 2}],
-                        'PHI': [{name: 'Jalen Hurts', number: 1}, {name: 'Kenny Pickett', number: 7}],
-                        'WAS': [{name: 'Jayden Daniels', number: 5}, {name: 'Marcus Mariota', number: 18}],
-                        'CHI': [{name: 'Caleb Williams', number: 18}, {name: 'Tyson Bagent', number: 17}],
-                        'DET': [{name: 'Jared Goff', number: 16}, {name: 'Hendon Hooker', number: 2}],
-                        'GB': [{name: 'Jordan Love', number: 10}, {name: 'Malik Willis', number: 11}],
-                        'MIN': [{name: 'Sam Darnold', number: 14}, {name: 'J.J. McCarthy', number: 9}],
-                        'ATL': [{name: 'Kirk Cousins', number: 18}, {name: 'Michael Penix Jr.', number: 9}],
-                        'CAR': [{name: 'Bryce Young', number: 9}, {name: 'Andy Dalton', number: 14}],
-                        'NO': [{name: 'Derek Carr', number: 4}, {name: 'Spencer Rattler', number: 18}],
-                        'TB': [{name: 'Baker Mayfield', number: 6}, {name: 'Kyle Trask', number: 2}],
-                        'ARI': [{name: 'Kyler Murray', number: 1}, {name: 'Clayton Tune', number: 16}],
-                        'LAR': [{name: 'Matthew Stafford', number: 9}, {name: 'Jimmy Garoppolo', number: 10}],
-                        'SF': [{name: 'Brock Purdy', number: 13}, {name: 'Sam Darnold', number: 14}],
-                        'SEA': [{name: 'Geno Smith', number: 7}, {name: 'Sam Howell', number: 6}]
-                    };
-                    
-                    if (staticQBData[teamSelect.value]) {
-                        staticQBData[teamSelect.value].forEach(qb => {
-                            qbSelect.innerHTML += `<option value="${qb.name}">#${qb.number} ${qb.name}</option>`;
-                        });
-                    } else {
-                        qbSelect.innerHTML += '<option value="starter">Starting QB</option><option value="backup">Backup QB</option>';
-                    }
+                    // NO FALLBACK DATA - Require real Tank01 API data only
+                    console.error('❌ Tank01 API not available - NO STATIC DATA PROVIDED');
+                    qbSelect.innerHTML += '<option value="">❌ Real-time data unavailable</option>';
                 }
                 
                 // Update team info
@@ -1634,17 +1593,11 @@
                     console.log('📊 Weather impact:', mlPrediction.metadata?.weather_impact);
                     console.log('🏥 Injury factor:', mlPrediction.metadata?.injury_adjustment);
                 } else {
-                    console.log('⚠️ ML Backend not available - using fallback prediction');
-                    console.log('💡 To use real XGBoost: Run .\\ml-backend\\Start-ML-Backend.ps1');
+                    console.error('❌ ML Backend not available - NO FALLBACK DATA PROVIDED');
+                    console.error('💡 REAL DATA ONLY: Run .\\ml-backend\\Start-ML-Backend.ps1');
                     
-                    prediction = {
-                        passingYards: Math.floor(Math.random() * 150) + 200,
-                        completions: Math.floor(Math.random() * 10) + 20,
-                        attempts: Math.floor(Math.random() * 15) + 30,
-                        touchdowns: Math.floor(Math.random() * 3) + 1,
-                        interceptions: Math.floor(Math.random() * 2),
-                        qbRating: Math.floor(Math.random() * 40) + 80
-                    };
+                    // NO FAKE DATA - Fail gracefully
+                    throw new Error('ML Backend unavailable - Real-time predictions only');
                 }
                 
                 // Update prediction display with null safety and proper formatting
@@ -1664,16 +1617,25 @@
                     }
                 });
                 
-                // Show confidence meter with null safety
+                // Show confidence meter with null safety - REAL DATA ONLY
                 const confidenceMeter = document.getElementById('confidence-meter');
                 const confidenceText = document.getElementById('confidence-text');
-                const confidence = Math.floor(Math.random() * 20) + 75;
                 
-                if (confidenceText) {
-                    confidenceText.textContent = confidence + '%';
-                }
-                if (confidenceMeter) {
-                    confidenceMeter.style.display = 'block';
+                // Only show confidence if we have real ML prediction data
+                if (prediction && mlPrediction?.metadata?.confidence) {
+                    const confidence = Math.round(mlPrediction.metadata.confidence * 100);
+                    
+                    if (confidenceText) {
+                        confidenceText.textContent = confidence + '%';
+                    }
+                    if (confidenceMeter) {
+                        confidenceMeter.style.display = 'block';
+                    }
+                } else {
+                    // No real confidence data - hide meter
+                    if (confidenceMeter) {
+                        confidenceMeter.style.display = 'none';
+                    }
                 }
                 
                 // Update QB news
