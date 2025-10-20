@@ -739,21 +739,30 @@ class GameCentricUI {
     getWeekGames() {
         // Return live games if available, otherwise use static fallback
         if (this.liveGames && this.liveGames.length > 0) {
-            return this.liveGames.map(game => ({
-                away: game.awayTeam.code || game.awayTeam,
-                home: game.homeTeam.code || game.homeTeam,
-                awayTeam: game.awayTeam,
-                homeTeam: game.homeTeam,
-                status: game.status,
-                time: game.gameTime,
-                awayRecord: game.awayRecord || 'TBD', // Use real record or TBD
-                homeRecord: game.homeRecord || 'TBD', // Use real record or TBD
-                awayScore: game.awayScore,
-                homeScore: game.homeScore,
-                quarter: game.quarter,
-                timeRemaining: game.timeRemaining,
-                week: game.week || 'Current Week'
-            }));
+            console.log('🎯 Transforming live games data:', this.liveGames);
+            return this.liveGames.map(game => {
+                // Handle both object and string team formats
+                const awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
+                const homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
+                
+                const transformedGame = {
+                    away: awayTeamObj.code || awayTeamObj.name || game.awayTeam,
+                    home: homeTeamObj.code || homeTeamObj.name || game.homeTeam,
+                    awayTeam: awayTeamObj,
+                    homeTeam: homeTeamObj,
+                    status: game.status,
+                    time: game.gameTime || game.time,
+                    awayRecord: game.awayRecord || 'TBD',
+                    homeRecord: game.homeRecord || 'TBD',
+                    awayScore: game.awayScore || awayTeamObj.score || 0,
+                    homeScore: game.homeScore || homeTeamObj.score || 0,
+                    quarter: game.quarter || '',
+                    timeRemaining: game.timeRemaining || '',
+                    week: game.week || 'Current Week'
+                };
+                console.log('✅ Transformed game:', transformedGame);
+                return transformedGame;
+            });
         }
         
         // Fallback static data
