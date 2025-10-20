@@ -1252,8 +1252,8 @@ class GameCentricUI {
         
         if (window.BetYardML && window.BetYardML.isAvailable) {
             try {
-                console.log('🧠 Fetching real ML prediction for', playerName);
-                mlPrediction = await window.BetYardML.getPrediction(playerName, this.selectedTeam.code);
+                console.log(`🧠 Fetching real ML ${position} prediction for`, playerName);
+                mlPrediction = await window.BetYardML.getPrediction(playerName, this.selectedTeam.code, null, position);
                 console.log('✅ Got real ML prediction:', mlPrediction);
             } catch (error) {
                 console.warn('⚠️ ML prediction failed, using smart fallback:', error);
