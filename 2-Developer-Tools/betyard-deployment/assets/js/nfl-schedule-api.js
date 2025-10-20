@@ -427,21 +427,16 @@ class NFLScheduleAPI {
         }
         
         try {
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-            console.log(`🔄 Fetching NFL schedule for ${today} with your RapidAPI key...`);
+            // Smart NFL schedule fetching - get current/upcoming games
+            console.log('🏈 Fetching current and upcoming NFL games...');
             
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${today}`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const scheduleData = await response.json();
-                console.log('✅ Daily schedule fetched from Tank01:', scheduleData);
+            const gamesData = await this.fetchCurrentAndUpcomingGames();
+            if (gamesData) {
+                console.log('✅ Found NFL games:', gamesData);
                 
                 // Enhanced caching with expiration
                 this.cache.dailySchedule = {
-                    data: scheduleData,
+                    data: gamesData,
                     expires: Date.now() + (6 * 60 * 60 * 1000) // 6 hours
                 };
                 this.cache.lastScheduleFetch = new Date();
@@ -457,11 +452,129 @@ class NFLScheduleAPI {
                 return scheduleData;
             }
         } catch (error) {
-            console.warn('⚠️ Schedule API error, using fallback data:', error);
+            console.error('❌ Error fetching NFL schedule:', error);
+            return null;
         }
         
-        // Fallback to realistic mock schedule
-        return this.generateFallbackSchedule();
+        return null;
+    }
+    
+    /**
+     * Fetch current and upcoming NFL games intelligently
+     * Priority: Current games > Today's games > Next week's games
+     */
+    async fetchCurrentAndUpcomingGames() {
+        console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
+        
+        // 1. Try to get current week games (October 2025 = weeks 6-10)
+        for (let week = 6; week <= 18; week++) {
+            console.log(`📅 Checking Week ${week}...`);
+            
+            const weekGames = await this.fetchWeeklySchedule(week);
+            if (weekGames && weekGames.body && weekGames.body.length > 0) {
+                console.log(`✅ Found ${weekGames.body.length} games in Week ${week}`);
+                return weekGames;
+            }
+        }
+        
+        // 2. Try specific dates around current time
+        const datesToTry = this.generateGameDates();
+        for (let date of datesToTry) {
+            console.log(`📅 Checking date: ${date}`);
+            
+            const dayGames = await this.fetchDateSchedule(date);
+            if (dayGames && dayGames.body && dayGames.body.length > 0) {
+                console.log(`✅ Found ${dayGames.body.length} games on ${date}`);
+                return dayGames;
+            }
+        }
+        
+        console.error('❌ No NFL games found in current or upcoming weeks');
+        return null;
+    }
+    
+    /**
+     * Fetch NFL schedule for a specific week
+     */
+    async fetchWeekSchedule(week) {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2025`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(`⚠️ Week ${week} fetch failed:`, error.message);
+        }
+        return null;
+    }
+    
+    /**
+     * Fetch NFL schedule for a specific date
+     */
+    async fetchDateSchedule(date) {
+        try {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${date}`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(`⚠️ Date ${date} fetch failed:`, error.message);
+        }
+        return null;
+    }
+    
+    /**
+     * Generate probable NFL game dates
+     */
+    generateGameDates() {
+        const dates = [];
+        const today = new Date();
+        
+        // Add today and next 14 days
+        for (let i = 0; i < 14; i++) {
+            const date = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
+            dates.push(date.toISOString().split('T')[0]);
+        }
+        
+        // Add known NFL dates for 2025 season (October 2025 onwards)
+        dates.push('2025-10-19', '2025-10-20', '2025-10-26', '2025-10-27', '2025-11-02', '2025-11-03', '2025-11-09', '2025-11-10');
+        
+        return dates;
+    }
+
+    // NEW: Fetch weekly schedule for smart NFL scheduling
+    async fetchWeeklySchedule(weekNumber) {
+        try {
+            console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
+            
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${weekNumber}&season=2025`, {
+                method: 'GET',
+                headers: this.apiConfig.headers
+            });
+            
+            if (response.ok) {
+                const weekData = await response.json();
+                console.log(`✅ Week ${weekNumber} schedule fetched:`, weekData);
+                
+                // Return games array if available
+                return weekData?.body || [];
+            } else {
+                throw new Error(`Week ${weekNumber} not available (${response.status})`);
+            }
+        } catch (error) {
+            console.log(`❌ Week ${weekNumber} fetch failed:`, error.message);
+            throw error;
+        }
     }
     
     /**

@@ -4,28 +4,28 @@
  * Provides dynamic NFL week information based on current date
  */
 
-// NFL 2024-2025 Season Schedule Data
-const NFL_2024_SCHEDULE = {
-    seasonStart: new Date('2024-09-05'), // Week 1 start
+// NFL 2025-2026 Season Schedule Data
+const NFL_2025_SCHEDULE = {
+    seasonStart: new Date('2025-09-04'), // Week 1 start
     weeks: [
-        { week: 1, start: '2024-09-05', end: '2024-09-11', title: 'Week 1 - September 2024' },
-        { week: 2, start: '2024-09-12', end: '2024-09-18', title: 'Week 2 - September 2024' },
-        { week: 3, start: '2024-09-19', end: '2024-09-25', title: 'Week 3 - September 2024' },
-        { week: 4, start: '2024-09-26', end: '2024-10-02', title: 'Week 4 - September/October 2024' },
-        { week: 5, start: '2024-10-03', end: '2024-10-09', title: 'Week 5 - October 2024' },
-        { week: 6, start: '2024-10-10', end: '2024-10-16', title: 'Week 6 - October 2024' },
-        { week: 7, start: '2024-10-17', end: '2024-10-23', title: 'Week 7 - October 2024' },
-        { week: 8, start: '2024-10-24', end: '2024-10-30', title: 'Week 8 - October 2024' },
-        { week: 9, start: '2024-10-31', end: '2024-11-06', title: 'Week 9 - November 2024' },
-        { week: 10, start: '2024-11-07', end: '2024-11-13', title: 'Week 10 - November 2024' },
-        { week: 11, start: '2024-11-14', end: '2024-11-20', title: 'Week 11 - November 2024' },
-        { week: 12, start: '2024-11-21', end: '2024-11-27', title: 'Week 12 - November 2024' },
-        { week: 13, start: '2024-11-28', end: '2024-12-04', title: 'Week 13 - December 2024' },
-        { week: 14, start: '2024-12-05', end: '2024-12-11', title: 'Week 14 - December 2024' },
-        { week: 15, start: '2024-12-12', end: '2024-12-18', title: 'Week 15 - December 2024' },
-        { week: 16, start: '2024-12-19', end: '2024-12-25', title: 'Week 16 - December 2024' },
-        { week: 17, start: '2024-12-26', end: '2025-01-01', title: 'Week 17 - December 2024/January 2025' },
-        { week: 18, start: '2025-01-02', end: '2025-01-08', title: 'Week 18 - January 2025' }
+        { week: 1, start: '2025-09-04', end: '2025-09-10', title: 'Week 1 - September 2025' },
+        { week: 2, start: '2025-09-11', end: '2025-09-17', title: 'Week 2 - September 2025' },
+        { week: 3, start: '2025-09-18', end: '2025-09-24', title: 'Week 3 - September 2025' },
+        { week: 4, start: '2025-09-25', end: '2025-10-01', title: 'Week 4 - September/October 2025' },
+        { week: 5, start: '2025-10-02', end: '2025-10-08', title: 'Week 5 - October 2025' },
+        { week: 6, start: '2025-10-09', end: '2025-10-15', title: 'Week 6 - October 2025' },
+        { week: 7, start: '2025-10-16', end: '2025-10-22', title: 'Week 7 - October 2025' },
+        { week: 8, start: '2025-10-23', end: '2025-10-29', title: 'Week 8 - October 2025' },
+        { week: 9, start: '2025-10-30', end: '2025-11-05', title: 'Week 9 - November 2025' },
+        { week: 10, start: '2025-11-06', end: '2025-11-12', title: 'Week 10 - November 2025' },
+        { week: 11, start: '2025-11-13', end: '2025-11-19', title: 'Week 11 - November 2025' },
+        { week: 12, start: '2025-11-20', end: '2025-11-26', title: 'Week 12 - November 2025' },
+        { week: 13, start: '2025-11-27', end: '2025-12-03', title: 'Week 13 - December 2025' },
+        { week: 14, start: '2025-12-04', end: '2025-12-10', title: 'Week 14 - December 2025' },
+        { week: 15, start: '2025-12-11', end: '2025-12-17', title: 'Week 15 - December 2025' },
+        { week: 16, start: '2025-12-18', end: '2025-12-24', title: 'Week 16 - December 2025' },
+        { week: 17, start: '2025-12-25', end: '2025-12-31', title: 'Week 17 - December 2025' },
+        { week: 18, start: '2026-01-01', end: '2026-01-07', title: 'Week 18 - January 2026' }
     ],
     games: {
         week7: [
@@ -58,50 +58,6 @@ const NFL_2024_SCHEDULE = {
             { away: 'LAR', home: 'MIN', time: 'Sunday 4:25 PM ET' },
             { away: 'SF', home: 'DAL', time: 'Sunday 8:20 PM ET' },
             { away: 'LV', home: 'KC', time: 'Monday 8:15 PM ET' }
-        ]
-    }
-};
-
-// NFL 2025-2026 Season Schedule Data
-const NFL_2025_SCHEDULE = {
-    seasonStart: new Date('2025-09-04'), // Week 1 start for 2025 season
-    weeks: [
-        { week: 1, start: '2025-09-04', end: '2025-09-10', title: 'Week 1 - September 2025' },
-        { week: 2, start: '2025-09-11', end: '2025-09-17', title: 'Week 2 - September 2025' },
-        { week: 3, start: '2025-09-18', end: '2025-09-24', title: 'Week 3 - September 2025' },
-        { week: 4, start: '2025-09-25', end: '2025-10-01', title: 'Week 4 - September/October 2025' },
-        { week: 5, start: '2025-10-02', end: '2025-10-08', title: 'Week 5 - October 2025' },
-        { week: 6, start: '2025-10-09', end: '2025-10-15', title: 'Week 6 - October 2025' },
-        { week: 7, start: '2025-10-16', end: '2025-10-22', title: 'Week 7 - October 2025' },
-        { week: 8, start: '2025-10-23', end: '2025-10-29', title: 'Week 8 - October 2025' },
-        { week: 9, start: '2025-10-30', end: '2025-11-05', title: 'Week 9 - November 2025' },
-        { week: 10, start: '2025-11-06', end: '2025-11-12', title: 'Week 10 - November 2025' },
-        { week: 11, start: '2025-11-13', end: '2025-11-19', title: 'Week 11 - November 2025' },
-        { week: 12, start: '2025-11-20', end: '2025-11-26', title: 'Week 12 - November 2025' },
-        { week: 13, start: '2025-11-27', end: '2025-12-03', title: 'Week 13 - December 2025' },
-        { week: 14, start: '2025-12-04', end: '2025-12-10', title: 'Week 14 - December 2025' },
-        { week: 15, start: '2025-12-11', end: '2025-12-17', title: 'Week 15 - December 2025' },
-        { week: 16, start: '2025-12-18', end: '2025-12-24', title: 'Week 16 - December 2025' },
-        { week: 17, start: '2025-12-25', end: '2025-12-31', title: 'Week 17 - December 2025' },
-        { week: 18, start: '2026-01-01', end: '2026-01-07', title: 'Week 18 - January 2026' }
-    ],
-    games: {
-        week7: [
-            { away: 'DEN', home: 'NO', time: 'Thursday 8:15 PM ET' },
-            { away: 'HOU', home: 'NE', time: 'Sunday 9:30 AM ET (London)' },
-            { away: 'TEN', home: 'BUF', time: 'Sunday 1:00 PM ET' },
-            { away: 'CLE', home: 'CIN', time: 'Sunday 1:00 PM ET' },
-            { away: 'MIA', home: 'IND', time: 'Sunday 1:00 PM ET' },
-            { away: 'SEA', home: 'ATL', time: 'Sunday 1:00 PM ET' },
-            { away: 'PHI', home: 'MIN', time: 'Sunday 1:00 PM ET' },
-            { away: 'DET', home: 'BAL', time: 'Sunday 1:00 PM ET' },
-            { away: 'GB', home: 'WSH', time: 'Sunday 1:00 PM ET' },
-            { away: 'JAX', home: 'PIT', time: 'Sunday 1:00 PM ET' },
-            { away: 'LAR', home: 'LV', time: 'Sunday 4:05 PM ET' },
-            { away: 'CAR', home: 'NYG', time: 'Sunday 4:25 PM ET' },
-            { away: 'KC', home: 'SF', time: 'Sunday 4:25 PM ET' },
-            { away: 'NYJ', home: 'DAL', time: 'Sunday 8:20 PM ET' },
-            { away: 'CHI', home: 'LAC', time: 'Monday 8:15 PM ET' }
         ]
     }
 };
@@ -169,13 +125,13 @@ function getCurrentNFLWeek() {
         }
     }
     
-    // Check 2024-2025 season
+    // Check 2024-2025 season (past season, but keeping for reference)
     const season2024Start = new Date('2024-09-05');
     const season2024End = new Date('2025-01-08');
     
     if (today >= season2024Start && today <= season2024End) {
-        // We're in the 2024-2025 season
-        for (const weekData of NFL_2024_SCHEDULE.weeks) {
+        // We're in the 2024-2025 season (historical)
+        for (const weekData of NFL_2025_SCHEDULE.weeks) {
             const weekStart = new Date(weekData.start);
             const weekEnd = new Date(weekData.end);
             
@@ -283,7 +239,7 @@ function findTeamGame(teamCode, week, season = '2025') {
     if (season === '2025') {
         schedule = NFL_2025_SCHEDULE.games;
     } else {
-        schedule = NFL_2024_SCHEDULE.games;
+        schedule = NFL_2025_SCHEDULE.games;
     }
     
     const gameWeek = schedule[`week${week}`];

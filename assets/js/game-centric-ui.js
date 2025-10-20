@@ -737,7 +737,23 @@ class GameCentricUI {
     }
     
     getWeekGames() {
-        // Use similar data structure as live scores
+        // Return live games if available, otherwise use static fallback
+        if (this.liveGames && this.liveGames.length > 0) {
+            return this.liveGames.map(game => ({
+                away: game.awayTeam,
+                home: game.homeTeam,
+                status: game.status,
+                time: game.gameTime,
+                awayRecord: '5-1', // TODO: Get from API
+                homeRecord: '4-2', // TODO: Get from API
+                awayScore: game.awayScore,
+                homeScore: game.homeScore,
+                quarter: game.quarter,
+                timeRemaining: game.timeRemaining
+            }));
+        }
+        
+        // Fallback static data
         return [
             { away: 'PHI', home: 'MIN', status: 'SCHEDULED', time: '1:00 ET', awayRecord: '5-1', homeRecord: '4-2' },
             { away: 'KC', home: 'LV', status: 'LIVE', quarter: '2nd', time: '8:42', awayRecord: '6-0', homeRecord: '2-4', awayScore: 14, homeScore: 7 },
@@ -748,6 +764,15 @@ class GameCentricUI {
             { away: 'DET', home: 'GB', status: 'SCHEDULED', time: '4:25 ET', awayRecord: '5-1', homeRecord: '4-2' },
             { away: 'LAR', home: 'SEA', status: 'SCHEDULED', time: '4:05 ET', awayRecord: '2-4', homeRecord: '4-2' }
         ];
+    }
+
+    updateWithLiveGames(games) {
+        // Store the live games data
+        this.liveGames = games;
+        console.log('🎯 Game-Centric UI received', games.length, 'live games');
+        
+        // Reload the games display with live data
+        this.loadGames();
     }
     
     createGameOptionCard(game) {
