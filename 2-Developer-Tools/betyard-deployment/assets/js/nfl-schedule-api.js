@@ -466,8 +466,12 @@ class NFLScheduleAPI {
     async fetchCurrentAndUpcomingGames() {
         console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
         
-        // 1. Try to get current week games (October 2025 = weeks 6-10)
-        for (let week = 6; week <= 18; week++) {
+        // Get current NFL week dynamically
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
+        const startWeek = currentWeekInfo.week || 7;
+        
+        // 1. Try to get current week games (starting from current week)
+        for (let week = startWeek; week <= 18; week++) {
             console.log(`📅 Checking Week ${week}...`);
             
             const weekGames = await this.fetchWeeklySchedule(week);
@@ -685,7 +689,12 @@ class NFLScheduleAPI {
                 
                 // Process player stats with playerID mapping
                 if (boxScore.body && boxScore.body.playerStats) {
-                    await this.processPlayerStats(boxScore.body.playerStats, gameID);
+                    try {
+                        await this.processPlayerStats(boxScore.body.playerStats, gameID);
+                    } catch (statsError) {
+                        console.warn(`⚠️ Player stats processing error for ${gameID}:`, statsError.message);
+                        // Continue processing even if player stats fail
+                    }
                 }
                 
                 // Detect exciting plays
@@ -772,9 +781,15 @@ class NFLScheduleAPI {
     }
     
     /**
-     * Player Stats Processing with playerID mapping
+     * Process player statistics with enhanced metadata
      */
     async processPlayerStats(playerStats, gameID) {
+        // Validate that playerStats is iterable
+        if (!playerStats || !Array.isArray(playerStats)) {
+            console.log(`⚠️ No valid player stats array for game ${gameID}`);
+            return;
+        }
+        
         for (const stat of playerStats) {
             if (stat.playerID) {
                 // Get player metadata from cached rosters
