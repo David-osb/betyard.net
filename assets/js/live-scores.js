@@ -439,7 +439,7 @@ class LiveNFLScores {
         for (let weekNum = 8; weekNum <= 18; weekNum++) {
             try {
                 console.log(`🔍 Checking NFL Week ${weekNum}...`);
-                const weekData = await this.api.fetchWeeklySchedule(weekNum);
+                const weekData = await this.scheduleAPI.fetchWeeklySchedule(weekNum);
                 
                 if (weekData && weekData.length > 0) {
                     // Check if any games are upcoming (not final)
