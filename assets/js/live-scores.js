@@ -485,18 +485,12 @@ class LiveNFLScores {
         
         this.games = games.map(game => ({
             gameId: game.gameID,
-            gameTime: game.gameTime || 'TBD',
+            gameTime: this.formatGameTime(game.gameTime) || 'TBD',
             gameDate: new Date().toLocaleDateString(),
-            awayTeam: {
-                code: game.away || 'TBD',
-                name: this.getTeamName(game.away),
-                score: parseInt(game.awayPts) || 0
-            },
-            homeTeam: {
-                code: game.home || 'TBD', 
-                name: this.getTeamName(game.home),
-                score: parseInt(game.homePts) || 0
-            },
+            awayTeam: game.away || 'TBD',
+            homeTeam: game.home || 'TBD',
+            awayScore: parseInt(game.awayPts) || 0,
+            homeScore: parseInt(game.homePts) || 0,
             quarter: game.quarter || 'Pre',
             timeRemaining: game.gameClock || '',
             status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
@@ -506,6 +500,33 @@ class LiveNFLScores {
         
         this.currentWeek = 7;
         this.lastUpdate = new Date();
+        this.updateLiveScoresDisplay();
+    }
+
+    formatGameTime(gameTime) {
+        if (!gameTime) return 'TBD';
+        
+        // Handle different time formats from Tank01
+        try {
+            // If it's already in ET format (like "1:00 ET"), return as-is
+            if (gameTime.includes('ET') || gameTime.includes('EST') || gameTime.includes('EDT')) {
+                return gameTime;
+            }
+            
+            // If it's a time like "13:00", convert to ET format
+            if (gameTime.includes(':')) {
+                const [hours, minutes] = gameTime.split(':');
+                const hour24 = parseInt(hours);
+                const hour12 = hour24 > 12 ? hour24 - 12 : (hour24 === 0 ? 12 : hour24);
+                const period = hour24 >= 12 ? 'PM' : 'AM';
+                return `${hour12}:${minutes} ET`;
+            }
+            
+            return gameTime;
+        } catch (error) {
+            console.warn('Error formatting game time:', gameTime, error);
+            return gameTime || 'TBD';
+        }
     }
     
     updateLiveGame(gameID, boxScore) {
