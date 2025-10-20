@@ -503,10 +503,11 @@ class LiveNFLScores {
         }));
         
         // For games marked as FINAL, try to get real box scores first
+        console.log(`🚀 REAL API INTEGRATION ACTIVE - Processing ${this.games.length} games for authentic final scores`);
         for (let gameData of this.games) {
             if (gameData.status === 'FINAL' && gameData.awayScore === 0 && gameData.homeScore === 0) {
                 try {
-                    console.log(`🔄 Fetching real box score for ${gameData.awayTeam} @ ${gameData.homeTeam} (${gameData.gameId})`);
+                    console.log(`🔄 Fetching REAL box score for ${gameData.awayTeam} @ ${gameData.homeTeam} (${gameData.gameId})`);
                     
                     const boxScore = await this.scheduleAPI.fetchBoxScore(gameData.gameId);
                     if (boxScore && boxScore.body) {
