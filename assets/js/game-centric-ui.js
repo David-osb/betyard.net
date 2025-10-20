@@ -794,7 +794,7 @@ class GameCentricUI {
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time}</div>`;
                 // Get current week dynamically
                 const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
-                gameInfo = `<div class="game-details">${currentWeekInfo.title} - October 2025</div>`;
+                gameInfo = `<div class="game-details">${currentWeekInfo.title}</div>`;
                 break;
         }
         
