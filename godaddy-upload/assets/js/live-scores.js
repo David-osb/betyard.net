@@ -13,6 +13,7 @@ class LiveNFLScores {
         this.currentWeek = null;
         this.games = [];
         this.lastUpdate = null;
+        this.finalGamesCache = new Set(); // Cache final game IDs to prevent re-updates
         
         // Tank01 API configuration with your real key
         this.apiConfig = {
@@ -671,6 +672,17 @@ class LiveNFLScores {
         }
         
         return apiData.body.map(game => {
+            const gameId = game.gameID;
+            
+            // If game is already final and cached, skip re-processing
+            if (this.finalGamesCache.has(gameId)) {
+                const existingGame = this.games.find(g => g.gameId === gameId);
+                if (existingGame && existingGame.status === 'FINAL') {
+                    console.log(`✅ Using cached final game: ${game.away} @ ${game.home}`);
+                    return existingGame; // Return cached data, no re-processing
+                }
+            }
+            
             // Get status from Tank01
             const status = this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home);
             
@@ -680,8 +692,14 @@ class LiveNFLScores {
             
             console.log(`📊 Tank01 Game: ${game.away} (${awayScore}) @ ${game.home} (${homeScore}) - Status: ${game.gameStatus} → ${status}`);
             
+            // Cache final games
+            if (status === 'FINAL' && gameId) {
+                this.finalGamesCache.add(gameId);
+                console.log(`🔒 Cached final game: ${game.away} @ ${game.home}`);
+            }
+            
             return {
-                gameId: game.gameID || null,
+                gameId: gameId || null,
                 gameTime: game.gameTime || 'TBD',
                 gameDate: game.gameDate || new Date().toLocaleDateString(),
                 week: game.gameWeek || game.week || null,
@@ -1155,7 +1173,18 @@ class LiveNFLScores {
         }
         
         this.intervalId = setInterval(() => {
-            this.fetchLiveScores();
+            // Only refresh if there are live or upcoming games
+            const hasLiveOrUpcoming = this.games.some(game => 
+                game.status === 'LIVE' || game.status === 'SCHEDULED'
+            );
+            
+            if (hasLiveOrUpcoming) {
+                console.log('🔄 Refreshing live/upcoming games...');
+                this.fetchLiveScores();
+            } else {
+                console.log('⏸️ All games finished - pausing refresh');
+                this.stopAutoRefresh();
+            }
         }, this.refreshInterval);
         
         console.log(`🔄 Auto-refresh started (${this.refreshInterval / 1000}s interval)`);
