@@ -293,25 +293,23 @@ function updateStadiumInfo(teamCode) {
 }
 
 /**
- * Get mock weather conditions (to be replaced with real API)
+ * NO MOCK WEATHER - Real weather API data required
  */
-function getMockWeatherConditions() {
-    const conditions = [
-        { temp: '72°F', condition: 'Clear', wind: '5 mph SW' },
-        { temp: '45°F', condition: 'Cloudy', wind: '12 mph NW' },
-        { temp: '28°F', condition: 'Snow', wind: '18 mph N' },
-        { temp: '85°F', condition: 'Sunny', wind: '3 mph SE' },
-        { temp: '55°F', condition: 'Light Rain', wind: '8 mph W' }
-    ];
-    
-    return conditions[Math.floor(Math.random() * conditions.length)];
+function getRealWeatherConditions() {
+    console.error('❌ NO MOCK WEATHER DATA - Real weather API integration required');
+    return null;
 }
 
 /**
- * Update game conditions display
+ * Update game conditions display - REAL DATA ONLY
  */
 function updateGameConditions() {
-    const weather = getMockWeatherConditions();
+    const weather = getRealWeatherConditions();
+    
+    if (!weather) {
+        console.log('⚠️ No real weather data available');
+        return;
+    }
     
     const gameConditionsElement = document.querySelector('.info-sections .grid-item:nth-child(2) p');
     if (gameConditionsElement) {

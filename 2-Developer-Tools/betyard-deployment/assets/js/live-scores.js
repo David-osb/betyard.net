@@ -663,7 +663,7 @@ class LiveNFLScores {
         }
         
         return apiData.body.map(game => ({
-            gameId: game.gameID || `game_${Math.random().toString(36).substr(2, 9)}`,
+            gameId: game.gameID || null, // NO FAKE IDs - Real API data only
             gameTime: game.gameTime || 'TBD',
             gameDate: game.gameDate || new Date().toLocaleDateString(),
             awayTeam: {
@@ -777,9 +777,8 @@ class LiveNFLScores {
     }
     
     detectExcitingPlay(game) {
-        // Basic exciting play detection from real game data
-        const plays = ['TOUCHDOWN', 'RED ZONE', 'TURNOVER', 'FIELD GOAL'];
-        return Math.random() > 0.7 ? plays[Math.floor(Math.random() * plays.length)] : null;
+        // NO FAKE EXCITING PLAYS - Only real Tank01 play data
+        return null;
     }
     
     generateRealisticGameData() {
@@ -887,25 +886,15 @@ class LiveNFLScores {
             
             switch (status) {
                 case 'LIVE':
-                    gameData.homeScore = Math.floor(Math.random() * 28) + 7;
-                    gameData.awayScore = Math.floor(Math.random() * 28) + 7;
-                    gameData.quarter = quarters[Math.floor(Math.random() * quarters.length)];
-                    
-                    // Make time remaining more realistic
-                    const minutes = Math.floor(Math.random() * 15) + 1;
-                    const seconds = Math.floor(Math.random() * 60);
-                    gameData.timeRemaining = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                    
-                    // Add exciting live context
-                    if (Math.random() > 0.7) {
-                        gameData.lastPlay = excitingPlays[Math.floor(Math.random() * excitingPlays.length)];
-                    }
+                    // NO FAKE DATA - Only use real Tank01 API data
+                    console.error('❌ LIVE game detected but no real-time data available');
+                    gameData.status = 'DATA_UNAVAILABLE';
                     break;
                     
                 case 'FINAL':
-                    gameData.homeScore = Math.floor(Math.random() * 21) + 17;
-                    gameData.awayScore = Math.floor(Math.random() * 21) + 17;
-                    gameData.quarter = 'FINAL';
+                    // NO FAKE DATA - Only use real Tank01 box scores
+                    console.error('❌ FINAL game detected but no real box score data available');
+                    gameData.status = 'DATA_UNAVAILABLE';
                     
                     // Add overtime possibility
                     if (Math.random() > 0.8) {

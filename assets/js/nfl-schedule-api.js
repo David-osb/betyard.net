@@ -872,38 +872,11 @@ class NFLScheduleAPI {
     }
     
     /**
-     * Fallback Schedule Generation
+     * NO FALLBACK SCHEDULES - Real Tank01 API Data Only
      */
     generateFallbackSchedule() {
-        const today = new Date();
-        const isGameDay = [0, 1, 4, 6].includes(today.getDay()); // Sun, Mon, Thu, Sat
-        
-        if (!isGameDay) {
-            return { body: [] };
-        }
-        
-        // Generate realistic games for today
-        const fallbackGames = [
-            {
-                gameID: `fallback_${today.getTime()}_1`,
-                away: 'PHI',
-                home: 'MIN',
-                gameTime: '13:00',
-                gameTime_epoch: Math.floor(Date.now() / 1000) + 3600,
-                gameStatus: 'Scheduled'
-            },
-            {
-                gameID: `fallback_${today.getTime()}_2`,
-                away: 'KC',
-                home: 'BAL',
-                gameTime: '16:30',
-                gameTime_epoch: Math.floor(Date.now() / 1000) + 7200,
-                gameStatus: 'Scheduled'
-            }
-        ];
-        
-        console.log('📅 Using fallback schedule:', fallbackGames);
-        return { body: fallbackGames };
+        console.error('❌ NO FALLBACK DATA - Tank01 API required for real-time schedules');
+        return { error: 'Real-time API data unavailable', body: [] };
     }
     
     /**
