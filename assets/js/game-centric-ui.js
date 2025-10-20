@@ -740,8 +740,10 @@ class GameCentricUI {
         // Return live games if available, otherwise use static fallback
         if (this.liveGames && this.liveGames.length > 0) {
             return this.liveGames.map(game => ({
-                away: game.awayTeam,
-                home: game.homeTeam,
+                away: game.awayTeam.code || game.awayTeam,
+                home: game.homeTeam.code || game.homeTeam,
+                awayTeam: game.awayTeam,
+                homeTeam: game.homeTeam,
                 status: game.status,
                 time: game.gameTime,
                 awayRecord: game.awayRecord || 'TBD', // Use real record or TBD
@@ -784,11 +786,11 @@ class GameCentricUI {
         switch (game.status) {
             case 'LIVE':
                 statusBadge = `<div class="game-status-badge status-live">🔴 LIVE - ${game.quarter} ${game.time}</div>`;
-                gameInfo = `<div class="game-details">Score: ${game.awayTeam} ${game.awayScore} - ${game.homeScore} ${game.homeTeam}</div>`;
+                gameInfo = `<div class="game-details">Score: ${game.awayTeam.name || game.awayTeam.code || game.awayTeam} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>`;
                 break;
             case 'FINAL':
                 statusBadge = `<div class="game-status-badge status-final">FINAL</div>`;
-                gameInfo = `<div class="game-details">Final: ${game.away} ${game.awayScore} - ${game.homeScore} ${game.home}</div>`;
+                gameInfo = `<div class="game-details">Final: ${game.awayTeam.name || game.awayTeam.code || game.awayTeam} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>`;
                 break;
             case 'SCHEDULED':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time}</div>`;
@@ -799,21 +801,21 @@ class GameCentricUI {
         }
         
         return `
-            <div class="game-option" onclick="gameCentricUI.selectGame('${game.away}', '${game.home}', '${game.status}')">
+            <div class="game-option" onclick="gameCentricUI.selectGame('${game.awayTeam.code || game.awayTeam}', '${game.homeTeam.code || game.homeTeam}', '${game.status}')">
                 <div class="game-header">
                     ${statusBadge}
                 </div>
                 
                 <div class="matchup-display">
                     <div class="team-info">
-                        <div class="team-name">${game.away}</div>
+                        <div class="team-name">${game.awayTeam.name || game.awayTeam.code || game.awayTeam}</div>
                         <div class="team-record">${game.awayRecord}</div>
                     </div>
                     
                     <div class="vs-separator">@</div>
                     
                     <div class="team-info">
-                        <div class="team-name">${game.home}</div>
+                        <div class="team-name">${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>
                         <div class="team-record">${game.homeRecord}</div>
                     </div>
                 </div>
