@@ -38,48 +38,13 @@ class EnhancedAPITester {
     
     init() {
         console.log('🧪 Enhanced API Tester: Starting comprehensive Tank01 endpoint testing...');
-        this.createTestInterface();
+        console.log('📊 Tests will run in background - check console for results');
+        // No visual interface - console only
         this.runAllTests();
     }
     
-    createTestInterface() {
-        // Create floating test results panel
-        const testPanel = document.createElement('div');
-        testPanel.id = 'api-test-panel';
-        testPanel.style.cssText = `
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            width: 400px;
-            max-height: 80vh;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border: 2px solid #00ff88;
-            border-radius: 10px;
-            padding: 15px;
-            z-index: 10000;
-            overflow-y: auto;
-            font-family: 'Segoe UI', sans-serif;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
-        `;
-        
-        testPanel.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="color: #00ff88; margin: 0; font-size: 16px;">🧪 API Test Results</h3>
-                <button onclick="this.parentElement.parentElement.style.display='none'" 
-                        style="background: #ff4444; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">×</button>
-            </div>
-            <div id="test-results" style="color: #fff; font-size: 12px; line-height: 1.4;"></div>
-            <div id="test-summary" style="margin-top: 15px; padding: 10px; background: rgba(0, 255, 136, 0.1); border-radius: 5px; color: #00ff88;"></div>
-        `;
-        
-        document.body.appendChild(testPanel);
-    }
-    
     async runAllTests() {
-        const resultsDiv = document.getElementById('test-results');
-        const summaryDiv = document.getElementById('test-summary');
-        
-        resultsDiv.innerHTML = '<div style="color: #00ff88;">🔄 Running comprehensive API tests...</div>';
+        console.log('🔄 Running comprehensive API tests...');
         
         let successCount = 0;
         let totalTests = this.endpoints.length;
@@ -88,20 +53,10 @@ class EnhancedAPITester {
             const result = await this.testEndpoint(test);
             this.testResults.push(result);
             
-            const statusColor = result.success ? '#00ff88' : (result.rateLimited ? '#ffaa00' : '#ff4444');
             const statusIcon = result.success ? '✅' : (result.rateLimited ? '⚠️' : '❌');
             
-            resultsDiv.innerHTML += `
-                <div style="margin: 8px 0; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 5px;">
-                    <div style="color: ${statusColor}; font-weight: bold;">
-                        ${statusIcon} ${test.name}
-                    </div>
-                    <div style="color: #ccc; font-size: 11px; margin-top: 4px;">
-                        ${result.message}
-                    </div>
-                    ${result.dataSize ? `<div style="color: #88ff88; font-size: 10px;">Data size: ${result.dataSize} bytes</div>` : ''}
-                </div>
-            `;
+            // Log to console only
+            console.log(`${statusIcon} ${test.name}: ${result.message}${result.dataSize ? ` (${result.dataSize} bytes)` : ''}`);
             
             if (result.success) successCount++;
             
@@ -109,14 +64,12 @@ class EnhancedAPITester {
             await this.delay(1000);
         }
         
-        // Update summary
+        // Console summary only
         const successRate = Math.round((successCount / totalTests) * 100);
-        summaryDiv.innerHTML = `
-            <strong>📊 Test Summary</strong><br>
-            Success Rate: ${successRate}% (${successCount}/${totalTests})<br>
-            API Key Status: ${successCount > 0 ? '🟢 Active' : '🔴 Issues Detected'}<br>
-            Tank01 Integration: ${successCount > 5 ? '🟢 Excellent' : successCount > 2 ? '🟡 Good' : '🔴 Limited'}
-        `;
+        console.log('\n📊 Test Summary:');
+        console.log(`Success Rate: ${successRate}% (${successCount}/${totalTests})`);
+        console.log(`API Key Status: ${successCount > 0 ? '🟢 Active' : '🔴 Issues Detected'}`);
+        console.log(`Tank01 Integration: ${successCount > 5 ? '🟢 Excellent' : successCount > 2 ? '🟡 Good' : '🔴 Limited'}\n`);
         
         console.log('🧪 API Testing Complete:', this.testResults);
         this.generateAPIReport();
