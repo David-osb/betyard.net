@@ -737,7 +737,24 @@ class GameCentricUI {
     }
     
     getWeekGames() {
-        // Use similar data structure as live scores
+        // Return live games if available, otherwise use static fallback
+        if (this.liveGames && this.liveGames.length > 0) {
+            return this.liveGames.map(game => ({
+                away: game.awayTeam,
+                home: game.homeTeam,
+                status: game.status,
+                time: game.gameTime,
+                awayRecord: game.awayRecord || 'TBD', // Use real record or TBD
+                homeRecord: game.homeRecord || 'TBD', // Use real record or TBD
+                awayScore: game.awayScore,
+                homeScore: game.homeScore,
+                quarter: game.quarter,
+                timeRemaining: game.timeRemaining,
+                week: game.week || 'Current Week'
+            }));
+        }
+        
+        // Fallback static data
         return [
             { away: 'PHI', home: 'MIN', status: 'SCHEDULED', time: '1:00 ET', awayRecord: '5-1', homeRecord: '4-2' },
             { away: 'KC', home: 'LV', status: 'LIVE', quarter: '2nd', time: '8:42', awayRecord: '6-0', homeRecord: '2-4', awayScore: 14, homeScore: 7 },
@@ -748,6 +765,15 @@ class GameCentricUI {
             { away: 'DET', home: 'GB', status: 'SCHEDULED', time: '4:25 ET', awayRecord: '5-1', homeRecord: '4-2' },
             { away: 'LAR', home: 'SEA', status: 'SCHEDULED', time: '4:05 ET', awayRecord: '2-4', homeRecord: '4-2' }
         ];
+    }
+
+    updateWithLiveGames(games) {
+        // Store the live games data
+        this.liveGames = games;
+        console.log('🎯 Game-Centric UI received', games.length, 'live games');
+        
+        // Reload the games display with live data
+        this.loadGames();
     }
     
     createGameOptionCard(game) {
@@ -766,7 +792,9 @@ class GameCentricUI {
                 break;
             case 'SCHEDULED':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time}</div>`;
-                gameInfo = `<div class="game-details">Week 7 • October 2025</div>`;
+                // Get current week dynamically
+                const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
+                gameInfo = `<div class="game-details">${currentWeekInfo.title}</div>`;
                 break;
         }
         
@@ -1065,6 +1093,9 @@ class GameCentricUI {
         const positionData = this.predictionTypes[this.selectedPosition];
         const opponent = this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away;
         
+        // Get current week dynamically
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
+        
         // Show loading state
         container.innerHTML = `
             <div class="prediction-loading">
@@ -1083,7 +1114,7 @@ class GameCentricUI {
         const predictionsHTML = `
             <div class="prediction-summary">
                 <h3>🎯 ML Predictions for ${this.selectedPlayer.name}</h3>
-                <p><strong>${this.selectedTeam.code}</strong> vs <strong>${opponent}</strong> • Week 7</p>
+                <p><strong>${this.selectedTeam.code}</strong> vs <strong>${opponent}</strong> - ${currentWeekInfo.title}</p>
                 <div class="matchup-context">
                     ${this.getMatchupContext()}
                 </div>

@@ -242,8 +242,6 @@ function updateLiveIndicator() {
     }
 }
 
-// Duplicate block removed to avoid redeclaration of variables and functions (original content already defined above)
-
 // Tank01 API Integration - Fixed and Working
 async function fetchNFLDataWithTank01Enhanced() {
     console.log('🚀 Tank01 Enhanced function called - attempting live data fetch...');
@@ -387,10 +385,20 @@ function enableDropdownsAfterTank01(tank01Success = true) {
             console.log('✅ QB dropdown updated with default option');
         }
         
-        // Update team select if needed
+        // Update team select with default option and clear loading text
         const teamSelect = document.getElementById('team-select');
         if (teamSelect) {
             teamSelect.disabled = false;
+            // Clear the loading text and set default option
+            const firstOption = teamSelect.querySelector('option[value=""]');
+            if (firstOption) {
+                const currentText = firstOption.textContent.trim();
+                console.log('🔍 Current team dropdown first option text:', currentText);
+                if (currentText.includes('Loading') || currentText.includes('Tank01') || currentText.includes('⏳')) {
+                    firstOption.textContent = 'Select a team';
+                    console.log('✅ Team dropdown loading text cleared');
+                }
+            }
             console.log('✅ Team dropdown enabled');
         }
         

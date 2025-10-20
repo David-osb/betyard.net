@@ -405,7 +405,7 @@ class LiveNFLScores {
                 // Try processing whatever data we have
                 if (todaysGames) {
                     console.log('� Processing available API data...');
-                    this.processScheduleAPIData(todaysGames);
+                    await this.processScheduleAPIData(todaysGames);
                     return;
                 }
             }
@@ -549,7 +549,7 @@ class LiveNFLScores {
     }
 
     formatGameTime(gameTime) {
-        if (!gameTime) return 'TBD';
+        if (!gameTime || typeof gameTime !== 'string') return 'TBD';
         
         // Handle different time formats from Tank01
         try {
@@ -561,9 +561,13 @@ class LiveNFLScores {
             // Handle Tank01 specific formats like "1:00p", "4:25p", "8:20p"
             if (gameTime.includes('p') || gameTime.includes('a')) {
                 const cleanTime = gameTime.replace(/[pa]/, '');
-                const [hours, minutes] = cleanTime.split(':');
-                const period = gameTime.includes('p') ? 'PM' : 'AM';
-                return `${hours}:${minutes || '00'} ${period} ET`;
+                const timeParts = cleanTime.split(':');
+                if (timeParts.length >= 2) {
+                    const hours = timeParts[0];
+                    const minutes = timeParts[1] || '00';
+                    const period = gameTime.includes('p') ? 'PM' : 'AM';
+                    return `${hours}:${minutes} ${period} ET`;
+                }
             }
             
             // If it's a time like "13:00", convert to ET format
@@ -677,9 +681,13 @@ class LiveNFLScores {
     
     mapGameStatus(apiStatus, gameTime, awayTeam, homeTeam) {
         // Map Tank01 API status to our format with proper time zone conversion
-        console.log(`🔍 mapGameStatus called: ${awayTeam} @ ${homeTeam}, API status: ${apiStatus}, gameTime: ${gameTime}`);
+        console.log(`🔍 mapGameStatus called: ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}, API status: ${apiStatus || 'N/A'}, gameTime: ${gameTime || 'N/A'}`);
         
         if (!apiStatus) return 'SCHEDULED';
+        
+        // Validate team names to prevent undefined access
+        const safeAwayTeam = awayTeam || 'UNK';
+        const safeHomeTeam = homeTeam || 'UNK';
         
         // Get current time in Eastern Time (proper conversion)
         const now = new Date();
@@ -946,7 +954,7 @@ class LiveNFLScores {
             
             gameCards.forEach(card => {
                 const cardText = card.textContent;
-                if (cardText.includes(selectedTeam)) {
+                if (cardText && cardText.includes(selectedTeam)) {
                     card.style.border = '2px solid #f59e0b';
                     card.style.background = 'linear-gradient(135deg, #fef3c7 0%, #ffffff 100%)';
                     
