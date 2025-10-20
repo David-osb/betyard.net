@@ -749,8 +749,19 @@ class GameCentricUI {
                 const awayScore = game.awayScore || awayTeamObj.score || 0;
                 const homeScore = game.homeScore || homeTeamObj.score || 0;
                 
+                // ENHANCED STATUS DETECTION: Handle various API status formats
+                let status = game.status ? game.status.toUpperCase() : 'SCHEDULED';
+                
+                // Normalize status variations
+                if (status.includes('LIVE') || status.includes('PROGRESS') || status.includes('ACTIVE') || status.includes('INPROGRESS')) {
+                    status = 'LIVE';
+                } else if (status.includes('FINAL') || status.includes('COMPLETE') || status.includes('ENDED')) {
+                    status = 'FINAL';
+                } else if (status.includes('SCHEDULED') || status.includes('UPCOMING') || status.includes('PRE')) {
+                    status = 'SCHEDULED';
+                }
+                
                 // SMART STATUS DETECTION: If game has scores but isn't LIVE, it's FINAL
-                let status = game.status;
                 if ((awayScore > 0 || homeScore > 0) && status !== 'LIVE') {
                     console.log(`🔍 Game ${game.away || awayTeamObj.code} @ ${game.home || homeTeamObj.code} has scores (${awayScore}-${homeScore}) but status is ${status} - correcting to FINAL`);
                     status = 'FINAL';
