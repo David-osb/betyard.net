@@ -498,7 +498,7 @@ class NFLScheduleAPI {
      */
     async fetchWeekSchedule(week) {
         try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2024`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2025`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });
@@ -557,7 +557,7 @@ class NFLScheduleAPI {
         try {
             console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
             
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${weekNumber}&season=2024`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${weekNumber}&season=2025`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });

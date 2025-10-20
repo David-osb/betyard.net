@@ -441,16 +441,32 @@ class LiveNFLScores {
                 console.log(`🔍 Checking NFL Week ${weekNum}...`);
                 const weekData = await this.scheduleAPI.fetchWeeklySchedule(weekNum);
                 
-                if (weekData && weekData.length > 0) {
-                    // Check if any games are upcoming (not final)
-                    const upcomingGames = weekData.filter(game => {
-                        const status = game.gameStatus?.toLowerCase() || '';
-                        return !status.includes('final') && !status.includes('finished');
+                // Handle Tank01 API response format: {statusCode: 200, body: Array}
+                const games = weekData?.body || weekData;
+                if (games && games.length > 0) {
+                    console.log(`📊 Week ${weekNum} API returned ${games.length} games`);
+                    
+                    // Log first game structure to understand the data better
+                    if (games[0]) {
+                        console.log(`🔍 Sample game structure:`, {
+                            gameID: games[0].gameID,
+                            gameStatus: games[0].gameStatus,
+                            gameDate: games[0].gameDate,
+                            gameTime: games[0].gameTime,
+                            away: games[0].away,
+                            home: games[0].home
+                        });
+                    }
+                    
+                    // Be more intelligent about game filtering
+                    const validGames = games.filter(game => {
+                        // Accept games that have basic required data
+                        return game.gameID && (game.away || game.home);
                     });
                     
-                    if (upcomingGames.length > 0) {
-                        console.log(`✅ Found ${upcomingGames.length} upcoming games in Week ${weekNum}`);
-                        return upcomingGames;
+                    if (validGames.length > 0) {
+                        console.log(`✅ Found ${validGames.length} valid games in Week ${weekNum}`);
+                        return { body: validGames }; // Return in expected format
                     }
                 }
             } catch (error) {
