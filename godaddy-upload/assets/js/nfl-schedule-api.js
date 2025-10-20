@@ -544,15 +544,18 @@ class NFLScheduleAPI {
         const dates = [];
         const today = new Date();
         
-        // Add today and next 14 days
-        for (let i = 0; i < 14; i++) {
+        // Add today and next 21 days (covers current week + next 2-3 weeks)
+        for (let i = 0; i < 21; i++) {
             const date = new Date(today.getTime() + (i * 24 * 60 * 60 * 1000));
-            dates.push(date.toISOString().split('T')[0]);
+            const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday, 4=Thursday
+            
+            // Only add NFL game days (Thursday, Sunday, Monday)
+            if (dayOfWeek === 0 || dayOfWeek === 1 || dayOfWeek === 4) {
+                dates.push(date.toISOString().split('T')[0]);
+            }
         }
         
-        // Add known NFL dates for 2025 season (October 2025 onwards)
-        dates.push('2025-10-19', '2025-10-20', '2025-10-26', '2025-10-27', '2025-11-02', '2025-11-03', '2025-11-09', '2025-11-10');
-        
+        console.log(`📅 Generated ${dates.length} potential NFL game dates:`, dates);
         return dates;
     }
 
