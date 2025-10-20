@@ -1067,12 +1067,12 @@ class LiveNFLScores {
                 scoreDisplay = `
                     ${liveContext}
                     <div class="team">
-                        <div class="team-name">${game.awayTeam}</div>
+                        <div class="team-name">${game.awayTeam.name || game.awayTeam.code || game.awayTeam}</div>
                         <div class="team-score">${game.awayScore}</div>
                     </div>
                     <div class="vs-separator">@</div>
                     <div class="team">
-                        <div class="team-name">${game.homeTeam}</div>
+                        <div class="team-name">${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>
                         <div class="team-score">${game.homeScore}</div>
                     </div>
                 `;
@@ -1093,12 +1093,12 @@ class LiveNFLScores {
                 
                 scoreDisplay = `
                     <div class="team ${winner === 'away' ? 'winner' : ''}">
-                        <div class="team-name">${game.awayTeam}</div>
+                        <div class="team-name">${game.awayTeam.name || game.awayTeam.code || game.awayTeam}</div>
                         <div class="team-score">${game.awayScore}</div>
                     </div>
                     <div class="vs-separator">@</div>
                     <div class="team ${winner === 'home' ? 'winner' : ''}">
-                        <div class="team-name">${game.homeTeam}</div>
+                        <div class="team-name">${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>
                         <div class="team-score">${game.homeScore}</div>
                     </div>
                 `;
@@ -1114,12 +1114,12 @@ class LiveNFLScores {
                 statusDisplay = `<div class="game-status status-scheduled">UPCOMING</div>`;
                 scoreDisplay = `
                     <div class="team">
-                        <div class="team-name">${game.awayTeam}</div>
+                        <div class="team-name">${game.awayTeam.name || game.awayTeam.code || game.awayTeam}</div>
                         <div class="team-score">-</div>
                     </div>
                     <div class="vs-separator">@</div>
                     <div class="team">
-                        <div class="team-name">${game.homeTeam}</div>
+                        <div class="team-name">${game.homeTeam.name || game.homeTeam.code || game.homeTeam}</div>
                         <div class="team-score">-</div>
                     </div>
                 `;
@@ -1133,7 +1133,7 @@ class LiveNFLScores {
         }
         
         return `
-            <div class="game-card" onclick="selectGameTeams('${game.awayTeam}', '${game.homeTeam}')">
+            <div class="game-card" onclick="selectGameTeams('${game.awayTeam.code || game.awayTeam}', '${game.homeTeam.code || game.homeTeam}')">
                 ${statusDisplay}
                 <div class="teams-container">
                     ${scoreDisplay}
