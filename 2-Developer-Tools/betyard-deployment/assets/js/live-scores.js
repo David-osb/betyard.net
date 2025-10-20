@@ -963,11 +963,13 @@ class LiveNFLScores {
         
         // Update timestamp
         const timestamp = document.getElementById('scores-timestamp');
-        if (timestamp) {
+        if (timestamp && this.lastUpdate) {
             timestamp.textContent = this.lastUpdate.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
+        } else if (timestamp) {
+            timestamp.textContent = 'Updating...';
         }
         
         // Add game context information
