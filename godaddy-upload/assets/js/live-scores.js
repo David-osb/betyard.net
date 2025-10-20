@@ -776,9 +776,12 @@ class LiveNFLScores {
         // SPECIAL OVERRIDE FOR OCTOBER 19, 2025: 
         // Most games should be FINAL by now except Falcons vs 49ers
         if (mappedStatus === 'LIVE') {
+            console.log(`🔍 LIVE GAME DETECTED: ${safeAwayTeam} @ ${safeHomeTeam}`);
             if ((safeAwayTeam === 'ATL' && safeHomeTeam === 'SF') || 
-                (safeAwayTeam === 'SF' && safeHomeTeam === 'ATL')) {
-                console.log(`🔴 CONFIRMED LIVE: ${safeAwayTeam} @ ${safeHomeTeam} (Falcons vs 49ers)`);
+                (safeAwayTeam === 'SF' && safeHomeTeam === 'ATL') ||
+                (safeAwayTeam.includes('ATL') || safeHomeTeam.includes('ATL')) && 
+                (safeAwayTeam.includes('SF') || safeHomeTeam.includes('SF'))) {
+                console.log(`🔴 CONFIRMED LIVE: ${safeAwayTeam} @ ${safeHomeTeam} (Falcons vs 49ers match)`);
                 return 'LIVE';
             } else {
                 // Force other "live" games to FINAL
