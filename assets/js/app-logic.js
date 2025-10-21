@@ -4,28 +4,29 @@
 console.log('📄 App logic JavaScript loaded from external file');
 
 // Function to determine current NFL week based on actual date
+// NFL weeks run Tuesday to Monday to account for Monday Night Football
 function getCurrentWeek() {
     const today = new Date();
     const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     
-    // NFL weeks and their start dates for 2025 season
+    // NFL weeks and their start dates for 2025 season (Tuesday to Monday)
     const weekStartDates = {
-        6: new Date(2025, 9, 6),   // Week 6: Oct 6
-        7: new Date(2025, 9, 13),  // Week 7: Oct 13
-        8: new Date(2025, 9, 20),  // Week 8: Oct 20
-        9: new Date(2025, 9, 27),  // Week 9: Oct 27
-        10: new Date(2025, 10, 3), // Week 10: Nov 3
-        11: new Date(2025, 10, 10), // Week 11: Nov 10
-        12: new Date(2025, 10, 17), // Week 12: Nov 17
-        13: new Date(2025, 10, 24), // Week 13: Nov 24
-        14: new Date(2025, 11, 1),  // Week 14: Dec 1
-        15: new Date(2025, 11, 8),  // Week 15: Dec 8
-        16: new Date(2025, 11, 15), // Week 16: Dec 15
-        17: new Date(2025, 11, 22), // Week 17: Dec 22
-        18: new Date(2025, 11, 29)  // Week 18: Dec 29
+        6: new Date(2025, 9, 7),   // Week 6: Oct 7 (Tue) - Oct 13 (Mon)
+        7: new Date(2025, 9, 14),  // Week 7: Oct 14 (Tue) - Oct 20 (Mon)
+        8: new Date(2025, 9, 21),  // Week 8: Oct 21 (Tue) - Oct 27 (Mon)
+        9: new Date(2025, 9, 28),  // Week 9: Oct 28 (Tue) - Nov 3 (Mon)
+        10: new Date(2025, 10, 4), // Week 10: Nov 4 (Tue) - Nov 10 (Mon)
+        11: new Date(2025, 10, 11), // Week 11: Nov 11 (Tue) - Nov 17 (Mon)
+        12: new Date(2025, 10, 18), // Week 12: Nov 18 (Tue) - Nov 24 (Mon)
+        13: new Date(2025, 10, 25), // Week 13: Nov 25 (Tue) - Dec 1 (Mon)
+        14: new Date(2025, 11, 2),  // Week 14: Dec 2 (Tue) - Dec 8 (Mon)
+        15: new Date(2025, 11, 9),  // Week 15: Dec 9 (Tue) - Dec 15 (Mon)
+        16: new Date(2025, 11, 16), // Week 16: Dec 16 (Tue) - Dec 22 (Mon)
+        17: new Date(2025, 11, 23), // Week 17: Dec 23 (Tue) - Dec 29 (Mon)
+        18: new Date(2025, 11, 30)  // Week 18: Dec 30 (Tue) - Jan 5 (Mon)
     };
     
-    let currentWeek = 7; // Default to current week
+    let currentWeek = 8; // Default to Week 8 (current as of Oct 21)
     
     for (const [week, startDate] of Object.entries(weekStartDates)) {
         if (currentDate >= startDate) {
