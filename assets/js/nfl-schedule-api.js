@@ -494,7 +494,17 @@ class NFLScheduleAPI {
             }
         }
         
-        console.error(`❌ No NFL games found for Week ${currentWeek}`);
+        // FINAL FALLBACK: Use static schedule
+        console.log(`📅 API unavailable, using static schedule for Week ${currentWeek}...`);
+        if (window.NFLStaticSchedule) {
+            const staticGames = window.NFLStaticSchedule.getWeekSchedule(currentWeek);
+            if (staticGames && staticGames.length > 0) {
+                console.log(`✅ Using static schedule: ${staticGames.length} games for Week ${currentWeek}`);
+                return { body: staticGames };
+            }
+        }
+        
+        console.error(`❌ No NFL games found for Week ${currentWeek} (API or static)`);
         return null;
     }
     
