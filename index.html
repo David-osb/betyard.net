@@ -113,55 +113,122 @@
             animation: pulse 2s infinite;
         }
 
-        /* Compact Live Status Section - Fluid Integration */
-        .live-status-section {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 0;
-        }
-
-        .compact-status-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 12px;
-            padding: 16px 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+        /* Sport Selection Header */
+        .sport-selector-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
             margin: 16px 8px;
+            backdrop-filter: blur(10px);
         }
 
-        .status-item {
+        .sport-selector-title {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 13px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .status-icon {
-            font-size: 14px;
-            animation: pulse 2s infinite;
+        .sport-icons-container {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .status-text {
+        .sport-icon {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .sport-icon:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: #3b82f6;
+        }
+
+        .sport-icon.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-color: #2563eb;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .sport-icon.active .sport-label {
+            color: white;
             font-weight: 600;
-            color: #374151;
         }
 
-        .status-time {
-            font-size: 11px;
-            color: #6b7280;
+        .sport-icon-wrapper {
+            font-size: 32px;
+            filter: grayscale(0);
+            transition: all 0.3s ease;
+        }
+
+        .sport-icon:not(.active) .sport-icon-wrapper {
+            filter: grayscale(0.5);
+            opacity: 0.7;
+        }
+
+        .sport-label {
+            font-size: 13px;
             font-weight: 500;
+            color: #374151;
+            transition: color 0.3s ease;
+        }
+
+        .coming-soon-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #f59e0b;
+            color: white;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
         }
 
         @media (max-width: 768px) {
-            .compact-status-bar {
-                flex-direction: column;
-                gap: 8px;
-                padding: 12px;
+            .sport-selector-header {
+                padding: 16px;
                 margin: 12px 4px;
+            }
+
+            .sport-icons-container {
+                gap: 12px;
+            }
+
+            .sport-icon {
+                min-width: 80px;
+                padding: 12px 16px;
+            }
+
+            .sport-icon-wrapper {
+                font-size: 28px;
+            }
+
+            .sport-label {
+                font-size: 11px;
+            }
+
+            .sport-selector-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
             
             .status-item {
@@ -814,23 +881,43 @@
         <main class="mdl-layout__content">
             <div class="mdl-grid">
                 
-                <!-- Compact Live Status Bar - Integrated -->
+                <!-- Sport Selection Header -->
                 <div class="mdl-cell mdl-cell--12-col" style="padding: 0;">
-                    <div class="compact-status-bar">
-                        <div class="status-item">
-                            <span class="status-icon">🟢</span>
-                            <span class="status-text">Platform Online</span>
-                            <span class="status-time" id="platformLastUpdate">Loading...</span>
+                    <div class="sport-selector-header">
+                        <div class="sport-selector-title">
+                            <span style="font-size: 20px; font-weight: 600; color: #1e293b;">Select Your Sport</span>
+                            <span style="font-size: 12px; color: #64748b; margin-left: 12px;">Choose a sport to view games and make predictions</span>
                         </div>
-                        <div class="status-item">
-                            <span class="status-icon">🟢</span>
-                            <span class="status-text">Tank01 API Active</span>
-                            <span class="status-time" id="apiResponseTime">Fast</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-icon">🟢</span>
-                            <span class="status-text">XGBoost ML (27K+ Games)</span>
-                            <span class="status-time" id="modelAccuracy">R² 0.78-0.95</span>
+                        <div class="sport-icons-container">
+                            <div class="sport-icon active" data-sport="football" onclick="selectSport('football')" title="Football">
+                                <div class="sport-icon-wrapper">🏈</div>
+                                <span class="sport-label">Football</span>
+                            </div>
+                            <div class="sport-icon" data-sport="basketball" onclick="selectSport('basketball')" title="Basketball">
+                                <div class="sport-icon-wrapper">🏀</div>
+                                <span class="sport-label">Basketball</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
+                            <div class="sport-icon" data-sport="hockey" onclick="selectSport('hockey')" title="Hockey">
+                                <div class="sport-icon-wrapper">🏒</div>
+                                <span class="sport-label">Hockey</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
+                            <div class="sport-icon" data-sport="baseball" onclick="selectSport('baseball')" title="Baseball">
+                                <div class="sport-icon-wrapper">⚾</div>
+                                <span class="sport-label">Baseball</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
+                            <div class="sport-icon" data-sport="soccer" onclick="selectSport('soccer')" title="Soccer">
+                                <div class="sport-icon-wrapper">⚽</div>
+                                <span class="sport-label">Soccer</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
+                            <div class="sport-icon" data-sport="tennis" onclick="selectSport('tennis')" title="Tennis">
+                                <div class="sport-icon-wrapper">🎾</div>
+                                <span class="sport-label">Tennis</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1021,6 +1108,79 @@
             }
             if (confidenceTextEl) {
                 confidenceTextEl.textContent = confidence + '%';
+            }
+        }
+
+        // Sport Selection Function
+        let currentSport = 'football'; // Default sport
+
+        function selectSport(sport) {
+            console.log(`🏅 Sport selected: ${sport}`);
+            
+            // Update current sport
+            currentSport = sport;
+            
+            // Update active state on icons
+            document.querySelectorAll('.sport-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            document.querySelector(`[data-sport="${sport}"]`).classList.add('active');
+            
+            // Update game container based on sport
+            const gameContainer = document.getElementById('game-centric-container');
+            
+            if (sport === 'football') {
+                // Load NFL games (existing functionality)
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Fetching live and upcoming matchups from Tank01 API</p>
+                            <div style="margin-top: 20px;">
+                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                            </div>
+                        </div>
+                    `;
+                    // Reload games if the game-centric system is available
+                    if (window.GameCentricUI && window.GameCentricUI.loadGames) {
+                        window.GameCentricUI.loadGames();
+                    }
+                }
+            } else {
+                // Show coming soon for other sports
+                const sportEmojis = {
+                    'basketball': '🏀',
+                    'hockey': '🏒',
+                    'baseball': '⚾',
+                    'soccer': '⚽',
+                    'tennis': '🎾'
+                };
+                
+                const sportNames = {
+                    'basketball': 'NBA Basketball',
+                    'hockey': 'NHL Hockey',
+                    'baseball': 'MLB Baseball',
+                    'soccer': 'Soccer',
+                    'tennis': 'Tennis'
+                };
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 2px dashed rgba(59, 130, 246, 0.3);">
+                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport]}</div>
+                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">${sportNames[sport]} Coming Soon!</h2>
+                            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin: 0 auto;">
+                                We're working hard to bring you ${sportNames[sport]} predictions with the same ML-powered accuracy you love for NFL.
+                            </p>
+                            <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
+                                <p style="color: #2563eb; font-weight: 600; margin: 0;">
+                                    🚀 Stay tuned for updates!
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }
             }
         }
 
