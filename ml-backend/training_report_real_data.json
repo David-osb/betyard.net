@@ -1,0 +1,119 @@
+{
+  "training_scores": {
+    "QB": {
+      "train": {
+        "mse": 84.51021411292328,
+        "mae": 6.987745268787599,
+        "r2": 0.9867302725714406
+      },
+      "test": {
+        "mse": 721.5238471630526,
+        "mae": 21.297343104875008,
+        "r2": 0.8835329812984734
+      },
+      "samples": 2936,
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      },
+      "data_source": "NFL 2020-2024 Real Stats"
+    },
+    "RB": {
+      "train": {
+        "mse": 107.7691564764351,
+        "mae": 6.933882604445743,
+        "r2": 0.9167974442253971
+      },
+      "test": {
+        "mse": 282.7738346701625,
+        "mae": 10.509039204301148,
+        "r2": 0.7802199975351026
+      },
+      "samples": 6945,
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      },
+      "data_source": "NFL 2020-2024 Real Stats"
+    },
+    "WR": {
+      "train": {
+        "mse": 38.559605949486425,
+        "mae": 4.105253247938643,
+        "r2": 0.9709427793262638
+      },
+      "test": {
+        "mse": 89.45557525783379,
+        "mae": 6.021588433784231,
+        "r2": 0.934382371431447
+      },
+      "samples": 11178,
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      },
+      "data_source": "NFL 2020-2024 Real Stats"
+    },
+    "TE": {
+      "train": {
+        "mse": 7.636571565120823,
+        "mae": 1.7023839325904628,
+        "r2": 0.9887115864216788
+      },
+      "test": {
+        "mse": 36.56035120607535,
+        "mae": 3.531579348912109,
+        "r2": 0.9486033596814057
+      },
+      "samples": 5554,
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      },
+      "data_source": "NFL 2020-2024 Real Stats"
+    }
+  },
+  "timestamp": "2025-10-21 07:50:46.722097",
+  "data_source": "NFL Official Stats 2020-2024",
+  "total_samples": 26613
+}
