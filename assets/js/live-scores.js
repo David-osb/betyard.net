@@ -453,52 +453,50 @@ class LiveNFLScores {
 
     // Smart function to find upcoming NFL games across multiple weeks
     async findUpcomingNFLGames() {
-        // Get current NFL week first
+        // Get ONLY the current NFL week (Tuesday to Monday cycle)
         const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8 };
-        const startWeek = currentWeekInfo.week || 7;
+        const currentWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 8);
         
-        console.log(`🏈 Searching NFL weeks ${startWeek}-18 for current and upcoming games...`);
+        console.log(`🏈 Fetching ONLY Week ${currentWeek} games (current week, Tuesday-Monday)`);
         
-        // Check from current week through week 18 (regular season)
-        for (let weekNum = startWeek; weekNum <= 18; weekNum++) {
-            try {
-                console.log(`🔍 Checking NFL Week ${weekNum}...`);
-                const weekData = await this.scheduleAPI.fetchWeeklySchedule(weekNum);
+        // Fetch ONLY the current week's games
+        try {
+            console.log(`🔍 Fetching NFL Week ${currentWeek}...`);
+            const weekData = await this.scheduleAPI.fetchWeeklySchedule(currentWeek);
+            
+            // Handle Tank01 API response format: {statusCode: 200, body: Array}
+            const games = weekData?.body || weekData;
+            if (games && games.length > 0) {
+                console.log(`📊 Week ${currentWeek} returned ${games.length} games (finished + upcoming)`);
                 
-                // Handle Tank01 API response format: {statusCode: 200, body: Array}
-                const games = weekData?.body || weekData;
-                if (games && games.length > 0) {
-                    console.log(`📊 Week ${weekNum} API returned ${games.length} games`);
-                    
-                    // Log first game structure to understand the data better
-                    if (games[0]) {
-                        console.log(`🔍 Sample game structure:`, {
-                            gameID: games[0].gameID,
-                            gameStatus: games[0].gameStatus,
-                            gameDate: games[0].gameDate,
-                            gameTime: games[0].gameTime,
-                            away: games[0].away,
-                            home: games[0].home
-                        });
-                    }
-                    
-                    // Be more intelligent about game filtering
-                    const validGames = games.filter(game => {
-                        // Accept games that have basic required data
-                        return game.gameID && (game.away || game.home);
+                // Log first game structure to understand the data better
+                if (games[0]) {
+                    console.log(`🔍 Sample game structure:`, {
+                        gameID: games[0].gameID,
+                        gameStatus: games[0].gameStatus,
+                        gameDate: games[0].gameDate,
+                        gameTime: games[0].gameTime,
+                        away: games[0].away,
+                        home: games[0].home
                     });
-                    
-                    if (validGames.length > 0) {
-                        console.log(`✅ Found ${validGames.length} valid games in Week ${weekNum}`);
-                        return { body: validGames }; // Return in expected format
-                    }
                 }
-            } catch (error) {
-                console.log(`❌ Week ${weekNum} not available:`, error.message);
+                
+                // Filter to valid games only
+                const validGames = games.filter(game => {
+                    // Accept games that have basic required data
+                    return game.gameID && (game.away || game.home);
+                });
+                
+                if (validGames.length > 0) {
+                    console.log(`✅ Found ${validGames.length} valid games in Week ${currentWeek}`);
+                    return { body: validGames }; // Return in expected format
+                }
             }
+        } catch (error) {
+            console.log(`❌ Week ${currentWeek} not available:`, error.message);
         }
         
-        console.log('⚠️ No upcoming games found in any NFL week');
+        console.log(`⚠️ No games found for Week ${currentWeek}`);
         return null;
     }
     
