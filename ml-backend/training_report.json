@@ -1,0 +1,110 @@
+{
+  "best_params": {},
+  "training_scores": {
+    "QB": {
+      "train": {
+        "mse": 566.6919968729161,
+        "mae": 18.585476863590486,
+        "r2": 0.8978285428699516
+      },
+      "test": {
+        "mse": 1170.4721376484865,
+        "mae": 26.94544095088126,
+        "r2": 0.7917977055579017
+      },
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 6,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      }
+    },
+    "RB": {
+      "train": {
+        "mse": 334.4742755072638,
+        "mae": 14.579884269684637,
+        "r2": 0.818642712863156
+      },
+      "test": {
+        "mse": 582.0658902466423,
+        "mae": 19.3793605303352,
+        "r2": 0.6741468122256341
+      },
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 6,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      }
+    },
+    "WR": {
+      "train": {
+        "mse": 242.03788008362028,
+        "mae": 12.28995053740112,
+        "r2": 0.8225842542713275
+      },
+      "test": {
+        "mse": 484.3079719759115,
+        "mae": 17.670814984784847,
+        "r2": 0.656158024391376
+      },
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 6,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      }
+    },
+    "TE": {
+      "train": {
+        "mse": 163.18063074295586,
+        "mae": 10.12277400258931,
+        "r2": 0.8197145649918545
+      },
+      "test": {
+        "mse": 306.791361765733,
+        "mae": 14.051454729078875,
+        "r2": 0.6631573493813696
+      },
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 6,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "min_child_weight": 3,
+        "gamma": 0.1,
+        "reg_alpha": 0.01,
+        "reg_lambda": 1,
+        "objective": "reg:squarederror",
+        "random_state": 42,
+        "n_jobs": -1
+      }
+    }
+  },
+  "timestamp": "2025-10-21 07:43:26.794285"
+}
