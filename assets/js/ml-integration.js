@@ -28,7 +28,7 @@ class BetYardMLAPI {
                                   
         return isLocalDevelopment 
             ? 'http://localhost:5000' 
-            : 'https://betyard-ml-backend-production.up.railway.app';
+            : 'https://betyard-ml-backend.onrender.com';
     }
 
     async checkBackendHealth() {
