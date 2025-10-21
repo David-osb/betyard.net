@@ -113,23 +113,24 @@
             animation: pulse 2s infinite;
         }
 
-        /* Compact Live Status Section */
+        /* Compact Live Status Section - Fluid Integration */
         .live-status-section {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            padding: 8px 0;
-            margin-bottom: 16px;
-            border-bottom: 1px solid #cbd5e1;
+            background: transparent;
+            padding: 0;
+            margin-bottom: 0;
         }
 
         .compact-status-bar {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            background: white;
-            border-radius: 8px;
-            padding: 12px 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border: 1px solid #e5e7eb;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            margin: 16px 8px;
         }
 
         .status-item {
@@ -160,12 +161,29 @@
                 flex-direction: column;
                 gap: 8px;
                 padding: 12px;
+                margin: 12px 4px;
             }
             
             .status-item {
                 justify-content: center;
                 gap: 8px;
             }
+        }
+        
+        /* Smooth transition animation for status bar */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .compact-status-bar {
+            animation: fadeInDown 0.5s ease-out;
         }
 
         /* Betting Insights Styles */
@@ -433,10 +451,11 @@
             scroll-behavior: smooth;
         }
         
-        /* Layout content - remove padding for seamless integration */
+        /* Layout content - seamless integration with status section */
         .mdl-layout__content {
             padding: 0;
             margin: 0;
+            background: transparent;
         }
         
         /* Header mobile optimization */
@@ -792,10 +811,11 @@
             </div>
         </header>
         
-        <!-- Compact Live Status Bar -->
-        <section class="live-status-section">
+        <main class="mdl-layout__content">
             <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--12-col">
+                
+                <!-- Compact Live Status Bar - Integrated -->
+                <div class="mdl-cell mdl-cell--12-col" style="padding: 0;">
                     <div class="compact-status-bar">
                         <div class="status-item">
                             <span class="status-icon">🟢</span>
@@ -814,15 +834,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <main class="mdl-layout__content">
-            <div class="mdl-grid">
                 
                 <!-- Tank01 Status Banner -->
                 <div class="mdl-cell mdl-cell--12-col">
-                    <div style="padding: 16px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; color: white; text-align: center; margin-bottom: 16px;">
+                    <div style="padding: 16px 20px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; color: white; text-align: center; margin: 0 8px 16px 8px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);">
                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
                             <span style="font-size: 16px;">🚀</span>
                             <strong>TANK01 API ENABLED</strong>
