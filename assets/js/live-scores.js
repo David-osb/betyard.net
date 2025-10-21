@@ -493,10 +493,20 @@ class LiveNFLScores {
                 }
             }
         } catch (error) {
-            console.log(`❌ Week ${currentWeek} not available:`, error.message);
+            console.log(`❌ Week ${currentWeek} not available from API:`, error.message);
         }
         
-        console.log(`⚠️ No games found for Week ${currentWeek}`);
+        // FALLBACK: Use static schedule if Tank01 API doesn't have data
+        console.log(`📅 Attempting to use static schedule for Week ${currentWeek}...`);
+        if (window.NFLStaticSchedule) {
+            const staticGames = window.NFLStaticSchedule.getWeekSchedule(currentWeek);
+            if (staticGames && staticGames.length > 0) {
+                console.log(`✅ Using static schedule: ${staticGames.length} games for Week ${currentWeek}`);
+                return { body: staticGames }; // Return in expected format
+            }
+        }
+        
+        console.log(`⚠️ No games found for Week ${currentWeek} (API or static)`);
         return null;
     }
     
