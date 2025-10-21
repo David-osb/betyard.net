@@ -468,7 +468,7 @@ class NFLScheduleAPI {
         
         // Get current NFL week dynamically
         const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8 };
-        const startWeek = currentWeekInfo.week || 7;
+        const startWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 8);
         
         // 1. Try to get current week and next 2 weeks only (for predictions)
         const endWeek = Math.min(startWeek + 2, 18); // Only check current + next 2 weeks
