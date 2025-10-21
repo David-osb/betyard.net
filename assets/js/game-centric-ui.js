@@ -51,9 +51,12 @@ class GameCentricUI {
     }
     
     createNewLayout() {
-        // Find the main content area and replace it
-        const mainContent = document.querySelector('.mdl-layout__content');
-        if (!mainContent) return;
+        // Find the game-centric container
+        const container = document.getElementById('game-centric-container');
+        if (!container) {
+            console.warn('⚠️ Game-centric container not found, skipping layout creation');
+            return;
+        }
         
         // Create the new game-centric layout
         const newLayoutHTML = `
@@ -157,8 +160,8 @@ class GameCentricUI {
             </div>
         `;
         
-        // Replace the existing content
-        mainContent.innerHTML = newLayoutHTML;
+        // Inject into the container
+        container.innerHTML = newLayoutHTML;
         
         // Add the CSS styles
         this.addGameCentricStyles();

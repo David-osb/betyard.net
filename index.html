@@ -846,6 +846,19 @@
                             Live NFL data integration active - Real-time roster and statistics loading!
                         </div>
                     </div>
+                    
+                    <!-- Game-Centric UI Container -->
+                    <div id="game-centric-container" style="margin: 16px 8px;">
+                        <!-- Games will be loaded here by game-centric-ui.js -->
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Fetching live and upcoming matchups from Tank01 API</p>
+                            <div style="margin-top: 20px;">
+                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="home-team-info" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                         <div style="font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">
                             🏟️ <span id="home-team-name">Home Team</span>
