@@ -467,7 +467,7 @@ class NFLScheduleAPI {
         console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
         
         // Get current NFL week dynamically
-        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7 };
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8 };
         const startWeek = currentWeekInfo.week || 7;
         
         // 1. Try to get current week and next 2 weeks only (for predictions)
