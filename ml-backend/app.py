@@ -317,18 +317,29 @@ class NFLMLModel:
             'experience': np.random.uniform(2, 15)
         }
         
-        # Create feature vector
+        # Create feature vector matching real data training
+        # QB model expects: completions, attempts, passing_tds, interceptions, sacks,
+        # passing_air_yards, passing_yards_after_catch, passing_first_downs
+        
+        # Estimate typical game stats based on season averages
+        est_attempts = np.clip(qb_stats['season_avg_yards'] / 7.5 + np.random.normal(0, 3), 25, 55)
+        est_completions = est_attempts * 0.65 * qb_stats['recent_form']
+        est_tds = qb_stats['season_avg_tds'] * qb_stats['recent_form']
+        est_ints = max(0, np.random.poisson(1) * (1.5 - qb_stats['recent_form']))
+        est_sacks = max(0, np.random.poisson(2))
+        est_air_yards = qb_stats['season_avg_yards'] * 0.6
+        est_yac = qb_stats['season_avg_yards'] * 0.4
+        est_first_downs = qb_stats['season_avg_yards'] / 15
+        
         features = np.array([[
-            qb_stats['recent_form'],
-            1,  # home_advantage (mock)
-            np.random.uniform(5, 25),  # opponent_defense_rank
-            weather['temp'],
-            weather['wind'],
-            injury['impact_factor'],
-            qb_stats['experience'],
-            qb_stats['season_avg_yards'],
-            qb_stats['season_avg_tds'],
-            1.0 if weather['dome'] else max(0.7, 1 - weather['wind']/50 - abs(weather['temp']-70)/100)
+            est_completions,
+            est_attempts,
+            est_tds,
+            est_ints,
+            est_sacks,
+            est_air_yards,
+            est_yac,
+            est_first_downs
         ]])
         
         # Make prediction using QB model
@@ -390,17 +401,28 @@ class NFLMLModel:
             'carries_per_game': np.random.normal(15, 5)
         }
         
-        # Create feature vector for RB model
+        # Create feature vector matching real data training
+        # RB model expects: carries, rushing_tds, rushing_fumbles, rushing_first_downs,
+        # receptions, targets, receiving_yards, receiving_tds
+        
+        est_carries = rb_stats['carries_per_game'] * rb_stats['recent_form']
+        est_rush_tds = rb_stats['season_avg_tds'] * rb_stats['recent_form']
+        est_fumbles = max(0, np.random.poisson(0.1))
+        est_first_downs = rb_stats['season_avg_yards'] / 10
+        est_receptions = np.clip(np.random.normal(3, 2), 0, 10)
+        est_targets = est_receptions * 1.5
+        est_rec_yards = est_receptions * np.random.normal(8, 3)
+        est_rec_tds = max(0, np.random.poisson(0.2))
+        
         features = np.array([[
-            rb_stats['recent_form'],
-            1,  # home_advantage (mock)
-            np.random.uniform(5, 25),  # opponent_rush_defense_rank
-            weather['temp'],
-            injury['impact_factor'],
-            rb_stats['experience'],
-            rb_stats['season_avg_yards'],
-            rb_stats['season_avg_tds'],
-            rb_stats['carries_per_game']
+            est_carries,
+            est_rush_tds,
+            est_fumbles,
+            est_first_downs,
+            est_receptions,
+            est_targets,
+            est_rec_yards,
+            est_rec_tds
         ]])
         
         # Make prediction using RB model
@@ -444,18 +466,26 @@ class NFLMLModel:
             'target_share': np.random.normal(0.20, 0.08)
         }
         
-        # Create feature vector for WR model
+        # Create feature vector matching real data training
+        # WR model expects: receptions, targets, receiving_tds, receiving_fumbles,
+        # receiving_air_yards, receiving_yards_after_catch, receiving_first_downs
+        
+        est_receptions = wr_stats['season_avg_receptions'] * wr_stats['recent_form']
+        est_targets = est_receptions / 0.65  # ~65% catch rate
+        est_tds = max(0, np.random.poisson(0.6) * wr_stats['recent_form'])
+        est_fumbles = max(0, np.random.poisson(0.05))
+        est_air_yards = wr_stats['season_avg_yards'] * 0.65
+        est_yac = wr_stats['season_avg_yards'] * 0.35
+        est_first_downs = wr_stats['season_avg_yards'] / 12
+        
         features = np.array([[
-            wr_stats['recent_form'],
-            1,  # home_advantage (mock)
-            np.random.uniform(5, 25),  # opponent_pass_defense_rank
-            weather['temp'],
-            weather['wind'],
-            injury['impact_factor'],
-            wr_stats['experience'],
-            wr_stats['season_avg_yards'],
-            wr_stats['season_avg_receptions'],
-            wr_stats['target_share']
+            est_receptions,
+            est_targets,
+            est_tds,
+            est_fumbles,
+            est_air_yards,
+            est_yac,
+            est_first_downs
         ]])
         
         # Make prediction using WR model
@@ -501,17 +531,26 @@ class NFLMLModel:
             'blocking_snaps': np.random.normal(0.35, 0.15)
         }
         
-        # Create feature vector for TE model
+        # Create feature vector matching real data training
+        # TE model expects: receptions, targets, receiving_tds, receiving_fumbles,
+        # receiving_air_yards, receiving_yards_after_catch, receiving_first_downs
+        
+        est_receptions = te_stats['season_avg_receptions'] * te_stats['recent_form']
+        est_targets = est_receptions / 0.68  # TEs have ~68% catch rate
+        est_tds = max(0, np.random.poisson(0.5) * te_stats['recent_form'])
+        est_fumbles = max(0, np.random.poisson(0.03))
+        est_air_yards = te_stats['season_avg_yards'] * 0.55
+        est_yac = te_stats['season_avg_yards'] * 0.45
+        est_first_downs = te_stats['season_avg_yards'] / 11
+        
         features = np.array([[
-            te_stats['recent_form'],
-            1,  # home_advantage (mock)
-            np.random.uniform(5, 25),  # opponent_pass_defense_rank
-            weather['temp'],
-            injury['impact_factor'],
-            te_stats['experience'],
-            te_stats['season_avg_yards'],
-            te_stats['season_avg_receptions'],
-            te_stats['blocking_snaps']
+            est_receptions,
+            est_targets,
+            est_tds,
+            est_fumbles,
+            est_air_yards,
+            est_yac,
+            est_first_downs
         ]])
         
         # Make prediction using TE model
