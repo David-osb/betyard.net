@@ -460,29 +460,29 @@ class NFLScheduleAPI {
     }
     
     /**
-     * Fetch current and upcoming NFL games intelligently
-     * Priority: Current games > Today's games > Next week's games
+     * Fetch current week's NFL games ONLY
+     * Shows all games from the current week (Tuesday to Monday)
+     * Automatically switches to new week on Tuesday
      */
     async fetchCurrentAndUpcomingGames() {
-        console.log('🏈 Smart NFL schedule search: Current → Today → Upcoming weeks...');
+        console.log('🏈 Fetching current week\'s NFL games...');
         
-        // Get current NFL week dynamically
+        // Get current NFL week dynamically (Tuesday to Monday cycle)
         const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8 };
-        const startWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 8);
+        const currentWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 8);
         
-        // 1. Try to get current week and next 2 weeks only (for predictions)
-        const endWeek = Math.min(startWeek + 2, 18); // Only check current + next 2 weeks
-        for (let week = startWeek; week <= endWeek; week++) {
-            console.log(`📅 Checking Week ${week}...`);
-            
-            const weekGames = await this.fetchWeeklySchedule(week);
-            if (weekGames && weekGames.body && weekGames.body.length > 0) {
-                console.log(`✅ Found ${weekGames.body.length} games in Week ${week}`);
-                return weekGames;
-            }
+        console.log(`📅 Current NFL Week: ${currentWeek} (Tuesday to Monday)`);
+        
+        // Fetch ONLY the current week's games (not next weeks)
+        const weekGames = await this.fetchWeeklySchedule(currentWeek);
+        if (weekGames && weekGames.body && weekGames.body.length > 0) {
+            console.log(`✅ Found ${weekGames.body.length} games in Week ${currentWeek}`);
+            console.log(`📊 Games include: Finished + Upcoming from this week`);
+            return weekGames;
         }
         
-        // 2. Try specific dates around current time
+        // Fallback: Try dates only if week-based fetch fails
+        console.log(`⚠️ Week ${currentWeek} API failed, trying date-based search...`);
         const datesToTry = this.generateGameDates();
         for (let date of datesToTry) {
             console.log(`📅 Checking date: ${date}`);
@@ -494,7 +494,7 @@ class NFLScheduleAPI {
             }
         }
         
-        console.error('❌ No NFL games found in current or upcoming weeks');
+        console.error(`❌ No NFL games found for Week ${currentWeek}`);
         return null;
     }
     
