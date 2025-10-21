@@ -1329,12 +1329,105 @@ class GameCentricUI {
                     trend = 'trending-down';
                     trendText = '⚠️ Low confidence';
                 }
+            } else if (position === 'WR' || position === 'TE') {
+                // WR and TE predictions
+                switch(stat) {
+                    case 'Receiving Yards':
+                        value = Math.round(mlPrediction.receiving_yards || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Receptions':
+                        value = Math.round(mlPrediction.receptions || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Touchdowns':
+                        value = Math.round(mlPrediction.touchdowns || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 80) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Targets':
+                        value = Math.round(mlPrediction.targets || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Fantasy Points':
+                        // Calculate fantasy points: 0.1 per yard + 6 per TD + 1 per reception (PPR)
+                        const yards = mlPrediction.receiving_yards || 0;
+                        const tds = mlPrediction.touchdowns || 0;
+                        const recs = mlPrediction.receptions || 0;
+                        value = ((yards * 0.1) + (tds * 6) + (recs * 1)).toFixed(1);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    default:
+                        value = 'N/A';
+                        confidence = 0;
+                }
+                
+                // Determine trend based on confidence
+                if (confidence >= 85) {
+                    trend = 'trending-up';
+                    trendText = '📈 Strong projection';
+                } else if (confidence >= 75) {
+                    trend = 'neutral';
+                    trendText = '➡️ Moderate confidence';
+                } else if (confidence > 0) {
+                    trend = 'trending-down';
+                    trendText = '⚠️ Low confidence';
+                } else {
+                    trend = 'unavailable';
+                    trendText = '❌ Failed to generate';
+                }
+            } else if (position === 'RB') {
+                // RB predictions
+                switch(stat) {
+                    case 'Rushing Yards':
+                        value = Math.round(mlPrediction.rushing_yards || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Rushing Attempts':
+                        value = Math.round(mlPrediction.rushing_attempts || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Touchdowns':
+                        value = Math.round(mlPrediction.touchdowns || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 80) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Receiving Yards':
+                        value = Math.round(mlPrediction.receiving_yards || 0);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    case 'Fantasy Points':
+                        // Calculate fantasy points: 0.1 per rush yard + 0.1 per rec yard + 6 per TD + 1 per reception (PPR)
+                        const rushYards = mlPrediction.rushing_yards || 0;
+                        const recYards = mlPrediction.receiving_yards || 0;
+                        const tds = mlPrediction.touchdowns || 0;
+                        const recs = mlPrediction.receptions || 0;
+                        value = ((rushYards * 0.1) + (recYards * 0.1) + (tds * 6) + (recs * 1)).toFixed(1);
+                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        break;
+                    default:
+                        value = 'N/A';
+                        confidence = 0;
+                }
+                
+                // Determine trend based on confidence
+                if (confidence >= 85) {
+                    trend = 'trending-up';
+                    trendText = '📈 Strong projection';
+                } else if (confidence >= 75) {
+                    trend = 'neutral';
+                    trendText = '➡️ Moderate confidence';
+                } else if (confidence > 0) {
+                    trend = 'trending-down';
+                    trendText = '⚠️ Low confidence';
+                } else {
+                    trend = 'unavailable';
+                    trendText = '❌ Failed to generate';
+                }
             } else {
-                // Other positions not supported yet - show unavailable
+                // Unsupported position
                 value = 'UNAVAILABLE';
                 confidence = 0;
                 trend = 'unavailable';
-                trendText = '❌ QB only for now';
+                trendText = '❌ Position not supported';
             }
             
             return {
@@ -1368,8 +1461,42 @@ class GameCentricUI {
                     source: 'smart_fallback'
                 }
             };
+        } else if (position === 'WR') {
+            return {
+                receiving_yards: 55 + Math.floor(Math.random() * 70), // 55-125 yards (NFL avg ~75)
+                receptions: 4 + Math.floor(Math.random() * 6), // 4-10 receptions (NFL avg ~6)
+                targets: 6 + Math.floor(Math.random() * 8), // 6-14 targets (NFL avg ~9)
+                touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.5)
+                metadata: {
+                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    source: 'smart_fallback'
+                }
+            };
+        } else if (position === 'TE') {
+            return {
+                receiving_yards: 35 + Math.floor(Math.random() * 55), // 35-90 yards (NFL avg ~50)
+                receptions: 3 + Math.floor(Math.random() * 5), // 3-8 receptions (NFL avg ~5)
+                targets: 4 + Math.floor(Math.random() * 6), // 4-10 targets (NFL avg ~7)
+                touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.4)
+                metadata: {
+                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    source: 'smart_fallback'
+                }
+            };
+        } else if (position === 'RB') {
+            return {
+                rushing_yards: 45 + Math.floor(Math.random() * 85), // 45-130 yards (NFL avg ~75)
+                rushing_attempts: 12 + Math.floor(Math.random() * 12), // 12-24 attempts (NFL avg ~17)
+                receiving_yards: 10 + Math.floor(Math.random() * 35), // 10-45 yards (NFL avg ~22)
+                receptions: 1 + Math.floor(Math.random() * 5), // 1-6 receptions (NFL avg ~3)
+                touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.6)
+                metadata: {
+                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    source: 'smart_fallback'
+                }
+            };
         }
-        return null; // Other positions not yet supported
+        return null;
     }
     
     getMatchupContext() {
