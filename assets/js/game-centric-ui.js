@@ -1181,7 +1181,7 @@ class GameCentricUI {
         const opponent = this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away;
         
         // Get current week dynamically
-        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 7, title: 'Week 7' };
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8, title: 'Week 8' };
         
         // Show loading state
         container.innerHTML = `
