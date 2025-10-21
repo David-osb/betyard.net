@@ -1292,26 +1292,29 @@ class GameCentricUI {
             let value, confidence, trend, trendText;
             
             if (position === 'QB') {
+                // Get confidence once (backend returns it as a percentage already)
+                const baseConfidence = mlPrediction.confidence || mlPrediction.metadata?.confidence || 85;
+                
                 switch(stat) {
                     case 'Passing Yards':
                         value = Math.round(mlPrediction.passing_yards);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || 0.85) * 100);
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Touchdowns':
                         value = Math.round(mlPrediction.touchdowns);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || 0.80) * 100);
+                        confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
                         break;
                     case 'Completions':
                         value = Math.round(mlPrediction.completions);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || 0.85) * 100);
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Attempts':
                         value = Math.round(mlPrediction.attempts);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || 0.85) * 100);
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'QB Rating':
                         value = mlPrediction.qb_rating ? mlPrediction.qb_rating.toFixed(1) : 'N/A';
-                        confidence = Math.round((mlPrediction.metadata?.confidence || 0.80) * 100);
+                        confidence = Math.round(baseConfidence * 0.90); // QB Rating is calculated, less direct
                         break;
                     default:
                         value = 'N/A';
@@ -1331,22 +1334,25 @@ class GameCentricUI {
                 }
             } else if (position === 'WR' || position === 'TE') {
                 // WR and TE predictions
+                // Get confidence once (backend returns it as a percentage already)
+                const baseConfidence = mlPrediction.confidence || mlPrediction.metadata?.confidence || 85;
+                
                 switch(stat) {
                     case 'Receiving Yards':
                         value = Math.round(mlPrediction.receiving_yards || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Receptions':
                         value = Math.round(mlPrediction.receptions || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Touchdowns':
                         value = Math.round(mlPrediction.touchdowns || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 80) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
                         break;
                     case 'Targets':
                         value = Math.round(mlPrediction.targets || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Fantasy Points':
                         // Calculate fantasy points: 0.1 per yard + 6 per TD + 1 per reception (PPR)
@@ -1354,7 +1360,7 @@ class GameCentricUI {
                         const tds = mlPrediction.touchdowns || 0;
                         const recs = mlPrediction.receptions || 0;
                         value = ((yards * 0.1) + (tds * 6) + (recs * 1)).toFixed(1);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence * 0.97); // Combined stat, slightly lower confidence
                         break;
                     default:
                         value = 'N/A';
@@ -1377,22 +1383,25 @@ class GameCentricUI {
                 }
             } else if (position === 'RB') {
                 // RB predictions
+                // Get confidence once (backend returns it as a percentage already)
+                const baseConfidence = mlPrediction.confidence || mlPrediction.metadata?.confidence || 85;
+                
                 switch(stat) {
                     case 'Rushing Yards':
                         value = Math.round(mlPrediction.rushing_yards || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Rushing Attempts':
                         value = Math.round(mlPrediction.rushing_attempts || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 85) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence);
                         break;
                     case 'Touchdowns':
                         value = Math.round(mlPrediction.touchdowns || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 80) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
                         break;
                     case 'Receiving Yards':
                         value = Math.round(mlPrediction.receiving_yards || 0);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence * 0.98); // RB receiving slightly less predictable
                         break;
                     case 'Fantasy Points':
                         // Calculate fantasy points: 0.1 per rush yard + 0.1 per rec yard + 6 per TD + 1 per reception (PPR)
@@ -1401,7 +1410,7 @@ class GameCentricUI {
                         const tds = mlPrediction.touchdowns || 0;
                         const recs = mlPrediction.receptions || 0;
                         value = ((rushYards * 0.1) + (recYards * 0.1) + (tds * 6) + (recs * 1)).toFixed(1);
-                        confidence = Math.round((mlPrediction.metadata?.confidence || mlPrediction.confidence || 82) * (mlPrediction.metadata?.confidence ? 1 : 0.01));
+                        confidence = Math.round(baseConfidence * 0.97); // Combined stat, slightly lower confidence
                         break;
                     default:
                         value = 'N/A';
