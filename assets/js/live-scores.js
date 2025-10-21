@@ -398,10 +398,10 @@ class LiveNFLScores {
                 if (liveScores && liveScores.body) {
                     console.log('✅ Using composite live scores from Schedule API');
                     this.games = this.processRealNFLData(liveScores);
-                    this.currentWeek = 7;
+                    this.currentWeek = window.getCurrentWeek ? window.getCurrentWeek() : 8; // Dynamic week calculation
                     this.lastUpdate = new Date();
                     this.updateLiveScoresDisplay();
-                    console.log(`✅ Updated ${this.games.length} games from composite live scores`);
+                    console.log(`✅ Updated ${this.games.length} games from composite live scores - Week ${this.currentWeek}`);
                     return;
                 }
             }
@@ -571,8 +571,9 @@ class LiveNFLScores {
             }
         }
         
-        this.currentWeek = 7;
+        this.currentWeek = window.getCurrentWeek ? window.getCurrentWeek() : 8; // Dynamic week calculation
         this.lastUpdate = new Date();
+        console.log(`✅ Live scores updated for Week ${this.currentWeek}`);
         this.updateLiveScoresDisplay();
     }
 
@@ -906,7 +907,7 @@ class LiveNFLScores {
         });
         
         return {
-            week: 7,
+            week: window.getCurrentWeek ? window.getCurrentWeek() : 8, // Dynamic week calculation
             season: 2025,
             games: games.slice(0, 8) // Show 8 key games
         };
