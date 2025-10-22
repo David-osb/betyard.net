@@ -735,7 +735,7 @@ def tank01_proxy():
         
         # RapidAPI headers
         headers = {
-            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
             'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
         }
         
@@ -767,7 +767,7 @@ def nfl_schedule_proxy():
         
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule'
         headers = {
-            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
             'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
         }
         params = {'teamAbv': team_abv, 'season': '2024'}
@@ -794,7 +794,7 @@ def nfl_roster_proxy():
         
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster'
         headers = {
-            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
             'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
         }
         params = {'teamID': team_id, 'getStats': get_stats}
@@ -818,7 +818,7 @@ def nfl_games_proxy():
         
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForWeek'
         headers = {
-            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
             'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
         }
         params = {'week': game_week, 'season': season}
