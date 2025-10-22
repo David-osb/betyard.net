@@ -225,6 +225,88 @@
                 font-size: 11px;
             }
 
+            /* NBA Game Cards */
+            .nba-game-card {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                border-radius: 16px;
+                padding: 24px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border: 1px solid rgba(255,255,255,0.05);
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .nba-game-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+            }
+
+            .nba-game-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
+                border-bottom: 2px solid rgba(255,255,255,0.1);
+            }
+
+            .nba-game-league {
+                font-size: 14px;
+                color: #ff6b35;
+                font-weight: 600;
+            }
+
+            .nba-game-teams {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 20px;
+                margin: 20px 0;
+            }
+
+            .nba-team {
+                flex: 1;
+                text-align: center;
+            }
+
+            .nba-team-name {
+                font-size: 20px;
+                font-weight: 700;
+                color: white;
+                margin-bottom: 8px;
+            }
+
+            .nba-team-record {
+                font-size: 14px;
+                color: rgba(255,255,255,0.6);
+            }
+
+            .nba-vs {
+                font-size: 16px;
+                color: rgba(255,255,255,0.4);
+                font-weight: 600;
+            }
+
+            .nba-game-info {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .nba-game-time {
+                font-size: 14px;
+                color: #4ecdc4;
+                font-weight: 500;
+            }
+
+            .nba-game-venue {
+                font-size: 12px;
+                color: rgba(255,255,255,0.5);
+            }
+
             .sport-selector-title {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1025,6 +1107,7 @@
     <script src="assets/js/ml-integration.js?v=2025-10-20-ML-FIX&t=1729465300000"></script>
     <script src="assets/js/live-scores.js?v=2025-10-20-UPDATE-FIX&t=1729465300000"></script>
     <script src="assets/js/game-centric-ui.js?v=2025-10-20-ML-READY&t=1729465300000"></script>
+    <script src="assets/js/nba-games.js"></script>
     <script src="assets/js/main.js?v=2024-10-18-15-35&t=1729350000"></script>
     <script src="assets/js/app-logic.js?v=2024-10-18-15-35&t=1729350000"></script>
     <script src="assets/js/enhanced-api-test.js?v=2025-10-19-CONSOLE-ONLY&t=1760930271"></script>
@@ -1145,6 +1228,37 @@
                     // Reload games if the game-centric system is available
                     if (window.GameCentricUI && window.GameCentricUI.loadGames) {
                         window.GameCentricUI.loadGames();
+                    }
+                }
+            } else if (sport === 'basketball') {
+                // Load NBA games
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
+                            <p style="color: #64748b;">Fetching this week's matchups</p>
+                            <div style="margin-top: 20px;">
+                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Load NBA games
+                    if (window.NBAGames) {
+                        const nbaGames = new window.NBAGames();
+                        nbaGames.fetchNBAGames().then(games => {
+                            gameContainer.innerHTML = nbaGames.displayNBAGames(games);
+                        }).catch(error => {
+                            console.error('Error loading NBA games:', error);
+                            gameContainer.innerHTML = `
+                                <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                                    <h3 style="color: #dc2626; margin-bottom: 8px;">Unable to Load NBA Games</h3>
+                                    <p style="color: #64748b;">Please try again later</p>
+                                </div>
+                            `;
+                        });
                     }
                 }
             } else {
