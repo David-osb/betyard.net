@@ -1207,8 +1207,9 @@
         async function selectSport(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
             
-            // Update current sport
+            // Update current sport globally so live-scores.js can detect changes
             currentSport = sport;
+            window.selectedSport = sport;
             
             // Update active state on icons
             document.querySelectorAll('.sport-icon').forEach(icon => {
@@ -1235,6 +1236,12 @@
                     
                     // Small delay to ensure DOM is ready, then reload games
                     setTimeout(() => {
+                        // Trigger live scores refresh to force game-centric UI update
+                        if (window.liveNFLScores && window.liveNFLScores.fetchLiveScores) {
+                            console.log('🔄 Refreshing NFL scores for sport change...');
+                            window.liveNFLScores.fetchLiveScores();
+                        }
+                        
                         if (window.GameCentricUI && window.GameCentricUI.loadGames) {
                             window.GameCentricUI.loadGames();
                         }
