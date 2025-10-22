@@ -783,21 +783,23 @@ def nfl_schedule_proxy():
 def nfl_roster_proxy():
     """
     Specialized proxy for NFL team roster data
-    Usage: /api/proxy/nfl/roster?teamID=LAC&getStats=false
+    Usage: /api/proxy/nfl/roster?teamID=LAC&getStats=false (accepts teamID or teamAbv)
     """
     try:
-        team_id = request.args.get('teamID')
+        # Accept either teamID or teamAbv parameter
+        team_id = request.args.get('teamID') or request.args.get('teamAbv')
         get_stats = request.args.get('getStats', 'false')
         
         if not team_id:
-            return jsonify({'error': 'Missing teamID parameter'}), 400
+            return jsonify({'error': 'Missing teamID or teamAbv parameter'}), 400
         
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster'
         headers = {
             'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
             'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
         }
-        params = {'teamID': team_id, 'getStats': get_stats}
+        # Use teamAbv parameter for Tank01 API
+        params = {'teamAbv': team_id, 'getStats': get_stats}
         
         response = requests.get(url, headers=headers, params=params, timeout=10)
         return jsonify(response.json()), response.status_code
