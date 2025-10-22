@@ -995,7 +995,7 @@ class LiveNFLScores {
         const currentGame = this.findMostRelevantGame();
         
         if (window.gameCentricUI) {
-            // Only update if games have actually changed
+            // Only update if games have actually changed OR this is the first update
             const gamesSignature = JSON.stringify(this.games.map(g => ({
                 id: `${g.away}-${g.home}`,
                 status: g.status,
@@ -1003,8 +1003,10 @@ class LiveNFLScores {
                 homeScore: g.homeScore
             })));
             
-            if (this.lastGameSignature !== gamesSignature) {
-                console.log('🎯 Updating Game-Centric UI with changed games');
+            // Force update on first load (when lastGameSignature is null)
+            // or when games have actually changed
+            if (this.lastGameSignature === null || this.lastGameSignature !== gamesSignature) {
+                console.log('🎯 Updating Game-Centric UI with', this.games.length, 'games');
                 window.gameCentricUI.updateWithLiveGames(this.games);
                 this.lastGameSignature = gamesSignature;
             } else {
