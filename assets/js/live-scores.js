@@ -15,6 +15,7 @@ class LiveNFLScores {
         this.lastUpdate = null;
         this.finalGamesCache = new Set(); // Cache final game IDs to prevent re-updates
         this.lastGameSignature = null; // Track game changes to avoid redundant updates
+        this.currentSport = 'NFL'; // Track current sport to detect sport changes
         
         // Tank01 API configuration with your real key
         this.apiConfig = {
@@ -995,7 +996,17 @@ class LiveNFLScores {
         const currentGame = this.findMostRelevantGame();
         
         if (window.gameCentricUI) {
-            // Only update if games have actually changed OR this is the first update
+            // Detect sport changes (when user switches sports and comes back)
+            const selectedSport = window.selectedSport || 'NFL';
+            const sportChanged = selectedSport !== this.currentSport;
+            
+            if (sportChanged) {
+                console.log(`🔄 Sport changed from ${this.currentSport} to ${selectedSport}, forcing UI reload`);
+                this.currentSport = selectedSport;
+                this.lastGameSignature = null; // Reset signature to force update
+            }
+            
+            // Only update if games have actually changed OR this is the first update OR sport changed
             const gamesSignature = JSON.stringify(this.games.map(g => ({
                 id: `${g.away}-${g.home}`,
                 status: g.status,
@@ -1004,8 +1015,8 @@ class LiveNFLScores {
             })));
             
             // Force update on first load (when lastGameSignature is null)
-            // or when games have actually changed
-            if (this.lastGameSignature === null || this.lastGameSignature !== gamesSignature) {
+            // or when games have actually changed, or when sport changes
+            if (this.lastGameSignature === null || this.lastGameSignature !== gamesSignature || sportChanged) {
                 console.log('🎯 Updating Game-Centric UI with', this.games.length, 'games');
                 window.gameCentricUI.updateWithLiveGames(this.games);
                 this.lastGameSignature = gamesSignature;
