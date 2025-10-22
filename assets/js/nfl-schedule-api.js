@@ -12,7 +12,9 @@ class NFLScheduleAPI {
             headers: {
                 'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
                 'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
-            }
+            },
+            // Disable roster fetching to avoid CORS errors (not critical for game display)
+            enableRosterFetch: false
         };
         
         // API optimization settings
@@ -298,20 +300,34 @@ class NFLScheduleAPI {
         
         for (const teamID of priorityTeams) {
             try {
-                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamSchedule?teamID=${teamID}&season=2025`, {
-                    method: 'GET',
-                    headers: this.apiConfig.headers
-                });
+                let scheduleData;
                 
-                if (response.ok) {
-                    const scheduleData = await response.json();
+                // Use proxy if available, fallback to direct API
+                if (window.Tank01Proxy) {
+                    scheduleData = await window.Tank01Proxy.call('getNFLTeamSchedule', {
+                        teamID: teamID,
+                        season: '2025'
+                    });
+                } else {
+                    // Fallback to direct API call
+                    const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamSchedule?teamID=${teamID}&season=2025`, {
+                        method: 'GET',
+                        headers: this.apiConfig.headers
+                    });
+                    
+                    if (response.ok) {
+                        scheduleData = await response.json();
+                    }
+                }
+                
+                if (scheduleData) {
                     this.cache.teamSchedules = this.cache.teamSchedules || new Map();
                     this.cache.teamSchedules.set(teamID, {
                         data: scheduleData,
                         expires: Date.now() + (24 * 60 * 60 * 1000)
                     });
                     
-                    console.log(`✅ Team schedule cached for ${teamID}`);
+                    console.log(`✅ Team schedule cached for ${teamID} (via ${window.Tank01Proxy ? 'proxy' : 'direct'})`);
                 }
             } catch (error) {
                 console.warn(`⚠️ Team schedule API error for ${teamID}:`, error);
@@ -792,13 +808,9 @@ class NFLScheduleAPI {
             
             console.log(`🔄 Fetching roster for ${teamID}...`);
             
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamRoster?teamID=${teamID}&getStats=false`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const rosterData = await response.json();
+            // Use proxy if available, fallback to direct API
+            if (window.Tank01Proxy) {
+                const rosterData = await window.Tank01Proxy.getTeamRoster(teamID, false);
                 
                 // Cache roster with timestamp
                 this.cache.rosters.set(teamID, {
@@ -806,8 +818,27 @@ class NFLScheduleAPI {
                     timestamp: Date.now()
                 });
                 
-                console.log(`✅ Roster cached for ${teamID}`);
+                console.log(`✅ Roster cached for ${teamID} (via proxy)`);
                 return rosterData;
+            } else {
+                // Fallback to direct API call
+                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamRoster?teamID=${teamID}&getStats=false`, {
+                    method: 'GET',
+                    headers: this.apiConfig.headers
+                });
+                
+                if (response.ok) {
+                    const rosterData = await response.json();
+                    
+                    // Cache roster with timestamp
+                    this.cache.rosters.set(teamID, {
+                        roster: rosterData,
+                        timestamp: Date.now()
+                    });
+                    
+                    console.log(`✅ Roster cached for ${teamID}`);
+                    return rosterData;
+                }
             }
         } catch (error) {
             console.warn(`⚠️ Roster API error for ${teamID}:`, error);

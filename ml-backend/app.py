@@ -709,6 +709,126 @@ def model_info():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# ============================================================================
+# API PROXY ENDPOINTS (CORS Solution for Tank01 NFL API)
+# ============================================================================
+
+@app.route('/api/proxy/tank01', methods=['GET', 'POST'])
+def tank01_proxy():
+    """
+    Proxy endpoint for Tank01 NFL API to bypass CORS restrictions
+    Usage: /api/proxy/tank01?endpoint=getNFLTeamSchedule&teamAbv=KC
+    """
+    try:
+        # Get the endpoint and parameters from query string
+        endpoint = request.args.get('endpoint')
+        if not endpoint:
+            return jsonify({'error': 'Missing endpoint parameter'}), 400
+        
+        # Build the Tank01 API URL
+        base_url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+        url = f"{base_url}/{endpoint}"
+        
+        # Get all query parameters except 'endpoint'
+        params = {k: v for k, v in request.args.items() if k != 'endpoint'}
+        
+        # RapidAPI headers
+        headers = {
+            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+        }
+        
+        # Make the request to Tank01 API
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        
+        # Return the response with CORS headers
+        return jsonify(response.json()), response.status_code
+        
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Tank01 API timeout'}), 504
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Tank01 proxy error: {str(e)}")
+        return jsonify({'error': f'API request failed: {str(e)}'}), 500
+    except Exception as e:
+        logger.error(f"Proxy error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/proxy/nfl/schedule', methods=['GET'])
+def nfl_schedule_proxy():
+    """
+    Specialized proxy for NFL schedule data
+    Usage: /api/proxy/nfl/schedule?teamAbv=KC
+    """
+    try:
+        team_abv = request.args.get('teamAbv')
+        if not team_abv:
+            return jsonify({'error': 'Missing teamAbv parameter'}), 400
+        
+        url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule'
+        headers = {
+            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+        }
+        params = {'teamAbv': team_abv, 'season': '2024'}
+        
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        return jsonify(response.json()), response.status_code
+        
+    except Exception as e:
+        logger.error(f"Schedule proxy error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/proxy/nfl/roster', methods=['GET'])
+def nfl_roster_proxy():
+    """
+    Specialized proxy for NFL team roster data
+    Usage: /api/proxy/nfl/roster?teamID=LAC&getStats=false
+    """
+    try:
+        team_id = request.args.get('teamID')
+        get_stats = request.args.get('getStats', 'false')
+        
+        if not team_id:
+            return jsonify({'error': 'Missing teamID parameter'}), 400
+        
+        url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster'
+        headers = {
+            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+        }
+        params = {'teamID': team_id, 'getStats': get_stats}
+        
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        return jsonify(response.json()), response.status_code
+        
+    except Exception as e:
+        logger.error(f"Roster proxy error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/proxy/nfl/games', methods=['GET'])
+def nfl_games_proxy():
+    """
+    Specialized proxy for NFL games data
+    Usage: /api/proxy/nfl/games?gameWeek=8&season=2024
+    """
+    try:
+        game_week = request.args.get('gameWeek', 'all')
+        season = request.args.get('season', '2024')
+        
+        url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForWeek'
+        headers = {
+            'X-RapidAPI-Key': 'be76a86cb3msh01c346c2b0ef4ffp151e0djsn0b0e85e00bd3',
+            'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+        }
+        params = {'week': game_week, 'season': season}
+        
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        return jsonify(response.json()), response.status_code
+        
+    except Exception as e:
+        logger.error(f"Games proxy error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     import os
     
