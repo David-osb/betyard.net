@@ -2,6 +2,7 @@
 """
 BetYard NFL Multi-Position Prediction ML Backend
 Real XGBoost models for QB, RB, WR, TE predictions via Flask API
+Includes Tank01 API proxy to solve CORS issues
 """
 
 from flask import Flask, request, jsonify
