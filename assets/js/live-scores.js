@@ -1006,7 +1006,7 @@ class LiveNFLScores {
                 this.lastGameSignature = null; // Reset signature to force update
             }
             
-            // Only update if games have actually changed OR this is the first update OR sport changed
+            // Calculate signature to detect actual game changes (scores, status)
             const gamesSignature = JSON.stringify(this.games.map(g => ({
                 id: `${g.away}-${g.home}`,
                 status: g.status,
@@ -1014,14 +1014,27 @@ class LiveNFLScores {
                 homeScore: g.homeScore
             })));
             
-            // Force update on first load (when lastGameSignature is null)
-            // or when games have actually changed, or when sport changes
-            if (this.lastGameSignature === null || this.lastGameSignature !== gamesSignature || sportChanged) {
-                console.log('🎯 Updating Game-Centric UI with', this.games.length, 'games');
+            // Check if this is first load (signature is null)
+            const isFirstLoad = this.lastGameSignature === null;
+            
+            // Check if games have actually changed (scores, status, etc)
+            const gamesChanged = this.lastGameSignature !== gamesSignature;
+            
+            // Update UI if:
+            // 1. First load (initial page load) - ALWAYS render
+            // 2. Sport changed (user switched back to football) - ALWAYS render
+            // 3. Games changed (live scores updated, status changed) - UPDATE only
+            if (isFirstLoad || sportChanged) {
+                console.log('🎯 Rendering Game-Centric UI with', this.games.length, 'games (first load or sport change)');
+                window.gameCentricUI.updateWithLiveGames(this.games);
+                this.lastGameSignature = gamesSignature;
+            } else if (gamesChanged) {
+                console.log('🔄 Updating Game-Centric UI - scores/status changed');
                 window.gameCentricUI.updateWithLiveGames(this.games);
                 this.lastGameSignature = gamesSignature;
             } else {
-                console.log('✅ Games unchanged, skipping Game-Centric UI update');
+                console.log('✅ Games unchanged - keeping existing UI (no reload needed)');
+                // Don't update UI, games are already displayed
             }
         }
     }
