@@ -113,6 +113,12 @@
             animation: pulse 2s infinite;
         }
 
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Sport Selection Header */
         .sport-selector-header {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -1197,7 +1203,7 @@
         // Sport Selection Function
         let currentSport = 'football'; // Default sport
 
-        function selectSport(sport) {
+        async function selectSport(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
             
             // Update current sport
@@ -1221,14 +1227,17 @@
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
                             <p style="color: #64748b;">Fetching live and upcoming matchups from Tank01 API</p>
                             <div style="margin-top: 20px;">
-                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
                         </div>
                     `;
-                    // Reload games if the game-centric system is available
-                    if (window.GameCentricUI && window.GameCentricUI.loadGames) {
-                        window.GameCentricUI.loadGames();
-                    }
+                    
+                    // Small delay to ensure DOM is ready, then reload games
+                    setTimeout(() => {
+                        if (window.GameCentricUI && window.GameCentricUI.loadGames) {
+                            window.GameCentricUI.loadGames();
+                        }
+                    }, 100);
                 }
             } else if (sport === 'basketball') {
                 // Load NBA games
@@ -1239,7 +1248,7 @@
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
                             <p style="color: #64748b;">Fetching this week's matchups</p>
                             <div style="margin-top: 20px;">
-                                <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
                         </div>
                     `;
