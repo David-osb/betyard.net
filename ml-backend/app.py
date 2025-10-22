@@ -18,6 +18,8 @@ import pickle
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 import logging
+import time
+from functools import wraps
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +27,50 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests from frontend
+
+# Simple in-memory cache for API responses
+API_CACHE = {}
+CACHE_DURATION = 300  # 5 minutes
+
+# Rate limiting
+RATE_LIMIT_WINDOW = 1.0  # 1 second between requests
+last_request_time = 0
+
+def cache_response(duration=CACHE_DURATION):
+    """Decorator to cache API responses"""
+    def decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            # Create cache key from request args
+            cache_key = f"{f.__name__}:{request.url}"
+            
+            # Check cache
+            if cache_key in API_CACHE:
+                cached_data, timestamp = API_CACHE[cache_key]
+                if time.time() - timestamp < duration:
+                    logger.info(f"✅ Cache hit: {cache_key}")
+                    return cached_data
+            
+            # Call function and cache result
+            result = f(*args, **kwargs)
+            API_CACHE[cache_key] = (result, time.time())
+            logger.info(f"💾 Cached: {cache_key}")
+            return result
+        return wrapped
+    return decorator
+
+def rate_limit():
+    """Simple rate limiter to avoid hitting API limits"""
+    global last_request_time
+    current_time = time.time()
+    time_since_last = current_time - last_request_time
+    
+    if time_since_last < RATE_LIMIT_WINDOW:
+        sleep_time = RATE_LIMIT_WINDOW - time_since_last
+        logger.info(f"⏱️ Rate limiting: sleeping {sleep_time:.2f}s")
+        time.sleep(sleep_time)
+    
+    last_request_time = time.time()
 
 @dataclass
 class PlayerPrediction:
@@ -755,15 +801,18 @@ def tank01_proxy():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/proxy/nfl/schedule', methods=['GET'])
+@cache_response(duration=1800)  # Cache schedules for 30 minutes
 def nfl_schedule_proxy():
     """
-    Specialized proxy for NFL schedule data
+    Specialized proxy for NFL schedule data with caching
     Usage: /api/proxy/nfl/schedule?teamAbv=KC
     """
     try:
         team_abv = request.args.get('teamAbv')
         if not team_abv:
             return jsonify({'error': 'Missing teamAbv parameter'}), 400
+        
+        rate_limit()
         
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule'
         headers = {
@@ -772,6 +821,7 @@ def nfl_schedule_proxy():
         }
         params = {'teamAbv': team_abv, 'season': '2024'}
         
+        logger.info(f"🔄 Fetching schedule for {team_abv}")
         response = requests.get(url, headers=headers, params=params, timeout=10)
         return jsonify(response.json()), response.status_code
         
@@ -780,9 +830,10 @@ def nfl_schedule_proxy():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/proxy/nfl/roster', methods=['GET'])
+@cache_response(duration=600)  # Cache rosters for 10 minutes
 def nfl_roster_proxy():
     """
-    Specialized proxy for NFL team roster data
+    Specialized proxy for NFL team roster data with caching and rate limiting
     Usage: /api/proxy/nfl/roster?teamID=LAC&getStats=false (accepts teamID or teamAbv)
     """
     try:
@@ -793,6 +844,9 @@ def nfl_roster_proxy():
         if not team_id:
             return jsonify({'error': 'Missing teamID or teamAbv parameter'}), 400
         
+        # Rate limiting to avoid hitting API limits
+        rate_limit()
+        
         url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamRoster'
         headers = {
             'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
@@ -801,6 +855,7 @@ def nfl_roster_proxy():
         # Use teamAbv parameter for Tank01 API
         params = {'teamAbv': team_id, 'getStats': get_stats}
         
+        logger.info(f"🔄 Fetching roster for {team_id}")
         response = requests.get(url, headers=headers, params=params, timeout=10)
         return jsonify(response.json()), response.status_code
         
