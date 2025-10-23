@@ -1,119 +1,158 @@
 {
+  "best_params": {
+    "QB": {
+      "colsample_bytree": 0.7,
+      "gamma": 0.1,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "min_child_weight": 3,
+      "n_estimators": 400,
+      "reg_alpha": 0.1,
+      "reg_lambda": 10,
+      "subsample": 0.7
+    },
+    "RB": {
+      "colsample_bytree": 0.7,
+      "gamma": 0.1,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "min_child_weight": 5,
+      "n_estimators": 200,
+      "reg_alpha": 0.1,
+      "reg_lambda": 10,
+      "subsample": 0.85
+    },
+    "WR": {
+      "colsample_bytree": 0.9,
+      "gamma": 0.1,
+      "learning_rate": 0.1,
+      "max_depth": 4,
+      "min_child_weight": 3,
+      "n_estimators": 400,
+      "reg_alpha": 0,
+      "reg_lambda": 10,
+      "subsample": 0.85
+    },
+    "TE": {
+      "colsample_bytree": 0.9,
+      "gamma": 0.2,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "min_child_weight": 5,
+      "n_estimators": 400,
+      "reg_alpha": 0.01,
+      "reg_lambda": 0.1,
+      "subsample": 0.9
+    }
+  },
   "training_scores": {
     "QB": {
       "train": {
-        "mse": 84.51021411292328,
-        "mae": 6.987745268787599,
-        "r2": 0.9867302725714406
+        "mse": 406.1081045527604,
+        "mae": 15.802284700500904,
+        "r2": 0.9362332244627466
       },
       "test": {
-        "mse": 721.5238471630526,
-        "mae": 21.297343104875008,
-        "r2": 0.8835329812984734
+        "mse": 680.9021370672681,
+        "mae": 20.480489944925115,
+        "r2": 0.8900900611344563
       },
       "samples": 2936,
       "params": {
-        "n_estimators": 300,
-        "max_depth": 7,
-        "learning_rate": 0.05,
-        "subsample": 0.85,
-        "colsample_bytree": 0.85,
-        "min_child_weight": 3,
+        "colsample_bytree": 0.7,
         "gamma": 0.1,
-        "reg_alpha": 0.01,
-        "reg_lambda": 1,
-        "objective": "reg:squarederror",
-        "random_state": 42,
-        "n_jobs": -1
+        "learning_rate": 0.05,
+        "max_depth": 4,
+        "min_child_weight": 3,
+        "n_estimators": 400,
+        "reg_alpha": 0.1,
+        "reg_lambda": 10,
+        "subsample": 0.7
       },
-      "data_source": "NFL 2020-2024 Real Stats"
+      "data_source": "NFL 2020-2024 Real Stats",
+      "tuning": "Full GridSearchCV"
     },
     "RB": {
       "train": {
-        "mse": 107.7691564764351,
-        "mae": 6.933882604445743,
-        "r2": 0.9167974442253971
+        "mse": 212.7084285411367,
+        "mae": 9.506519666887,
+        "r2": 0.8357796843914994
       },
       "test": {
-        "mse": 282.7738346701625,
-        "mae": 10.509039204301148,
-        "r2": 0.7802199975351026
+        "mse": 244.30604010129372,
+        "mae": 9.99647033390508,
+        "r2": 0.8101182800088921
       },
       "samples": 6945,
       "params": {
-        "n_estimators": 300,
-        "max_depth": 7,
-        "learning_rate": 0.05,
-        "subsample": 0.85,
-        "colsample_bytree": 0.85,
-        "min_child_weight": 3,
+        "colsample_bytree": 0.7,
         "gamma": 0.1,
-        "reg_alpha": 0.01,
-        "reg_lambda": 1,
-        "objective": "reg:squarederror",
-        "random_state": 42,
-        "n_jobs": -1
+        "learning_rate": 0.03,
+        "max_depth": 4,
+        "min_child_weight": 5,
+        "n_estimators": 200,
+        "reg_alpha": 0.1,
+        "reg_lambda": 10,
+        "subsample": 0.85
       },
-      "data_source": "NFL 2020-2024 Real Stats"
+      "data_source": "NFL 2020-2024 Real Stats",
+      "tuning": "Full GridSearchCV"
     },
     "WR": {
       "train": {
-        "mse": 38.559605949486425,
-        "mae": 4.105253247938643,
-        "r2": 0.9709427793262638
+        "mse": 62.022876061949404,
+        "mae": 5.292097802045629,
+        "r2": 0.9532616490191115
       },
       "test": {
-        "mse": 89.45557525783379,
-        "mae": 6.021588433784231,
-        "r2": 0.934382371431447
+        "mse": 86.99306192942389,
+        "mae": 6.122495926867451,
+        "r2": 0.936188679025613
       },
       "samples": 11178,
       "params": {
-        "n_estimators": 300,
-        "max_depth": 7,
-        "learning_rate": 0.05,
-        "subsample": 0.85,
-        "colsample_bytree": 0.85,
-        "min_child_weight": 3,
+        "colsample_bytree": 0.9,
         "gamma": 0.1,
-        "reg_alpha": 0.01,
-        "reg_lambda": 1,
-        "objective": "reg:squarederror",
-        "random_state": 42,
-        "n_jobs": -1
+        "learning_rate": 0.1,
+        "max_depth": 4,
+        "min_child_weight": 3,
+        "n_estimators": 400,
+        "reg_alpha": 0,
+        "reg_lambda": 10,
+        "subsample": 0.85
       },
-      "data_source": "NFL 2020-2024 Real Stats"
+      "data_source": "NFL 2020-2024 Real Stats",
+      "tuning": "Full GridSearchCV"
     },
     "TE": {
       "train": {
-        "mse": 7.636571565120823,
-        "mae": 1.7023839325904628,
-        "r2": 0.9887115864216788
+        "mse": 17.345415803781094,
+        "mae": 2.6677721715749194,
+        "r2": 0.9743599302892237
       },
       "test": {
-        "mse": 36.56035120607535,
-        "mae": 3.531579348912109,
-        "r2": 0.9486033596814057
+        "mse": 33.53908468107994,
+        "mae": 3.4822987246349735,
+        "r2": 0.9528506643097594
       },
       "samples": 5554,
       "params": {
-        "n_estimators": 300,
-        "max_depth": 7,
+        "colsample_bytree": 0.9,
+        "gamma": 0.2,
         "learning_rate": 0.05,
-        "subsample": 0.85,
-        "colsample_bytree": 0.85,
-        "min_child_weight": 3,
-        "gamma": 0.1,
+        "max_depth": 4,
+        "min_child_weight": 5,
+        "n_estimators": 400,
         "reg_alpha": 0.01,
-        "reg_lambda": 1,
-        "objective": "reg:squarederror",
-        "random_state": 42,
-        "n_jobs": -1
+        "reg_lambda": 0.1,
+        "subsample": 0.9
       },
-      "data_source": "NFL 2020-2024 Real Stats"
+      "data_source": "NFL 2020-2024 Real Stats",
+      "tuning": "Full GridSearchCV"
     }
   },
-  "timestamp": "2025-10-21 07:50:46.722097",
+  "timestamp": "2025-10-23T19:25:00.168689",
   "data_source": "NFL Official Stats 2020-2024",
-  "total_samples": 26613
+  "total_samples": 26613,
+  "tuning_method": "GridSearchCV with 5-fold CV"
 }
