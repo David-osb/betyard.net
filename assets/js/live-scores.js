@@ -463,7 +463,7 @@ class LiveNFLScores {
         // Fetch ONLY the current week's games
         try {
             console.log(`🔍 Fetching NFL Week ${currentWeek}...`);
-            const weekData = await this.scheduleAPI.fetchWeeklySchedule(currentWeek);
+            const weekData = await this.scheduleAPI.fetchCurrentAndUpcomingGames();
             
             // Handle Tank01 API response format: {statusCode: 200, body: Array}
             const games = weekData?.body || weekData;
