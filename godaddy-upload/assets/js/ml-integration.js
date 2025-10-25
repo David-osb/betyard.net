@@ -28,23 +28,36 @@ class BetYardMLAPI {
                                   
         return isLocalDevelopment 
             ? 'http://localhost:5000' 
-            : 'https://betyard-ml-backend-production.up.railway.app';
+            : 'https://betyard-ml-backend.onrender.com';
     }
 
     async checkBackendHealth() {
         try {
-            const response = await fetch(`${this.baseURL}/health`);
+            console.log('🔍 Checking ML backend health at:', this.baseURL);
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            
+            const response = await fetch(`${this.baseURL}/health`, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            
             const data = await response.json();
             this.isAvailable = data.status === 'healthy' && data.model_loaded;
             
             if (this.isAvailable) {
-                console.log('🧠 ML Backend connected - Real XGBoost model active!');
+                console.log('✅ ML Backend connected - Real XGBoost model active!');
+                console.log('📊 Backend URL:', this.baseURL);
+                console.log('🎯 Model loaded:', data.model_loaded);
                 this.logModelInfo();
             } else {
-                console.log('⚠️ ML Backend unavailable - Using fallback predictions');
+                console.warn('⚠️ ML Backend unavailable - Using fallback predictions');
+                console.warn('📊 Health check response:', data);
             }
         } catch (error) {
-            console.log('⚠️ ML Backend not running - Using fallback predictions');
+            console.error('❌ ML Backend not reachable:', error.message);
+            console.error('🔗 Attempted URL:', this.baseURL);
             this.isAvailable = false;
         }
     }
@@ -73,34 +86,50 @@ class BetYardMLAPI {
         }
     }
 
-    async getPrediction(qbName, teamCode, opponentCode = null) {
+    async getPrediction(playerName, teamCode, opponentCode = null, position = 'QB') {
+        // Check if backend is available, if not try to wake it up
         if (!this.isAvailable) {
-            return this.getFallbackPrediction(qbName, teamCode);
+            console.log('🔄 Backend not available, attempting to wake up...');
+            await this.checkBackendHealth();
+            
+            // If still not available after check, use fallback
+            if (!this.isAvailable) {
+                console.log('⚠️ Backend still unavailable, using fallback');
+                return this.getFallbackPrediction(playerName, teamCode, position);
+            }
         }
 
         try {
+            console.log(`🎯 Requesting ${position} prediction for ${playerName} (${teamCode})`);
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for cold start
+            
             const response = await fetch(`${this.baseURL}/predict`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    qb_name: qbName,
+                    player_name: playerName,
                     team_code: teamCode,
-                    opponent_code: opponentCode
-                })
+                    opponent_code: opponentCode,
+                    position: position
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
             const data = await response.json();
             
             if (data.success) {
-                console.log('🎯 Real ML Prediction Generated:', data.prediction);
-                console.log('📊 Weather Impact:', data.metadata.weather_impact);
-                console.log('🏥 Injury Adjustment:', data.metadata.injury_adjustment);
+                console.log(`✅ Real ML ${position} Prediction Generated:`, data.prediction);
+                console.log('📊 Confidence:', data.prediction.confidence + '%');
                 
                 return {
                     ...data.prediction,
@@ -108,39 +137,78 @@ class BetYardMLAPI {
                     source: 'XGBoost_Real'
                 };
             } else {
-                throw new Error(data.error);
+                throw new Error(data.error || 'Prediction failed');
             }
 
         } catch (error) {
-            console.log('❌ ML Backend error:', error.message);
+            console.error(`❌ ML Backend error for ${position}:`, error.message);
             console.log('🔄 Falling back to simulation...');
-            return this.getFallbackPrediction(qbName, teamCode);
+            return this.getFallbackPrediction(playerName, teamCode, position);
         }
     }
 
-    getFallbackPrediction(qbName, teamCode) {
-        // Enhanced fallback with more realistic variance
-        const basePrediction = {
-            passing_yards: Math.floor(Math.random() * 150) + 200,
-            completions: Math.floor(Math.random() * 10) + 20,
-            attempts: Math.floor(Math.random() * 15) + 30,
-            touchdowns: Math.floor(Math.random() * 3) + 1,
-            interceptions: Math.floor(Math.random() * 2),
-            confidence: Math.floor(Math.random() * 20) + 70
-        };
+    getFallbackPrediction(playerName, teamCode, position = 'QB') {
+        let basePrediction = { position };
+        
+        if (position === 'QB') {
+            // QB predictions
+            basePrediction = {
+                ...basePrediction,
+                passing_yards: Math.floor(Math.random() * 150) + 200,
+                completions: Math.floor(Math.random() * 10) + 20,
+                attempts: Math.floor(Math.random() * 15) + 30,
+                touchdowns: Math.floor(Math.random() * 3) + 1,
+                interceptions: Math.floor(Math.random() * 2),
+                confidence: Math.floor(Math.random() * 20) + 70
+            };
 
-        // Calculate QB rating
-        const compPct = (basePrediction.completions / basePrediction.attempts) * 100;
-        const yardsPerAtt = basePrediction.passing_yards / basePrediction.attempts;
-        const tdPct = (basePrediction.touchdowns / basePrediction.attempts) * 100;
-        const intPct = (basePrediction.interceptions / basePrediction.attempts) * 100;
+            // Calculate QB rating
+            const compPct = (basePrediction.completions / basePrediction.attempts) * 100;
+            const yardsPerAtt = basePrediction.passing_yards / basePrediction.attempts;
+            const tdPct = (basePrediction.touchdowns / basePrediction.attempts) * 100;
+            const intPct = (basePrediction.interceptions / basePrediction.attempts) * 100;
 
-        basePrediction.qb_rating = Math.min(158.3, Math.max(0, 
-            (compPct - 30) * 0.05 + 
-            (yardsPerAtt - 3) * 0.25 + 
-            tdPct * 0.2 - 
-            intPct * 0.25
-        ) * 100);
+            basePrediction.qb_rating = Math.min(158.3, Math.max(0, 
+                (compPct - 30) * 0.05 + 
+                (yardsPerAtt - 3) * 0.25 + 
+                tdPct * 0.2 - 
+                intPct * 0.25
+            ) * 100);
+            
+        } else if (position === 'RB') {
+            // RB predictions
+            basePrediction = {
+                ...basePrediction,
+                rushing_yards: Math.floor(Math.random() * 100) + 50,
+                rushing_attempts: Math.floor(Math.random() * 10) + 12,
+                touchdowns: Math.floor(Math.random() * 2),
+                receiving_yards: Math.floor(Math.random() * 30) + 10,
+                receptions: Math.floor(Math.random() * 4) + 1,
+                confidence: Math.floor(Math.random() * 20) + 70
+            };
+            
+        } else if (position === 'WR') {
+            // WR predictions
+            basePrediction = {
+                ...basePrediction,
+                receiving_yards: Math.floor(Math.random() * 80) + 40,
+                receptions: Math.floor(Math.random() * 6) + 4,
+                targets: Math.floor(Math.random() * 4) + 8,
+                touchdowns: Math.floor(Math.random() * 2),
+                confidence: Math.floor(Math.random() * 20) + 70
+            };
+            
+        } else if (position === 'TE') {
+            // TE predictions
+            basePrediction = {
+                ...basePrediction,
+                receiving_yards: Math.floor(Math.random() * 60) + 30,
+                receptions: Math.floor(Math.random() * 5) + 3,
+                targets: Math.floor(Math.random() * 3) + 5,
+                touchdowns: Math.floor(Math.random() * 2),
+                confidence: Math.floor(Math.random() * 20) + 70
+            };
+        }
 
         return {
             ...basePrediction,
@@ -257,7 +325,7 @@ if (window.XGBoostModel) {
     window.XGBoostModel.predict = async function(features) {
         // This is called by legacy code - redirect to real ML
         const prediction = await window.BetYardML.getPrediction('Unknown', 'KC');
-        return prediction.confidence / 100; // Return normalized confidence
+        return prediction.confidence; // Return confidence as percentage (backend already provides 60-95)
     };
     
     window.XGBoostModel.getFeatureImportance = async function() {
