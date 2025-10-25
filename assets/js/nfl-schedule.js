@@ -46,7 +46,7 @@ const NFL_2025_SCHEDULE = {
         ],
         week8: [
             { away: 'NYJ', home: 'NE', time: 'Thursday 8:15 PM ET' },
-            { away: 'BAL', home: 'CLE', time: 'Sunday 1:00 PM ET' },
+            { away: 'CLE', home: 'NE', time: 'Sunday 1:00 PM ET' }, // Browns @ Patriots - Week 8
             { away: 'ARI', home: 'MIA', time: 'Sunday 1:00 PM ET' },
             { away: 'ATL', home: 'TB', time: 'Sunday 1:00 PM ET' },
             { away: 'GB', home: 'JAX', time: 'Sunday 1:00 PM ET' },
