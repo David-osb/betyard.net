@@ -382,6 +382,15 @@ class LiveNFLScores {
         try {
             console.log('🔄 Fetching live NFL scores with proper data flow...');
             
+            // FORCE CLEAR ALL CACHED DATA for fresh Week 8 fetch
+            if (this.scheduleAPI && this.scheduleAPI.cache) {
+                console.log('🧹 Clearing all API cache for fresh Week 8 data...');
+                this.scheduleAPI.cache.dailySchedule = { data: null, expires: null };
+                this.scheduleAPI.cache.liveScores = { data: null, expires: null };
+                this.scheduleAPI.cache.gameInfo.clear();
+                this.scheduleAPI.cache.lastScheduleFetch = null;
+            }
+            
             // Skip potentially stale cached data and fetch fresh current week games directly
             console.log('🔍 Fetching fresh current week NFL games...');
             const freshUpcomingGames = await this.findUpcomingNFLGames();
