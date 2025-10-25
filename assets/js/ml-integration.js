@@ -9,8 +9,7 @@ class BetYardMLAPI {
         this.isAvailable = false;
         
         console.log(`🔗 ML Backend URL: ${this.baseURL}`);
-        // DISABLED: Skip health check to prevent CORS errors when backend is offline
-        // this.checkBackendHealth();
+        this.checkBackendHealth();
     }
     
     getMLBackendURL() {
@@ -33,11 +32,6 @@ class BetYardMLAPI {
     }
 
     async checkBackendHealth() {
-        // DISABLED: Prevent console spam from CORS errors when backend is offline
-        console.log('⚠️ ML backend health check disabled to prevent CORS errors');
-        this.isAvailable = false;
-        return;
-        
         try {
             console.log('🔍 Checking ML backend health at:', this.baseURL);
             
@@ -95,9 +89,8 @@ class BetYardMLAPI {
     async getPrediction(playerName, teamCode, opponentCode = null, position = 'QB') {
         // Check if backend is available, if not try to wake it up
         if (!this.isAvailable) {
-            console.log('🔄 Backend not available, skipping health check to prevent CORS errors');
-            // DISABLED: Skip health check to prevent console spam
-            // await this.checkBackendHealth();
+            console.log('🔄 Backend not available, attempting to wake up...');
+            await this.checkBackendHealth();
             
             // If still not available after check, use fallback
             if (!this.isAvailable) {
