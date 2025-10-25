@@ -891,7 +891,7 @@ if __name__ == '__main__':
     import os
     
     # Get port from environment variable (Railway/Heroku sets this)
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))  # Use 5001 as default
     
     logger.info("🚀 Starting NFL Multi-Position Prediction ML Backend...")
     logger.info("🏈 XGBoost Models: QB, RB, WR, TE")
