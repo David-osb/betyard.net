@@ -525,7 +525,7 @@ class NFLScheduleAPI {
             }
         }
         
-        console.error(`❌ No NFL games found for Week ${currentWeek} (API or static)`);
+        console.log(`ℹ️ No additional games found for Week ${currentWeek} from fallback sources (main API already succeeded)`);
         return null;
     }
     
