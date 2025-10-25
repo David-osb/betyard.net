@@ -11,8 +11,8 @@ const ML_CONFIG = {
     // 🔧 Development
     LOCAL: 'http://localhost:5000',
     
-    // 🎯 Active Configuration - LIVE ML BACKEND! 🔥
-    ACTIVE: 'RENDER' // ✅ LIVE: Your deployed ML backend with real XGBoost predictions!
+    // 🎯 Active Configuration - LOCAL ML BACKEND WITH REAL XGBOOST! 🔥
+    ACTIVE: 'LOCAL' // ✅ LOCAL: Using real trained XGBoost models from localhost:5000
 };
 
 // Export for use in ml-integration.js
@@ -22,10 +22,6 @@ window.ML_CONFIG = ML_CONFIG;
 console.log('🔍 Testing ML Backend Endpoints...');
 
 async function testMLEndpoints() {
-    // DISABLED: Skip health check to prevent CORS errors when backend is offline
-    console.log('⚠️ ML backend health checks disabled to prevent console spam');
-    return;
-    
     // Always test the active provider
     const activeProvider = ML_CONFIG.ACTIVE;
     console.log(`🎯 Testing ACTIVE provider: ${activeProvider}`);
@@ -73,5 +69,4 @@ async function testMLEndpoints() {
 }
 
 // Run the test
-// DISABLED: Prevent console spam from health check errors
-// testMLEndpoints();
+testMLEndpoints();
