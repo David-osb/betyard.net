@@ -382,7 +382,17 @@ class LiveNFLScores {
         try {
             console.log('🔄 Fetching live NFL scores with proper data flow...');
             
-            // First, try to get data from our Schedule API
+            // Skip potentially stale cached data and fetch fresh current week games directly
+            console.log('🔍 Fetching fresh current week NFL games...');
+            const freshUpcomingGames = await this.findUpcomingNFLGames();
+            if (freshUpcomingGames) {
+                console.log('✅ Found fresh upcoming NFL games');
+                await this.processScheduleAPIData(freshUpcomingGames);
+                this.updateLiveScoresDisplay();
+                return;
+            }
+            
+            // First, try to get data from our Schedule API as fallback
             if (this.scheduleAPI) {
                 const todaysGames = this.scheduleAPI.getTodaysGames();
                 if (todaysGames && todaysGames.body) {
@@ -460,10 +470,11 @@ class LiveNFLScores {
         
         console.log(`🏈 Fetching ONLY Week ${currentWeek} games (current week, Tuesday-Monday)`);
         
-        // Fetch ONLY the current week's games
+        // Force use of current week games to maintain consistency
         try {
             console.log(`🔍 Fetching NFL Week ${currentWeek}...`);
-            const weekData = await this.scheduleAPI.fetchCurrentAndUpcomingGames();
+            // Use the same data source as initial load for consistency
+            const weekData = await this.scheduleAPI.fetchWeeklySchedule(currentWeek);
             
             // Handle Tank01 API response format: {statusCode: 200, body: Array}
             const games = weekData?.body || weekData;
