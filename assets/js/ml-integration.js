@@ -325,7 +325,7 @@ if (window.XGBoostModel) {
     window.XGBoostModel.predict = async function(features) {
         // This is called by legacy code - redirect to real ML
         const prediction = await window.BetYardML.getPrediction('Unknown', 'KC');
-        return prediction.confidence / 100; // Return normalized confidence
+        return prediction.confidence; // Return confidence as percentage (backend already provides 60-95)
     };
     
     window.XGBoostModel.getFeatureImportance = async function() {
