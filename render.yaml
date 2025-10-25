@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: betyard-ml-backend
+    env: python
+    buildCommand: "cd ml-backend && pip install -r requirements.txt"
+    startCommand: "cd ml-backend && python app.py"
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHON_VERSION
+        fromFile: ml-backend/runtime.txt
+    healthCheckPath: /health
+    autoDeploy: true
+    rootDir: .
