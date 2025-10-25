@@ -33,6 +33,11 @@ class BetYardMLAPI {
     }
 
     async checkBackendHealth() {
+        // DISABLED: Prevent console spam from CORS errors when backend is offline
+        console.log('⚠️ ML backend health check disabled to prevent CORS errors');
+        this.isAvailable = false;
+        return;
+        
         try {
             console.log('🔍 Checking ML backend health at:', this.baseURL);
             
