@@ -73,4 +73,5 @@ async function testMLEndpoints() {
 }
 
 // Run the test
-testMLEndpoints();
+// DISABLED: Prevent console spam from health check errors
+// testMLEndpoints();
