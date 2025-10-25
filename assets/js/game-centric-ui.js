@@ -1466,7 +1466,7 @@ class GameCentricUI {
                 attempts: 32 + Math.floor(Math.random() * 10), // 32-42 attempts (NFL avg ~36)
                 qb_rating: 85 + Math.random() * 25, // 85-110 rating (NFL avg ~92)
                 metadata: {
-                    confidence: 0.78 + Math.random() * 0.12, // 78-90% confidence
+                    confidence: 78 + Math.random() * 12, // 78-90% confidence
                     source: 'smart_fallback'
                 }
             };
@@ -1477,7 +1477,7 @@ class GameCentricUI {
                 targets: 6 + Math.floor(Math.random() * 8), // 6-14 targets (NFL avg ~9)
                 touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.5)
                 metadata: {
-                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    confidence: 75 + Math.random() * 15, // 75-90% confidence
                     source: 'smart_fallback'
                 }
             };
@@ -1488,7 +1488,7 @@ class GameCentricUI {
                 targets: 4 + Math.floor(Math.random() * 6), // 4-10 targets (NFL avg ~7)
                 touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.4)
                 metadata: {
-                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    confidence: 75 + Math.random() * 15, // 75-90% confidence
                     source: 'smart_fallback'
                 }
             };
@@ -1500,7 +1500,7 @@ class GameCentricUI {
                 receptions: 1 + Math.floor(Math.random() * 5), // 1-6 receptions (NFL avg ~3)
                 touchdowns: Math.floor(Math.random() * 2), // 0-1 TDs (NFL avg ~0.6)
                 metadata: {
-                    confidence: 0.75 + Math.random() * 0.15, // 75-90% confidence
+                    confidence: 75 + Math.random() * 15, // 75-90% confidence
                     source: 'smart_fallback'
                 }
             };
