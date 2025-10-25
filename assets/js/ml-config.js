@@ -11,8 +11,8 @@ const ML_CONFIG = {
     // 🔧 Development
     LOCAL: 'http://localhost:5001',
     
-    // 🎯 Active Configuration - USING FALLBACK WHILE FIXING CLOUD DEPLOYMENT
-    ACTIVE: 'LOCAL' // 🔄 LOCAL: Temporary fallback while fixing cloud services
+    // 🎯 Active Configuration - REAL XGBOOST MODELS LIVE! 🔥
+    ACTIVE: 'RENDER' // ✅ RENDER: Real trained XGBoost models now live!
 };
 
 // Export for use in ml-integration.js
