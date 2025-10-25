@@ -13,7 +13,7 @@ class NFLScheduleAPI {
                 'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
                 'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
             },
-            // Disable roster fetching to avoid CORS errors (not critical for game display)
+            // DISABLE roster fetching to stop CORS errors - not critical for game display
             enableRosterFetch: false
         };
         
@@ -58,7 +58,8 @@ class NFLScheduleAPI {
         this.fetchDailySchedule();
         
         // Set up intelligent roster updates
-        this.setupSmartRosterUpdates();
+        // DISABLE roster updates to prevent 502/CORS errors - focus on schedule only
+        // this.setupSmartRosterUpdates();
         
         // Add additional NFL data endpoints
         this.setupEnhancedDataCollection();
