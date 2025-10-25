@@ -297,6 +297,10 @@ class NFLScheduleAPI {
     }
     
     async fetchTeamSchedules() {
+        // DISABLED: Prevent console spam from team schedule API errors when ML backend is offline
+        console.log('⚠️ Team schedule fetching disabled to prevent 502/CORS errors');
+        return;
+        
         const priorityTeams = ['PHI', 'KC', 'CIN', 'BAL'];
         
         for (const teamID of priorityTeams) {
@@ -788,6 +792,10 @@ class NFLScheduleAPI {
     }
     
     async updatePriorityRosters() {
+        // DISABLED: Prevent console spam from roster API errors when ML backend is offline
+        console.log('⚠️ Roster updates disabled to prevent 502/CORS errors');
+        return;
+        
         const priorityTeams = ['PHI', 'MIN', 'KC', 'BAL', 'SF', 'BUF', 'CIN', 'DAL'];
         console.log('🔄 Updating priority team rosters...');
         
