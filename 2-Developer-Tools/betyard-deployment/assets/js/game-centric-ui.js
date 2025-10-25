@@ -1278,7 +1278,7 @@ class GameCentricUI {
         
         return positionData.stats.map(stat => {
             const range = ranges[stat];
-            if (!range) return { stat, value: 'N/A', confidence: 0, trend: 'neutral', trendText: '' };
+            if (!range) return { stat, value: 'N/A', confidence: 0, model_accuracy: 0, prediction_likelihood: 0, trend: 'neutral', trendText: '' };
             
             // NO FAKE DATA - Only real ML predictions
             console.error('❌ NO MOCK PREDICTIONS - Real ML backend required for stat predictions');
