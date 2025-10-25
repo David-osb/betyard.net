@@ -27,18 +27,21 @@ const NFL_2025_SCHEDULE = {
         { week: 18, start: '2026-01-01', end: '2026-01-07', title: 'Week 18 - January 2026' }
     ],
     games: {
-        // WEEK 8 - CORRECT DATA: Browns @ Patriots
+        // WEEK 8 - CORRECT DATA FROM CSV: October 23-27, 2025
         week8: [
-            { away: 'CLE', home: 'NE', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26' }, // BROWNS @ PATRIOTS
-            // Add other Week 8 games here - please provide the correct matchups
-            // Placeholder games (need correct data):
-            { away: 'BAL', home: 'MIA', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26' },
-            { away: 'ARI', home: 'GB', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26' },
-            { away: 'ATL', home: 'TB', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26' },
-            { away: 'CAR', home: 'BUF', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26' },
-            { away: 'IND', home: 'LAC', time: 'Sunday 4:05 PM ET', gameDate: '2025-10-26' },
-            { away: 'JAX', home: 'LAR', time: 'Sunday 4:25 PM ET', gameDate: '2025-10-26' },
-            { away: 'KC', home: 'LV', time: 'Monday 8:15 PM ET', gameDate: '2025-10-27' }
+            { away: 'MIN', home: 'LAC', time: 'Thursday 8:15 PM ET', gameDate: '2025-10-23', network: 'Prime Video' },
+            { away: 'MIA', home: 'ATL', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'CBS' },
+            { away: 'CHI', home: 'BAL', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'CBS' },
+            { away: 'BUF', home: 'CAR', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'FOX' },
+            { away: 'NYJ', home: 'CIN', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'CBS' },
+            { away: 'SF', home: 'HOU', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'FOX' },
+            { away: 'CLE', home: 'NE', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'FOX' }, // BROWNS @ PATRIOTS ✅
+            { away: 'NYG', home: 'PHI', time: 'Sunday 1:00 PM ET', gameDate: '2025-10-26', network: 'FOX' },
+            { away: 'TB', home: 'NO', time: 'Sunday 4:05 PM ET', gameDate: '2025-10-26', network: 'FOX' },
+            { away: 'DAL', home: 'DEN', time: 'Sunday 4:25 PM ET', gameDate: '2025-10-26', network: 'CBS' },
+            { away: 'TEN', home: 'IND', time: 'Sunday 4:25 PM ET', gameDate: '2025-10-26', network: 'CBS' },
+            { away: 'GB', home: 'PIT', time: 'Sunday 8:20 PM ET', gameDate: '2025-10-26', network: 'NBC' },
+            { away: 'WAS', home: 'KC', time: 'Monday 8:15 PM ET', gameDate: '2025-10-27', network: 'ESPN' }
         ],
         
         // WEEK 7 - Add correct data here
