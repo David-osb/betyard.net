@@ -9,7 +9,8 @@ class BetYardMLAPI {
         this.isAvailable = false;
         
         console.log(`🔗 ML Backend URL: ${this.baseURL}`);
-        this.checkBackendHealth();
+        // DISABLED: Skip health check to prevent CORS errors when backend is offline
+        // this.checkBackendHealth();
     }
     
     getMLBackendURL() {
