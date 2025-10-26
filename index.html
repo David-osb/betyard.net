@@ -5173,6 +5173,43 @@
             formatOdds(odds) {
                 return odds > 0 ? `+${odds}` : `${odds}`;
             }
+
+            updateAllocationBars() {
+                const maxBet = this.bankroll * this.riskMultipliers[this.riskTolerance];
+                const conservativeBet = this.bankroll * 0.01;
+                const moderateBet = this.bankroll * 0.025;
+                const aggressiveBet = this.bankroll * 0.05;
+                
+                const barsContainer = document.getElementById('allocation-bars');
+                if (!barsContainer) return;
+                
+                barsContainer.innerHTML = `
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Conservative (1%)</span>
+                        <span class="allocation-amount">$${conservativeBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Moderate (2.5%)</span>
+                        <span class="allocation-amount">$${moderateBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Aggressive (5%)</span>
+                        <span class="allocation-amount">$${aggressiveBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Max Recommended</span>
+                        <span class="allocation-amount">$${maxBet.toFixed(0)}</span>
+                    </div>
+                `;
+            }
+
+            updateBankrollDisplay() {
+                const bankrollEl = document.getElementById('current-bankroll');
+                if (bankrollEl) {
+                    bankrollEl.value = this.bankroll;
+                }
+                this.updateAllocationBars();
+            }
         }
 
         // Global functions for HTML onclick handlers
@@ -5241,174 +5278,6 @@
                     if (liveDot) liveDot.classList.remove('connected');
                     if (liveStatus) liveStatus.textContent = 'Paused';
                 }
-            }
-        }
-                
-                if (!valueBets || valueBets.length === 0) {
-                    tbody.innerHTML = '';
-                    noValueBets.style.display = 'block';
-                    return;
-                }
-                
-                noValueBets.style.display = 'none';
-                
-                tbody.innerHTML = valueBets.map(bet => `
-                    <tr>
-                        <td>
-                            <div class="game-info">
-                                <strong>${bet.away_team} @ ${bet.home_team}</strong>
-                                <small>${new Date(bet.commence_time).toLocaleDateString()}</small>
-                            </div>
-                        </td>
-                        <td>${this.formatMarket(bet.market)}</td>
-                        <td><strong>${bet.outcome}</strong></td>
-                        <td>${this.formatOdds(bet.best_odds)}</td>
-                        <td>
-                            <span class="bookmaker-badge">${bet.best_bookmaker}</span>
-                        </td>
-                        <td>${(bet.model_probability * 100).toFixed(1)}%</td>
-                        <td>${(bet.implied_probability * 100).toFixed(1)}%</td>
-                        <td class="edge-positive">+${(bet.edge * 100).toFixed(1)}%</td>
-                        <td>${(bet.kelly_fraction * 100).toFixed(1)}%</td>
-                        <td>
-                            <button class="btn-small" onclick="window.analytics?.placeBet('${bet.game_id}', '${bet.outcome}', ${bet.best_odds}, ${bet.kelly_fraction})">
-                                <i class="material-icons">add_shopping_cart</i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-        }
-
-        // Global functions for HTML onclick handlers
-        function filterValueBets() {
-            const filter = document.getElementById('value-bet-filter')?.value;
-            console.log('Filtering value bets:', filter);
-        }
-
-        function loadOddsComparison() {
-            const gameId = document.getElementById('odds-game-select')?.value;
-            if (!gameId) return;
-            
-            const comparisonDiv = document.getElementById('odds-comparison');
-            if (comparisonDiv) {
-                comparisonDiv.innerHTML = `
-                    <div class="odds-item">
-                        <span class="odds-bookmaker">Loading odds comparison...</span>
-                    </div>
-                `;
-            }
-        }
-
-        function openBankrollSettings() {
-            alert('Bankroll settings panel would open here');
-        }
-
-        function updateBankroll() {
-            const newBankroll = parseFloat(document.getElementById('current-bankroll')?.value) || 1000;
-            if (window.analytics) {
-                window.analytics.bankroll = newBankroll;
-                window.analytics.updateAllocationBars();
-            }
-        }
-
-        function updateRiskTolerance() {
-                const maxBet = this.bankroll * this.riskMultipliers[this.riskTolerance];
-                const conservativeBet = this.bankroll * 0.01;
-                const moderateBet = this.bankroll * 0.025;
-                const aggressiveBet = this.bankroll * 0.05;
-                
-                const barsContainer = document.getElementById('allocation-bars');
-                if (!barsContainer) return;
-                
-                barsContainer.innerHTML = `
-                    <div class="allocation-bar">
-                        <span class="allocation-label">Conservative (1%)</span>
-                        <span class="allocation-amount">$${conservativeBet.toFixed(0)}</span>
-                    </div>
-                    <div class="allocation-bar">
-                        <span class="allocation-label">Moderate (2.5%)</span>
-                        <span class="allocation-amount">$${moderateBet.toFixed(0)}</span>
-                    </div>
-                    <div class="allocation-bar">
-                        <span class="allocation-label">Aggressive (5%)</span>
-                        <span class="allocation-amount">$${aggressiveBet.toFixed(0)}</span>
-                    </div>
-                    <div class="allocation-bar">
-                        <span class="allocation-label">Max Recommended</span>
-                        <span class="allocation-amount">$${maxBet.toFixed(0)}</span>
-                    </div>
-                `;
-            }
-            
-            startAutoRefresh() {
-                this.refreshInterval = setInterval(() => {
-                    this.loadMarketOverview();
-                    this.loadValueBets();
-                }, 30000);
-            }
-            
-            stopAutoRefresh() {
-                if (this.refreshInterval) {
-                    clearInterval(this.refreshInterval);
-                    this.refreshInterval = null;
-                }
-            }
-            
-            placeBet(gameId, outcome, odds, kellyFraction) {
-                const betAmount = this.bankroll * kellyFraction;
-                
-                const confirmation = confirm(
-                    `Place bet on ${outcome}?\\n\\n` +
-                    `Odds: ${this.formatOdds(odds)}\\n` +
-                    `Recommended bet: $${betAmount.toFixed(2)} (${(kellyFraction * 100).toFixed(1)}% of bankroll)\\n\\n` +
-                    `This will open your sportsbook app.`
-                );
-                
-                if (confirmation) {
-                    alert('Bet tracking added to your portfolio!');
-                }
-            }
-            
-            formatOdds(americanOdds) {
-                return americanOdds > 0 ? `+${americanOdds}` : `${americanOdds}`;
-            }
-            
-            formatMarket(market) {
-                const marketNames = {
-                    'h2h': 'Moneyline',
-                    'spreads': 'Point Spread',
-                    'totals': 'Over/Under',
-                    'moneyline': 'Moneyline'
-                };
-                return marketNames[market] || market;
-            }
-            
-            showNoValueBets() {
-                const tbody = document.getElementById('value-bets-tbody');
-                const noValueBets = document.getElementById('no-value-bets');
-                
-                if (tbody) tbody.innerHTML = '';
-                if (noValueBets) noValueBets.style.display = 'block';
-                
-                const countEl = document.getElementById('value-bet-count');
-                if (countEl) countEl.textContent = '0';
-            }
-            
-            getMockPredictions() {
-                return {
-                    "game_1": {
-                        "home_team": "Buffalo Bills",
-                        "away_team": "Miami Dolphins",
-                        "commence_time": "2025-10-25T20:00:00Z",
-                        "predictions": {
-                            "home_win_probability": 0.68,
-                            "away_win_probability": 0.32,
-                            "over_probability": 0.55,
-                            "under_probability": 0.45
-                        }
-                    }
-                };
             }
         }
 

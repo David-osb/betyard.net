@@ -6,7 +6,15 @@ Includes Tank01 API proxy to solve CORS issues
 """
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+
+# Try to import CORS, but make it optional since Tank01 integration is more important
+try:
+    from flask_cors import CORS
+    CORS_AVAILABLE = True
+except ImportError:
+    print("WARNING: flask-cors not available. CORS headers will be set manually.")
+    CORS_AVAILABLE = False
+    CORS = None
 import pandas as pd
 import numpy as np
 import xgboost as xgb
@@ -31,7 +39,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests from frontend
+
+# Configure CORS if available, otherwise set headers manually
+if CORS_AVAILABLE:
+    CORS(app)  # Allow cross-origin requests from frontend
+else:
+    # Manual CORS headers for Tank01 integration
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
 
 # Simple in-memory cache for API responses
 API_CACHE = {}
