@@ -301,8 +301,15 @@ class OddsComparisonService:
             away_odds_list = [odds for odds in odds_data if odds.market == 'h2h' and odds.outcome == away_team]
             
             if home_odds_list and away_odds_list:
-                best_home = max(home_odds_list, key=lambda x: x.price if x.price > 0 else -abs(x.price))
-                best_away = max(away_odds_list, key=lambda x: x.price if x.price > 0 else -abs(x.price))
+                # For American odds: positive odds - higher is better, negative odds - closer to 0 is better
+                def odds_value(odds):
+                    if odds.price > 0:
+                        return odds.price  # Higher positive odds are better
+                    else:
+                        return 1000 + odds.price  # For negative odds, closer to 0 is better (-100 > -200)
+                
+                best_home = max(home_odds_list, key=odds_value)
+                best_away = max(away_odds_list, key=odds_value)
                 
                 # Check for arbitrage opportunity
                 total_implied_prob = best_home.implied_probability + best_away.implied_probability
@@ -316,6 +323,16 @@ class OddsComparisonService:
                         'away_bookmaker': best_away.bookmaker,
                         'profit_margin': profit_margin
                     })
+                
+                # Calculate market efficiency for this game
+                market_efficiency = min(total_implied_prob, 1.0)
+                analysis['best_odds_by_game'][game_id] = {
+                    'market_efficiency': market_efficiency,
+                    'home_team': home_team,
+                    'away_team': away_team,
+                    'best_home_odds': best_home.price,
+                    'best_away_odds': best_away.price
+                }
                 
                 analysis['best_odds_by_game'][game_id] = {
                     'home_team': home_team,
