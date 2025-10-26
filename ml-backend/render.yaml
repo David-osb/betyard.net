@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: betyard-ml-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: ODDS_API_KEY
+        value: 464b16f6d6ce6f6ae933e55c07cf11c1
+      - key: FLASK_ENV
+        value: production
