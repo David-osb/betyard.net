@@ -17,7 +17,7 @@
     <script>
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2025-10-20-ml-script-order-fix-1729472400000';
+        const EXPECTED_VERSION = 'v2025-10-26-analytics-dom-ready-fix-1729997500000';
         
         // AGGRESSIVE CACHE CLEARING
         console.log('🧹 Clearing all caches...');
@@ -4869,11 +4869,32 @@
             
             init() {
                 console.log('Initializing Advanced Analytics...');
-                this.loadMarketOverview();
-                this.loadValueBets();
-                this.loadArbitrageOpportunities();
-                this.updateBankrollDisplay();
-                this.startAutoRefresh();
+                
+                // Wait for DOM elements to be ready
+                const waitForElements = () => {
+                    const requiredElements = [
+                        'total-games', 'total-bookmakers', 'arbitrage-count', 
+                        'value-bet-count', 'avg-efficiency'
+                    ];
+                    
+                    const allElementsExist = requiredElements.every(id => 
+                        document.getElementById(id) !== null
+                    );
+                    
+                    if (allElementsExist) {
+                        console.log('✅ All required DOM elements found, proceeding with initialization...');
+                        this.loadMarketOverview();
+                        this.loadValueBets();
+                        this.loadArbitrageOpportunities();
+                        this.updateBankrollDisplay();
+                        this.startAutoRefresh();
+                    } else {
+                        console.log('⏳ Waiting for DOM elements to be ready...');
+                        setTimeout(waitForElements, 50); // Check again in 50ms
+                    }
+                };
+                
+                waitForElements();
             }
             
             async loadMarketOverview() {
@@ -5403,8 +5424,12 @@
         function initializeAnalytics() {
             if (!window.analytics) {
                 console.log('Creating AdvancedAnalytics instance...');
-                window.analytics = new AdvancedAnalytics();
-                window.analytics.init();
+                
+                // Add small delay to ensure DOM elements are rendered after panel switch
+                setTimeout(() => {
+                    window.analytics = new AdvancedAnalytics();
+                    window.analytics.init();
+                }, 100); // 100ms delay to ensure DOM is ready
             }
         }
 
