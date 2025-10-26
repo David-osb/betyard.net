@@ -969,10 +969,67 @@ else:
 def compare_odds(sport):
     """Get real-time odds comparison for a sport"""
     if not ODDS_API_AVAILABLE:
+        # Return mock data for demonstration when API is not available
+        mock_data = {
+            'total_games': 25,
+            'total_bookmakers': 7,
+            'arbitrage_opportunities': [
+                {
+                    'game': 'Miami Dolphins @ Atlanta Falcons',
+                    'home_odds': 134,
+                    'away_odds': 310,
+                    'home_bookmaker': 'fanduel',
+                    'away_bookmaker': 'mybookieag',
+                    'profit_margin': 32.87
+                },
+                {
+                    'game': 'Buffalo Bills @ Carolina Panthers',
+                    'home_odds': 475,
+                    'away_odds': 106,
+                    'home_bookmaker': 'ballybet',
+                    'away_bookmaker': 'fanduel',
+                    'profit_margin': 34.07
+                },
+                {
+                    'game': 'New York Jets @ Cincinnati Bengals',
+                    'home_odds': 106,
+                    'away_odds': 240,
+                    'home_bookmaker': 'fanduel',
+                    'away_bookmaker': 'fanduel',
+                    'profit_margin': 22.04
+                },
+                {
+                    'game': 'Cleveland Browns @ New England Patriots',
+                    'home_odds': -148,
+                    'away_odds': 290,
+                    'home_bookmaker': 'draftkings',
+                    'away_bookmaker': 'bovada',
+                    'profit_margin': 14.68
+                },
+                {
+                    'game': 'San Francisco 49ers @ Houston Texans',
+                    'home_odds': 100,
+                    'away_odds': 114,
+                    'home_bookmaker': 'ballybet',
+                    'away_bookmaker': 'fanduel',
+                    'profit_margin': 3.27
+                }
+            ],
+            'best_odds_by_game': {
+                'game_1': {'market_efficiency': 0.89},
+                'game_2': {'market_efficiency': 0.91},
+                'game_3': {'market_efficiency': 0.87},
+                'game_4': {'market_efficiency': 0.85},
+                'game_5': {'market_efficiency': 0.92}
+            }
+        }
+        
         return jsonify({
-            'success': False,
-            'error': 'Odds comparison service not available'
-        }), 503
+            'success': True,
+            'data': mock_data,
+            'timestamp': datetime.now().isoformat(),
+            'note': 'Demo data - configure ODDS_API_KEY for live data'
+        })
     
     try:
         # Run async function in event loop
@@ -1003,10 +1060,16 @@ def compare_odds(sport):
 def find_value_bets(sport):
     """Find value bets by comparing model predictions with market odds"""
     if not ODDS_API_AVAILABLE:
+        # Return empty value bets for demo (since we don't have real predictions vs odds comparison)
         return jsonify({
-            'success': False,
-            'error': 'Odds comparison service not available'
-        }), 503
+            'success': True,
+            'data': {
+                'value_bets': [],
+                'count': 0
+            },
+            'timestamp': datetime.now().isoformat(),
+            'note': 'Demo mode - configure ODDS_API_KEY for value bet analysis'
+        })
     
     try:
         # Get model predictions from request
@@ -1116,10 +1179,59 @@ def get_best_lines(sport, team):
 def find_arbitrage_opportunities(sport):
     """Find arbitrage betting opportunities"""
     if not ODDS_API_AVAILABLE:
+        # Return mock arbitrage opportunities for demonstration
+        mock_arbitrage_ops = [
+            {
+                'game': 'Miami Dolphins @ Atlanta Falcons',
+                'home_odds': 134,
+                'away_odds': 310,
+                'home_bookmaker': 'fanduel',
+                'away_bookmaker': 'mybookieag',
+                'profit_margin': 32.87
+            },
+            {
+                'game': 'Buffalo Bills @ Carolina Panthers',
+                'home_odds': 475,
+                'away_odds': 106,
+                'home_bookmaker': 'ballybet',
+                'away_bookmaker': 'fanduel',
+                'profit_margin': 34.07
+            },
+            {
+                'game': 'New York Jets @ Cincinnati Bengals',
+                'home_odds': 106,
+                'away_odds': 240,
+                'home_bookmaker': 'fanduel',
+                'away_bookmaker': 'fanduel',
+                'profit_margin': 22.04
+            },
+            {
+                'game': 'Cleveland Browns @ New England Patriots',
+                'home_odds': -148,
+                'away_odds': 290,
+                'home_bookmaker': 'draftkings',
+                'away_bookmaker': 'bovada',
+                'profit_margin': 14.68
+            },
+            {
+                'game': 'San Francisco 49ers @ Houston Texans',
+                'home_odds': 100,
+                'away_odds': 114,
+                'home_bookmaker': 'ballybet',
+                'away_bookmaker': 'fanduel',
+                'profit_margin': 3.27
+            }
+        ]
+        
         return jsonify({
-            'success': False,
-            'error': 'Odds comparison service not available'
-        }), 503
+            'success': True,
+            'data': {
+                'arbitrage_opportunities': mock_arbitrage_ops,
+                'count': len(mock_arbitrage_ops)
+            },
+            'timestamp': datetime.now().isoformat(),
+            'note': 'Demo data - configure ODDS_API_KEY for live arbitrage detection'
+        })
     
     try:
         loop = asyncio.new_event_loop()
