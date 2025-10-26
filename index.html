@@ -17,7 +17,7 @@
     <script>
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2025-10-26-analytics-dom-ready-fix-1729997500000';
+        const EXPECTED_VERSION = 'v2025-10-26-responsive-layout-fix-1729998000000';
         
         // AGGRESSIVE CACHE CLEARING
         console.log('🧹 Clearing all caches...');
@@ -2767,64 +2767,498 @@
             border-radius: 8px;
         }
 
-        /* Mobile responsiveness for Advanced Analytics */
+        /* ===== IMPROVED LAYOUT & RESPONSIVENESS ===== */
+        
+        /* Main Content Container Improvements */
+        #main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+        
+        /* Better Grid System */
+        .mdl-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        
+        /* Content Panel Constraints */
+        .content-panel {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            box-sizing: border-box;
+        }
+        
+        /* Panel Grid Improvements */
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Sport Selector Improvements */
+        .sport-selector-header {
+            max-width: 1200px;
+            margin: 0 auto 32px auto;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .sport-icons-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .sport-icon {
+            flex: 0 0 auto;
+            min-width: 100px;
+            max-width: 140px;
+            padding: 16px 12px;
+            text-align: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        /* Game Cards Layout */
+        .game-card {
+            max-width: 100%;
+            margin: 0 auto 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* ===== DESKTOP OPTIMIZATIONS (1025px+) ===== */
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .main-container {
+                margin-left: 280px;
+                padding: 0;
+            }
+            
+            .mdl-grid {
+                padding: 24px;
+            }
+            
+            .content-panel {
+                padding: 32px 24px;
+            }
+            
+            .panel-grid {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 24px;
+            }
+            
+            .sport-icons-container {
+                gap: 20px;
+            }
+            
+            .sport-icon {
+                min-width: 120px;
+                max-width: 160px;
+                padding: 20px 16px;
+            }
+        }
+        
+        /* ===== TABLET OPTIMIZATIONS (769px - 1024px) ===== */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .main-container {
+                margin-left: 0;
+                padding: 0 16px;
+            }
+            
+            .mdl-grid {
+                padding: 20px 16px;
+            }
+            
+            .content-panel {
+                padding: 24px 16px;
+            }
+            
+            .panel-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 20px;
+            }
+            
+            .sport-selector-header {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+        }
+        
+        /* ===== MOBILE OPTIMIZATIONS (320px - 768px) ===== */
+        /* ===== MOBILE OPTIMIZATIONS (320px - 768px) ===== */
         @media (max-width: 768px) {
+            /* Main Layout */
+            .main-container {
+                margin-left: 0;
+                padding: 0 8px;
+                min-height: 100vh;
+            }
+            
+            #main-content {
+                padding: 0 8px;
+            }
+            
+            .mdl-grid {
+                padding: 12px 8px !important;
+                margin: 0;
+            }
+            
+            .content-panel {
+                padding: 16px 8px;
+            }
+            
+            /* Sidebar Mobile */
+            .sidebar {
+                width: 280px;
+                left: -280px;
+                z-index: 1000;
+            }
+            
+            /* Panel Grid Mobile */
+            .panel-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 8px;
+            }
+            
+            /* Sport Selector Mobile */
+            .sport-selector-header {
+                margin: 8px 0 20px 0;
+                padding: 16px 12px;
+                border-radius: 12px;
+            }
+            
+            .sport-selector-title span:first-child {
+                font-size: 18px !important;
+                font-weight: 600;
+                display: block;
+                margin-bottom: 4px;
+            }
+            
+            .sport-selector-title span:last-child {
+                font-size: 11px !important;
+                display: block;
+                margin-left: 0 !important;
+            }
+            
+            .sport-icons-container {
+                gap: 12px;
+                justify-content: space-between;
+                margin-top: 16px;
+            }
+            
+            .sport-icon {
+                flex: 1;
+                min-width: 70px;
+                max-width: 85px;
+                padding: 12px 8px;
+                border-radius: 10px;
+            }
+            
+            .sport-icon-wrapper {
+                font-size: 24px !important;
+                margin-bottom: 6px;
+            }
+            
+            .sport-label {
+                font-size: 10px !important;
+                font-weight: 600;
+                line-height: 1.2;
+            }
+            
+            .coming-soon-badge {
+                font-size: 8px !important;
+                padding: 1px 4px;
+                margin-top: 2px;
+            }
+            
+            /* Game Cards Mobile */
+            .mdl-cell {
+                margin: 8px 0 !important;
+                padding: 0 !important;
+            }
+            
+            .mdl-card {
+                margin: 0 0 12px 0 !important;
+                border-radius: 12px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            }
+            
+            .mdl-card__title {
+                padding: 16px 16px 8px 16px !important;
+                min-height: auto !important;
+            }
+            
+            .mdl-card__supporting-text {
+                padding: 8px 16px 16px 16px !important;
+                max-height: none;
+                overflow: visible;
+            }
+            
+            /* Typography Mobile */
+            h1, h2, h3, h4, h5, h6 {
+                line-height: 1.3;
+                margin-bottom: 8px;
+            }
+            
+            .mdl-card__title-text {
+                font-size: 16px !important;
+                font-weight: 600 !important;
+                line-height: 1.3;
+            }
+            
+            /* Touch Targets */
+            .mdl-button, button, select, input, .sport-icon {
+                min-height: 44px;
+                font-size: 16px;
+                touch-action: manipulation;
+            }
+            
+            /* Input Improvements */
+            input[type="text"], input[type="number"], select {
+                padding: 12px 16px;
+                border-radius: 8px;
+                border: 2px solid #e2e8f0;
+                font-size: 16px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            /* Statistics Display */
+            .stat-value {
+                font-size: 1.4em !important;
+                font-weight: bold;
+                margin-bottom: 4px;
+                line-height: 1.2;
+            }
+            
+            .stat-label {
+                font-size: 11px !important;
+                color: #666;
+                text-transform: uppercase;
+                line-height: 1.2;
+            }
+            
+            /* Advanced Analytics Mobile */
             .market-stats {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
+                gap: 12px;
             }
 
             .stat-item {
-                padding: 1rem 0.5rem;
-                min-height: 80px;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
-            }
-
-            .stat-label {
-                font-size: 0.75rem;
+                padding: 12px 8px;
+                min-height: 70px;
+                border-radius: 8px;
             }
 
             .value-bets-table {
-                font-size: 0.75rem;
+                font-size: 12px;
+                border-radius: 8px;
+                overflow: hidden;
             }
 
             .value-bets-table th,
             .value-bets-table td {
-                padding: 0.5rem 0.25rem;
+                padding: 8px 4px;
+                text-align: center;
             }
 
             .card-header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.75rem;
-                padding: 1rem;
+                gap: 12px;
+                padding: 16px;
             }
-
+            
             .card-header h3 {
-                font-size: 1rem;
+                font-size: 16px !important;
+                margin: 0;
+            }
+            
+            .card-actions {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
                 width: 100%;
             }
-
+            
+            /* Panel Cards Mobile */
+            .panel-card {
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            
+            .panel-card .card-content {
+                padding: 16px;
+            }
+        }
+        
+        /* ===== SMALL MOBILE (320px - 480px) ===== */
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 0 4px;
+            }
+            
+            #main-content {
+                padding: 0 4px;
+            }
+            
+            .mdl-grid {
+                padding: 8px 4px !important;
+            }
+            
+            .content-panel {
+                padding: 12px 4px;
+            }
+            
+            .sport-selector-header {
+                margin: 4px 0 16px 0;
+                padding: 12px 8px;
+            }
+            
+            .sport-selector-title span:first-child {
+                font-size: 16px !important;
+            }
+            
+            .sport-icons-container {
+                gap: 8px;
+            }
+            
+            .sport-icon {
+                min-width: 60px;
+                max-width: 75px;
+                padding: 8px 4px;
+            }
+            
+            .sport-icon-wrapper {
+                font-size: 20px !important;
+            }
+            
+            .sport-label {
+                font-size: 9px !important;
+            }
+            
+            .mdl-card__title {
+                padding: 12px 12px 6px 12px !important;
+            }
+            
+            .mdl-card__supporting-text {
+                padding: 6px 12px 12px 12px !important;
+            }
+            
+            .mdl-card__title-text {
+                font-size: 14px !important;
+            }
+            
+            .stat-item {
+                padding: 8px 6px;
+                min-height: 60px;
+            }
+            
+            .stat-value {
+                font-size: 1.2em !important;
+            }
+            
+            .stat-label {
+                font-size: 10px !important;
+            }
+            
+            .card-header {
+                padding: 12px 8px;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .card-header h3 {
+                font-size: 14px !important;
+                margin: 0;
+            }
+            
             .card-actions {
                 width: 100%;
                 justify-content: space-between;
                 flex-wrap: nowrap;
-                gap: 0.5rem;
+                gap: 8px;
             }
-
+            
             .card-actions small {
-                font-size: 0.7rem !important;
+                font-size: 10px !important;
                 flex: 1;
                 text-align: left;
             }
 
             .btn-refresh {
-                min-width: 36px;
-                height: 36px;
+                min-width: 32px;
+                height: 32px;
+                padding: 4px;
             }
+            
+            .panel-grid {
+                padding: 0 4px;
+                gap: 12px;
+            }
+            
+            .panel-card .card-content {
+                padding: 12px 8px;
+            }
+        }
+        
+        /* ===== LAYOUT UTILITIES ===== */
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Improved focus states */
+        button:focus,
+        .sport-icon:focus,
+        input:focus,
+        select:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        /* Better loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* Responsive images */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Container max-width consistency */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
 
             .card-content {
                 padding: 1rem;
