@@ -5,9 +5,13 @@ Adds endpoints for real-time odds comparison and value bet identification
 
 import asyncio
 import os
+import logging
 from datetime import datetime
 from flask import jsonify, request
 from odds_comparison_service import OddsComparisonService
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 # Add these endpoints to your app.py file
 
