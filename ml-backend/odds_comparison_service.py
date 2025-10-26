@@ -139,7 +139,12 @@ class OddsComparisonService:
                     return data
                 elif response.status == 401:
                     response_text = await response.text()
-                    logger.error(f"API authentication failed: {response.status} - {response_text}")
+                    logger.error(f"API quota exceeded: {response.status} - {response_text}")
+                    
+                    # Return mock data when quota is exceeded
+                    if "OUT_OF_USAGE_CREDITS" in response_text:
+                        logger.info("Returning mock NFL data due to quota exhaustion")
+                        return self._get_mock_nfl_data()
                     return []
                 else:
                     response_text = await response.text()
