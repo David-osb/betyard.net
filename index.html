@@ -399,18 +399,29 @@
         }
 
         .sidebar-toggle {
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
-            padding: 8px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             margin-right: 12px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sidebar-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .sidebar-toggle:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .sidebar-toggle .material-icons {
@@ -3835,28 +3846,6 @@
             color: #ef4444;
         }
 
-        /* Recent changes */
-        .changes-header {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .changes-list {
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .change-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            background: rgba(0, 61, 165, 0.02);
-            border-radius: 4px;
-        }
-
         .change-time {
             font-size: 0.75rem;
             color: var(--text-secondary);
@@ -4249,6 +4238,88 @@
                 font-size: 15px;
                 margin: 16px 0 12px 0;
                 padding-bottom: 4px;
+            }
+        }
+
+        /* Mobile Sidebar Improvements */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                left: -280px;
+                z-index: 1200;
+            }
+            
+            .sidebar-overlay {
+                z-index: 1150;
+            }
+            
+            .sidebar-toggle {
+                padding: 12px;
+                margin-right: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+            }
+            
+            .sidebar-toggle .material-icons {
+                font-size: 26px;
+            }
+            
+            .sidebar-header {
+                padding: 20px 16px;
+            }
+            
+            .sidebar-item {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+            
+            .sidebar-section-title {
+                padding: 12px 20px 8px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 260px;
+                left: -260px;
+                z-index: 1250;
+            }
+            
+            .sidebar-overlay {
+                z-index: 1200;
+                background: rgba(0, 0, 0, 0.6);
+            }
+            
+            .sidebar-toggle {
+                padding: 10px;
+                margin-right: 6px;
+            }
+            
+            .sidebar-toggle .material-icons {
+                font-size: 24px;
+            }
+            
+            .sidebar-header {
+                padding: 16px 14px;
+            }
+            
+            .sidebar-brand {
+                font-size: 22px;
+            }
+            
+            .sidebar-subtitle {
+                font-size: 12px;
+            }
+            
+            .sidebar-item {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .sidebar-section-title {
+                padding: 10px 16px 6px;
+                font-size: 11px;
             }
         }
     </style>
@@ -4644,12 +4715,6 @@
                 <div class="live-odds-container">
                     <div class="odds-ticker" id="odds-ticker">
                         <!-- Real-time odds updates -->
-                    </div>
-                    <div class="recent-changes" id="recent-changes">
-                        <div class="changes-header">Recent Line Movements</div>
-                        <div class="changes-list" id="changes-list">
-                            <!-- Recent odds changes -->
-                        </div>
                     </div>
                 </div>
             </div>
