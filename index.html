@@ -479,6 +479,268 @@
             }
         }
 
+        /* Content Panel Styles */
+        .content-panel {
+            display: none;
+            padding: 24px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .content-panel h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .content-panel h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .content-panel p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .panel-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 61, 165, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .panel-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 61, 165, 0.15);
+        }
+
+        .panel-card h3 {
+            color: #003da5;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .panel-card .material-icons {
+            color: #003da5;
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        /* Dark Theme Content Panels */
+        body.dark-theme .content-panel h1 {
+            color: #f9fafb;
+        }
+
+        body.dark-theme .content-panel h2 {
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .content-panel p {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .panel-card {
+            background: #1e293b;
+            border-color: rgba(148, 163, 184, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-theme .panel-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .panel-card h3 {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .panel-card .material-icons {
+            color: #60a5fa;
+        }
+
+        /* Content Panel Styles */
+        .content-panel {
+            display: none;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            margin: 20px;
+            box-shadow: 0 4px 16px rgba(0, 61, 165, 0.1);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .content-panel h2 {
+            color: #003da5;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-panel h3 {
+            color: #374151;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+        }
+
+        .content-panel p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border: 1px solid rgba(0, 61, 165, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 61, 165, 0.15);
+        }
+
+        .feature-card h4 {
+            color: #003da5;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #003da5 0%, #0047ab 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 61, 165, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid rgba(0, 61, 165, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #003da5;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Dark Theme Content Panels */
+        body.dark-theme .content-panel {
+            background: #1e293b;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .content-panel h2 {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .content-panel h3 {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .content-panel p {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .feature-card {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%);
+            border-color: rgba(96, 165, 250, 0.2);
+        }
+
+        body.dark-theme .feature-card h4 {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .stat-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        body.dark-theme .stat-value {
+            color: #93c5fd;
+        }
+
+        body.dark-theme .stat-label {
+            color: #94a3b8;
+        }
+
         /* Modern Font Import */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -2091,6 +2353,411 @@
             display: block !important;
             color: #374151 !important;
         }
+
+        /* ===============================================
+         * ADVANCED ANALYTICS STYLES
+         * =============================================== */
+        
+        /* Market stats grid */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 61, 165, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 61, 165, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--honda-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Market efficiency */
+        .market-efficiency {
+            background: rgba(0, 61, 165, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 61, 165, 0.1);
+        }
+
+        .efficiency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .efficiency-bar {
+            height: 8px;
+            background: rgba(0, 61, 165, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .efficiency-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--honda-blue), var(--honda-blue-light));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Value bets table */
+        .value-bets-table {
+            overflow-x: auto;
+        }
+
+        .value-bets-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .value-bets-table th,
+        .value-bets-table td {
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 61, 165, 0.1);
+        }
+
+        .value-bets-table th {
+            background: rgba(0, 61, 165, 0.05);
+            font-weight: 600;
+            color: var(--honda-blue);
+            position: sticky;
+            top: 0;
+        }
+
+        .value-bets-table tr:hover {
+            background: rgba(0, 61, 165, 0.02);
+        }
+
+        .edge-positive {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .edge-neutral {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        /* Odds comparison */
+        .odds-comparison {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .odds-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(0, 61, 165, 0.02);
+            border-radius: 6px;
+            border-left: 3px solid var(--honda-blue);
+        }
+
+        .odds-bookmaker {
+            font-weight: 600;
+            color: var(--honda-blue);
+        }
+
+        .odds-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Arbitrage opportunities */
+        .arbitrage-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .arbitrage-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.1));
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+        }
+
+        .arbitrage-game {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .arbitrage-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .arbitrage-profit {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Bankroll management */
+        .bankroll-summary > .bankroll-item {
+            margin-bottom: 1rem;
+        }
+
+        .bankroll-item label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bankroll-item input,
+        .bankroll-item select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid rgba(0, 61, 165, 0.2);
+            border-radius: 4px;
+            background: white;
+            font-size: 0.875rem;
+        }
+
+        .allocation-header {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .allocation-bars > .allocation-bar {
+            margin-bottom: 0.5rem;
+        }
+
+        .allocation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .allocation-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .allocation-amount {
+            font-weight: 600;
+            color: var(--honda-blue);
+        }
+
+        /* Live feed indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        .live-dot.connected {
+            background: #22c55e;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Odds ticker */
+        .odds-ticker {
+            height: 100px;
+            overflow-y: auto;
+            background: rgba(0, 61, 165, 0.02);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ticker-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 61, 165, 0.1);
+        }
+
+        .ticker-item:last-child {
+            border-bottom: none;
+        }
+
+        .ticker-game {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .ticker-change {
+            font-weight: 600;
+        }
+
+        .ticker-change.positive {
+            color: #22c55e;
+        }
+
+        .ticker-change.negative {
+            color: #ef4444;
+        }
+
+        /* Recent changes */
+        .changes-header {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .changes-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .change-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: rgba(0, 61, 165, 0.02);
+            border-radius: 4px;
+        }
+
+        .change-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Analytics buttons */
+        .btn-refresh,
+        .btn-analyze,
+        .btn-settings,
+        .btn-toggle {
+            padding: 0.5rem;
+            border: none;
+            background: rgba(0, 61, 165, 0.1);
+            color: var(--honda-blue);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-refresh:hover,
+        .btn-analyze:hover,
+        .btn-settings:hover,
+        .btn-toggle:hover {
+            background: var(--honda-blue);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border: none;
+            background: var(--honda-blue);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            background: var(--honda-blue-dark);
+        }
+
+        /* Bookmaker badges */
+        .bookmaker-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(0, 61, 165, 0.1);
+            color: var(--honda-blue);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Game info styling */
+        .game-info strong {
+            display: block;
+            color: var(--text-primary);
+        }
+
+        .game-info small {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        /* Dark theme adjustments for analytics */
+        body.dark-theme .stat-item,
+        body.dark-theme .market-efficiency,
+        body.dark-theme .value-bets-table th {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme .bankroll-item input,
+        body.dark-theme .bankroll-item select {
+            background: var(--bg-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        body.dark-theme .bookmaker-badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--honda-blue-light);
+        }
+
+        /* Responsive design for analytics */
+        @media (max-width: 768px) {
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .value-bets-table {
+                font-size: 0.75rem;
+            }
+            
+            .arbitrage-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .allocation-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+        }
     </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100">
@@ -2100,7 +2767,7 @@
     <!-- Collapsible Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand">Betyard</div>
+            <div class="sidebar-brand" onclick="showMainContent()" style="cursor: pointer;" title="Back to main content">Betyard</div>
             <div class="sidebar-subtitle">AI Sports Betting Platform</div>
             <button class="sidebar-close" onclick="closeSidebar()">
                 <i class="material-icons">close</i>
@@ -2111,19 +2778,19 @@
             <!-- Main Navigation -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Main</div>
-                <a href="#" class="sidebar-item active">
+                <a href="#dashboard" class="sidebar-item active">
                     <i class="material-icons">dashboard</i>
                     Dashboard
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#predictions" class="sidebar-item">
                     <i class="material-icons">sports_football</i>
                     Predictions
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#analytics" class="sidebar-item">
                     <i class="material-icons">trending_up</i>
                     Analytics
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#history" class="sidebar-item">
                     <i class="material-icons">history</i>
                     Bet History
                 </a>
@@ -2132,19 +2799,19 @@
             <!-- Account Section -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Account</div>
-                <a href="#" class="sidebar-item">
+                <a href="#profile" class="sidebar-item">
                     <i class="material-icons">person</i>
                     Profile
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#payment" class="sidebar-item">
                     <i class="material-icons">account_balance_wallet</i>
                     Payment Methods
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#notifications" class="sidebar-item">
                     <i class="material-icons">notifications</i>
                     Notifications
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#security" class="sidebar-item">
                     <i class="material-icons">security</i>
                     Security
                 </a>
@@ -2153,15 +2820,15 @@
             <!-- Tools Section -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Tools</div>
-                <a href="#" class="sidebar-item">
+                <a href="#calculator" class="sidebar-item">
                     <i class="material-icons">calculate</i>
                     Odds Calculator
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#insights" class="sidebar-item">
                     <i class="material-icons">insights</i>
                     AI Insights
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#compare" class="sidebar-item">
                     <i class="material-icons">compare_arrows</i>
                     Compare Odds
                 </a>
@@ -2170,15 +2837,15 @@
             <!-- Support Section -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Support</div>
-                <a href="#" class="sidebar-item">
+                <a href="#settings" class="sidebar-item">
                     <i class="material-icons">settings</i>
                     Settings
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#help" class="sidebar-item">
                     <i class="material-icons">help</i>
                     Help Center
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="#contact" class="sidebar-item">
                     <i class="material-icons">contact_support</i>
                     Contact Us
                 </a>
@@ -2221,6 +2888,475 @@
         </header>
         
         <main class="mdl-layout__content">
+            <!-- Content Panels for Sidebar Navigation -->
+            <div id="dashboard-panel" class="content-panel">
+                <h2><i class="material-icons">dashboard</i>Dashboard</h2>
+                <p>Welcome to your Betyard dashboard! Here's an overview of your betting performance and AI-powered insights.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">89%</div>
+                        <div class="stat-label">AI Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$2,450</div>
+                        <div class="stat-label">Total Winnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Total Bets</div>
+                    </div>
+                </div>
+
+                <h3>Recent Activity</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">trending_up</i>Latest Predictions</h4>
+                        <p>Check out our newest AI predictions for this week's games with 89% accuracy rate.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">account_balance_wallet</i>Profit Tracker</h4>
+                        <p>Monitor your betting profits and ROI with our advanced analytics dashboard.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="predictions-panel" class="content-panel">
+                <h2><i class="material-icons">sports_football</i>AI Predictions</h2>
+                <p>Our advanced XGBoost machine learning models analyze 26,613+ NFL data points to provide the most accurate sports betting predictions.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">psychology</i>Quarterback Analysis</h4>
+                        <p>89% accuracy rate predicting QB performance including passing yards, touchdowns, and completion percentage.</p>
+                        <button class="action-button">View QB Predictions <i class="material-icons">arrow_forward</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">directions_run</i>Running Back Insights</h4>
+                        <p>81% accuracy rate for RB rushing yards, touchdowns, and fantasy performance metrics.</p>
+                        <button class="action-button">View RB Predictions <i class="material-icons">arrow_forward</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">sports</i>Receiver Projections</h4>
+                        <p>94% accuracy rate for WR receiving yards, catches, and touchdown predictions.</p>
+                        <button class="action-button">View WR Predictions <i class="material-icons">arrow_forward</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">sports_football</i>Tight End Analytics</h4>
+                        <p>95% accuracy rate for TE performance including receptions and red zone targets.</p>
+                        <button class="action-button">View TE Predictions <i class="material-icons">arrow_forward</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analytics-panel" class="content-panel">
+    <div class="panel-grid">
+        <!-- Market Overview Card -->
+        <div class="panel-card">
+            <div class="card-header">
+                <h3><i class="material-icons">trending_up</i>Market Overview</h3>
+                <div class="card-actions">
+                    <button class="btn-refresh" onclick="refreshMarketData()">
+                        <i class="material-icons">refresh</i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="market-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-games">--</div>
+                        <div class="stat-label">Active Games</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-bookmakers">--</div>
+                        <div class="stat-label">Sportsbooks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="arbitrage-count">--</div>
+                        <div class="stat-label">Arbitrage Ops</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="value-bet-count">--</div>
+                        <div class="stat-label">Value Bets</div>
+                    </div>
+                </div>
+                <div class="market-efficiency">
+                    <div class="efficiency-header">
+                        <span>Market Efficiency</span>
+                        <span id="avg-efficiency">--</span>
+                    </div>
+                    <div class="efficiency-bar">
+                        <div class="efficiency-fill" id="efficiency-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Value Bets Card -->
+        <div class="panel-card full-width">
+            <div class="card-header">
+                <h3><i class="material-icons">euro_symbol</i>Value Betting Opportunities</h3>
+                <div class="card-actions">
+                    <select id="value-bet-filter" onchange="filterValueBets()">
+                        <option value="all">All Markets</option>
+                        <option value="moneyline">Moneyline</option>
+                        <option value="spread">Point Spread</option>
+                        <option value="totals">Over/Under</option>
+                    </select>
+                    <button class="btn-analyze" onclick="analyzeValueBets()">
+                        <i class="material-icons">analytics</i>
+                        Analyze
+                    </button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="value-bets-table">
+                    <table id="value-bets-table">
+                        <thead>
+                            <tr>
+                                <th>Game</th>
+                                <th>Market</th>
+                                <th>Bet</th>
+                                <th>Best Odds</th>
+                                <th>Bookmaker</th>
+                                <th>Model Prob.</th>
+                                <th>Market Prob.</th>
+                                <th>Edge</th>
+                                <th>Kelly %</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="value-bets-tbody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="no-value-bets" class="empty-state" style="display: none;">
+                    <i class="material-icons">search_off</i>
+                    <p>No value bets found</p>
+                    <small>Try adjusting your filters or check back later</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Odds Comparison Card -->
+        <div class="panel-card">
+            <div class="card-header">
+                <h3><i class="material-icons">compare_arrows</i>Odds Comparison</h3>
+                <div class="card-actions">
+                    <select id="odds-game-select" onchange="loadOddsComparison()">
+                        <option value="">Select Game</option>
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="odds-comparison" id="odds-comparison">
+                    <div class="empty-state">
+                        <i class="material-icons">compare_arrows</i>
+                        <p>Select a game to compare odds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arbitrage Opportunities Card -->
+        <div class="panel-card">
+            <div class="card-header">
+                <h3><i class="material-icons">swap_horiz</i>Arbitrage Opportunities</h3>
+                <div class="arbitrage-info">
+                    <i class="material-icons" title="Risk-free profit opportunities">info</i>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="arbitrage-list" id="arbitrage-list">
+                    <!-- Dynamic content -->
+                </div>
+                <div id="no-arbitrage" class="empty-state" style="display: none;">
+                    <i class="material-icons">block</i>
+                    <p>No arbitrage opportunities</p>
+                    <small>Markets are efficient right now</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bankroll Management Card -->
+        <div class="panel-card">
+            <div class="card-header">
+                <h3><i class="material-icons">account_balance_wallet</i>Bankroll Management</h3>
+                <div class="card-actions">
+                    <button class="btn-settings" onclick="openBankrollSettings()">
+                        <i class="material-icons">settings</i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="bankroll-summary">
+                    <div class="bankroll-item">
+                        <label>Current Bankroll</label>
+                        <input type="number" id="current-bankroll" value="1000" onchange="updateBankroll()">
+                    </div>
+                    <div class="bankroll-item">
+                        <label>Risk Tolerance</label>
+                        <select id="risk-tolerance" onchange="updateRiskTolerance()">
+                            <option value="conservative">Conservative (1-2%)</option>
+                            <option value="moderate" selected>Moderate (2-5%)</option>
+                            <option value="aggressive">Aggressive (5-10%)</option>
+                        </select>
+                    </div>
+                    <div class="bankroll-allocation">
+                        <div class="allocation-header">Recommended Allocation</div>
+                        <div class="allocation-bars" id="allocation-bars">
+                            <!-- Dynamic allocation bars -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Odds Updates Card -->
+        <div class="panel-card full-width">
+            <div class="card-header">
+                <h3><i class="material-icons">update</i>Live Odds Feed</h3>
+                <div class="card-actions">
+                    <div class="live-indicator">
+                        <div class="live-dot" id="live-dot"></div>
+                        <span id="live-status">Connecting...</span>
+                    </div>
+                    <button class="btn-toggle" onclick="toggleLiveFeed()" id="live-toggle">
+                        <i class="material-icons">pause</i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="live-odds-container">
+                    <div class="odds-ticker" id="odds-ticker">
+                        <!-- Real-time odds updates -->
+                    </div>
+                    <div class="recent-changes" id="recent-changes">
+                        <div class="changes-header">Recent Line Movements</div>
+                        <div class="changes-list" id="changes-list">
+                            <!-- Recent odds changes -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div id="history-panel" class="content-panel">
+                <h2><i class="material-icons">history</i>Bet History</h2>
+                <p>Review your complete betting history with detailed analytics and performance metrics.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">receipt</i>Recent Bets</h4>
+                        <p>View your latest betting activity with outcomes and profit/loss calculations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">filter_list</i>Filter & Search</h4>
+                        <p>Filter your bet history by date, sport, bet type, or outcome for detailed analysis.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-panel" class="content-panel">
+                <h2><i class="material-icons">person</i>User Profile</h2>
+                <p>Manage your account information, preferences, and betting settings.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">edit</i>Personal Information</h4>
+                        <p>Update your name, email, phone number, and other account details.</p>
+                        <button class="action-button">Edit Profile <i class="material-icons">edit</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">tune</i>Betting Preferences</h4>
+                        <p>Set your default bet amounts, favorite sports, and risk tolerance levels.</p>
+                        <button class="action-button">Configure <i class="material-icons">settings</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payment-panel" class="content-panel">
+                <h2><i class="material-icons">account_balance_wallet</i>Payment Methods</h2>
+                <p>Manage your payment methods, view transaction history, and handle deposits/withdrawals securely.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">credit_card</i>Credit Cards</h4>
+                        <p>Add, remove, or update your credit and debit card information for quick deposits.</p>
+                        <button class="action-button">Manage Cards <i class="material-icons">add_card</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">account_balance</i>Bank Accounts</h4>
+                        <p>Link your bank account for direct deposits and withdrawals with enhanced security.</p>
+                        <button class="action-button">Add Bank Account <i class="material-icons">account_balance</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">receipt_long</i>Transaction History</h4>
+                        <p>View detailed records of all your deposits, withdrawals, and betting transactions.</p>
+                        <button class="action-button">View History <i class="material-icons">history</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-panel" class="content-panel">
+                <h2><i class="material-icons">settings</i>Settings</h2>
+                <p>Customize your Betyard experience with personalized settings and preferences.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">notifications</i>Notifications</h4>
+                        <p>Control email, SMS, and push notification preferences for predictions and results.</p>
+                        <button class="action-button">Configure <i class="material-icons">tune</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">security</i>Security</h4>
+                        <p>Enable two-factor authentication and manage your password security settings.</p>
+                        <button class="action-button">Security Settings <i class="material-icons">shield</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">palette</i>Theme</h4>
+                        <p>Choose between light and dark modes, or let the system automatically decide.</p>
+                        <button class="action-button">Theme Settings <i class="material-icons">brightness_6</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notifications-panel" class="content-panel">
+                <h2><i class="material-icons">notifications</i>Notifications</h2>
+                <p>Manage your notification preferences to stay updated on predictions, results, and account activity.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">email</i>Email Notifications</h4>
+                        <p>Receive prediction updates, betting results, and account notifications via email.</p>
+                        <button class="action-button">Configure Email <i class="material-icons">edit</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">sms</i>SMS Alerts</h4>
+                        <p>Get instant text messages for important betting opportunities and results.</p>
+                        <button class="action-button">Setup SMS <i class="material-icons">phone_android</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="security-panel" class="content-panel">
+                <h2><i class="material-icons">security</i>Security</h2>
+                <p>Protect your account with advanced security features and monitoring.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">lock</i>Two-Factor Authentication</h4>
+                        <p>Add an extra layer of security with 2FA using your phone or authenticator app.</p>
+                        <button class="action-button">Enable 2FA <i class="material-icons">security</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">vpn_key</i>Password Management</h4>
+                        <p>Update your password and review recent login activity for your account.</p>
+                        <button class="action-button">Change Password <i class="material-icons">edit</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calculator-panel" class="content-panel">
+                <h2><i class="material-icons">calculate</i>Odds Calculator</h2>
+                <p>Calculate potential payouts, compare betting strategies, and optimize your wagers.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">calculate</i>Payout Calculator</h4>
+                        <p>Enter your bet amount and odds to see potential winnings and ROI.</p>
+                        <button class="action-button">Open Calculator <i class="material-icons">launch</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">compare</i>Odds Comparison</h4>
+                        <p>Compare odds across different sportsbooks to find the best value.</p>
+                        <button class="action-button">Compare Odds <i class="material-icons">compare_arrows</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="insights-panel" class="content-panel">
+                <h2><i class="material-icons">insights</i>AI Insights</h2>
+                <p>Discover personalized betting insights powered by our advanced machine learning algorithms.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">psychology</i>Personalized Recommendations</h4>
+                        <p>Get AI-powered betting suggestions based on your history and preferences.</p>
+                        <button class="action-button">View Insights <i class="material-icons">auto_awesome</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">trending_up</i>Market Trends</h4>
+                        <p>Stay ahead with real-time analysis of betting market movements and patterns.</p>
+                        <button class="action-button">Market Analysis <i class="material-icons">analytics</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="compare-panel" class="content-panel">
+                <h2><i class="material-icons">compare_arrows</i>Compare Odds</h2>
+                <p>Find the best odds across multiple sportsbooks to maximize your potential winnings.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">sports_football</i>NFL Odds</h4>
+                        <p>Compare NFL betting lines, spreads, and over/under totals across sportsbooks.</p>
+                        <button class="action-button">Compare NFL <i class="material-icons">sports_football</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">live_tv</i>Live Odds</h4>
+                        <p>Real-time odds tracking during games for in-play betting opportunities.</p>
+                        <button class="action-button">Live Odds <i class="material-icons">live_tv</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="help-panel" class="content-panel">
+                <h2><i class="material-icons">help</i>Help Center</h2>
+                <p>Find answers to common questions and get support for your Betyard account.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">quiz</i>FAQ</h4>
+                        <p>Browse frequently asked questions about betting, AI predictions, and account management.</p>
+                        <button class="action-button">View FAQ <i class="material-icons">help_outline</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">school</i>Betting Guide</h4>
+                        <p>Learn the basics of sports betting and how to use our AI prediction tools.</p>
+                        <button class="action-button">Learn More <i class="material-icons">school</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact-panel" class="content-panel">
+                <h2><i class="material-icons">contact_support</i>Contact Us</h2>
+                <p>Get in touch with our support team for personalized assistance with your account.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="material-icons">chat</i>Live Chat</h4>
+                        <p>Chat with our support team in real-time for immediate assistance.</p>
+                        <button class="action-button">Start Chat <i class="material-icons">chat</i></button>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="material-icons">email</i>Email Support</h4>
+                        <p>Send us a detailed message and we'll respond within 24 hours.</p>
+                        <button class="action-button">Send Email <i class="material-icons">email</i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Original Main Content (hidden when sidebar panels are active) -->
+            <div id="main-content">
             <div class="mdl-grid">
                 
                 <!-- Sport Selection Header -->
@@ -2355,6 +3491,7 @@
                 </div>
                 
             </div>
+            </div> <!-- End main-content -->
         </main>
     </div>
     <script src="assets/js/https-enforcement.js"></script>
@@ -3204,6 +4341,70 @@
             document.body.style.overflow = '';
         }
 
+        // Content Panel Management
+        function showPanel(panelId) {
+            // Hide all panels
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // Get main content
+            const mainContent = document.getElementById('main-content');
+            
+            if (panelId === 'dashboard-panel') {
+                // Dashboard shows the main content (home functionality)
+                if (mainContent) {
+                    mainContent.style.display = 'block';
+                }
+            } else {
+                // Hide main content and show selected panel
+                if (mainContent) {
+                    mainContent.style.display = 'none';
+                }
+                
+                // Show selected panel
+                const targetPanel = document.getElementById(panelId);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            }
+            
+            // Update sidebar active state
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => item.classList.remove('active'));
+            
+            // Find and activate the clicked sidebar item
+            const activeItem = document.querySelector(`[onclick*="${panelId}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                setTimeout(() => closeSidebar(), 300);
+            }
+        }
+
+        function showMainContent() {
+            // Hide all panels
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // Show main content
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.style.display = 'block';
+            }
+            
+            // Update sidebar active state - no item should be active for main content
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => item.classList.remove('active'));
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                setTimeout(() => closeSidebar(), 300);
+            }
+        }
+
         // Close sidebar when clicking outside or pressing escape
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -3211,12 +4412,21 @@
             }
         });
 
-        // Close sidebar on mobile when clicking a menu item (optional)
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    setTimeout(() => closeSidebar(), 300);
-                }
+        // Initialize content management when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up sidebar item click handlers
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the panel ID from the href or data attribute
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        const panelId = href.substring(1) + '-panel';
+                        showPanel(panelId);
+                    }
+                });
             });
         });
 
@@ -3240,6 +4450,418 @@
         // Call initialize theme when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
             initializeTheme();
+        });
+
+        /* ===============================================
+         * ADVANCED ANALYTICS JAVASCRIPT
+         * =============================================== */
+        
+        class AdvancedAnalytics {
+            constructor() {
+                this.apiBaseUrl = 'https://betyard-ml-backend.onrender.com/api';
+                this.currentSport = 'nfl';
+                this.refreshInterval = null;
+                this.liveFeedActive = false;
+                this.bankroll = 1000;
+                this.riskTolerance = 'moderate';
+                
+                // Risk tolerance multipliers
+                this.riskMultipliers = {
+                    conservative: 0.02,
+                    moderate: 0.035,
+                    aggressive: 0.075
+                };
+            }
+            
+            init() {
+                console.log('Initializing Advanced Analytics...');
+                this.loadMarketOverview();
+                this.loadValueBets();
+                this.loadArbitrageOpportunities();
+                this.updateBankrollDisplay();
+                this.startAutoRefresh();
+            }
+            
+            async loadMarketOverview() {
+                try {
+                    console.log('Loading market overview...');
+                    
+                    // Show loading state
+                    document.getElementById('total-games').textContent = '...';
+                    document.getElementById('total-bookmakers').textContent = '...';
+                    document.getElementById('arbitrage-count').textContent = '...';
+                    document.getElementById('value-bet-count').textContent = '...';
+                    document.getElementById('avg-efficiency').textContent = '...';
+                    
+                    const response = await fetch(`${this.apiBaseUrl}/odds/compare/${this.currentSport}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.updateMarketStats(data.data);
+                    } else {
+                        console.error('Failed to load market overview:', data.error);
+                        this.showMarketError();
+                    }
+                } catch (error) {
+                    console.error('Market overview error:', error);
+                    this.showMarketError();
+                }
+            }
+            
+            updateMarketStats(marketData) {
+                document.getElementById('total-games').textContent = marketData.total_games || '0';
+                document.getElementById('total-bookmakers').textContent = marketData.total_bookmakers || '0';
+                document.getElementById('arbitrage-count').textContent = marketData.arbitrage_opportunities?.length || 0;
+                
+                const games = marketData.best_odds_by_game || {};
+                const efficiencies = Object.values(games).map(game => game.market_efficiency);
+                const avgEfficiency = efficiencies.length > 0 
+                    ? efficiencies.reduce((a, b) => a + b, 0) / efficiencies.length 
+                    : 0;
+                
+                document.getElementById('avg-efficiency').textContent = `${(avgEfficiency * 100).toFixed(1)}%`;
+                
+                const efficiencyBar = document.getElementById('efficiency-bar');
+                if (efficiencyBar) {
+                    efficiencyBar.style.width = `${avgEfficiency * 100}%`;
+                }
+                
+                this.updateArbitrageDisplay(marketData.arbitrage_opportunities || []);
+                this.populateGameSelector(games);
+            }
+            
+            showMarketError() {
+                document.getElementById('total-games').textContent = '--';
+                document.getElementById('total-bookmakers').textContent = '--';
+                document.getElementById('arbitrage-count').textContent = '--';
+                document.getElementById('value-bet-count').textContent = '--';
+                document.getElementById('avg-efficiency').textContent = '--';
+            }
+            
+            async loadValueBets() {
+                try {
+                    const mockPredictions = this.getMockPredictions();
+                    
+                    const response = await fetch(`${this.apiBaseUrl}/odds/value-bets/${this.currentSport}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(mockPredictions)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.updateValueBetsDisplay(data.data.value_bets);
+                        document.getElementById('value-bet-count').textContent = data.data.count;
+                    } else {
+                        console.error('Failed to load value bets:', data.error);
+                        this.showNoValueBets();
+                    }
+                } catch (error) {
+                    console.error('Value bets error:', error);
+                    this.showNoValueBets();
+                }
+            }
+            
+            updateValueBetsDisplay(valueBets) {
+                const tbody = document.getElementById('value-bets-tbody');
+                const noValueBets = document.getElementById('no-value-bets');
+                
+                if (!valueBets || valueBets.length === 0) {
+                    tbody.innerHTML = '';
+                    noValueBets.style.display = 'block';
+                    return;
+                }
+                
+                noValueBets.style.display = 'none';
+                
+                tbody.innerHTML = valueBets.map(bet => `
+                    <tr>
+                        <td>
+                            <div class="game-info">
+                                <strong>${bet.away_team} @ ${bet.home_team}</strong>
+                                <small>${new Date(bet.commence_time).toLocaleDateString()}</small>
+                            </div>
+                        </td>
+                        <td>${this.formatMarket(bet.market)}</td>
+                        <td><strong>${bet.outcome}</strong></td>
+                        <td>${this.formatOdds(bet.best_odds)}</td>
+                        <td>
+                            <span class="bookmaker-badge">${bet.best_bookmaker}</span>
+                        </td>
+                        <td>${(bet.model_probability * 100).toFixed(1)}%</td>
+                        <td>${(bet.implied_probability * 100).toFixed(1)}%</td>
+                        <td class="edge-positive">+${(bet.edge * 100).toFixed(1)}%</td>
+                        <td>${(bet.kelly_fraction * 100).toFixed(1)}%</td>
+                        <td>
+                            <button class="btn-small" onclick="window.analytics?.placeBet('${bet.game_id}', '${bet.outcome}', ${bet.best_odds}, ${bet.kelly_fraction})">
+                                <i class="material-icons">add_shopping_cart</i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            updateArbitrageDisplay(arbitrageOps) {
+                const arbitrageList = document.getElementById('arbitrage-list');
+                const noArbitrage = document.getElementById('no-arbitrage');
+                
+                if (!arbitrageOps || arbitrageOps.length === 0) {
+                    arbitrageList.innerHTML = '';
+                    noArbitrage.style.display = 'block';
+                    return;
+                }
+                
+                noArbitrage.style.display = 'none';
+                
+                arbitrageList.innerHTML = arbitrageOps.map(arb => `
+                    <div class="arbitrage-item">
+                        <div class="arbitrage-game">${arb.game}</div>
+                        <div class="arbitrage-details">
+                            <div>
+                                <strong>Home:</strong> ${this.formatOdds(arb.home_odds)} 
+                                <span class="bookmaker-badge">${arb.home_bookmaker}</span>
+                            </div>
+                            <div>
+                                <strong>Away:</strong> ${this.formatOdds(arb.away_odds)} 
+                                <span class="bookmaker-badge">${arb.away_bookmaker}</span>
+                            </div>
+                        </div>
+                        <div class="arbitrage-profit">
+                            ${arb.profit_margin.toFixed(2)}% Guaranteed Profit
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            populateGameSelector(games) {
+                const selector = document.getElementById('odds-game-select');
+                if (!selector) return;
+                
+                selector.innerHTML = '<option value="">Select Game</option>';
+                
+                Object.entries(games).forEach(([gameId, game]) => {
+                    const option = document.createElement('option');
+                    option.value = gameId;
+                    option.textContent = `${game.away_team} @ ${game.home_team}`;
+                    selector.appendChild(option);
+                });
+            }
+            
+            async loadArbitrageOpportunities() {
+                try {
+                    const response = await fetch(`${this.apiBaseUrl}/odds/arbitrage/${this.currentSport}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.updateArbitrageDisplay(data.data.arbitrage_opportunities);
+                    }
+                } catch (error) {
+                    console.error('Arbitrage error:', error);
+                }
+            }
+            
+            updateBankrollDisplay() {
+                const bankrollInput = document.getElementById('current-bankroll');
+                const riskSelect = document.getElementById('risk-tolerance');
+                
+                if (bankrollInput) bankrollInput.value = this.bankroll;
+                if (riskSelect) riskSelect.value = this.riskTolerance;
+                
+                this.updateAllocationBars();
+            }
+            
+            updateAllocationBars() {
+                const maxBet = this.bankroll * this.riskMultipliers[this.riskTolerance];
+                const conservativeBet = this.bankroll * 0.01;
+                const moderateBet = this.bankroll * 0.025;
+                const aggressiveBet = this.bankroll * 0.05;
+                
+                const barsContainer = document.getElementById('allocation-bars');
+                if (!barsContainer) return;
+                
+                barsContainer.innerHTML = `
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Conservative (1%)</span>
+                        <span class="allocation-amount">$${conservativeBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Moderate (2.5%)</span>
+                        <span class="allocation-amount">$${moderateBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Aggressive (5%)</span>
+                        <span class="allocation-amount">$${aggressiveBet.toFixed(0)}</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <span class="allocation-label">Max Recommended</span>
+                        <span class="allocation-amount">$${maxBet.toFixed(0)}</span>
+                    </div>
+                `;
+            }
+            
+            startAutoRefresh() {
+                this.refreshInterval = setInterval(() => {
+                    this.loadMarketOverview();
+                    this.loadValueBets();
+                }, 30000);
+            }
+            
+            stopAutoRefresh() {
+                if (this.refreshInterval) {
+                    clearInterval(this.refreshInterval);
+                    this.refreshInterval = null;
+                }
+            }
+            
+            placeBet(gameId, outcome, odds, kellyFraction) {
+                const betAmount = this.bankroll * kellyFraction;
+                
+                const confirmation = confirm(
+                    `Place bet on ${outcome}?\\n\\n` +
+                    `Odds: ${this.formatOdds(odds)}\\n` +
+                    `Recommended bet: $${betAmount.toFixed(2)} (${(kellyFraction * 100).toFixed(1)}% of bankroll)\\n\\n` +
+                    `This will open your sportsbook app.`
+                );
+                
+                if (confirmation) {
+                    alert('Bet tracking added to your portfolio!');
+                }
+            }
+            
+            formatOdds(americanOdds) {
+                return americanOdds > 0 ? `+${americanOdds}` : `${americanOdds}`;
+            }
+            
+            formatMarket(market) {
+                const marketNames = {
+                    'h2h': 'Moneyline',
+                    'spreads': 'Point Spread',
+                    'totals': 'Over/Under',
+                    'moneyline': 'Moneyline'
+                };
+                return marketNames[market] || market;
+            }
+            
+            showNoValueBets() {
+                const tbody = document.getElementById('value-bets-tbody');
+                const noValueBets = document.getElementById('no-value-bets');
+                
+                if (tbody) tbody.innerHTML = '';
+                if (noValueBets) noValueBets.style.display = 'block';
+                
+                const countEl = document.getElementById('value-bet-count');
+                if (countEl) countEl.textContent = '0';
+            }
+            
+            getMockPredictions() {
+                return {
+                    "game_1": {
+                        "home_team": "Buffalo Bills",
+                        "away_team": "Miami Dolphins",
+                        "commence_time": "2025-10-25T20:00:00Z",
+                        "predictions": {
+                            "home_win_probability": 0.68,
+                            "away_win_probability": 0.32,
+                            "over_probability": 0.55,
+                            "under_probability": 0.45
+                        }
+                    }
+                };
+            }
+        }
+
+        // Global functions for HTML onclick handlers
+        function refreshMarketData() {
+            if (window.analytics) {
+                window.analytics.loadMarketOverview();
+            }
+        }
+
+        function filterValueBets() {
+            const filter = document.getElementById('value-bet-filter')?.value;
+            console.log('Filtering value bets:', filter);
+        }
+
+        function analyzeValueBets() {
+            if (window.analytics) {
+                window.analytics.loadValueBets();
+            }
+        }
+
+        function loadOddsComparison() {
+            const gameId = document.getElementById('odds-game-select')?.value;
+            if (!gameId) return;
+            
+            const comparisonDiv = document.getElementById('odds-comparison');
+            if (comparisonDiv) {
+                comparisonDiv.innerHTML = `
+                    <div class="odds-item">
+                        <span class="odds-bookmaker">Loading odds comparison...</span>
+                    </div>
+                `;
+            }
+        }
+
+        function openBankrollSettings() {
+            alert('Bankroll settings panel would open here');
+        }
+
+        function updateBankroll() {
+            const newBankroll = parseFloat(document.getElementById('current-bankroll')?.value) || 1000;
+            if (window.analytics) {
+                window.analytics.bankroll = newBankroll;
+                window.analytics.updateAllocationBars();
+            }
+        }
+
+        function updateRiskTolerance() {
+            const newTolerance = document.getElementById('risk-tolerance')?.value;
+            if (window.analytics) {
+                window.analytics.riskTolerance = newTolerance;
+                window.analytics.updateAllocationBars();
+            }
+        }
+
+        function toggleLiveFeed() {
+            const liveToggle = document.getElementById('live-toggle');
+            const liveDot = document.getElementById('live-dot');
+            const liveStatus = document.getElementById('live-status');
+            
+            if (window.analytics) {
+                window.analytics.liveFeedActive = !window.analytics.liveFeedActive;
+                
+                if (window.analytics.liveFeedActive) {
+                    if (liveToggle) liveToggle.innerHTML = '<i class="material-icons">pause</i>';
+                    if (liveDot) liveDot.classList.add('connected');
+                    if (liveStatus) liveStatus.textContent = 'Live';
+                } else {
+                    if (liveToggle) liveToggle.innerHTML = '<i class="material-icons">play_arrow</i>';
+                    if (liveDot) liveDot.classList.remove('connected');
+                    if (liveStatus) liveStatus.textContent = 'Paused';
+                }
+            }
+        }
+
+        // Initialize analytics when analytics panel becomes visible
+        const originalShowPanel = showPanel;
+        showPanel = function(panelId) {
+            originalShowPanel(panelId);
+            
+            if (panelId === 'analytics-panel' && !window.analytics) {
+                console.log('Initializing analytics for first time...');
+                window.analytics = new AdvancedAnalytics();
+                window.analytics.init();
+            }
+        };
+
+        // Clean up when leaving the page
+        window.addEventListener('beforeunload', function() {
+            if (window.analytics) {
+                window.analytics.stopAutoRefresh();
+            }
         });
     </script>
 </body>
