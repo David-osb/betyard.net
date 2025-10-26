@@ -699,6 +699,63 @@ def debug_config():
             'timestamp': datetime.now().isoformat()
         })
 
+@app.route('/debug/test-odds-api', methods=['GET'])
+def test_odds_api():
+    """Test the external odds API directly"""
+    try:
+        if not ODDS_API_KEY:
+            return jsonify({
+                'error': 'No API key configured',
+                'timestamp': datetime.now().isoformat()
+            })
+        
+        import aiohttp
+        
+        async def test_api():
+            url = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+            params = {
+                'apiKey': ODDS_API_KEY,
+                'regions': 'us',
+                'markets': 'h2h',
+                'oddsFormat': 'american'
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    status = response.status
+                    if status == 200:
+                        data = await response.json()
+                        return {
+                            'status': status,
+                            'games_count': len(data) if data else 0,
+                            'sample_game': data[0] if data else None,
+                            'success': True
+                        }
+                    else:
+                        text = await response.text()
+                        return {
+                            'status': status,
+                            'error_response': text,
+                            'success': False
+                        }
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(test_api())
+        loop.close()
+        
+        return jsonify({
+            'api_test_result': result,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error testing odds API: {e}", exc_info=True)
+        return jsonify({
+            'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        })
+
 @app.route('/test', methods=['GET'])
 def test_json_fix():
     """Test endpoint to verify JSON serialization fix is deployed"""
@@ -969,67 +1026,50 @@ else:
 def compare_odds(sport):
     """Get real-time odds comparison for a sport"""
     if not ODDS_API_AVAILABLE:
-        # Return mock data for demonstration when API is not available
-        mock_data = {
-            'total_games': 25,
-            'total_bookmakers': 7,
-            'arbitrage_opportunities': [
-                {
-                    'game': 'Miami Dolphins @ Atlanta Falcons',
-                    'home_odds': 134,
-                    'away_odds': 310,
-                    'home_bookmaker': 'fanduel',
-                    'away_bookmaker': 'mybookieag',
-                    'profit_margin': 32.87
-                },
-                {
-                    'game': 'Buffalo Bills @ Carolina Panthers',
-                    'home_odds': 475,
-                    'away_odds': 106,
-                    'home_bookmaker': 'ballybet',
-                    'away_bookmaker': 'fanduel',
-                    'profit_margin': 34.07
-                },
-                {
-                    'game': 'New York Jets @ Cincinnati Bengals',
-                    'home_odds': 106,
-                    'away_odds': 240,
-                    'home_bookmaker': 'fanduel',
-                    'away_bookmaker': 'fanduel',
-                    'profit_margin': 22.04
-                },
-                {
-                    'game': 'Cleveland Browns @ New England Patriots',
-                    'home_odds': -148,
-                    'away_odds': 290,
-                    'home_bookmaker': 'draftkings',
-                    'away_bookmaker': 'bovada',
-                    'profit_margin': 14.68
-                },
-                {
-                    'game': 'San Francisco 49ers @ Houston Texans',
-                    'home_odds': 100,
-                    'away_odds': 114,
-                    'home_bookmaker': 'ballybet',
-                    'away_bookmaker': 'fanduel',
-                    'profit_margin': 3.27
-                }
-            ],
-            'best_odds_by_game': {
-                'game_1': {'market_efficiency': 0.89},
-                'game_2': {'market_efficiency': 0.91},
-                'game_3': {'market_efficiency': 0.87},
-                'game_4': {'market_efficiency': 0.85},
-                'game_5': {'market_efficiency': 0.92}
-            }
-        }
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available - missing dependencies'
+        }), 503
+    
+    if not ODDS_API_KEY or ODDS_API_KEY == 'demo_key':
+        return jsonify({
+            'success': False,
+            'error': 'Odds API key not configured - set ODDS_API_KEY environment variable'
+        }), 503
+    
+    try:
+        logger.info(f"Fetching odds comparison for sport: {sport}")
+        
+        # Run async function in event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_odds():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                result = await odds_service.get_market_analysis(sport)
+                logger.info(f"Market analysis result keys: {list(result.keys()) if result else 'None'}")
+                logger.info(f"Total games found: {result.get('total_games', 0) if result else 0}")
+                return result
+        
+        result = loop.run_until_complete(get_odds())
+        loop.close()
+        
+        if not result:
+            logger.warning("No odds data returned from service")
+            result = {}
         
         return jsonify({
             'success': True,
-            'data': mock_data,
-            'timestamp': datetime.now().isoformat(),
-            'note': 'Demo data - configure ODDS_API_KEY for live data'
+            'data': result,
+            'timestamp': datetime.now().isoformat()
         })
+        
+    except Exception as e:
+        logger.error(f"Error in odds comparison: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
     
     try:
         # Run async function in event loop
@@ -1179,59 +1219,48 @@ def get_best_lines(sport, team):
 def find_arbitrage_opportunities(sport):
     """Find arbitrage betting opportunities"""
     if not ODDS_API_AVAILABLE:
-        # Return mock arbitrage opportunities for demonstration
-        mock_arbitrage_ops = [
-            {
-                'game': 'Miami Dolphins @ Atlanta Falcons',
-                'home_odds': 134,
-                'away_odds': 310,
-                'home_bookmaker': 'fanduel',
-                'away_bookmaker': 'mybookieag',
-                'profit_margin': 32.87
-            },
-            {
-                'game': 'Buffalo Bills @ Carolina Panthers',
-                'home_odds': 475,
-                'away_odds': 106,
-                'home_bookmaker': 'ballybet',
-                'away_bookmaker': 'fanduel',
-                'profit_margin': 34.07
-            },
-            {
-                'game': 'New York Jets @ Cincinnati Bengals',
-                'home_odds': 106,
-                'away_odds': 240,
-                'home_bookmaker': 'fanduel',
-                'away_bookmaker': 'fanduel',
-                'profit_margin': 22.04
-            },
-            {
-                'game': 'Cleveland Browns @ New England Patriots',
-                'home_odds': -148,
-                'away_odds': 290,
-                'home_bookmaker': 'draftkings',
-                'away_bookmaker': 'bovada',
-                'profit_margin': 14.68
-            },
-            {
-                'game': 'San Francisco 49ers @ Houston Texans',
-                'home_odds': 100,
-                'away_odds': 114,
-                'home_bookmaker': 'ballybet',
-                'away_bookmaker': 'fanduel',
-                'profit_margin': 3.27
-            }
-        ]
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available - missing dependencies'
+        }), 503
+    
+    if not ODDS_API_KEY or ODDS_API_KEY == 'demo_key':
+        return jsonify({
+            'success': False,
+            'error': 'Odds API key not configured'
+        }), 503
+    
+    try:
+        logger.info(f"Finding arbitrage opportunities for sport: {sport}")
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_arbitrage():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                analysis = await odds_service.get_market_analysis(sport)
+                arbitrage_ops = analysis.get('arbitrage_opportunities', []) if analysis else []
+                logger.info(f"Found {len(arbitrage_ops)} arbitrage opportunities")
+                return arbitrage_ops
+        
+        arbitrage_ops = loop.run_until_complete(get_arbitrage())
+        loop.close()
         
         return jsonify({
             'success': True,
             'data': {
-                'arbitrage_opportunities': mock_arbitrage_ops,
-                'count': len(mock_arbitrage_ops)
+                'arbitrage_opportunities': arbitrage_ops,
+                'count': len(arbitrage_ops)
             },
-            'timestamp': datetime.now().isoformat(),
-            'note': 'Demo data - configure ODDS_API_KEY for live arbitrage detection'
+            'timestamp': datetime.now().isoformat()
         })
+        
+    except Exception as e:
+        logger.error(f"Error finding arbitrage opportunities: {e}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
     
     try:
         loop = asyncio.new_event_loop()
