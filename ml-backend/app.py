@@ -20,6 +20,11 @@ from typing import Dict, List, Optional
 import logging
 import time
 from functools import wraps
+import asyncio
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -913,6 +918,212 @@ def nfl_games_proxy():
     except Exception as e:
         logger.error(f"Games proxy error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+# =============================================================================
+# ODDS COMPARISON AND VALUE BETTING ENDPOINTS
+# =============================================================================
+
+# Import the odds comparison service
+try:
+    from odds_comparison_service import OddsComparisonService
+    ODDS_API_AVAILABLE = True
+except ImportError:
+    ODDS_API_AVAILABLE = False
+    logger.warning("Odds comparison service not available - install aiohttp")
+
+# Get API key from environment variable
+ODDS_API_KEY = os.environ.get('ODDS_API_KEY')
+
+# Validate API key
+if not ODDS_API_KEY or ODDS_API_KEY == 'demo_key':
+    logger.warning("⚠️  WARNING: No valid Odds API key found. Set ODDS_API_KEY environment variable.")
+    logger.warning("⚠️  Odds comparison features will be limited without a valid API key.")
+else:
+    logger.info(f"✅ Odds API key loaded: {ODDS_API_KEY[:8]}...{ODDS_API_KEY[-4:]}")
+
+@app.route('/api/odds/compare/<sport>', methods=['GET'])
+def compare_odds(sport):
+    """Get real-time odds comparison for a sport"""
+    if not ODDS_API_AVAILABLE:
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available'
+        }), 503
+    
+    try:
+        # Run async function in event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_odds():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                return await odds_service.get_market_analysis(sport)
+        
+        result = loop.run_until_complete(get_odds())
+        loop.close()
+        
+        return jsonify({
+            'success': True,
+            'data': result,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error comparing odds: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/odds/value-bets/<sport>', methods=['POST'])
+def find_value_bets(sport):
+    """Find value bets by comparing model predictions with market odds"""
+    if not ODDS_API_AVAILABLE:
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available'
+        }), 503
+    
+    try:
+        # Get model predictions from request
+        predictions = request.get_json()
+        
+        if not predictions:
+            return jsonify({
+                'success': False,
+                'error': 'Model predictions required'
+            }), 400
+        
+        # Run async function in event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_value_bets():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                return await odds_service.identify_value_bets(sport, predictions)
+        
+        value_bets = loop.run_until_complete(get_value_bets())
+        loop.close()
+        
+        # Convert dataclasses to dictionaries for JSON serialization
+        value_bets_dict = []
+        for bet in value_bets:
+            value_bets_dict.append({
+                'game_id': bet.game_id,
+                'home_team': bet.home_team,
+                'away_team': bet.away_team,
+                'commence_time': bet.commence_time.isoformat(),
+                'market': bet.market,
+                'outcome': bet.outcome,
+                'best_odds': bet.best_odds,
+                'best_bookmaker': bet.best_bookmaker,
+                'model_probability': bet.model_probability,
+                'implied_probability': bet.implied_probability,
+                'edge': bet.edge,
+                'kelly_fraction': bet.kelly_fraction
+            })
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'value_bets': value_bets_dict,
+                'count': len(value_bets_dict)
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error finding value bets: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/odds/best-lines/<sport>/<team>', methods=['GET'])
+def get_best_lines(sport, team):
+    """Get best available lines for a specific team"""
+    if not ODDS_API_AVAILABLE:
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available'
+        }), 503
+    
+    try:
+        market = request.args.get('market', 'h2h')
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_lines():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                raw_odds = await odds_service.fetch_odds(sport, [market])
+                odds_data = odds_service.parse_odds_data(raw_odds)
+                return odds_service.find_best_odds(odds_data, market, team)
+        
+        best_odds = loop.run_until_complete(get_lines())
+        loop.close()
+        
+        if best_odds:
+            return jsonify({
+                'success': True,
+                'data': {
+                    'team': team,
+                    'market': market,
+                    'best_odds': best_odds.price,
+                    'bookmaker': best_odds.bookmaker,
+                    'implied_probability': best_odds.implied_probability,
+                    'last_update': best_odds.last_update.isoformat()
+                }
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': f'No odds found for {team} in {market} market'
+            }), 404
+            
+    except Exception as e:
+        logger.error(f"Error getting best lines: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/odds/arbitrage/<sport>', methods=['GET'])
+def find_arbitrage_opportunities(sport):
+    """Find arbitrage betting opportunities"""
+    if not ODDS_API_AVAILABLE:
+        return jsonify({
+            'success': False,
+            'error': 'Odds comparison service not available'
+        }), 503
+    
+    try:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        async def get_arbitrage():
+            async with OddsComparisonService(ODDS_API_KEY) as odds_service:
+                analysis = await odds_service.get_market_analysis(sport)
+                return analysis.get('arbitrage_opportunities', [])
+        
+        arbitrage_ops = loop.run_until_complete(get_arbitrage())
+        loop.close()
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'arbitrage_opportunities': arbitrage_ops,
+                'count': len(arbitrage_ops)
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error finding arbitrage opportunities: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
 if __name__ == '__main__':
     import os
