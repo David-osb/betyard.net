@@ -4891,12 +4891,18 @@
                 try {
                     console.log('Fetching fresh market overview data...');
                     
-                    // Show loading state
-                    document.getElementById('total-games').textContent = '...';
-                    document.getElementById('total-bookmakers').textContent = '...';
-                    document.getElementById('arbitrage-count').textContent = '...';
-                    document.getElementById('value-bet-count').textContent = '...';
-                    document.getElementById('avg-efficiency').textContent = '...';
+                    // Show loading state with null safety checks
+                    const totalGamesEl = document.getElementById('total-games');
+                    const totalBookmakersEl = document.getElementById('total-bookmakers');
+                    const arbitrageCountEl = document.getElementById('arbitrage-count');
+                    const valueBetCountEl = document.getElementById('value-bet-count');
+                    const avgEfficiencyEl = document.getElementById('avg-efficiency');
+                    
+                    if (totalGamesEl) totalGamesEl.textContent = '...';
+                    if (totalBookmakersEl) totalBookmakersEl.textContent = '...';
+                    if (arbitrageCountEl) arbitrageCountEl.textContent = '...';
+                    if (valueBetCountEl) valueBetCountEl.textContent = '...';
+                    if (avgEfficiencyEl) avgEfficiencyEl.textContent = '...';
                     
                     // Add timeout for performance
                     const controller = new AbortController();
@@ -4938,9 +4944,15 @@
             }
             
             updateMarketStats(marketData) {
-                document.getElementById('total-games').textContent = marketData.total_games || '0';
-                document.getElementById('total-bookmakers').textContent = marketData.total_sportsbooks || '0';
-                document.getElementById('arbitrage-count').textContent = marketData.arbitrage_opportunities?.length || 0;
+                // Add null safety checks for all DOM elements
+                const totalGamesEl = document.getElementById('total-games');
+                const totalBookmakersEl = document.getElementById('total-bookmakers');
+                const arbitrageCountEl = document.getElementById('arbitrage-count');
+                const bestLinesCountEl = document.getElementById('best-lines-count');
+                
+                if (totalGamesEl) totalGamesEl.textContent = marketData.total_games || '0';
+                if (totalBookmakersEl) totalBookmakersEl.textContent = marketData.total_sportsbooks || '0';
+                if (arbitrageCountEl) arbitrageCountEl.textContent = marketData.arbitrage_opportunities?.length || 0;
                 
                 // Count best lines (simplified from complex value betting)
                 const games = marketData.games || [];
@@ -4949,7 +4961,7 @@
                     const sportsbooks = Object.keys(game.sportsbooks || {});
                     if (sportsbooks.length > 0) bestLinesCount += 3; // ML, Spread, Total
                 });
-                document.getElementById('best-lines-count').textContent = bestLinesCount;
+                if (bestLinesCountEl) bestLinesCountEl.textContent = bestLinesCount;
                 
                 // Update timestamp
                 const lastUpdated = document.getElementById('last-updated');
@@ -4964,10 +4976,16 @@
             }
             
             showMarketError() {
-                document.getElementById('total-games').textContent = '--';
-                document.getElementById('total-bookmakers').textContent = '--';
-                document.getElementById('arbitrage-count').textContent = '--';
-                document.getElementById('best-lines-count').textContent = '--';
+                // Add null safety checks for error state
+                const totalGamesEl = document.getElementById('total-games');
+                const totalBookmakersEl = document.getElementById('total-bookmakers');
+                const arbitrageCountEl = document.getElementById('arbitrage-count');
+                const bestLinesCountEl = document.getElementById('best-lines-count');
+                
+                if (totalGamesEl) totalGamesEl.textContent = '--';
+                if (totalBookmakersEl) totalBookmakersEl.textContent = '--';
+                if (arbitrageCountEl) arbitrageCountEl.textContent = '--';
+                if (bestLinesCountEl) bestLinesCountEl.textContent = '--';
             }
             
             async loadValueBets() {
@@ -4987,6 +5005,29 @@
                     console.error('Best lines error:', error);
                     this.showBestLinesError();
                 }
+            }
+            
+            async loadArbitrageOpportunities() {
+                try {
+                    console.log('Loading arbitrage opportunities...');
+                    const response = await fetch(`${this.apiBaseUrl}/odds/arbitrage/${this.currentSport}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.updateArbitrageDisplay(data.data.arbitrage_opportunities || []);
+                    } else {
+                        console.log('No arbitrage opportunities available');
+                        this.updateArbitrageDisplay([]);
+                    }
+                } catch (error) {
+                    console.error('Arbitrage error:', error);
+                    this.updateArbitrageDisplay([]);
+                }
+            }
+            
+            updateArbitrageDisplay(opportunities) {
+                console.log('Updating arbitrage display with', opportunities.length, 'opportunities');
+                // Add arbitrage display logic here if needed
             }
             
             updateBestLinesDisplay(games) {
@@ -5209,6 +5250,21 @@
                     bankrollEl.value = this.bankroll;
                 }
                 this.updateAllocationBars();
+            }
+            
+            startAutoRefresh() {
+                // Set up auto-refresh for analytics data
+                if (this.refreshInterval) {
+                    clearInterval(this.refreshInterval);
+                }
+                
+                this.refreshInterval = setInterval(() => {
+                    console.log('Auto-refreshing analytics data...');
+                    this.loadMarketOverview();
+                    this.loadValueBets();
+                }, 60000); // Refresh every 60 seconds
+                
+                console.log('Analytics auto-refresh started (60s interval)');
             }
         }
 
