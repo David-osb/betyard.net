@@ -5251,27 +5251,9 @@
         }
 
         // Global functions for HTML onclick handlers
-        function refreshMarketData() {
-            if (window.analytics) {
-                // Clear cache to force fresh data
-                const cacheKey = `market-overview-${window.analytics.currentSport}`;
-                window.analytics.cache.delete(cacheKey);
-                window.analytics.loadMarketOverview();
-            }
-        }
-
         function filterValueBets() {
             const filter = document.getElementById('value-bet-filter')?.value;
             console.log('Filtering value bets:', filter);
-        }
-
-        function analyzeValueBets() {
-            if (window.analytics) {
-                // Clear cache to force fresh data
-                const cacheKey = `value-bets-${window.analytics.currentSport}`;
-                window.analytics.cache.delete(cacheKey);
-                window.analytics.loadValueBets();
-            }
         }
 
         function loadOddsComparison() {
@@ -5335,10 +5317,45 @@
             
             if (panelId === 'analytics-panel' && !window.analytics) {
                 console.log('Initializing analytics for first time...');
+                initializeAnalytics();
+            }
+        };
+
+        // Function to ensure analytics is initialized
+        function initializeAnalytics() {
+            if (!window.analytics) {
+                console.log('Creating AdvancedAnalytics instance...');
                 window.analytics = new AdvancedAnalytics();
                 window.analytics.init();
             }
-        };
+        }
+
+        // Make sure analytics functions work even if called before panel is shown
+        function refreshMarketData() {
+            if (!window.analytics) {
+                console.log('Analytics not initialized, initializing now...');
+                initializeAnalytics();
+            }
+            if (window.analytics) {
+                console.log('Refreshing market data...');
+                const cacheKey = `market-overview-${window.analytics.currentSport}`;
+                window.analytics.cache.delete(cacheKey);
+                window.analytics.loadMarketOverview();
+            }
+        }
+
+        function analyzeValueBets() {
+            if (!window.analytics) {
+                console.log('Analytics not initialized, initializing now...');
+                initializeAnalytics();
+            }
+            if (window.analytics) {
+                console.log('Analyzing value bets...');
+                const cacheKey = `value-bets-${window.analytics.currentSport}`;
+                window.analytics.cache.delete(cacheKey);
+                window.analytics.loadValueBets();
+            }
+        }
 
         // Clean up when leaving the page
         window.addEventListener('beforeunload', function() {
