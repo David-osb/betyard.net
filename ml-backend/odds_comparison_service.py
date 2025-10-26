@@ -74,7 +74,8 @@ class OddsComparisonService:
         
     async def __aenter__(self):
         """Async context manager entry"""
-        self.session = aiohttp.ClientSession()
+        timeout = aiohttp.ClientTimeout(total=30)
+        self.session = aiohttp.ClientSession(timeout=timeout)
         return self
         
     async def __aexit__(self, exc_type, exc_val, exc_tb):
@@ -125,16 +126,27 @@ class OddsComparisonService:
         url = f"{self.base_url}/sports/{sport_key}/odds"
         
         try:
+            logger.info(f"Making API request to: {url}")
+            logger.info(f"API key length: {len(self.api_key)}")
+            logger.info(f"API key prefix: {self.api_key[:10]}...")
+            
             async with self.session.get(url, params=params) as response:
+                logger.info(f"API response status: {response.status}")
+                
                 if response.status == 200:
                     data = await response.json()
                     logger.info(f"Fetched odds for {len(data)} {sport} games")
                     return data
+                elif response.status == 401:
+                    response_text = await response.text()
+                    logger.error(f"API authentication failed: {response.status} - {response_text}")
+                    return []
                 else:
-                    logger.error(f"API request failed: {response.status}")
+                    response_text = await response.text()
+                    logger.error(f"API request failed: {response.status} - {response_text}")
                     return []
         except Exception as e:
-            logger.error(f"Error fetching odds: {e}")
+            logger.error(f"Error fetching odds: {e}", exc_info=True)
             return []
     
     def parse_odds_data(self, raw_data: List[Dict]) -> List[OddsData]:
