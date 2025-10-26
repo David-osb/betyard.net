@@ -675,6 +675,30 @@ def health_check():
         'version': 'v2024-10-20-multi-position'
     })
 
+@app.route('/debug/config', methods=['GET'])
+def debug_config():
+    """Debug endpoint to check configuration"""
+    try:
+        import sys
+        return jsonify({
+            'odds_api_available': ODDS_API_AVAILABLE,
+            'odds_api_key_exists': bool(ODDS_API_KEY),
+            'odds_api_key_length': len(ODDS_API_KEY) if ODDS_API_KEY else 0,
+            'environment_variables': {
+                'ODDS_API_KEY': '***' + ODDS_API_KEY[-4:] if ODDS_API_KEY else None,
+                'FLASK_ENV': os.environ.get('FLASK_ENV'),
+                'PORT': os.environ.get('PORT')
+            },
+            'python_version': sys.version,
+            'cwd': os.getcwd(),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        })
+
 @app.route('/test', methods=['GET'])
 def test_json_fix():
     """Test endpoint to verify JSON serialization fix is deployed"""
