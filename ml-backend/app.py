@@ -1031,27 +1031,46 @@ def compare_odds(sport):
         
         # For NFL, use Tank01 betting odds
         if sport.lower() in ['nfl', 'americanfootball_nfl']:
-            today = datetime.now().strftime('%Y%m%d')
-            tank01_url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLBettingOdds'
+            # Try multiple dates to find current week games
+            dates_to_try = []
+            today = datetime.now()
             
-            headers = {
-                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
-                'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
-            }
+            # Add today and next 6 days to catch current week games
+            for i in range(7):
+                date_str = (today + timedelta(days=i)).strftime('%Y%m%d')
+                dates_to_try.append(date_str)
             
-            params = {'gameDate': today}
-            response = requests.get(tank01_url, headers=headers, params=params, timeout=10)
+            all_games = {}
             
-            if response.status_code == 200:
-                tank01_data = response.json()
-                if tank01_data.get('statusCode') == 200 and tank01_data.get('body'):
+            for date_str in dates_to_try:
+                try:
+                    tank01_url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLBettingOdds'
+                    
+                    headers = {
+                        'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
+                        'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                    }
+                    
+                    params = {'gameDate': date_str}
+                    response = requests.get(tank01_url, headers=headers, params=params, timeout=10)
+                    
+                    if response.status_code == 200:
+                        tank01_data = response.json()
+                        if tank01_data.get('statusCode') == 200 and tank01_data.get('body'):
+                            all_games.update(tank01_data['body'])
+                            logger.info(f"Found {len(tank01_data['body'])} games for {date_str}")
+                except Exception as e:
+                    logger.warning(f"Error fetching odds for {date_str}: {e}")
+                    continue
+            
+            if all_games:
                     # Convert Tank01 format to our analytics format
                     games_data = []
                     best_odds_by_game = {}
                     arbitrage_opportunities = []
                     value_bets = []
                     
-                    for game_id, game_data in tank01_data['body'].items():
+                    for game_id, game_data in all_games.items():
                         away_team = game_data.get('awayTeam')
                         home_team = game_data.get('homeTeam')
                         
