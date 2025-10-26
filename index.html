@@ -270,6 +270,215 @@
             background-clip: text !important;
         }
 
+        /* Collapsible Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 4px 0 24px rgba(0, 61, 165, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1100;
+            overflow-y: auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1050;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            background: linear-gradient(135deg, #003da5 0%, #0047ab 100%);
+            color: white;
+            position: relative;
+        }
+
+        .sidebar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 20px 12px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, rgba(0, 61, 165, 0.08) 0%, rgba(0, 61, 165, 0.04) 100%);
+            color: #003da5;
+            text-decoration: none;
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(0, 61, 165, 0.12) 0%, rgba(0, 61, 165, 0.06) 100%);
+            color: #003da5;
+            border-right: 3px solid #003da5;
+        }
+
+        .sidebar-item .material-icons {
+            margin-right: 16px;
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .sidebar-item:hover .material-icons,
+        .sidebar-item.active .material-icons {
+            opacity: 1;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-right: 12px;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-toggle .material-icons {
+            font-size: 24px;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(180deg, transparent 0%, rgba(248, 250, 252, 0.8) 100%);
+            border-top: 1px solid rgba(107, 114, 128, 0.1);
+        }
+
+        .sidebar-version {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        /* Dark Theme Sidebar */
+        body.dark-theme .sidebar {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .sidebar-header {
+            background: linear-gradient(135deg, #002d84 0%, #003499 100%);
+        }
+
+        body.dark-theme .sidebar-section-title {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .sidebar-item {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .sidebar-item:hover {
+            background: linear-gradient(90deg, rgba(0, 61, 165, 0.15) 0%, rgba(0, 61, 165, 0.08) 100%);
+            color: #60a5fa;
+        }
+
+        body.dark-theme .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(0, 61, 165, 0.2) 0%, rgba(0, 61, 165, 0.1) 100%);
+            color: #60a5fa;
+            border-right-color: #60a5fa;
+        }
+
+        body.dark-theme .sidebar-footer {
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.8) 100%);
+            border-top-color: rgba(148, 163, 184, 0.1);
+        }
+
+        body.dark-theme .sidebar-version {
+            color: #94a3b8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+        }
+
         /* Modern Font Import */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -1885,10 +2094,110 @@
     </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <!-- Collapsible Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">Betyard</div>
+            <div class="sidebar-subtitle">AI Sports Betting Platform</div>
+            <button class="sidebar-close" onclick="closeSidebar()">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <!-- Main Navigation -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Main</div>
+                <a href="#" class="sidebar-item active">
+                    <i class="material-icons">dashboard</i>
+                    Dashboard
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">sports_football</i>
+                    Predictions
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">trending_up</i>
+                    Analytics
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">history</i>
+                    Bet History
+                </a>
+            </div>
+            
+            <!-- Account Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Account</div>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">person</i>
+                    Profile
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">account_balance_wallet</i>
+                    Payment Methods
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">notifications</i>
+                    Notifications
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">security</i>
+                    Security
+                </a>
+            </div>
+            
+            <!-- Tools Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Tools</div>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">calculate</i>
+                    Odds Calculator
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">insights</i>
+                    AI Insights
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">compare_arrows</i>
+                    Compare Odds
+                </a>
+            </div>
+            
+            <!-- Support Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Support</div>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">settings</i>
+                    Settings
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">help</i>
+                    Help Center
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="material-icons">contact_support</i>
+                    Contact Us
+                </a>
+            </div>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="sidebar-version">Betyard v2.0</div>
+        </div>
+    </nav>
+
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <!-- Header -->
         <header class="mdl-layout__header mdl-color--indigo-500">
             <div class="mdl-layout__header-row">
+                <!-- Sidebar Toggle Button -->
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="material-icons">menu</i>
+                </button>
                 <!-- Title -->
                 <span class="mdl-layout-title mdl-color-text--white">
                     <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">sports_football</i>
@@ -2869,6 +3178,47 @@
                 }
             }, 100);
         }
+
+        // Sidebar Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            
+            // Prevent body scroll when sidebar is open
+            if (sidebar.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Close sidebar when clicking outside or pressing escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        // Close sidebar on mobile when clicking a menu item (optional)
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => closeSidebar(), 300);
+                }
+            });
+        });
 
         // Initialize theme on page load
         function initializeTheme() {
