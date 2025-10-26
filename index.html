@@ -17,7 +17,7 @@
     <script>
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2025-10-26-responsive-layout-fix-1729998000000';
+        const EXPECTED_VERSION = 'v2025-10-26-organized-odds-layout-1729998500000';
         
         // AGGRESSIVE CACHE CLEARING
         console.log('🧹 Clearing all caches...');
@@ -2441,6 +2441,164 @@
             transition: width 0.5s ease;
         }
 
+        /* ===== IMPROVED BETTING ODDS LAYOUT ===== */
+        
+        /* Game-by-Game Card Layout */
+        .best-lines-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            padding: 16px 0;
+        }
+        
+        .game-odds-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .game-odds-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 16px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .game-matchup {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        
+        .game-time {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .odds-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+        }
+        
+        .odds-section {
+            background: #ffffff;
+            padding: 16px;
+            text-align: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .odds-section:hover {
+            background: #f8fafc;
+        }
+        
+        .market-type {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .best-line {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        
+        .odds-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 6px;
+        }
+        
+        .sportsbook-name {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Premium sportsbook highlighting */
+        .sportsbook-draftkings { background: #ff6600; color: white; }
+        .sportsbook-fanduel { background: #1e3a8a; color: white; }
+        .sportsbook-betmgm { background: #ffd700; color: #000; }
+        .sportsbook-caesars { background: #8b5a3c; color: white; }
+        .sportsbook-bet365 { background: #00b04f; color: white; }
+        .sportsbook-espnbet { background: #ff0000; color: white; }
+        .sportsbook-betrivers { background: #0066cc; color: white; }
+        .sportsbook-hardrock { background: #000000; color: white; }
+        .sportsbook-fanatics { background: #1e293b; color: white; }
+        
+        /* View toggle */
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: flex-end;
+        }
+        
+        .view-toggle button {
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .view-toggle button.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .view-toggle button:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .view-toggle button.active:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        /* Old table fallback (hidden by default) */
+        .best-lines-table {
+            display: none;
+        }
+        
+        .show-table-view .best-lines-table {
+            display: block;
+        }
+        
+        .show-table-view .best-lines-container {
+            display: none;
+        }
+
         /* Value bets table - Enhanced modern design */
         .value-bets-table {
             overflow-x: auto;
@@ -3083,6 +3241,53 @@
                 padding: 8px 4px;
                 text-align: center;
             }
+            
+            /* Best Lines Mobile */
+            .best-lines-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 8px 0;
+            }
+            
+            .game-odds-card {
+                border-radius: 12px;
+            }
+            
+            .game-header {
+                padding: 12px 16px;
+            }
+            
+            .game-matchup {
+                font-size: 16px;
+            }
+            
+            .odds-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .odds-section {
+                padding: 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+            }
+            
+            .odds-left {
+                flex: 1;
+            }
+            
+            .odds-right {
+                text-align: right;
+            }
+            
+            .market-type {
+                margin-bottom: 4px;
+            }
+            
+            .view-toggle {
+                justify-content: center;
+            }
 
             .card-header {
                 flex-direction: column;
@@ -3544,6 +3749,41 @@
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.1);
         }
+        
+        /* Dark theme for improved betting odds layout */
+        body.dark-theme .game-odds-card {
+            background: #1e293b;
+            border-color: #374151;
+        }
+        
+        body.dark-theme .odds-section {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        
+        body.dark-theme .odds-section:hover {
+            background: #334155;
+        }
+        
+        body.dark-theme .best-line {
+            color: #e2e8f0;
+        }
+        
+        body.dark-theme .sportsbook-name {
+            background: #374151;
+            color: #94a3b8;
+        }
+        
+        body.dark-theme .view-toggle button {
+            background: #374151;
+            border-color: #4b5563;
+            color: #e2e8f0;
+        }
+        
+        body.dark-theme .view-toggle button.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
 
         body.dark-theme .bankroll-item input,
         body.dark-theme .bankroll-item select {
@@ -3825,6 +4065,21 @@
                 </div>
             </div>
             <div class="card-content">
+                <!-- View Toggle -->
+                <div class="view-toggle">
+                    <button class="active" onclick="toggleBestLinesView('cards')">Card View</button>
+                    <button onclick="toggleBestLinesView('table')">Table View</button>
+                </div>
+                
+                <!-- New Card-Based Layout -->
+                <div class="best-lines-container" id="best-lines-container">
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+                        <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">search</i>
+                        <p style="font-size: 16px; margin: 0;">Click "Find Best Lines" to analyze current odds</p>
+                    </div>
+                </div>
+                
+                <!-- Original Table View (Hidden by default) -->
                 <div class="best-lines-table">
                     <table id="best-lines-table">
                         <thead>
@@ -5486,6 +5741,43 @@
             }
             
             updateBestLinesDisplay(games) {
+                // Update both card view and table view
+                this.updateCardView(games);
+                this.updateTableView(games);
+            }
+            
+            updateCardView(games) {
+                const container = document.getElementById('best-lines-container');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                if (!games || games.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+                            <i class="material-icons" style="font-size: 48px; margin-bottom: 16px;">search_off</i>
+                            <p style="font-size: 16px; margin: 0;">No games available</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                games.forEach(game => {
+                    const awayTeam = game.away_team;
+                    const homeTeam = game.home_team;
+                    const sportsbooks = game.sportsbooks || {};
+                    
+                    // Find best odds for each market
+                    const bestOdds = this.findBestOdds(sportsbooks);
+                    
+                    if (bestOdds.moneyline || bestOdds.spread || bestOdds.total) {
+                        const gameCard = this.createGameCard(awayTeam, homeTeam, bestOdds, game.game_time);
+                        container.appendChild(gameCard);
+                    }
+                });
+            }
+            
+            updateTableView(games) {
                 const tbody = document.getElementById('best-lines-tbody');
                 if (!tbody) return;
                 
@@ -5510,75 +5802,144 @@
                     const homeTeam = game.home_team;
                     const sportsbooks = game.sportsbooks || {};
                     
-                    // Find best moneyline odds
-                    let bestAwayML = null, bestHomeML = null;
-                    let bestAwaySpread = null, bestHomeSpread = null;
-                    let bestOver = null, bestUnder = null;
+                    // Find best odds for each market
+                    const bestOdds = this.findBestOdds(sportsbooks);
                     
-                    Object.entries(sportsbooks).forEach(([bookName, bookData]) => {
-                        const ml = bookData.moneyline || {};
-                        const spread = bookData.spread || {};
-                        const totals = bookData.totals || {};
-                        
-                        // Track best moneyline
-                        if (ml.away && (!bestAwayML || this.compareOdds(ml.away, bestAwayML.odds) > 0)) {
-                            bestAwayML = { odds: ml.away, book: bookName };
-                        }
-                        if (ml.home && (!bestHomeML || this.compareOdds(ml.home, bestHomeML.odds) > 0)) {
-                            bestHomeML = { odds: ml.home, book: bookName };
-                        }
-                        
-                        // Track best spread
-                        if (spread.away?.odds && (!bestAwaySpread || this.compareOdds(spread.away.odds, bestAwaySpread.odds) > 0)) {
-                            bestAwaySpread = { odds: spread.away.odds, line: spread.away.point, book: bookName };
-                        }
-                        if (spread.home?.odds && (!bestHomeSpread || this.compareOdds(spread.home.odds, bestHomeSpread.odds) > 0)) {
-                            bestHomeSpread = { odds: spread.home.odds, line: spread.home.point, book: bookName };
-                        }
-                        
-                        // Track best totals
-                        if (totals.over?.odds && (!bestOver || this.compareOdds(totals.over.odds, bestOver.odds) > 0)) {
-                            bestOver = { odds: totals.over.odds, line: totals.over.point, book: bookName };
-                        }
-                        if (totals.under?.odds && (!bestUnder || this.compareOdds(totals.under.odds, bestUnder.odds) > 0)) {
-                            bestUnder = { odds: totals.under.odds, line: totals.under.point, book: bookName };
-                        }
-                    });
-                    
-                    // Add rows for best odds found
-                    if (bestAwayML) {
+                    // Add table rows
+                    if (bestOdds.moneyline) {
                         tbody.innerHTML += this.createBestLineRow(
                             `${awayTeam} @ ${homeTeam}`, 
                             'Moneyline', 
-                            awayTeam, 
-                            bestAwayML.odds, 
-                            bestAwayML.book,
+                            bestOdds.moneyline.team, 
+                            bestOdds.moneyline.odds, 
+                            bestOdds.moneyline.book,
                             'Best ML odds'
                         );
                     }
                     
-                    if (bestAwaySpread) {
+                    if (bestOdds.spread) {
                         tbody.innerHTML += this.createBestLineRow(
                             `${awayTeam} @ ${homeTeam}`, 
                             'Spread', 
-                            `${awayTeam} ${bestAwaySpread.line}`, 
-                            bestAwaySpread.odds, 
-                            bestAwaySpread.book,
+                            `${bestOdds.spread.team} ${bestOdds.spread.line}`, 
+                            bestOdds.spread.odds, 
+                            bestOdds.spread.book,
                             'Best spread odds'
                         );
                     }
                     
-                    if (bestOver) {
+                    if (bestOdds.total) {
                         tbody.innerHTML += this.createBestLineRow(
                             `${awayTeam} @ ${homeTeam}`, 
                             'Total', 
-                            `Over ${bestOver.line}`, 
-                            bestOver.odds, 
-                            bestOver.book,
-                            'Best over odds'
+                            `${bestOdds.total.type} ${bestOdds.total.line}`, 
+                            bestOdds.total.odds, 
+                            bestOdds.total.book,
+                            'Best total odds'
                         );
                     }
                 });
+            }
+            
+            findBestOdds(sportsbooks) {
+                let bestMoneyline = null;
+                let bestSpread = null;
+                let bestTotal = null;
+                
+                Object.entries(sportsbooks).forEach(([bookName, bookData]) => {
+                    const ml = bookData.moneyline || {};
+                    const spread = bookData.spread || {};
+                    const totals = bookData.totals || {};
+                    
+                    // Find best moneyline (highest odds for underdog or lowest negative for favorite)
+                    if (ml.away && (!bestMoneyline || this.compareOdds(ml.away, bestMoneyline.odds) > 0)) {
+                        bestMoneyline = { odds: ml.away, book: bookName, team: bookData.away_team || 'Away' };
+                    }
+                    if (ml.home && (!bestMoneyline || this.compareOdds(ml.home, bestMoneyline.odds) > 0)) {
+                        bestMoneyline = { odds: ml.home, book: bookName, team: bookData.home_team || 'Home' };
+                    }
+                    
+                    // Find best spread
+                    if (spread.away?.odds && (!bestSpread || this.compareOdds(spread.away.odds, bestSpread.odds) > 0)) {
+                        bestSpread = { 
+                            odds: spread.away.odds, 
+                            line: spread.away.point, 
+                            book: bookName, 
+                            team: bookData.away_team || 'Away'
+                        };
+                    }
+                    if (spread.home?.odds && (!bestSpread || this.compareOdds(spread.home.odds, bestSpread.odds) > 0)) {
+                        bestSpread = { 
+                            odds: spread.home.odds, 
+                            line: spread.home.point, 
+                            book: bookName, 
+                            team: bookData.home_team || 'Home'
+                        };
+                    }
+                    
+                    // Find best total
+                    if (totals.over?.odds && (!bestTotal || this.compareOdds(totals.over.odds, bestTotal.odds) > 0)) {
+                        bestTotal = { 
+                            odds: totals.over.odds, 
+                            line: totals.over.point, 
+                            book: bookName, 
+                            type: 'Over'
+                        };
+                    }
+                    if (totals.under?.odds && (!bestTotal || this.compareOdds(totals.under.odds, bestTotal.odds) > 0)) {
+                        bestTotal = { 
+                            odds: totals.under.odds, 
+                            line: totals.under.point, 
+                            book: bookName, 
+                            type: 'Under'
+                        };
+                    }
+                });
+                
+                return {
+                    moneyline: bestMoneyline,
+                    spread: bestSpread,
+                    total: bestTotal
+                };
+            }
+            
+            createGameCard(awayTeam, homeTeam, bestOdds, gameTime) {
+                const card = document.createElement('div');
+                card.className = 'game-odds-card';
+                
+                const formatSportsbook = (bookName) => {
+                    const formatted = bookName.toLowerCase().replace(/\s+/g, '');
+                    return `sportsbook-${formatted}`;
+                };
+                
+                card.innerHTML = `
+                    <div class="game-header">
+                        <div class="game-matchup">${awayTeam} @ ${homeTeam}</div>
+                        <div class="game-time">${gameTime || 'TBD'}</div>
+                    </div>
+                    <div class="odds-grid">
+                        <div class="odds-section">
+                            <div class="market-type">Moneyline</div>
+                            <div class="best-line">${bestOdds.moneyline ? bestOdds.moneyline.team : '--'}</div>
+                            <div class="odds-value">${bestOdds.moneyline ? bestOdds.moneyline.odds : '--'}</div>
+                            <div class="sportsbook-name ${bestOdds.moneyline ? formatSportsbook(bestOdds.moneyline.book) : ''}">${bestOdds.moneyline ? bestOdds.moneyline.book : '--'}</div>
+                        </div>
+                        <div class="odds-section">
+                            <div class="market-type">Spread</div>
+                            <div class="best-line">${bestOdds.spread ? `${bestOdds.spread.team} ${bestOdds.spread.line}` : '--'}</div>
+                            <div class="odds-value">${bestOdds.spread ? bestOdds.spread.odds : '--'}</div>
+                            <div class="sportsbook-name ${bestOdds.spread ? formatSportsbook(bestOdds.spread.book) : ''}">${bestOdds.spread ? bestOdds.spread.book : '--'}</div>
+                        </div>
+                        <div class="odds-section">
+                            <div class="market-type">Total</div>
+                            <div class="best-line">${bestOdds.total ? `${bestOdds.total.type} ${bestOdds.total.line}` : '--'}</div>
+                            <div class="odds-value">${bestOdds.total ? bestOdds.total.odds : '--'}</div>
+                            <div class="sportsbook-name ${bestOdds.total ? formatSportsbook(bestOdds.total.book) : ''}">${bestOdds.total ? bestOdds.total.book : '--'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                return card;
             }
             
             createBestLineRow(game, market, line, odds, book, edge) {
@@ -5724,6 +6085,25 @@
         }
 
         // Global functions for HTML onclick handlers
+        function toggleBestLinesView(viewType) {
+            const cardView = document.querySelector('.best-lines-container');
+            const tableView = document.querySelector('.best-lines-table');
+            const cardBtn = document.querySelector('.view-toggle button:first-child');
+            const tableBtn = document.querySelector('.view-toggle button:last-child');
+            
+            if (viewType === 'cards') {
+                cardView.style.display = 'grid';
+                tableView.style.display = 'none';
+                cardBtn.classList.add('active');
+                tableBtn.classList.remove('active');
+            } else {
+                cardView.style.display = 'none';
+                tableView.style.display = 'block';
+                cardBtn.classList.remove('active');
+                tableBtn.classList.add('active');
+            }
+        }
+        
         function filterValueBets() {
             const filter = document.getElementById('value-bet-filter')?.value;
             console.log('Filtering value bets:', filter);
