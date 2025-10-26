@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🏈 BetYard - NFL QB Predictor & Analysis Platform [v5.0-PROPER-DATA-FLOW]</title>
-    <meta name="description" content="Professional NFL Quarterback predictions with XGBoost ML, betting analysis, and value recommendations on BetYard.net">
-    <meta name="keywords" content="NFL, quarterback, predictions, betting, statistics, football, analysis, betyard, xgboost, machine learning, value bets">
+    <title>🏈 Betyard - NFL Predictions & Analysis Platform</title>
+    <meta name="description" content="Professional Sports Analysis & predictions using the power of A.I for the most accurate sports bets on the internet! Betyard.net">
+    <meta name="keywords" content="sports betting, AI predictions, artificial intelligence, betting analysis, sports analysis, accurate bets, betyard, machine learning, sports predictions, betting tips">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
@@ -81,10 +81,955 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 75%, #f59e0b 100%);
             color: #374151;
             min-height: 100vh;
             line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Light Mode Colors */
+        .sport-selector-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #e0e7ff 100%);
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            margin: 16px 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .sport-icon {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+        }
+
+        .sport-icon:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #fefeff 0%, #f0f4ff 100%);
+        }
+
+        .sport-icon.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: #4f46e5;
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Better card styling */
+        .mdl-card {
+            border-radius: 16px !important;
+            margin-bottom: 16px !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.12) !important;
+            border: 1px solid rgba(99, 102, 241, 0.08) !important;
+        }
+
+        /* Game-Centric UI Enhanced Colors */
+        .game-centric-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+        }
+
+        .selection-step {
+            background: linear-gradient(135deg, #ffffff 0%, #fefeff 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08) !important;
+        }
+
+        .step-header {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15) !important;
+        }
+
+        .game-option, .team-option, .position-option, .player-option {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.08) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .game-option:hover, .team-option:hover, .position-option:hover, .player-option:hover {
+            background: linear-gradient(135deg, #fefeff 0%, #f0f4ff 100%) !important;
+            border-color: #6366f1 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.18) !important;
+        }
+
+        .game-option.selected, .team-option.selected, .position-option.selected, .player-option.selected {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            border-color: #4f46e5 !important;
+            color: white !important;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3) !important;
+        }
+
+        /* Live Game Container Enhanced */
+        .live-scores-container {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25) !important;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1) !important;
+        }
+
+        .game-card:hover {
+            background: linear-gradient(135deg, #fefeff 0%, #f0f4ff 100%) !important;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2) !important;
+        }
+
+        /* Navigation Controls Enhanced */
+        .navigation-controls {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1) !important;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.2) !important;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .prev-btn {
+            background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%) !important;
+            color: white !important;
+        }
+
+        .prev-btn:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            box-shadow: 0 4px 16px rgba(100, 116, 139, 0.3) !important;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+        }
+
+        .next-btn:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4) !important;
+        }
+
+        /* Status Banners Enhanced */
+        .status-banner, #qb-news-section, #betting-recommendations {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08) !important;
+        }
+
+        /* Prediction Cards Enhanced */
+        .prediction-card, .stat-item, .player-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.08) !important;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2) !important;
+            background: linear-gradient(135deg, #fefeff 0%, #f0f4ff 100%) !important;
+        }
+
+        /* Modern Betyard Subtitle Styling */
+        .betyard-subtitle {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-weight: 500 !important;
+            font-size: 16px !important;
+            letter-spacing: -0.2px !important;
+            line-height: 1.4 !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.9) 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            text-shadow: none !important;
+        }
+
+        /* Dark Theme Subtitle */
+        body.dark-theme .betyard-subtitle {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(179, 229, 252, 0.8) 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        /* Modern Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        /* Modern Betyard Logo Styling */
+        .betyard-logo {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 24px !important;
+            letter-spacing: -0.5px !important;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            text-shadow: none !important;
+            margin-left: 8px !important;
+        }
+
+        /* Enhanced Material Design Header - Honda Blue Theme */
+        .mdl-layout__header {
+            background: linear-gradient(135deg, #003da5 0%, #0047ab 50%, #0066cc 100%) !important;
+            box-shadow: 0 4px 24px rgba(0, 61, 165, 0.4) !important;
+        }
+
+        .mdl-layout__header-row {
+            background: transparent !important;
+        }
+
+        /* MDL Header Text Colors */
+        .mdl-layout__header .mdl-layout-title {
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .mdl-layout__header .mdl-color-text--indigo-100 {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .mdl-layout__header .mdl-color-text--white {
+            color: white !important;
+        }
+
+        /* Enhanced Form Elements */
+        select, input[type="text"], input[type="email"], input[type="password"] {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 2px solid rgba(99, 102, 241, 0.15) !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            transition: all 0.3s ease !important;
+            color: #374151 !important;
+        }
+
+        select:focus, input:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+            outline: none !important;
+        }
+
+        /* Enhanced Buttons */
+        button:not(.nav-btn):not(#theme-toggle) {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2) !important;
+        }
+
+        button:hover:not(.nav-btn):not(#theme-toggle) {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3) !important;
+        }
+
+        /* Enhanced Success/Warning Colors */
+        .success-highlight {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: white !important;
+        }
+
+        .warning-highlight {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: white !important;
+        }
+
+        .error-highlight {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: white !important;
+        }
+
+        /* Enhanced Loading States */
+        .loading-container {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08) !important;
+        }
+
+        /* Enhanced Spinner */
+        .loading-spinner {
+            border: 4px solid rgba(99, 102, 241, 0.1) !important;
+            border-top: 4px solid #6366f1 !important;
+        }
+
+        /* Enhanced Progress Bars */
+        .progress-bar {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%) !important;
+            border-radius: 8px !important;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            border-radius: 8px !important;
+        }
+
+        /* Enhanced Text Colors */
+        h1, h2, h3, h4, h5, h6 {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+        }
+
+        p {
+            color: #475569 !important;
+            line-height: 1.7 !important;
+        }
+
+        /* Enhanced Links */
+        a:not(.mdl-button) {
+            color: #6366f1 !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        a:hover:not(.mdl-button) {
+            color: #4f46e5 !important;
+            text-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+        }
+
+        /* Enhanced Badges and Tags */
+        .badge {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+            padding: 4px 12px !important;
+            border-radius: 20px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+        }
+
+        /* Enhanced Tooltips */
+        .tooltip {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            color: white !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 24px rgba(30, 41, 59, 0.4) !important;
+        }
+
+        /* Enhanced Highlights */
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+            color: #92400e !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+        }
+
+        /* Enhanced Gradient Overlays */
+        .gradient-overlay {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(236, 72, 153, 0.1) 100%) !important;
+        }
+
+        /* Enhanced Glass Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15) !important;
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .mdl-layout__header {
+            background: linear-gradient(135deg, #002d84 0%, #003499 50%, #003da5 100%) !important;
+            box-shadow: 0 4px 24px rgba(0, 61, 165, 0.6) !important;
+        }
+
+        /* Dark theme ML Active section */
+        body.dark-theme .ml-active-banner {
+            background: linear-gradient(135deg, #001f5c, #002d84, #003499) !important;
+            box-shadow: 0 4px 16px rgba(0, 45, 132, 0.6) !important;
+        }
+
+        /* Dark Theme Modern Logo */
+        body.dark-theme .betyard-logo {
+            background: linear-gradient(135deg, #ffffff 0%, #b3e5fc 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        body.dark-theme .sport-selector-header {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%);
+            border-color: rgba(71, 85, 105, 0.5);
+        }
+
+        body.dark-theme .sport-selector-title span:first-child {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .sport-selector-title span:last-child {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .sport-icon {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .sport-icon:hover {
+            background: #475569;
+            border-color: #3b82f6;
+        }
+
+        body.dark-theme .sport-label {
+            color: #e2e8f0;
+        }
+
+        /* Game Cards Dark Theme */
+        body.dark-theme .mdl-card {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            color: #e2e8f0 !important;
+            border: 1px solid rgba(71, 85, 105, 0.3);
+        }
+
+        body.dark-theme .mdl-card__title-text {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .mdl-card__supporting-text {
+            color: #cbd5e1 !important;
+        }
+
+        /* Game Centric UI Cards */
+        body.dark-theme #game-centric-container .game-card {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            color: #e2e8f0;
+        }
+
+        /* Game-Centric UI Dark Theme - All Elements */
+        body.dark-theme .game-centric-container {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme .selection-step {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .step-header {
+            background: rgba(71, 85, 105, 0.2) !important;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme .step-number {
+            background: #3b82f6 !important;
+            color: white !important;
+        }
+
+        body.dark-theme .step-title h2 {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .step-title p {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .games-grid {
+            background: transparent !important;
+        }
+
+        body.dark-theme .game-option {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .game-option:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            border-color: #3b82f6 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        body.dark-theme .game-option.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        body.dark-theme .team-selection-container {
+            background: transparent !important;
+        }
+
+        body.dark-theme .team-option {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team-option:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            border-color: #3b82f6 !important;
+        }
+
+        body.dark-theme .team-option.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        body.dark-theme .position-grid {
+            background: transparent !important;
+        }
+
+        body.dark-theme .position-option {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .position-option:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            border-color: #3b82f6 !important;
+        }
+
+        body.dark-theme .position-option.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        body.dark-theme .position-icon {
+            filter: brightness(1.2) !important;
+        }
+
+        body.dark-theme .position-name {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .player-selection-container {
+            background: transparent !important;
+        }
+
+        body.dark-theme .player-option {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .player-option:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            border-color: #3b82f6 !important;
+        }
+
+        body.dark-theme .player-option.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        body.dark-theme .player-name {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .player-position {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .prediction-results {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .prediction-header {
+            background: rgba(71, 85, 105, 0.2) !important;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme .prediction-header h3 {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .predictions-grid {
+            background: transparent !important;
+        }
+
+        body.dark-theme .prediction-stat {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .stat-name {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .stat-value {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .stat-confidence {
+            color: #94a3b8 !important;
+        }
+
+        /* Loading states in Game-Centric UI */
+        body.dark-theme .loading-message {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .error-message {
+            color: #94a3b8 !important;
+        }
+
+        /* Navigation breadcrumbs */
+        body.dark-theme .breadcrumb {
+            background: rgba(71, 85, 105, 0.2) !important;
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme .breadcrumb-item {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .breadcrumb-separator {
+            color: #64748b !important;
+        }
+
+        /* Game status indicators */
+        body.dark-theme .game-status {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .game-status.live {
+            color: #ef4444 !important;
+        }
+
+        body.dark-theme .game-status.upcoming {
+            color: #3b82f6 !important;
+        }
+
+        body.dark-theme .game-status.final {
+            color: #94a3b8 !important;
+        }
+
+        /* Score displays */
+        body.dark-theme .score-display {
+            color: #e2e8f0 !important;
+        }
+
+        /* Team logos and names */
+        body.dark-theme .team-name {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team-code {
+            color: #94a3b8 !important;
+        }
+
+        /* Live Game Container Dark Theme */
+        body.dark-theme .live-scores-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme .live-scores-header {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .live-indicator {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .live-text {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .last-update {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme #live-games-container {
+            background: transparent !important;
+        }
+
+        body.dark-theme .game-card {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .game-card:hover {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        body.dark-theme .game-status {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .status-live {
+            background: #dc2626 !important;
+            color: white !important;
+        }
+
+        body.dark-theme .status-final {
+            background: #64748b !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .status-scheduled {
+            background: #475569 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .teams-container {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team-name {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team-score {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .loading-games {
+            color: #94a3b8 !important;
+        }
+
+        /* Navigation Controls Dark Theme */
+        body.dark-theme .navigation-controls {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .nav-btn {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .prev-btn {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .prev-btn:hover {
+            background: linear-gradient(135deg, #64748b 0%, #6b7280 100%) !important;
+        }
+
+        body.dark-theme .next-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+        }
+
+        body.dark-theme .next-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+        }
+
+        body.dark-theme .nav-btn:disabled {
+            background: linear-gradient(135deg, #374151 0%, #475569 100%) !important;
+            color: #6b7280 !important;
+            opacity: 0.6 !important;
+        }
+
+        body.dark-theme .progress-indicator {
+            background: transparent !important;
+        }
+
+        body.dark-theme .progress-dots {
+            background: transparent !important;
+        }
+
+        body.dark-theme .dot {
+            background: #475569 !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+        }
+
+        body.dark-theme .dot.active {
+            background: #3b82f6 !important;
+            border-color: #2563eb !important;
+        }
+
+        body.dark-theme .dot.completed {
+            background: #059669 !important;
+            border-color: #047857 !important;
+        }
+
+        /* Live Scores Widget Scrollbar */
+        body.dark-theme .live-games-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        body.dark-theme .live-games-scroll::-webkit-scrollbar-track {
+            background: rgba(71, 85, 105, 0.2);
+            border-radius: 2px;
+        }
+
+        body.dark-theme .live-games-scroll::-webkit-scrollbar-thumb {
+            background: rgba(71, 85, 105, 0.5);
+            border-radius: 2px;
+        }
+
+        body.dark-theme .live-games-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(71, 85, 105, 0.7);
+        }
+
+        body.dark-theme .game-header {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .team-section {
+            background: rgba(71, 85, 105, 0.2) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme .player-card {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .stat-item {
+            background: rgba(71, 85, 105, 0.2) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Prediction Cards */
+        body.dark-theme .prediction-card {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Loading States */
+        body.dark-theme .loading-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* News Section */
+        body.dark-theme #qb-news-section {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Betting Recommendations */
+        body.dark-theme #betting-recommendations {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Status Banners */
+        body.dark-theme .status-banner {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* NBA Game Cards */
+        body.dark-theme .nba-game-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+        }
+
+        /* Form Elements */
+        body.dark-theme select {
+            background: #374151 !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(71, 85, 105, 0.5) !important;
+        }
+
+        body.dark-theme input {
+            background: #374151 !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(71, 85, 105, 0.5) !important;
+        }
+
+        /* Text Colors */
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4, body.dark-theme h5, body.dark-theme h6 {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme p {
+            color: #cbd5e1 !important;
+        }
+
+        /* Override inline styles that might conflict */
+        body.dark-theme [style*="background: white"],
+        body.dark-theme [style*="background: #f8fafc"],
+        body.dark-theme [style*="background: rgba(255, 255, 255"] {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+        }
+
+        body.dark-theme [style*="color: #374151"],
+        body.dark-theme [style*="color: #1e293b"] {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme [style*="color: #64748b"] {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme [style*="color: #6b7280"] {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme [style*="color: #9ca3af"] {
+            color: #94a3b8 !important;
+        }
+
+        /* Game-Centric UI - Force dark theme on dynamic content */
+        body.dark-theme #game-centric-container * {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme #game-centric-container [style*="background"] {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+        }
+
+        body.dark-theme #game-centric-container .mdl-card {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            border: 1px solid rgba(71, 85, 105, 0.3) !important;
+        }
+
+        /* Specific overrides for game-centric score displays */
+        body.dark-theme #game-centric-container [style*="color: #dc2626"] {
+            color: #ef4444 !important; /* Keep red color but lighter for dark theme */
+        }
+
+        body.dark-theme #game-centric-container [style*="color: #6b7280"] {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-theme #game-centric-container [style*="color: #9ca3af"] {
+            color: #94a3b8 !important;
         }
 
         /* Better card styling */
@@ -947,7 +1892,7 @@
                 <!-- Title -->
                 <span class="mdl-layout-title mdl-color-text--white">
                     <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">sports_football</i>
-                    BetYard - NFL QB Predictor
+                    <span class="betyard-logo">Betyard</span>
                 </span>
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
@@ -959,9 +1904,9 @@
                 </button>
             </div>
             <!-- Subtitle -->
-            <div class="mdl-layout__header-row" style="height: 48px; padding-left: 40px;">
-                <span class="mdl-color-text--indigo-100" style="font-size: 14px;">
-                    Professional quarterback analysis & predictions with XGBoost ML
+            <div class="mdl-layout__header-row" style="height: 56px; padding-left: 40px; padding-right: 40px;">
+                <span class="betyard-subtitle">
+                    Professional Sports Analysis & predictions using the power of A.I for the most accurate sports bets on the internet!
                 </span>
             </div>
         </header>
@@ -1012,12 +1957,12 @@
                 
                 <!-- Tank01 Status Banner -->
                 <div class="mdl-cell mdl-cell--12-col">
-                    <div style="padding: 16px 20px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 12px; color: white; text-align: center; margin: 0 8px 16px 8px; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);">
+                    <div class="ml-active-banner" style="padding: 16px 20px; background: linear-gradient(135deg, #002d84, #003da5, #0047ab); border-radius: 12px; color: white; text-align: center; margin: 0 8px 16px 8px; box-shadow: 0 4px 16px rgba(0, 61, 165, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);">
                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
                             <span style="font-size: 16px;">🤖</span>
-                            <strong>REAL XGBOOST ML MODELS ACTIVE</strong>
+                            <strong style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">REAL XGBOOST ML MODELS ACTIVE</strong>
                         </div>
-                        <div style="font-size: 12px; font-weight: 500; opacity: 0.95;">
+                        <div style="font-size: 12px; font-weight: 500; opacity: 0.95; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
                             Trained on 27,332 NFL games (2020-2024) • Professional-grade predictions with 78-95% accuracy
                         </div>
                     </div>
@@ -1850,6 +2795,102 @@
                 </div>
             `;
         }
+
+        // Dark Theme Toggle Function
+        function toggleDarkTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            body.classList.toggle('dark-theme');
+            
+            // Update icon based on theme
+            if (body.classList.contains('dark-theme')) {
+                themeIcon.textContent = 'brightness_7'; // Sun icon for light mode
+                localStorage.setItem('darkTheme', 'enabled');
+            } else {
+                themeIcon.textContent = 'brightness_2'; // Moon icon for dark mode
+                localStorage.setItem('darkTheme', 'disabled');
+            }
+            
+            // Force refresh of any dynamically loaded content
+            setTimeout(() => {
+                // Refresh game cards if they exist
+                const gameCards = document.querySelectorAll('.game-card, .player-card, .stat-item');
+                gameCards.forEach(card => {
+                    // Trigger a small visual update to apply new styles
+                    card.style.opacity = '0.99';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                    }, 50);
+                });
+
+                // Force refresh game-centric UI elements specifically
+                const gameCentricElements = document.querySelectorAll('#game-centric-container *');
+                gameCentricElements.forEach(element => {
+                    // Force style recalculation
+                    element.style.transform = 'translateZ(0)';
+                    setTimeout(() => {
+                        element.style.transform = '';
+                    }, 10);
+                });
+
+                // Refresh any selection steps
+                const selectionSteps = document.querySelectorAll('.selection-step, .game-option, .team-option, .position-option, .player-option');
+                selectionSteps.forEach(step => {
+                    step.classList.add('theme-refresh');
+                    setTimeout(() => {
+                        step.classList.remove('theme-refresh');
+                    }, 100);
+                });
+
+                // Force refresh live game containers
+                const liveGameElements = document.querySelectorAll('#live-games-container *, .live-scores-container *, .game-card');
+                liveGameElements.forEach(element => {
+                    element.style.transform = 'translateZ(0)';
+                    setTimeout(() => {
+                        element.style.transform = '';
+                    }, 10);
+                });
+
+                // Force refresh navigation controls
+                const navigationElements = document.querySelectorAll('.navigation-controls *, .nav-btn, .progress-dots *');
+                navigationElements.forEach(element => {
+                    element.style.transform = 'translateZ(0)';
+                    setTimeout(() => {
+                        element.style.transform = '';
+                    }, 10);
+                });
+
+                // Trigger live scores refresh if available
+                if (window.liveNFLScores && window.liveNFLScores.addLiveScoresStyles) {
+                    setTimeout(() => {
+                        window.liveNFLScores.addLiveScoresStyles();
+                    }, 200);
+                }
+            }, 100);
+        }
+
+        // Initialize theme on page load
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('darkTheme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'enabled') {
+                document.body.classList.add('dark-theme');
+                if (themeIcon) {
+                    themeIcon.textContent = 'brightness_7';
+                }
+            } else {
+                if (themeIcon) {
+                    themeIcon.textContent = 'brightness_2';
+                }
+            }
+        }
+
+        // Call initialize theme when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+        });
     </script>
 </body>
 </html>
