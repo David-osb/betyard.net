@@ -2374,6 +2374,11 @@
             border: 1px solid rgba(0, 61, 165, 0.15);
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(0, 61, 165, 0.1);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .stat-item:hover {
@@ -2388,6 +2393,7 @@
             color: var(--honda-blue);
             margin-bottom: 0.5rem;
             line-height: 1;
+            word-break: break-word;
         }
 
         .stat-label {
@@ -2396,6 +2402,10 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
         }
 
         /* Market efficiency - Enhanced design */
@@ -2565,6 +2575,33 @@
             background: linear-gradient(135deg, var(--honda-blue-light), var(--honda-blue));
         }
 
+        /* Refresh button styling */
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--honda-blue), var(--honda-blue-light));
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 61, 165, 0.2);
+            min-width: 40px;
+            height: 40px;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 61, 165, 0.3);
+            background: linear-gradient(135deg, var(--honda-blue-light), var(--honda-blue));
+        }
+
+        .btn-refresh .material-icons {
+            font-size: 1.25rem;
+        }
+
         /* Card spacing and layout improvements */
         .panel-card {
             margin-bottom: 2rem;
@@ -2577,6 +2614,11 @@
             padding: 1.5rem;
             border-bottom: 1px solid rgba(0, 61, 165, 0.08);
             background: linear-gradient(135deg, rgba(0, 61, 165, 0.02), rgba(0, 61, 165, 0.05));
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .card-header h3 {
@@ -2587,13 +2629,16 @@
             color: var(--honda-blue);
             font-weight: 700;
             font-size: 1.25rem;
+            flex: 1;
+            min-width: 200px;
         }
 
         .card-actions {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-top: 1rem;
+            margin: 0;
+            flex-shrink: 0;
         }
 
         .card-content {
@@ -2725,16 +2770,21 @@
         /* Mobile responsiveness for Advanced Analytics */
         @media (max-width: 768px) {
             .market-stats {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 1rem;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
             }
 
             .stat-item {
-                padding: 1rem 0.75rem;
+                padding: 1rem 0.5rem;
+                min-height: 80px;
             }
 
             .stat-value {
-                font-size: 1.75rem;
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
             }
 
             .value-bets-table {
@@ -2743,17 +2793,41 @@
 
             .value-bets-table th,
             .value-bets-table td {
-                padding: 0.75rem 0.5rem;
+                padding: 0.5rem 0.25rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+                padding: 1rem;
             }
 
             .card-header h3 {
-                font-size: 1.125rem;
+                font-size: 1rem;
+                width: 100%;
             }
 
             .card-actions {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.75rem;
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+            }
+
+            .card-actions small {
+                font-size: 0.7rem !important;
+                flex: 1;
+                text-align: left;
+            }
+
+            .btn-refresh {
+                min-width: 36px;
+                height: 36px;
+            }
+
+            .card-content {
+                padding: 1rem;
             }
 
             .arbitrage-details {
@@ -2762,7 +2836,53 @@
             }
 
             .arbitrage-game {
-                font-size: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .arbitrage-item {
+                padding: 1rem;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .market-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .stat-item {
+                padding: 0.75rem 0.25rem;
+                min-height: 70px;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .card-header h3 {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Tablet responsiveness */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .card-header {
+                align-items: center;
+            }
+
+            .card-actions {
+                flex-direction: row;
+                gap: 0.75rem;
+            }
+
+            .market-stats {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 1rem;
             }
         }
 
@@ -3225,8 +3345,8 @@
             <div class="card-header">
                 <h3><i class="material-icons">trending_up</i>Market Overview</h3>
                 <div class="card-actions">
-                    <small id="last-updated" style="color: var(--text-secondary); margin-right: 1rem;">--</small>
-                    <button class="btn-refresh" onclick="refreshMarketData()">
+                    <small id="last-updated" style="color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap;">--</small>
+                    <button class="btn-refresh" onclick="refreshMarketData()" title="Refresh market data">
                         <i class="material-icons">refresh</i>
                     </button>
                 </div>
