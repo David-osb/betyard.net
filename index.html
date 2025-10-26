@@ -17,7 +17,7 @@
     <script>
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
-        const EXPECTED_VERSION = 'v2025-10-26-organized-odds-layout-1729998500000';
+        const EXPECTED_VERSION = 'v2025-10-26-mobile-friendly-odds-1729999000000';
         
         // AGGRESSIVE CACHE CLEARING
         console.log('🧹 Clearing all caches...');
@@ -2458,6 +2458,7 @@
             border: 1px solid #e5e7eb;
             overflow: hidden;
             transition: all 0.3s ease;
+            position: relative;
         }
         
         .game-odds-card:hover {
@@ -2465,12 +2466,16 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
         
-        .game-header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        /* Remove game header - integrate matchup into card */
+        .game-matchup-bar {
+            background: linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);
             color: white;
-            padding: 16px 20px;
+            padding: 12px 16px;
             text-align: center;
-            position: relative;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e5e7eb;
         }
         
         .game-matchup {
@@ -3242,51 +3247,92 @@
                 text-align: center;
             }
             
-            /* Best Lines Mobile */
+            /* Best Lines Mobile - MUCH MORE USER FRIENDLY */
             .best-lines-container {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                gap: 12px;
                 padding: 8px 0;
             }
             
             .game-odds-card {
                 border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             }
             
-            .game-header {
-                padding: 12px 16px;
-            }
-            
-            .game-matchup {
-                font-size: 16px;
+            .game-matchup-bar {
+                padding: 10px 12px;
+                font-size: 13px;
+                background: linear-gradient(135deg, #475569 0%, #64748b 100%);
             }
             
             .odds-grid {
                 grid-template-columns: 1fr;
+                gap: 0;
+                background: transparent;
             }
             
             .odds-section {
-                padding: 12px;
-                display: flex;
-                justify-content: space-between;
+                padding: 14px 16px;
+                display: grid;
+                grid-template-columns: 1fr auto auto;
                 align-items: center;
+                gap: 12px;
                 text-align: left;
+                border-bottom: 1px solid #f1f5f9;
+                background: #ffffff;
             }
             
-            .odds-left {
-                flex: 1;
+            .odds-section:last-child {
+                border-bottom: none;
             }
             
-            .odds-right {
-                text-align: right;
+            .odds-section:hover {
+                background: #f8fafc;
             }
             
             .market-type {
-                margin-bottom: 4px;
+                font-size: 12px;
+                font-weight: 700;
+                color: #475569;
+                margin: 0;
+                text-align: left;
+            }
+            
+            .best-line {
+                font-size: 13px;
+                font-weight: 600;
+                color: #1e293b;
+                margin: 0;
+                text-align: center;
+                justify-self: center;
+            }
+            
+            .odds-value {
+                font-size: 15px;
+                font-weight: 700;
+                color: #059669;
+                margin: 0;
+                text-align: right;
+                justify-self: end;
+            }
+            
+            .sportsbook-name {
+                font-size: 9px;
+                padding: 3px 6px;
+                margin-top: 4px;
+                grid-column: 1 / -1;
+                text-align: center;
+                border-radius: 4px;
             }
             
             .view-toggle {
                 justify-content: center;
+                margin-bottom: 12px;
+            }
+            
+            .view-toggle button {
+                padding: 6px 12px;
+                font-size: 11px;
             }
 
             .card-header {
@@ -3389,6 +3435,48 @@
                 font-size: 10px !important;
             }
             
+            /* Better mobile odds layout */
+            .best-lines-container {
+                gap: 8px;
+                padding: 4px 0;
+            }
+            
+            .game-odds-card {
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+                margin: 0 2px;
+            }
+            
+            .game-matchup-bar {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .odds-section {
+                padding: 10px 12px;
+                grid-template-columns: 80px 1fr auto;
+                gap: 8px;
+            }
+            
+            .market-type {
+                font-size: 11px;
+                width: 80px;
+            }
+            
+            .best-line {
+                font-size: 12px;
+            }
+            
+            .odds-value {
+                font-size: 14px;
+            }
+            
+            .sportsbook-name {
+                font-size: 8px;
+                padding: 2px 4px;
+                margin-top: 2px;
+            }
+
             .card-header {
                 padding: 12px 8px;
                 flex-direction: column;
@@ -5913,10 +6001,7 @@
                 };
                 
                 card.innerHTML = `
-                    <div class="game-header">
-                        <div class="game-matchup">${awayTeam} @ ${homeTeam}</div>
-                        <div class="game-time">${gameTime || 'TBD'}</div>
-                    </div>
+                    <div class="game-matchup-bar">${awayTeam} @ ${homeTeam} ${gameTime ? '• ' + gameTime : ''}</div>
                     <div class="odds-grid">
                         <div class="odds-section">
                             <div class="market-type">Moneyline</div>
