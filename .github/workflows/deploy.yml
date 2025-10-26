@@ -13,11 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Copy deployment files to root
+      run: |
+        cp -r 2-Developer-Tools/godaddy-upload/* .
+        ls -la
+        
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./2-Developer-Tools/godaddy-upload
+        publish_dir: .
         cname: betyard.net
         
     - name: Notify deployment
