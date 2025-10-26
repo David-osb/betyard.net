@@ -1024,21 +1024,180 @@ else:
 
 @app.route('/api/odds/compare/<sport>', methods=['GET'])
 def compare_odds(sport):
-    """Get real-time odds comparison for a sport"""
-    if not ODDS_API_AVAILABLE:
-        return jsonify({
-            'success': False,
-            'error': 'Odds comparison service not available - missing dependencies'
-        }), 503
-    
-    if not ODDS_API_KEY or ODDS_API_KEY == 'demo_key':
-        return jsonify({
-            'success': False,
-            'error': 'Odds API key not configured - set ODDS_API_KEY environment variable'
-        }), 503
+    """Get real-time odds comparison for a sport using Tank01 API for NFL"""
     
     try:
         logger.info(f"Fetching odds comparison for sport: {sport}")
+        
+        # For NFL, use Tank01 betting odds
+        if sport.lower() in ['nfl', 'americanfootball_nfl']:
+            today = datetime.now().strftime('%Y%m%d')
+            tank01_url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLBettingOdds'
+            
+            headers = {
+                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
+                'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+            }
+            
+            params = {'gameDate': today}
+            response = requests.get(tank01_url, headers=headers, params=params, timeout=10)
+            
+            if response.status_code == 200:
+                tank01_data = response.json()
+                if tank01_data.get('statusCode') == 200 and tank01_data.get('body'):
+                    # Convert Tank01 format to our analytics format
+                    games_data = []
+                    best_odds_by_game = {}
+                    arbitrage_opportunities = []
+                    value_bets = []
+                    
+                    for game_id, game_data in tank01_data['body'].items():
+                        away_team = game_data.get('awayTeam')
+                        home_team = game_data.get('homeTeam')
+                        
+                        # Track best odds for each market
+                        best_moneyline_away = {'odds': None, 'sportsbook': None}
+                        best_moneyline_home = {'odds': None, 'sportsbook': None}
+                        best_spread_away = {'odds': None, 'sportsbook': None, 'line': None}
+                        best_spread_home = {'odds': None, 'sportsbook': None, 'line': None}
+                        
+                        game_info = {
+                            'id': game_id,
+                            'away_team': away_team,
+                            'home_team': home_team,
+                            'commence_time': game_data.get('gameDate'),
+                            'sportsbooks': {}
+                        }
+                        
+                        # Extract sportsbook odds
+                        sportsbook_mapping = {
+                            'bet365': 'Bet365',
+                            'betmgm': 'BetMGM',
+                            'betrivers': 'BetRivers',
+                            'caesars_sportsbook': 'Caesars',
+                            'draftkings': 'DraftKings',
+                            'espnbet': 'ESPN BET',
+                            'fanatics': 'Fanatics',
+                            'fanduel': 'FanDuel',
+                            'hardrock': 'Hard Rock'
+                        }
+                        
+                        for tank01_book, display_name in sportsbook_mapping.items():
+                            if tank01_book in game_data:
+                                book_data = game_data[tank01_book]
+                                
+                                # Convert American odds to decimal for comparison
+                                def american_to_decimal(american_odds):
+                                    if not american_odds or american_odds == 'even':
+                                        return 2.0 if american_odds == 'even' else None
+                                    try:
+                                        odds = int(american_odds.replace('+', ''))
+                                        if odds > 0:
+                                            return (odds / 100) + 1
+                                        else:
+                                            return (100 / abs(odds)) + 1
+                                    except:
+                                        return None
+                                
+                                away_ml_decimal = american_to_decimal(book_data.get('awayTeamMLOdds'))
+                                home_ml_decimal = american_to_decimal(book_data.get('homeTeamMLOdds'))
+                                
+                                # Track best moneyline odds
+                                if away_ml_decimal and (not best_moneyline_away['odds'] or away_ml_decimal > best_moneyline_away['odds']):
+                                    best_moneyline_away = {'odds': away_ml_decimal, 'sportsbook': display_name, 'american': book_data.get('awayTeamMLOdds')}
+                                
+                                if home_ml_decimal and (not best_moneyline_home['odds'] or home_ml_decimal > best_moneyline_home['odds']):
+                                    best_moneyline_home = {'odds': home_ml_decimal, 'sportsbook': display_name, 'american': book_data.get('homeTeamMLOdds')}
+                                
+                                game_info['sportsbooks'][display_name] = {
+                                    'moneyline': {
+                                        'home': book_data.get('homeTeamMLOdds'),
+                                        'away': book_data.get('awayTeamMLOdds')
+                                    },
+                                    'spread': {
+                                        'home': {
+                                            'point': book_data.get('homeTeamSpread'),
+                                            'odds': book_data.get('homeTeamSpreadOdds')
+                                        },
+                                        'away': {
+                                            'point': book_data.get('awayTeamSpread'),
+                                            'odds': book_data.get('awayTeamSpreadOdds')
+                                        }
+                                    },
+                                    'totals': {
+                                        'over': {
+                                            'point': book_data.get('totalOver'),
+                                            'odds': book_data.get('totalOverOdds')
+                                        },
+                                        'under': {
+                                            'point': book_data.get('totalUnder'),
+                                            'odds': book_data.get('totalUnderOdds')
+                                        }
+                                    }
+                                }
+                        
+                        # Check for arbitrage opportunities
+                        if best_moneyline_away['odds'] and best_moneyline_home['odds']:
+                            implied_prob_away = 1 / best_moneyline_away['odds']
+                            implied_prob_home = 1 / best_moneyline_home['odds']
+                            total_implied_prob = implied_prob_away + implied_prob_home
+                            
+                            if total_implied_prob < 1.0:  # Arbitrage opportunity
+                                profit_margin = (1 - total_implied_prob) * 100
+                                arbitrage_opportunities.append({
+                                    'game': f"{away_team} @ {home_team}",
+                                    'away_bet': {
+                                        'team': away_team,
+                                        'odds': best_moneyline_away['american'],
+                                        'sportsbook': best_moneyline_away['sportsbook']
+                                    },
+                                    'home_bet': {
+                                        'team': home_team,
+                                        'odds': best_moneyline_home['american'],
+                                        'sportsbook': best_moneyline_home['sportsbook']
+                                    },
+                                    'profit_margin': round(profit_margin, 2)
+                                })
+                        
+                        # Store best odds for this game
+                        best_odds_by_game[game_id] = {
+                            'away_team': away_team,
+                            'home_team': home_team,
+                            'best_away_odds': best_moneyline_away,
+                            'best_home_odds': best_moneyline_home
+                        }
+                        
+                        games_data.append(game_info)
+                    
+                    logger.info(f"Successfully fetched Tank01 odds for {len(games_data)} games with {len(arbitrage_opportunities)} arbitrage opportunities")
+                    
+                    return jsonify({
+                        'success': True,
+                        'data': {
+                            'sport': sport,
+                            'games': games_data,
+                            'best_odds_by_game': best_odds_by_game,
+                            'arbitrage_opportunities': arbitrage_opportunities,
+                            'value_bets': value_bets,
+                            'total_games': len(games_data),
+                            'total_sportsbooks': len(sportsbook_mapping),
+                            'source': 'Tank01'
+                        },
+                        'timestamp': datetime.now().isoformat()
+                    })
+        
+        # For other sports, fall back to original odds service
+        if not ODDS_API_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Odds comparison service not available - missing dependencies'
+            }), 503
+        
+        if not ODDS_API_KEY or ODDS_API_KEY == 'demo_key':
+            return jsonify({
+                'success': False,
+                'error': 'Odds API key not configured - set ODDS_API_KEY environment variable'
+            }), 503
         
         # Run async function in event loop
         loop = asyncio.new_event_loop()
