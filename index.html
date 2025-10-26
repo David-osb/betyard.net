@@ -5245,21 +5245,12 @@
         }
 
         function updateRiskTolerance() {
-                    if (error.name === 'AbortError') {
-                        console.warn('Request timed out, checking for stale cache...');
-                        // Try to use stale cache data if timeout
-                        const staleCache = this.getCache(cacheKey, 1800000); // 30 minutes
-                        if (staleCache && staleCache.success) {
-                            console.log('Using stale cache data due to timeout');
-                            this.updateValueBetsDisplay(staleCache.data.value_bets);
-                            document.getElementById('value-bet-count').textContent = staleCache.data.count;
-                            return;
-                        }
-                    }
-                    
-                    console.error('Value bets error:', error);
-                    this.showNoValueBets();
-                }
+            const newTolerance = document.getElementById('risk-tolerance')?.value;
+            if (window.analytics) {
+                window.analytics.riskTolerance = newTolerance;
+                window.analytics.updateAllocationBars();
+            }
+        }
 
         function toggleLiveFeed() {
             const liveToggle = document.getElementById('live-toggle');
