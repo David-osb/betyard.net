@@ -3340,13 +3340,13 @@
 
             <div id="analytics-panel" class="content-panel">
     <div class="panel-grid">
-        <!-- Market Overview Card -->
-        <div class="panel-card">
+        <!-- Tank01 Live Odds Overview -->
+        <div class="panel-card full-width">
             <div class="card-header">
-                <h3><i class="material-icons">trending_up</i>Market Overview</h3>
+                <h3><i class="material-icons">sports_football</i>NFL Odds Overview - Tank01 Data</h3>
                 <div class="card-actions">
-                    <small id="last-updated" style="color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap;">--</small>
-                    <button class="btn-refresh" onclick="refreshMarketData()" title="Refresh market data">
+                    <small id="last-updated" style="color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap;">Live data from Tank01</small>
+                    <button class="btn-refresh" onclick="refreshMarketData()" title="Refresh live odds">
                         <i class="material-icons">refresh</i>
                     </button>
                 </div>
@@ -3366,159 +3366,156 @@
                         <div class="stat-label">Arbitrage Ops</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="value-bet-count">--</div>
-                        <div class="stat-label">Value Bets</div>
-                    </div>
-                </div>
-                <div class="market-efficiency">
-                    <div class="efficiency-header">
-                        <span>Market Efficiency</span>
-                        <span id="avg-efficiency">--</span>
-                    </div>
-                    <div class="efficiency-bar">
-                        <div class="efficiency-fill" id="efficiency-bar"></div>
+                        <div class="stat-value" id="best-lines-count">--</div>
+                        <div class="stat-label">Best Lines</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Value Bets Card -->
+        <!-- Best Lines Finder -->
         <div class="panel-card full-width">
             <div class="card-header">
-                <h3><i class="material-icons">attach_money</i>Value Betting Opportunities</h3>
+                <h3><i class="material-icons">star</i>Best Lines Across Sportsbooks</h3>
                 <div class="card-actions">
-                    <select id="value-bet-filter" onchange="filterValueBets()">
+                    <select id="market-filter" onchange="filterBestLines()">
                         <option value="all">All Markets</option>
                         <option value="moneyline">Moneyline</option>
                         <option value="spread">Point Spread</option>
-                        <option value="totals">Over/Under</option>
+                        <option value="total">Over/Under</option>
                     </select>
                     <button class="btn-analyze" onclick="analyzeValueBets()">
-                        <i class="material-icons">analytics</i>
-                        Analyze
+                        <i class="material-icons">search</i>
+                        Find Best Lines
                     </button>
                 </div>
             </div>
             <div class="card-content">
-                <div class="value-bets-table">
-                    <table id="value-bets-table">
+                <div class="best-lines-table">
+                    <table id="best-lines-table">
                         <thead>
                             <tr>
                                 <th>Game</th>
                                 <th>Market</th>
-                                <th>Bet</th>
-                                <th>Best Odds</th>
-                                <th>Bookmaker</th>
-                                <th>Model Prob.</th>
-                                <th>Market Prob.</th>
-                                <th>Edge</th>
-                                <th>Kelly %</th>
-                                <th>Actions</th>
+                                <th>Best Line</th>
+                                <th>Odds</th>
+                                <th>Sportsbook</th>
+                                <th>Edge vs Avg</th>
                             </tr>
                         </thead>
-                        <tbody id="value-bets-tbody">
-                            <!-- Dynamic content -->
+                        <tbody id="best-lines-tbody">
+                            <tr>
+                                <td colspan="6" class="empty-state-cell">
+                                    <div class="empty-state">
+                                        <i class="material-icons">search</i>
+                                        <p>Click "Find Best Lines" to analyze current odds</p>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                </div>
-                <div id="no-value-bets" class="empty-state" style="display: none;">
-                    <i class="material-icons">search_off</i>
-                    <p>No value bets found</p>
-                    <small>Try adjusting your filters or check back later</small>
                 </div>
             </div>
         </div>
 
-        <!-- Odds Comparison Card -->
+        <!-- Odds Comparison Grid -->
         <div class="panel-card">
             <div class="card-header">
-                <h3><i class="material-icons">compare_arrows</i>Odds Comparison</h3>
+                <h3><i class="material-icons">compare_arrows</i>Live Odds Grid</h3>
                 <div class="card-actions">
                     <select id="odds-game-select" onchange="loadOddsComparison()">
                         <option value="">Select Game</option>
-                        <!-- Dynamic options -->
                     </select>
                 </div>
             </div>
             <div class="card-content">
                 <div class="odds-comparison" id="odds-comparison">
                     <div class="empty-state">
-                        <i class="material-icons">compare_arrows</i>
+                        <i class="material-icons">sports_football</i>
                         <p>Select a game to compare odds</p>
+                        <small>View Moneyline, Spread, and Total odds side-by-side</small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Arbitrage Opportunities Card -->
+        <!-- Arbitrage Scanner -->
         <div class="panel-card">
             <div class="card-header">
-                <h3><i class="material-icons">swap_horiz</i>Arbitrage Opportunities</h3>
+                <h3><i class="material-icons">swap_horiz</i>Arbitrage Scanner</h3>
                 <div class="arbitrage-info">
-                    <i class="material-icons" title="Risk-free profit opportunities">info</i>
+                    <span class="arbitrage-status">Auto-scanning Tank01 data</span>
                 </div>
             </div>
             <div class="card-content">
                 <div class="arbitrage-list" id="arbitrage-list">
-                    <!-- Dynamic content -->
-                </div>
-                <div id="no-arbitrage" class="empty-state" style="display: none;">
-                    <i class="material-icons">block</i>
-                    <p>No arbitrage opportunities</p>
-                    <small>Markets are efficient right now</small>
+                    <div class="empty-state">
+                        <i class="material-icons">trending_flat</i>
+                        <p>Scanning for arbitrage opportunities...</p>
+                        <small>Risk-free profit opportunities will appear here</small>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bankroll Management Card -->
+        <!-- Sportsbook Performance -->
         <div class="panel-card">
             <div class="card-header">
-                <h3><i class="material-icons">account_balance_wallet</i>Bankroll Management</h3>
+                <h3><i class="material-icons">store</i>Sportsbook Analysis</h3>
                 <div class="card-actions">
-                    <button class="btn-settings" onclick="openBankrollSettings()">
-                        <i class="material-icons">settings</i>
+                    <button class="btn-info" onclick="showSportsbookInfo()">
+                        <i class="material-icons">info</i>
                     </button>
                 </div>
             </div>
             <div class="card-content">
-                <div class="bankroll-summary">
-                    <div class="bankroll-item">
-                        <label>Current Bankroll</label>
-                        <input type="number" id="current-bankroll" value="1000" onchange="updateBankroll()">
-                    </div>
-                    <div class="bankroll-item">
-                        <label>Risk Tolerance</label>
-                        <select id="risk-tolerance" onchange="updateRiskTolerance()">
-                            <option value="conservative">Conservative (1-2%)</option>
-                            <option value="moderate" selected>Moderate (2-5%)</option>
-                            <option value="aggressive">Aggressive (5-10%)</option>
-                        </select>
-                    </div>
-                    <div class="bankroll-allocation">
-                        <div class="allocation-header">Recommended Allocation</div>
-                        <div class="allocation-bars" id="allocation-bars">
-                            <!-- Dynamic allocation bars -->
-                        </div>
+                <div class="sportsbook-grid" id="sportsbook-analysis">
+                    <div class="empty-state">
+                        <i class="material-icons">assessment</i>
+                        <p>Loading sportsbook performance...</p>
+                        <small>Analyzing odds competitiveness across books</small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Live Odds Updates Card -->
+        <!-- Tank01 Data Source Info -->
         <div class="panel-card full-width">
             <div class="card-header">
-                <h3><i class="material-icons">update</i>Live Odds Feed</h3>
-                <div class="card-actions">
-                    <div class="live-indicator">
-                        <div class="live-dot" id="live-dot"></div>
-                        <span id="live-status">Connecting...</span>
-                    </div>
-                    <button class="btn-toggle" onclick="toggleLiveFeed()" id="live-toggle">
-                        <i class="material-icons">pause</i>
-                    </button>
-                </div>
+                <h3><i class="material-icons">info</i>Data Source Information</h3>
             </div>
             <div class="card-content">
+                <div class="data-source-info">
+                    <div class="info-section">
+                        <h4>Available Markets</h4>
+                        <div class="market-chips">
+                            <span class="chip">Moneyline</span>
+                            <span class="chip">Point Spread</span>
+                            <span class="chip">Over/Under Totals</span>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h4>Covered Sportsbooks</h4>
+                        <div class="sportsbook-chips">
+                            <span class="chip">Bet365</span>
+                            <span class="chip">BetMGM</span>
+                            <span class="chip">BetRivers</span>
+                            <span class="chip">Caesars</span>
+                            <span class="chip">DraftKings</span>
+                            <span class="chip">FanDuel</span>
+                            <span class="chip">ESPN BET</span>
+                            <span class="chip">Hard Rock</span>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h4>Update Frequency</h4>
+                        <p>Live odds updated in real-time via Tank01 API. Data refreshes automatically every 2 minutes or manually via refresh button.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
                 <div class="live-odds-container">
                     <div class="odds-ticker" id="odds-ticker">
                         <!-- Real-time odds updates -->
@@ -4942,21 +4939,17 @@
             
             updateMarketStats(marketData) {
                 document.getElementById('total-games').textContent = marketData.total_games || '0';
-                document.getElementById('total-bookmakers').textContent = marketData.total_bookmakers || '0';
+                document.getElementById('total-bookmakers').textContent = marketData.total_sportsbooks || '0';
                 document.getElementById('arbitrage-count').textContent = marketData.arbitrage_opportunities?.length || 0;
                 
-                const games = marketData.best_odds_by_game || {};
-                const efficiencies = Object.values(games).map(game => game.market_efficiency);
-                const avgEfficiency = efficiencies.length > 0 
-                    ? efficiencies.reduce((a, b) => a + b, 0) / efficiencies.length 
-                    : 0;
-                
-                document.getElementById('avg-efficiency').textContent = `${(avgEfficiency * 100).toFixed(1)}%`;
-                
-                const efficiencyBar = document.getElementById('efficiency-bar');
-                if (efficiencyBar) {
-                    efficiencyBar.style.width = `${avgEfficiency * 100}%`;
-                }
+                // Count best lines (simplified from complex value betting)
+                const games = marketData.games || [];
+                let bestLinesCount = 0;
+                games.forEach(game => {
+                    const sportsbooks = Object.keys(game.sportsbooks || {});
+                    if (sportsbooks.length > 0) bestLinesCount += 3; // ML, Spread, Total
+                });
+                document.getElementById('best-lines-count').textContent = bestLinesCount;
                 
                 // Update timestamp
                 const lastUpdated = document.getElementById('last-updated');
@@ -4966,64 +4959,255 @@
                 }
                 
                 this.updateArbitrageDisplay(marketData.arbitrage_opportunities || []);
-                this.populateGameSelector(games);
+                this.populateGameSelector(marketData.games || []);
+                this.updateSportsbookAnalysis(marketData.games || []);
             }
             
             showMarketError() {
                 document.getElementById('total-games').textContent = '--';
                 document.getElementById('total-bookmakers').textContent = '--';
                 document.getElementById('arbitrage-count').textContent = '--';
-                document.getElementById('value-bet-count').textContent = '--';
-                document.getElementById('avg-efficiency').textContent = '--';
+                document.getElementById('best-lines-count').textContent = '--';
             }
             
             async loadValueBets() {
-                // Check cache first (5 minute cache for live odds)
-                const cacheKey = `value-bets-${this.currentSport}`;
-                const cached = this.getCache(cacheKey, 300000);
-                if (cached) {
-                    console.log('Loading value bets from cache...');
-                    if (cached.success) {
-                        this.updateValueBetsDisplay(cached.data.value_bets);
-                        document.getElementById('value-bet-count').textContent = cached.data.count;
+                // This now becomes "Find Best Lines" functionality
+                try {
+                    console.log('Finding best lines across sportsbooks...');
+                    
+                    const response = await fetch(`${this.apiBaseUrl}/odds/compare/${this.currentSport}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.data) {
+                        this.updateBestLinesDisplay(data.data.games || []);
+                    } else {
+                        this.showBestLinesError();
                     }
+                } catch (error) {
+                    console.error('Best lines error:', error);
+                    this.showBestLinesError();
+                }
+            }
+            
+            updateBestLinesDisplay(games) {
+                const tbody = document.getElementById('best-lines-tbody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                if (!games || games.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state-cell">
+                                <div class="empty-state">
+                                    <i class="material-icons">search_off</i>
+                                    <p>No games available</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                     return;
                 }
                 
-                try {
-                    console.log('Fetching fresh value bets data...');
-                    const mockPredictions = this.getMockPredictions();
+                games.forEach(game => {
+                    const awayTeam = game.away_team;
+                    const homeTeam = game.home_team;
+                    const sportsbooks = game.sportsbooks || {};
                     
-                    // Add timeout controller for performance
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => {
-                        controller.abort();
-                        console.warn('Value bets request timed out after 8 seconds');
-                    }, 8000);
+                    // Find best moneyline odds
+                    let bestAwayML = null, bestHomeML = null;
+                    let bestAwaySpread = null, bestHomeSpread = null;
+                    let bestOver = null, bestUnder = null;
                     
-                    const response = await fetch(`${this.apiBaseUrl}/odds/value-bets/${this.currentSport}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(mockPredictions),
-                        signal: controller.signal
+                    Object.entries(sportsbooks).forEach(([bookName, bookData]) => {
+                        const ml = bookData.moneyline || {};
+                        const spread = bookData.spread || {};
+                        const totals = bookData.totals || {};
+                        
+                        // Track best moneyline
+                        if (ml.away && (!bestAwayML || this.compareOdds(ml.away, bestAwayML.odds) > 0)) {
+                            bestAwayML = { odds: ml.away, book: bookName };
+                        }
+                        if (ml.home && (!bestHomeML || this.compareOdds(ml.home, bestHomeML.odds) > 0)) {
+                            bestHomeML = { odds: ml.home, book: bookName };
+                        }
+                        
+                        // Track best spread
+                        if (spread.away?.odds && (!bestAwaySpread || this.compareOdds(spread.away.odds, bestAwaySpread.odds) > 0)) {
+                            bestAwaySpread = { odds: spread.away.odds, line: spread.away.point, book: bookName };
+                        }
+                        if (spread.home?.odds && (!bestHomeSpread || this.compareOdds(spread.home.odds, bestHomeSpread.odds) > 0)) {
+                            bestHomeSpread = { odds: spread.home.odds, line: spread.home.point, book: bookName };
+                        }
+                        
+                        // Track best totals
+                        if (totals.over?.odds && (!bestOver || this.compareOdds(totals.over.odds, bestOver.odds) > 0)) {
+                            bestOver = { odds: totals.over.odds, line: totals.over.point, book: bookName };
+                        }
+                        if (totals.under?.odds && (!bestUnder || this.compareOdds(totals.under.odds, bestUnder.odds) > 0)) {
+                            bestUnder = { odds: totals.under.odds, line: totals.under.point, book: bookName };
+                        }
                     });
                     
-                    clearTimeout(timeoutId);
-                    const data = await response.json();
-                    
-                    // Cache the response for performance
-                    this.setCache(cacheKey, data);
-                    
-                    if (data.success) {
-                        this.updateValueBetsDisplay(data.data.value_bets);
-                        document.getElementById('value-bet-count').textContent = data.data.count;
-                    } else {
-                        console.error('Failed to load value bets:', data.error);
-                        this.showNoValueBets();
+                    // Add rows for best odds found
+                    if (bestAwayML) {
+                        tbody.innerHTML += this.createBestLineRow(
+                            `${awayTeam} @ ${homeTeam}`, 
+                            'Moneyline', 
+                            awayTeam, 
+                            bestAwayML.odds, 
+                            bestAwayML.book,
+                            'Best ML odds'
+                        );
                     }
-                } catch (error) {
+                    
+                    if (bestAwaySpread) {
+                        tbody.innerHTML += this.createBestLineRow(
+                            `${awayTeam} @ ${homeTeam}`, 
+                            'Spread', 
+                            `${awayTeam} ${bestAwaySpread.line}`, 
+                            bestAwaySpread.odds, 
+                            bestAwaySpread.book,
+                            'Best spread odds'
+                        );
+                    }
+                    
+                    if (bestOver) {
+                        tbody.innerHTML += this.createBestLineRow(
+                            `${awayTeam} @ ${homeTeam}`, 
+                            'Total', 
+                            `Over ${bestOver.line}`, 
+                            bestOver.odds, 
+                            bestOver.book,
+                            'Best over odds'
+                        );
+                    }
+                });
+            }
+            
+            createBestLineRow(game, market, line, odds, book, edge) {
+                return `
+                    <tr>
+                        <td>${game}</td>
+                        <td>${market}</td>
+                        <td>${line}</td>
+                        <td>${odds}</td>
+                        <td>${book}</td>
+                        <td><span class="edge-positive">${edge}</span></td>
+                    </tr>
+                `;
+            }
+            
+            compareOdds(odds1, odds2) {
+                // Convert American odds to decimal for comparison
+                const decimal1 = this.americanToDecimal(odds1);
+                const decimal2 = this.americanToDecimal(odds2);
+                return decimal1 - decimal2;
+            }
+            
+            americanToDecimal(americanOdds) {
+                if (!americanOdds || americanOdds === 'even') return 2.0;
+                const odds = parseInt(americanOdds.toString().replace('+', ''));
+                return odds > 0 ? (odds / 100) + 1 : (100 / Math.abs(odds)) + 1;
+            }
+            
+            showBestLinesError() {
+                const tbody = document.getElementById('best-lines-tbody');
+                if (tbody) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state-cell">
+                                <div class="empty-state">
+                                    <i class="material-icons">error</i>
+                                    <p>Error loading odds data</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+            
+            updateSportsbookAnalysis(games) {
+                const container = document.getElementById('sportsbook-analysis');
+                if (!container || !games.length) return;
+                
+                // Count how many games each sportsbook covers
+                const sportsbookStats = {};
+                
+                games.forEach(game => {
+                    Object.keys(game.sportsbooks || {}).forEach(book => {
+                        if (!sportsbookStats[book]) {
+                            sportsbookStats[book] = { games: 0, markets: 0 };
+                        }
+                        sportsbookStats[book].games++;
+                        sportsbookStats[book].markets += 3; // ML, Spread, Total
+                    });
+                });
+                
+                // Display sportsbook coverage
+                container.innerHTML = Object.entries(sportsbookStats)
+                    .sort(([,a], [,b]) => b.games - a.games)
+                    .map(([book, stats]) => `
+                        <div class="sportsbook-stat">
+                            <div class="book-name">${book}</div>
+                            <div class="book-coverage">${stats.games} games</div>
+                            <div class="book-markets">${stats.markets} markets</div>
+                        </div>
+                    `).join('');
+            }
+            
+            populateGameSelector(games) {
+                const selector = document.getElementById('odds-game-select');
+                if (!selector || !games) return;
+                
+                selector.innerHTML = '<option value="">Select Game</option>';
+                
+                games.forEach((game, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${game.away_team} @ ${game.home_team}`;
+                    selector.appendChild(option);
+                });
+            }
+
+            formatOdds(odds) {
+                return odds > 0 ? `+${odds}` : `${odds}`;
+            }
+        }
+
+        // Global functions for HTML onclick handlers
+        function filterValueBets() {
+            const filter = document.getElementById('value-bet-filter')?.value;
+            console.log('Filtering value bets:', filter);
+        }
+
+        function loadOddsComparison() {
+            const gameId = document.getElementById('odds-game-select')?.value;
+            if (!gameId) return;
+            
+            const comparisonDiv = document.getElementById('odds-comparison');
+            if (comparisonDiv) {
+                comparisonDiv.innerHTML = `
+                    <div class="odds-item">
+                        <span class="odds-bookmaker">Loading odds comparison...</span>
+                    </div>
+                `;
+            }
+        }
+
+        function openBankrollSettings() {
+            alert('Bankroll settings panel would open here');
+        }
+
+        function updateBankroll() {
+            const newBankroll = parseFloat(document.getElementById('current-bankroll')?.value) || 1000;
+            if (window.analytics) {
+                window.analytics.bankroll = newBankroll;
+                window.analytics.updateAllocationBars();
+            }
+        }
+
+        function updateRiskTolerance() {
                     if (error.name === 'AbortError') {
                         console.warn('Request timed out, checking for stale cache...');
                         // Try to use stale cache data if timeout
@@ -5039,11 +5223,26 @@
                     console.error('Value bets error:', error);
                     this.showNoValueBets();
                 }
-            }
+
+        function toggleLiveFeed() {
+            const liveToggle = document.getElementById('live-toggle');
+            const liveDot = document.getElementById('live-dot');
+            const liveStatus = document.getElementById('live-status');
             
-            updateValueBetsDisplay(valueBets) {
-                const tbody = document.getElementById('value-bets-tbody');
-                const noValueBets = document.getElementById('no-value-bets');
+            if (window.analytics) {
+                window.analytics.liveFeedActive = !window.analytics.liveFeedActive;
+                
+                if (window.analytics.liveFeedActive) {
+                    if (liveToggle) liveToggle.innerHTML = '<i class="material-icons">pause</i>';
+                    if (liveDot) liveDot.classList.add('connected');
+                    if (liveStatus) liveStatus.textContent = 'Live';
+                } else {
+                    if (liveToggle) liveToggle.innerHTML = '<i class="material-icons">play_arrow</i>';
+                    if (liveDot) liveDot.classList.remove('connected');
+                    if (liveStatus) liveStatus.textContent = 'Paused';
+                }
+            }
+        }
                 
                 if (!valueBets || valueBets.length === 0) {
                     tbody.innerHTML = '';
@@ -5079,78 +5278,41 @@
                     </tr>
                 `).join('');
             }
+        }
+
+        // Global functions for HTML onclick handlers
+        function filterValueBets() {
+            const filter = document.getElementById('value-bet-filter')?.value;
+            console.log('Filtering value bets:', filter);
+        }
+
+        function loadOddsComparison() {
+            const gameId = document.getElementById('odds-game-select')?.value;
+            if (!gameId) return;
             
-            updateArbitrageDisplay(arbitrageOps) {
-                const arbitrageList = document.getElementById('arbitrage-list');
-                const noArbitrage = document.getElementById('no-arbitrage');
-                
-                if (!arbitrageOps || arbitrageOps.length === 0) {
-                    arbitrageList.innerHTML = '';
-                    noArbitrage.style.display = 'block';
-                    return;
-                }
-                
-                noArbitrage.style.display = 'none';
-                
-                arbitrageList.innerHTML = arbitrageOps.map(arb => `
-                    <div class="arbitrage-item">
-                        <div class="arbitrage-game">${arb.game}</div>
-                        <div class="arbitrage-details">
-                            <div>
-                                <strong>Home:</strong> ${this.formatOdds(arb.home_odds)} 
-                                <span class="bookmaker-badge">${arb.home_bookmaker}</span>
-                            </div>
-                            <div>
-                                <strong>Away:</strong> ${this.formatOdds(arb.away_odds)} 
-                                <span class="bookmaker-badge">${arb.away_bookmaker}</span>
-                            </div>
-                        </div>
-                        <div class="arbitrage-profit">
-                            <i class="material-icons" style="font-size: 1rem; margin-right: 0.25rem;">trending_up</i>
-                            ${arb.profit_margin.toFixed(2)}% Guaranteed Profit
-                        </div>
+            const comparisonDiv = document.getElementById('odds-comparison');
+            if (comparisonDiv) {
+                comparisonDiv.innerHTML = `
+                    <div class="odds-item">
+                        <span class="odds-bookmaker">Loading odds comparison...</span>
                     </div>
-                `).join('');
+                `;
             }
-            
-            populateGameSelector(games) {
-                const selector = document.getElementById('odds-game-select');
-                if (!selector) return;
-                
-                selector.innerHTML = '<option value="">Select Game</option>';
-                
-                Object.entries(games).forEach(([gameId, game]) => {
-                    const option = document.createElement('option');
-                    option.value = gameId;
-                    option.textContent = `${game.away_team} @ ${game.home_team}`;
-                    selector.appendChild(option);
-                });
+        }
+
+        function openBankrollSettings() {
+            alert('Bankroll settings panel would open here');
+        }
+
+        function updateBankroll() {
+            const newBankroll = parseFloat(document.getElementById('current-bankroll')?.value) || 1000;
+            if (window.analytics) {
+                window.analytics.bankroll = newBankroll;
+                window.analytics.updateAllocationBars();
             }
-            
-            async loadArbitrageOpportunities() {
-                try {
-                    const response = await fetch(`${this.apiBaseUrl}/odds/arbitrage/${this.currentSport}`);
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        this.updateArbitrageDisplay(data.data.arbitrage_opportunities);
-                    }
-                } catch (error) {
-                    console.error('Arbitrage error:', error);
-                }
-            }
-            
-            updateBankrollDisplay() {
-                const bankrollInput = document.getElementById('current-bankroll');
-                const riskSelect = document.getElementById('risk-tolerance');
-                
-                if (bankrollInput) bankrollInput.value = this.bankroll;
-                if (riskSelect) riskSelect.value = this.riskTolerance;
-                
-                this.updateAllocationBars();
-            }
-            
-            updateAllocationBars() {
+        }
+
+        function updateRiskTolerance() {
                 const maxBet = this.bankroll * this.riskMultipliers[this.riskTolerance];
                 const conservativeBet = this.bankroll * 0.01;
                 const moderateBet = this.bankroll * 0.025;
