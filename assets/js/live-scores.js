@@ -494,25 +494,50 @@ class LiveNFLScores {
             // Use the same data source as initial load for consistency
             const weekData = await this.scheduleAPI.fetchWeeklySchedule(currentWeek);
             
-            // Handle Tank01 API response format: {statusCode: 200, body: Array}
+            // Handle both ESPN and Tank01 API response formats
             const games = weekData?.body || weekData;
             if (games && games.length > 0) {
                 console.log(`📊 Week ${currentWeek} returned ${games.length} games (finished + upcoming)`);
                 
+                // Map ESPN format to Tank01 format for compatibility
+                const mappedGames = games.map(game => {
+                    // Handle ESPN format
+                    if (game.game_id && game.away_team && game.home_team) {
+                        return {
+                            gameID: game.game_id,
+                            gameStatus: game.status,
+                            gameDate: game.date,
+                            gameTime: game.date,
+                            away: game.away_team.abbreviation || game.away_team.name,
+                            home: game.home_team.abbreviation || game.home_team.name,
+                            awayResult: game.away_team.score || '0',
+                            homeResult: game.home_team.score || '0',
+                            awayPts: parseInt(game.away_team.score || '0'),
+                            homePts: parseInt(game.home_team.score || '0'),
+                            // Map ESPN status to Tank01 status
+                            gameStatusText: game.status === 'Final' ? 'FINAL' : 
+                                          game.status === 'In Progress' ? 'LIVE' : 
+                                          game.status === 'Scheduled' ? 'SCHEDULED' : game.status
+                        };
+                    }
+                    // Return original if already in Tank01 format
+                    return game;
+                });
+                
                 // Log first game structure to understand the data better
-                if (games[0]) {
+                if (mappedGames[0]) {
                     console.log(`🔍 Sample game structure:`, {
-                        gameID: games[0].gameID,
-                        gameStatus: games[0].gameStatus,
-                        gameDate: games[0].gameDate,
-                        gameTime: games[0].gameTime,
-                        away: games[0].away,
-                        home: games[0].home
+                        gameID: mappedGames[0].gameID,
+                        gameStatus: mappedGames[0].gameStatus,
+                        gameDate: mappedGames[0].gameDate,
+                        gameTime: mappedGames[0].gameTime,
+                        away: mappedGames[0].away,
+                        home: mappedGames[0].home
                     });
                 }
                 
                 // Filter to valid games only
-                const validGames = games.filter(game => {
+                const validGames = mappedGames.filter(game => {
                     // Accept games that have basic required data
                     return game.gameID && (game.away || game.home);
                 });
