@@ -570,28 +570,53 @@ class LiveNFLScores {
         
         const games = Array.isArray(todaysGames.body) ? todaysGames.body : [todaysGames.body];
         
-        this.games = games.map(game => ({
-            gameId: game.gameID,
-            gameTime: this.formatGameTime(game.gameTime) || 'TBD',
-            gameDate: new Date().toLocaleDateString(),
-            awayTeam: {
-                code: game.away || 'TBD',
-                name: this.getTeamName(game.away),
-                score: parseInt(game.awayPts) || 0
-            },
-            homeTeam: {
-                code: game.home || 'TBD',
-                name: this.getTeamName(game.home),
-                score: parseInt(game.homePts) || 0
-            },
-            awayScore: parseInt(game.awayPts) || 0,
-            homeScore: parseInt(game.homePts) || 0,
-            quarter: game.quarter || 'Pre',
-            timeRemaining: game.gameClock || '',
-            status: this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home),
-            excitingPlay: null,
-            isLive: this.scheduleAPI ? this.scheduleAPI.getLiveGames().includes(game.gameID) : false
-        }));
+        this.games = games.map(game => {
+            const gameStatus = this.mapGameStatus(game.gameStatus, game.gameTime, game.away, game.home);
+            
+            // Determine what to show for game time based on status
+            let displayTime;
+            if (gameStatus === 'LIVE') {
+                // For live games, show status instead of time
+                const status = game.gameStatus ? game.gameStatus.toLowerCase() : '';
+                if (status.includes('halftime')) {
+                    displayTime = 'Halftime';
+                } else if (status.includes('progress') || status.includes('active')) {
+                    displayTime = 'In Progress';
+                } else if (game.quarter && game.quarter !== 'Pre') {
+                    displayTime = `${game.quarter}${game.gameClock ? ' - ' + game.gameClock : ''}`;
+                } else {
+                    displayTime = 'Live';
+                }
+            } else if (gameStatus === 'FINAL') {
+                displayTime = 'Final';
+            } else {
+                // For scheduled games, show the formatted time
+                displayTime = this.formatGameTime(game.gameTime) || 'TBD';
+            }
+            
+            return {
+                gameId: game.gameID,
+                gameTime: displayTime,
+                gameDate: new Date().toLocaleDateString(),
+                awayTeam: {
+                    code: game.away || 'TBD',
+                    name: this.getTeamName(game.away),
+                    score: parseInt(game.awayPts) || 0
+                },
+                homeTeam: {
+                    code: game.home || 'TBD',
+                    name: this.getTeamName(game.home),
+                    score: parseInt(game.homePts) || 0
+                },
+                awayScore: parseInt(game.awayPts) || 0,
+                homeScore: parseInt(game.homePts) || 0,
+                quarter: game.quarter || 'Pre',
+                timeRemaining: game.gameClock || '',
+                status: gameStatus,
+                excitingPlay: null,
+                isLive: this.scheduleAPI ? this.scheduleAPI.getLiveGames().includes(game.gameID) : false
+            };
+        });
         
         // For games marked as FINAL, try to get real box scores first
         console.log(`🚀 REAL API INTEGRATION ACTIVE - Processing ${this.games.length} games for authentic final scores`);
@@ -643,8 +668,24 @@ class LiveNFLScores {
     formatGameTime(gameTime) {
         if (!gameTime || typeof gameTime !== 'string') return 'TBD';
         
-        // Handle different time formats from Tank01
+        // Handle different time formats from ESPN
         try {
+            // Handle ESPN ISO format like "2025-11-03T01:20Z"
+            if (gameTime.includes('T') && gameTime.includes('Z')) {
+                const date = new Date(gameTime);
+                if (!isNaN(date.getTime())) {
+                    // Convert to Eastern time
+                    const options = {
+                        timeZone: 'America/New_York',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    };
+                    const etTime = date.toLocaleString('en-US', options);
+                    return `${etTime} ET`;
+                }
+            }
+            
             // If it's already in ET format (like "1:00 ET"), return as-is
             if (gameTime.includes('ET') || gameTime.includes('EST') || gameTime.includes('EDT')) {
                 return gameTime;
@@ -803,7 +844,7 @@ class LiveNFLScores {
     }
     
     mapGameStatus(apiStatus, gameTime, awayTeam, homeTeam) {
-        // Map Tank01 API status to our format - TRUST THE API
+        // Map ESPN/Tank01 API status to our format
         console.log(`🔍 mapGameStatus called: ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}, API status: ${apiStatus || 'N/A'}, gameTime: ${gameTime || 'N/A'}`);
         
         if (!apiStatus) return 'SCHEDULED';
@@ -811,8 +852,9 @@ class LiveNFLScores {
         const status = apiStatus.toLowerCase();
         let mappedStatus = 'SCHEDULED';
         
-        // Map various Tank01 status formats to our 3 states
-        if (status.includes('live') || status.includes('progress') || status.includes('active') || status.includes('inprogress')) {
+        // Map various ESPN/Tank01 status formats to our 3 states
+        if (status.includes('live') || status.includes('progress') || status.includes('active') || 
+            status.includes('inprogress') || status.includes('halftime') || status.includes('in-progress')) {
             mappedStatus = 'LIVE';
         } else if (status.includes('final') || status.includes('complete') || status.includes('ended')) {
             mappedStatus = 'FINAL';
@@ -820,7 +862,7 @@ class LiveNFLScores {
             mappedStatus = 'SCHEDULED';
         }
         
-        console.log(`✅ Tank01 status for ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}: ${apiStatus} → ${mappedStatus}`);
+        console.log(`✅ ESPN/Tank01 status for ${awayTeam || 'UNK'} @ ${homeTeam || 'UNK'}: ${apiStatus} → ${mappedStatus}`);
         
         return mappedStatus;
     }
