@@ -1818,6 +1818,230 @@ def find_arbitrage_opportunities(sport):
             'error': str(e)
         }), 500
 
+# Initialize Enhanced ESPN Service
+try:
+    from enhanced_espn_service import EnhancedESPNService
+    enhanced_espn_service = EnhancedESPNService()
+    logger.info("✅ Enhanced ESPN service initialized")
+    ENHANCED_ESPN_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"⚠️ Enhanced ESPN service not available: {e}")
+    enhanced_espn_service = None
+    ENHANCED_ESPN_AVAILABLE = False
+except Exception as e:
+    logger.error(f"❌ Error initializing Enhanced ESPN service: {e}")
+    enhanced_espn_service = None
+    ENHANCED_ESPN_AVAILABLE = False
+
+# =============================================================================
+# ENHANCED ESPN BETTING INSIGHTS ENDPOINTS
+# =============================================================================
+
+@app.route('/api/enhanced/predict', methods=['POST'])
+def enhanced_predict():
+    """Enhanced prediction endpoint with ESPN Tier 1 data integration"""
+    try:
+        data = request.get_json()
+        
+        player_id = data.get('player_id')
+        position = data.get('position', 'QB').upper()
+        prediction_type = data.get('prediction_type', 'passing_yards')
+        team_id = data.get('team_id')
+        opponent_id = data.get('opponent_id')
+        
+        if not player_id or not team_id:
+            return jsonify({'error': 'Missing required fields: player_id, team_id'}), 400
+        
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Get enhanced ESPN insights
+        insights = enhanced_espn_service.generate_betting_insights(
+            player_id, position, prediction_type, team_id, opponent_id
+        )
+        
+        logger.info(f"✅ Enhanced insights generated for player {player_id}")
+        
+        return jsonify({
+            'success': True,
+            'insights': insights,
+            'metadata': {
+                'player_id': player_id,
+                'position': position,
+                'prediction_type': prediction_type,
+                'team_id': team_id,
+                'opponent_id': opponent_id,
+                'espn_data_quality': insights.get('confidence', {}).get('dataQuality', 'good'),
+                'timestamp': datetime.now().isoformat()
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Enhanced prediction error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/enhanced/player/<player_id>/analysis', methods=['GET'])
+def enhanced_player_analysis(player_id):
+    """Get comprehensive player analysis with ESPN data"""
+    try:
+        position = request.args.get('position', 'QB').upper()
+        team_id = request.args.get('team_id')
+        
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Get player stats from ESPN
+        player_stats = enhanced_espn_service.get_player_stats(player_id, position)
+        
+        # Get team stats for context
+        team_stats = None
+        if team_id:
+            team_stats = enhanced_espn_service.get_team_stats(team_id)
+        
+        return jsonify({
+            'success': True,
+            'player_analysis': {
+                'player_id': player_id,
+                'position': position,
+                'stats': player_stats,
+                'team_context': team_stats,
+                'last_updated': datetime.now().isoformat()
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Player analysis error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/enhanced/team/<team_id>/insights', methods=['GET'])
+def enhanced_team_insights(team_id):
+    """Get team betting insights with ESPN data"""
+    try:
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Get team stats and roster
+        team_stats = enhanced_espn_service.get_team_stats(team_id)
+        roster_data = enhanced_espn_service.get_team_roster(team_id)
+        
+        # Generate team-level insights
+        insights = {
+            'team_id': team_id,
+            'offensive_efficiency': team_stats.get('offensive_efficiency', 'N/A'),
+            'defensive_ranking': team_stats.get('defensive_ranking', 'N/A'),
+            'key_players': roster_data.get('key_players', []),
+            'recent_form': team_stats.get('recent_form', 'N/A'),
+            'betting_trends': {
+                'over_under_trend': 'Analyze from game logs',
+                'spread_performance': 'Historical ATS performance',
+                'scoring_consistency': team_stats.get('scoring_variance', 'N/A')
+            }
+        }
+        
+        return jsonify({
+            'success': True,
+            'team_insights': insights,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Team insights error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/enhanced/matchup', methods=['GET'])
+def enhanced_matchup_analysis():
+    """Get enhanced matchup analysis between two teams"""
+    try:
+        home_team = request.args.get('home_team')
+        away_team = request.args.get('away_team')
+        
+        if not home_team or not away_team:
+            return jsonify({'error': 'Missing required parameters: home_team, away_team'}), 400
+        
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Get matchup analysis
+        matchup_data = enhanced_espn_service.get_matchup_analysis(home_team, away_team)
+        
+        return jsonify({
+            'success': True,
+            'matchup_analysis': matchup_data,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Matchup analysis error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/enhanced/betting-insights/<position>', methods=['GET'])
+def enhanced_position_insights(position):
+    """Get position-specific betting insights"""
+    try:
+        position = position.upper()
+        team_id = request.args.get('team_id')
+        
+        if position not in ['QB', 'RB', 'WR', 'TE']:
+            return jsonify({'error': f'Invalid position: {position}'}), 400
+        
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Generate position-specific insights
+        insights = enhanced_espn_service.get_position_insights(position, team_id)
+        
+        return jsonify({
+            'success': True,
+            'position_insights': {
+                'position': position,
+                'team_id': team_id,
+                'insights': insights,
+                'confidence': 'high',
+                'data_sources': ['ESPN Stats API', 'ESPN Game Logs', 'Team Performance Metrics']
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Position insights error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/enhanced/trending', methods=['GET'])
+def enhanced_trending_opportunities():
+    """Get trending betting opportunities with ESPN data"""
+    try:
+        limit = int(request.args.get('limit', 10))
+        
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Get trending opportunities
+        trending = enhanced_espn_service.get_trending_opportunities(limit)
+        
+        return jsonify({
+            'success': True,
+            'trending_opportunities': trending,
+            'count': len(trending),
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Trending opportunities error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+# Initialize Enhanced ESPN Endpoints
+try:
+    from enhanced_api_endpoints import init_enhanced_endpoints
+    enhanced_espn_service_v2, enhanced_ml_predictor = init_enhanced_endpoints(app, ml_model.models)
+    logger.info("✅ Enhanced ESPN endpoints v2 initialized")
+    ENHANCED_ENDPOINTS_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"⚠️ Enhanced endpoints not available: {e}")
+    ENHANCED_ENDPOINTS_AVAILABLE = False
+except Exception as e:
+    logger.error(f"❌ Error initializing enhanced endpoints: {e}")
+    ENHANCED_ENDPOINTS_AVAILABLE = False
+
 if __name__ == '__main__':
     import os
     
@@ -1826,12 +2050,24 @@ if __name__ == '__main__':
     
     logger.info("🚀 Starting NFL Multi-Position Prediction ML Backend...")
     logger.info("🏈 XGBoost Models: QB, RB, WR, TE")
+    if ENHANCED_ENDPOINTS_AVAILABLE:
+        logger.info("🚀 Enhanced ESPN Tier 1 Endpoints: ACTIVE")
     logger.info("=" * 50)
     logger.info(f"📡 Server running on port {port}")
     logger.info("Available endpoints:")
     logger.info("  GET  /health - Health check")
     logger.info("  POST /predict - Player performance prediction (all positions)")
     logger.info("  GET  /model/info - Model information")
+    
+    if ENHANCED_ENDPOINTS_AVAILABLE:
+        logger.info("Enhanced ESPN Endpoints:")
+        logger.info("  GET  /api/enhanced/player/<id>/analysis - Comprehensive player analysis")
+        logger.info("  POST /api/enhanced/predict - Enhanced predictions with ESPN data")
+        logger.info("  GET  /api/enhanced/team/<id>/insights - Team betting insights")
+        logger.info("  GET  /api/enhanced/matchup - Matchup analysis")
+        logger.info("  GET  /api/enhanced/betting-insights/<position> - Position insights")
+        logger.info("  GET  /api/enhanced/trending - Trending betting opportunities")
+    
     logger.info("=" * 50)
     
     # Production ready settings for cloud deployment

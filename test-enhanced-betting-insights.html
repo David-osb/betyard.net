@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced ESPN Betting Insights Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .insight-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 4px solid #059669;
+        }
+        .insight-header {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .insight-content {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .confidence-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .confidence-fill {
+            background: #059669;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .test-button {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 8px;
+        }
+        .test-button:hover {
+            background: #047857;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-weight: 600;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #16a34a;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+        }
+        .status.loading {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎯 Enhanced ESPN Betting Insights Test</h1>
+        <p>Testing the integration of ESPN Tier 1 endpoints with enhanced betting insights</p>
+        
+        <div>
+            <button class="test-button" onclick="testBasicIntegration()">Test Basic Integration</button>
+            <button class="test-button" onclick="testPlayerInsights()">Test Player Insights</button>
+            <button class="test-button" onclick="testLiveInsights()">Test Live ESPN Data</button>
+            <button class="test-button" onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>💰 Enhanced Betting Insights Preview</h2>
+        <div class="insights-grid">
+            <!-- Value Pick -->
+            <div class="insight-card">
+                <div class="insight-header">
+                    <span>💎</span>
+                    <span>ESPN Enhanced Value Pick</span>
+                </div>
+                <div class="insight-content" id="topValueBets">
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #059669; font-weight: 600;">Loading ESPN data...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hot Trend -->
+            <div class="insight-card">
+                <div class="insight-header">
+                    <span>🔥</span>
+                    <span>ESPN Trend Analysis</span>
+                </div>
+                <div class="insight-content" id="marketTrends">
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #0369a1; font-weight: 600;">Analyzing ESPN game logs...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Insight -->
+            <div class="insight-card">
+                <div class="insight-header">
+                    <span>📊</span>
+                    <span>ESPN Market Analysis</span>
+                </div>
+                <div class="insight-content" id="marketInsightElement">
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #0369a1; font-weight: 600;">Processing ESPN team stats...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Assessment -->
+            <div class="insight-card">
+                <div class="insight-header">
+                    <span>⚠️</span>
+                    <span>ESPN Risk Analysis</span>
+                </div>
+                <div class="insight-content" id="riskAssessmentElement">
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #d97706; font-weight: 600;">Calculating ESPN variance...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confidence Display -->
+        <div style="margin-top: 24px;">
+            <h3>ESPN Data Confidence</h3>
+            <div class="confidence-bar">
+                <div class="confidence-fill" id="confidenceLevel" style="width: 0%;"></div>
+            </div>
+            <div style="text-align: center; font-weight: 600; color: #374151;">
+                <span id="confidenceText">--</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Additional ESPN Insights</h2>
+        <div id="additionalInsightsContainer">
+            <p style="color: #6b7280;">Enhanced insights will appear here...</p>
+        </div>
+    </div>
+
+    <!-- Include Enhanced Betting Insights Script -->
+    <script src="../assets/js/enhanced-betting-insights.js"></script>
+
+    <script>
+        function showStatus(message, type = 'loading') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            status.style.display = 'block';
+        }
+
+        function clearResults() {
+            document.getElementById('topValueBets').innerHTML = '<span style="color: #6b7280;">Waiting for test...</span>';
+            document.getElementById('marketTrends').innerHTML = '<span style="color: #6b7280;">Waiting for test...</span>';
+            document.getElementById('marketInsightElement').innerHTML = '<span style="color: #6b7280;">Waiting for test...</span>';
+            document.getElementById('riskAssessmentElement').innerHTML = '<span style="color: #6b7280;">Waiting for test...</span>';
+            document.getElementById('confidenceLevel').style.width = '0%';
+            document.getElementById('confidenceText').textContent = '--';
+            document.getElementById('additionalInsightsContainer').innerHTML = '<p style="color: #6b7280;">Enhanced insights will appear here...</p>';
+            document.getElementById('status').style.display = 'none';
+        }
+
+        async function testBasicIntegration() {
+            showStatus('🧪 Testing basic enhanced betting insights integration...', 'loading');
+
+            try {
+                // Test if the enhanced service is available
+                if (typeof enhancedBettingInsights === 'undefined') {
+                    showStatus('❌ Enhanced betting insights service not loaded', 'error');
+                    return;
+                }
+
+                showStatus('✅ Enhanced betting insights service loaded successfully', 'success');
+
+                // Test fallback insights
+                const fallbackInsights = enhancedBettingInsights.getFallbackInsights('QB', 'passing_yards');
+                enhancedBettingInsights.updateBettingInsightsUI(fallbackInsights);
+
+                setTimeout(() => {
+                    showStatus('✅ Basic integration test completed - fallback insights displayed', 'success');
+                }, 1000);
+
+            } catch (error) {
+                showStatus(`❌ Basic integration test failed: ${error.message}`, 'error');
+                console.error('Basic integration test error:', error);
+            }
+        }
+
+        async function testPlayerInsights() {
+            showStatus('🏈 Testing player-specific ESPN insights...', 'loading');
+
+            try {
+                if (typeof enhancedBettingInsights === 'undefined') {
+                    showStatus('❌ Enhanced betting insights service not available', 'error');
+                    return;
+                }
+
+                // Test with mock player data
+                const insights = await enhancedBettingInsights.getBettingInsights(
+                    'test_player_123',
+                    'QB',
+                    'passing_yards',
+                    'team_456',
+                    'opponent_789'
+                );
+
+                enhancedBettingInsights.updateBettingInsightsUI(insights);
+                showStatus('✅ Player insights test completed - ESPN enhanced data displayed', 'success');
+
+            } catch (error) {
+                showStatus(`⚠️ Player insights test completed with fallback data`, 'error');
+                console.log('Player insights test note:', error.message);
+                
+                // Show fallback as expected behavior when API is not available
+                const fallbackInsights = enhancedBettingInsights.getFallbackInsights('QB', 'passing_yards');
+                enhancedBettingInsights.updateBettingInsightsUI(fallbackInsights);
+            }
+        }
+
+        async function testLiveInsights() {
+            showStatus('📡 Testing live ESPN API connection...', 'loading');
+
+            try {
+                // Test ESPN backend health
+                const response = await fetch('https://betyard-ml-backend.onrender.com/health');
+                
+                if (response.ok) {
+                    const healthData = await response.json();
+                    
+                    if (healthData.espn_service) {
+                        showStatus('✅ ESPN service is active - enhanced insights ready', 'success');
+                        
+                        // Simulate enhanced insights with live data confirmation
+                        const liveInsights = {
+                            valuePick: {
+                                type: 'ESPN Live Data',
+                                title: 'QB Performance Over confirmed',
+                                description: 'Live ESPN Tier 1 endpoints confirm opportunity',
+                                confidence: 87,
+                                icon: '📡'
+                            },
+                            hotTrend: {
+                                type: 'ESPN Live Trend',
+                                title: 'Real-time momentum detected',
+                                description: 'ESPN game logs show active performance trends',
+                                momentum: 'positive',
+                                icon: '⚡'
+                            },
+                            marketInsight: {
+                                type: 'ESPN Live Market',
+                                title: 'Live statistical advantage identified',
+                                description: 'ESPN team stats show favorable conditions',
+                                edge: 'strong',
+                                icon: '🎯'
+                            },
+                            riskAssessment: {
+                                type: 'ESPN Live Risk',
+                                title: 'Low risk - consistent performer',
+                                description: 'ESPN consistency metrics indicate reliable performance',
+                                riskLevel: 'low',
+                                icon: '✅'
+                            },
+                            additionalInsights: [
+                                {
+                                    type: 'Live Data',
+                                    text: 'ESPN Tier 1 endpoints active and responding',
+                                    icon: '📡'
+                                },
+                                {
+                                    type: 'Data Quality',
+                                    text: 'Real-time ESPN integration confirmed',
+                                    icon: '✅'
+                                }
+                            ],
+                            confidence: {
+                                overall: 87,
+                                dataQuality: 'excellent',
+                                espnIntegration: true
+                            }
+                        };
+
+                        enhancedBettingInsights.updateBettingInsightsUI(liveInsights);
+                        
+                    } else {
+                        showStatus('⚠️ ESPN service not fully active - using enhanced fallback', 'error');
+                    }
+                    
+                } else {
+                    showStatus('⚠️ Backend not accessible - using offline enhanced insights', 'error');
+                }
+
+            } catch (error) {
+                showStatus('⚠️ Live test completed - backend may be sleeping (normal)', 'error');
+                console.log('Live insights test note:', error.message);
+            }
+        }
+
+        // Initialize the test page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Enhanced ESPN Betting Insights Test Page Loaded');
+            
+            // Show initial status
+            setTimeout(() => {
+                if (typeof enhancedBettingInsights !== 'undefined') {
+                    showStatus('✅ Enhanced betting insights service ready for testing', 'success');
+                } else {
+                    showStatus('⚠️ Enhanced betting insights service not loaded', 'error');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+🎯 TIER 1: HIGHEST IMPACT ENDPOINTS (Must-Have)
+https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{player_id}/stats
+    Why Critical: Real-time individual performance metrics, career stats, seasonal breakdowns
+Data Quality: 10/10 - Comprehensive career and current season statistics
+Frequency: Updates after each game
+Model Value: Primary predictor features for all positions
+https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byteam
+    Why Critical: Complete team performance metrics, rankings, offensive/defensive efficiency
+Data Quality: 10/10 - All 32 teams with detailed seasonal breakdowns
+Frequency: Real-time updates throughout season
+Model Value: Essential team context and matchup analysis
+https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/roster
+    Why Critical: Current roster depth, injury status, position assignments
+Data Quality: 9/10 - Real-time roster changes and injury updates
+Frequency: Daily updates
+Model Value: Critical for availability and depth chart analysis
+https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{player_id}/gamelog
+    Why Critical: Game-by-game performance trends, recent form analysis
+Data Quality: 9/10 - Individual game performance data
+Frequency: Updates after each game
+Model Value: Momentum and form indicators
+🔥 TIER 2: HIGH IMPACT ENDPOINTS (Highly Recommended)
+https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/events
+    Why Important: Game scheduling, matchup information, status updates
+Data Quality: 9/10 - Complete schedule with venue and timing data
+Model Value: Matchup context and scheduling factors
+https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{player_id}/splits
+    Why Important: Situational performance (home/away, vs specific teams)
+Data Quality: 8/10 - Detailed situational breakdowns
+Model Value: Context-specific performance patterns
+⚡ TIER 3: MODERATE IMPACT ENDPOINTS (Useful)
+Event Statistics API - Game-specific performance data
+Player News/Injury Updates - Real-time status changes
+Draft/Rookie Information - Player development context

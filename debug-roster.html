@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Roster API</title>
+</head>
+<body>
+    <h1>Debug Roster API Response</h1>
+    <button onclick="testRoster()">Test SEA Roster</button>
+    <pre id="output"></pre>
+
+    <script>
+        async function testRoster() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('https://betyard-ml-backend.onrender.com/api/proxy/nfl/roster?teamAbv=SEA&getStats=false', {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                // Show structure analysis
+                let analysis = "=== ROSTER API ANALYSIS ===\n\n";
+                analysis += `Response keys: ${Object.keys(data).join(', ')}\n\n`;
+                
+                if (data.body) {
+                    analysis += `Body keys: ${Object.keys(data.body).join(', ')}\n\n`;
+                    
+                    if (data.body.roster && Array.isArray(data.body.roster)) {
+                        analysis += `Roster length: ${data.body.roster.length}\n\n`;
+                        
+                        // Show first QB player structure
+                        const qb = data.body.roster.find(p => p.pos === 'QB' || p.position === 'QB');
+                        if (qb) {
+                            analysis += "=== FIRST QB PLAYER ===\n";
+                            analysis += JSON.stringify(qb, null, 2) + "\n\n";
+                        }
+                        
+                        // Show all unique positions
+                        const positions = [...new Set(data.body.roster.map(p => p.pos || p.position))];
+                        analysis += `Available positions: ${positions.join(', ')}\n\n`;
+                    }
+                }
+                
+                analysis += "=== FULL RESPONSE ===\n";
+                analysis += JSON.stringify(data, null, 2);
+                
+                output.textContent = analysis;
+                
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

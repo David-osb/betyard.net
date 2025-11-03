@@ -399,9 +399,9 @@ class LiveNFLScores {
         try {
             console.log('🔄 Fetching live NFL scores with proper data flow...');
             
-            // FORCE CLEAR ALL CACHED DATA for fresh Week 8 fetch
+            // FORCE CLEAR ALL CACHED DATA for fresh Week 9 fetch
             if (this.scheduleAPI && this.scheduleAPI.cache) {
-                console.log('🧹 Clearing all API cache for fresh Week 8 data...');
+                console.log('🧹 Clearing all API cache for fresh Week 9 data...');
                 this.scheduleAPI.cache.dailySchedule = { data: null, expires: null };
                 this.scheduleAPI.cache.liveScores = { data: null, expires: null };
                 this.scheduleAPI.cache.gameInfo.clear();

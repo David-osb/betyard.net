@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Betting Insights - Player Selection Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-weight: 600;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #16a34a;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-button {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 8px;
+        }
+        .test-button:hover {
+            background: #047857;
+        }
+        .insights-preview {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .insight-item {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.5;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        .insight-item:hover {
+            background: #f1f5f9;
+            transform: translateX(2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🏈 Enhanced Betting Insights - Player Selection Test</h1>
+        <p>This test simulates player selection in the game-centric UI and verifies that enhanced ESPN betting insights are triggered.</p>
+        
+        <div id="status" class="status info">Ready to test enhanced betting insights integration</div>
+        
+        <div>
+            <button class="test-button" onclick="testPlayerSelection()">🎯 Test Player Selection</button>
+            <button class="test-button" onclick="testDirectInsights()">📊 Test Direct Insights</button>
+            <button class="test-button" onclick="clearTest()">🔄 Clear Test</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Enhanced Betting Insights Preview</h2>
+        <div class="insights-preview">
+            <div class="insight-item" id="enhanced-value-pick">
+                💎 <strong>ESPN Enhanced:</strong> Waiting for player selection...
+            </div>
+            <div class="insight-item" id="enhanced-hot-trend">
+                🔥 <strong>Live Trend:</strong> Ready to analyze ESPN game logs...
+            </div>
+            <div class="insight-item" id="enhanced-market-insight">
+                📊 <strong>Market Edge:</strong> ESPN team stats standing by...
+            </div>
+            <div class="insight-item" id="enhanced-risk-assessment">
+                ⚠️ <strong>Risk Analysis:</strong> ESPN consistency metrics ready...
+            </div>
+            <div class="insight-item" id="enhanced-espn-status">
+                📡 <strong>ESPN Integration:</strong> Tier 1 endpoints on standby...
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔍 Test Log</h2>
+        <div id="test-log" style="background: #1f2937; color: #f9fafb; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">
+            <div>🔧 Test environment ready...</div>
+        </div>
+    </div>
+
+    <!-- Enhanced Betting Insights Service -->
+    <script src="assets/js/enhanced-betting-insights.js"></script>
+
+    <script>
+        // Mock game-centric UI context
+        window.mockGameCentricUI = {
+            selectedGame: {
+                home: 'KC',
+                away: 'BUF',
+                date: '2025-11-03'
+            },
+            selectedTeam: {
+                code: 'BUF', 
+                name: 'Buffalo Bills'
+            },
+            selectedPosition: 'QB',
+            selectedPlayer: {
+                id: 'josh_allen_123',
+                name: 'Josh Allen'
+            }
+        };
+
+        function log(message) {
+            const logElement = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function showStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+
+        async function testPlayerSelection() {
+            log('🎯 Starting player selection test...');
+            showStatus('Testing player selection with enhanced insights...', 'info');
+
+            try {
+                // Simulate player selection context
+                window.currentPlayerSelection = {
+                    playerId: window.mockGameCentricUI.selectedPlayer.id,
+                    position: window.mockGameCentricUI.selectedPosition,
+                    predictionType: 'passing_yards',
+                    teamId: window.mockGameCentricUI.selectedTeam.code,
+                    playerName: window.mockGameCentricUI.selectedPlayer.name,
+                    teamName: window.mockGameCentricUI.selectedTeam.name,
+                    opponent: window.mockGameCentricUI.selectedGame.home
+                };
+
+                log(`📋 Player context set: ${window.currentPlayerSelection.playerName} (${window.currentPlayerSelection.teamId})`);
+
+                // Check if enhanced betting insights service is available
+                if (typeof enhancedBettingInsights === 'undefined') {
+                    throw new Error('Enhanced betting insights service not loaded');
+                }
+
+                log('✅ Enhanced betting insights service detected');
+
+                // Test enhanced insights
+                const insights = await enhancedBettingInsights.getBettingInsights(
+                    window.currentPlayerSelection.playerId,
+                    window.currentPlayerSelection.position,
+                    window.currentPlayerSelection.predictionType,
+                    window.currentPlayerSelection.teamId,
+                    window.currentPlayerSelection.opponent
+                );
+
+                log('📊 Enhanced insights received - updating UI...');
+
+                // Update the mock insights UI (similar to game-centric UI)
+                updateMockInsightsUI(insights);
+
+                log('✅ Player selection test completed successfully');
+                showStatus('✅ Player selection test passed - Enhanced insights active!', 'success');
+
+            } catch (error) {
+                log(`❌ Player selection test failed: ${error.message}`);
+                showStatus(`❌ Test failed: ${error.message}`, 'error');
+                
+                // Show fallback behavior
+                updateFallbackInsights();
+            }
+        }
+
+        async function testDirectInsights() {
+            log('📊 Testing direct enhanced insights...');
+            showStatus('Testing direct ESPN insights integration...', 'info');
+
+            try {
+                if (typeof enhancedBettingInsights === 'undefined') {
+                    throw new Error('Enhanced betting insights service not loaded');
+                }
+
+                // Test direct insights call
+                const insights = await enhancedBettingInsights.getBettingInsights(
+                    'test_player_456',
+                    'QB',
+                    'passing_yards',
+                    'KC',
+                    'BUF'
+                );
+
+                log('📈 Direct insights received successfully');
+                updateMockInsightsUI(insights);
+
+                log('✅ Direct insights test completed');
+                showStatus('✅ Direct insights test passed!', 'success');
+
+            } catch (error) {
+                log(`ℹ️ Direct insights test: ${error.message}`);
+                showStatus('ℹ️ Enhanced service not available - using fallback', 'info');
+                updateFallbackInsights();
+            }
+        }
+
+        function updateMockInsightsUI(insights) {
+            log('🎨 Updating insights UI with ESPN data...');
+
+            // Update value pick
+            const valuePick = document.getElementById('enhanced-value-pick');
+            if (valuePick && insights.valuePick) {
+                valuePick.innerHTML = `${insights.valuePick.icon} <strong>${insights.valuePick.type}:</strong> ${insights.valuePick.title}
+                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.valuePick.description}</div>
+                    <div style="font-size: 11px; color: #059669; margin-top: 2px;">Confidence: ${insights.valuePick.confidence}%</div>`;
+                log(`💎 Value pick updated: ${insights.valuePick.title}`);
+            }
+
+            // Update hot trend
+            const hotTrend = document.getElementById('enhanced-hot-trend');
+            if (hotTrend && insights.hotTrend) {
+                const momentumColor = insights.hotTrend.momentum === 'positive' ? '#059669' : 
+                                     insights.hotTrend.momentum === 'negative' ? '#dc2626' : '#0369a1';
+                hotTrend.innerHTML = `${insights.hotTrend.icon} <strong>${insights.hotTrend.type}:</strong> ${insights.hotTrend.title}
+                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.hotTrend.description}</div>`;
+                hotTrend.style.borderLeftColor = momentumColor;
+                log(`🔥 Hot trend updated: ${insights.hotTrend.title} (${insights.hotTrend.momentum})`);
+            }
+
+            // Update market insight
+            const marketInsight = document.getElementById('enhanced-market-insight');
+            if (marketInsight && insights.marketInsight) {
+                const edgeColor = insights.marketInsight.edge === 'strong' ? '#059669' : 
+                                 insights.marketInsight.edge === 'moderate' ? '#0369a1' : '#6b7280';
+                marketInsight.innerHTML = `${insights.marketInsight.icon} <strong>${insights.marketInsight.type}:</strong> ${insights.marketInsight.title}
+                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.marketInsight.description}</div>`;
+                marketInsight.style.borderLeftColor = edgeColor;
+                log(`📊 Market insight updated: ${insights.marketInsight.title} (${insights.marketInsight.edge} edge)`);
+            }
+
+            // Update risk assessment
+            const riskAssessment = document.getElementById('enhanced-risk-assessment');
+            if (riskAssessment && insights.riskAssessment) {
+                const riskColor = insights.riskAssessment.riskLevel === 'low' ? '#059669' : 
+                                 insights.riskAssessment.riskLevel === 'medium' ? '#d97706' : '#dc2626';
+                riskAssessment.innerHTML = `${insights.riskAssessment.icon} <strong>${insights.riskAssessment.type}:</strong> ${insights.riskAssessment.title}
+                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.riskAssessment.description}</div>`;
+                riskAssessment.style.borderLeftColor = riskColor;
+                log(`⚠️ Risk assessment updated: ${insights.riskAssessment.title} (${insights.riskAssessment.riskLevel})`);
+            }
+
+            // Update ESPN status
+            const espnStatus = document.getElementById('enhanced-espn-status');
+            if (espnStatus && insights.confidence) {
+                const dataQuality = insights.confidence.dataQuality || 'good';
+                const qualityColor = dataQuality === 'excellent' ? '#059669' : 
+                                    dataQuality === 'high' ? '#0369a1' : '#d97706';
+                const qualityText = dataQuality === 'excellent' ? 'Tier 1 endpoints active' :
+                                   dataQuality === 'high' ? 'Enhanced data available' : 'Standard analysis';
+                
+                espnStatus.innerHTML = `<span style="color: ${qualityColor};">📡 <strong>ESPN Integration:</strong> ${qualityText}</span>
+                    <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Confidence: ${insights.confidence.overall || 75}%</div>`;
+                log(`📡 ESPN status updated: ${qualityText} (${insights.confidence.overall}% confidence)`);
+            }
+
+            log('✅ All insights UI elements updated');
+        }
+
+        function updateFallbackInsights() {
+            log('🔄 Updating with fallback insights...');
+
+            document.getElementById('enhanced-value-pick').innerHTML = 
+                `💡 <strong>Standard Analysis:</strong> QB passing props showing value
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Enhanced ESPN insights loading in background</div>`;
+
+            document.getElementById('enhanced-hot-trend').innerHTML = 
+                `⚡ <strong>Performance Trend:</strong> Recent form analysis active
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Monitoring for momentum patterns</div>`;
+
+            document.getElementById('enhanced-market-insight').innerHTML = 
+                `📊 <strong>Market Analysis:</strong> Standard market conditions
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">ESPN enhancement processing</div>`;
+
+            document.getElementById('enhanced-risk-assessment').innerHTML = 
+                `⚠️ <strong>Risk Profile:</strong> Moderate variance expected
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Standard assessment active</div>`;
+
+            document.getElementById('enhanced-espn-status').innerHTML = 
+                `<span style="color: #d97706;">📡 <strong>ESPN Integration:</strong> Fallback mode</span>
+                <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Enhanced service unavailable</div>`;
+
+            log('✅ Fallback insights displayed');
+        }
+
+        function clearTest() {
+            log('🔄 Clearing test results...');
+            
+            // Reset insights to initial state
+            document.getElementById('enhanced-value-pick').innerHTML = 
+                '💎 <strong>ESPN Enhanced:</strong> Waiting for player selection...';
+            document.getElementById('enhanced-hot-trend').innerHTML = 
+                '🔥 <strong>Live Trend:</strong> Ready to analyze ESPN game logs...';
+            document.getElementById('enhanced-market-insight').innerHTML = 
+                '📊 <strong>Market Edge:</strong> ESPN team stats standing by...';
+            document.getElementById('enhanced-risk-assessment').innerHTML = 
+                '⚠️ <strong>Risk Analysis:</strong> ESPN consistency metrics ready...';
+            document.getElementById('enhanced-espn-status').innerHTML = 
+                '📡 <strong>ESPN Integration:</strong> Tier 1 endpoints on standby...';
+
+            // Reset status
+            showStatus('Ready to test enhanced betting insights integration', 'info');
+
+            // Clear log
+            document.getElementById('test-log').innerHTML = '<div>🔧 Test environment reset...</div>';
+            
+            log('✅ Test cleared - ready for new test');
+        }
+
+        // Initialize test
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Enhanced betting insights test page loaded');
+            
+            setTimeout(() => {
+                if (typeof enhancedBettingInsights !== 'undefined') {
+                    log('✅ Enhanced betting insights service is available');
+                    showStatus('✅ Enhanced betting insights service ready for testing', 'success');
+                } else {
+                    log('⚠️ Enhanced betting insights service not detected');
+                    showStatus('⚠️ Enhanced service not loaded - fallback testing available', 'error');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

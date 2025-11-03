@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple CORS Test</title>
+</head>
+<body>
+    <h1>Testing CORS with Game-Centric Method</h1>
+    <button onclick="testCORS()">Test CORS Issue</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testCORS() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = 'Testing CORS...';
+            
+            try {
+                const baseURL = 'https://betyard-ml-backend.onrender.com';
+                const url = `${baseURL}/api/proxy/nfl/roster?teamAbv=SEA&getStats=false`;
+                
+                console.log('🌐 Making request to:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                console.log('📡 Response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.textContent = '✅ CORS SUCCESS!\n\n' + 
+                    `Status: ${response.status}\n` +
+                    `Has body: ${!!data.body}\n` +
+                    `Has roster: ${!!(data.body && data.body.roster)}\n` +
+                    `Roster length: ${data.body && data.body.roster ? data.body.roster.length : 0}\n\n` +
+                    JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                resultDiv.textContent = '❌ CORS FAILED!\n\n' + error.message;
+                console.error('CORS Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

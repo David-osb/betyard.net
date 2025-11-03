@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Player Search API</title>
+</head>
+<body>
+    <h1>Test Player Search Functionality</h1>
+    <button onclick="testPlayerSearch()">Test SEA QB Search</button>
+    <button onclick="testDirectRoster()">Test Direct Roster API</button>
+    <pre id="results"></pre>
+
+    <script>
+        async function testPlayerSearch() {
+            const results = document.getElementById('results');
+            results.textContent = 'Testing player search API...\n\n';
+            
+            try {
+                const baseURL = 'https://betyard-ml-backend.onrender.com';
+                const searchQuery = 'Seahawks QB';
+                const url = `${baseURL}/api/players/search?q=${encodeURIComponent(searchQuery)}&limit=4`;
+                
+                results.textContent += `🌐 Searching: ${url}\n\n`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                results.textContent += `📡 Status: ${response.status} ${response.statusText}\n\n`;
+                
+                if (!response.ok) {
+                    throw new Error(`Search failed: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                results.textContent += `✅ Search Success!\n\n`;
+                results.textContent += `Response structure:\n`;
+                results.textContent += `- Has players: ${!!(data && data.players)}\n`;
+                results.textContent += `- Players count: ${data.players ? data.players.length : 0}\n\n`;
+                
+                if (data.players && data.players.length > 0) {
+                    results.textContent += `First few players:\n`;
+                    data.players.slice(0, 3).forEach((player, i) => {
+                        results.textContent += `${i+1}. Name: ${player.name || player.displayName || 'N/A'}\n`;
+                        results.textContent += `   Team: ${player.team || player.teamAbv || 'N/A'}\n`;
+                        results.textContent += `   Position: ${player.position || player.pos || 'N/A'}\n`;
+                        results.textContent += `   Number: ${player.jerseyNumber || player.number || 'N/A'}\n\n`;
+                    });
+                }
+                
+                results.textContent += `\nFull response:\n${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                results.textContent += `❌ Error: ${error.message}\n\n`;
+                console.error('Player search error:', error);
+            }
+        }
+        
+        async function testDirectRoster() {
+            const results = document.getElementById('results');
+            results.textContent = 'Testing direct roster API...\n\n';
+            
+            try {
+                const baseURL = 'https://betyard-ml-backend.onrender.com';
+                const url = `${baseURL}/api/proxy/nfl/roster?teamAbv=SEA&getStats=false`;
+                
+                results.textContent += `🌐 URL: ${url}\n\n`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                results.textContent += `📡 Status: ${response.status} ${response.statusText}\n\n`;
+                
+                if (!response.ok) {
+                    throw new Error(`Roster API failed: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                results.textContent += `✅ Roster API Success!\n\n`;
+                results.textContent += `Response structure:\n`;
+                results.textContent += `- Has body: ${!!(data && data.body)}\n`;
+                results.textContent += `- Has roster: ${!!(data.body && data.body.roster)}\n`;
+                results.textContent += `- Roster length: ${data.body && data.body.roster ? data.body.roster.length : 0}\n\n`;
+                
+                if (data.body && data.body.roster) {
+                    const qbs = data.body.roster.filter(p => p.pos === 'QB');
+                    results.textContent += `QBs found: ${qbs.length}\n`;
+                    qbs.slice(0, 3).forEach((player, i) => {
+                        results.textContent += `${i+1}. ${player.firstName} ${player.lastName} #${player.jerseyNum}\n`;
+                    });
+                }
+                
+                results.textContent += `\nFull response (first 1000 chars):\n${JSON.stringify(data, null, 2).substring(0, 1000)}...`;
+                
+            } catch (error) {
+                results.textContent += `❌ Error: ${error.message}\n\n`;
+                console.error('Roster API error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
