@@ -40,8 +40,8 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Configure CORS if available, otherwise set headers manually
-if CORS_AVAILABLE:
+# Configure CORS - Force manual headers for better compatibility
+if False:  # Temporarily disable flask-cors to use manual headers
     CORS(app, 
          origins=['https://betyard.net', 'http://localhost:*', 'https://localhost:*'],
          methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
