@@ -264,22 +264,10 @@ class NFLScheduleAPI {
     
     async fetchComprehensivePlayerData() {
         try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/api/players/search?q=&limit=100`, {
-                method: 'GET',
-                headers: this.apiConfig.headers
-            });
-            
-            if (response.ok) {
-                const playerData = await response.json();
-                this.cache.comprehensivePlayerData = { data: playerData, expires: Date.now() + (12 * 60 * 60 * 1000) };
-                console.log('✅ Comprehensive player data fetched (5.2MB dataset!)');
-                
-                window.dispatchEvent(new CustomEvent('nflPlayerDataUpdated', {
-                    detail: { playerData, timestamp: new Date() }
-                }));
-                
-                return playerData;
-            }
+            // ESPN API requires a search query, so we'll skip this comprehensive fetch
+            // Individual player data will be fetched as needed
+            console.log('🏈 Skipping comprehensive player data fetch - ESPN requires specific search queries');
+            return null;
         } catch (error) {
             console.warn('⚠️ Comprehensive player data API error:', error);
         }
@@ -624,8 +612,8 @@ class NFLScheduleAPI {
                 const weekData = await response.json();
                 console.log(`✅ Week ${weekNumber} schedule fetched:`, weekData);
                 
-                // Return games array if available
-                return weekData?.body || [];
+                // Return games array from ESPN API format
+                return weekData?.schedule?.games || [];
             } else {
                 throw new Error(`Week ${weekNumber} not available (${response.status})`);
             }
@@ -640,13 +628,18 @@ class NFLScheduleAPI {
      * Get detailed game information for each gameID
      */
     async processScheduledGames(scheduleData) {
-        if (!scheduleData || !scheduleData.body) return;
+        if (!scheduleData || (!scheduleData.body && !Array.isArray(scheduleData))) return;
         
-        const games = Array.isArray(scheduleData.body) ? scheduleData.body : [scheduleData.body];
+        // Handle both Tank01 format (scheduleData.body) and ESPN format (direct array)
+        const games = scheduleData.body ? 
+            (Array.isArray(scheduleData.body) ? scheduleData.body : [scheduleData.body]) :
+            (Array.isArray(scheduleData) ? scheduleData : [scheduleData]);
         
         for (const game of games) {
-            if (game.gameID) {
-                await this.fetchGameInfo(game.gameID);
+            // Handle both Tank01 gameID and ESPN game_id
+            const gameId = game.gameID || game.game_id;
+            if (gameId) {
+                await this.fetchGameInfo(gameId);
                 
                 // Check if game should be monitored live
                 this.checkGameTiming(game);
