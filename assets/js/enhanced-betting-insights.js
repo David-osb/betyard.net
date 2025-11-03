@@ -2277,4 +2277,4 @@ class EnhancedBettingInsights {
 }
 
 // Initialize enhanced betting insights service
-const enhancedBettingInsights = new EnhancedBettingInsights();
+const enhancedBettingInsights = new EnhancedBettingInsights();/* Cache bust: 2025-11-03-09-39-44 */
