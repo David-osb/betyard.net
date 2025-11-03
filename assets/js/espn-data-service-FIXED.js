@@ -53,16 +53,9 @@ class ESPNDataService {
     }
     
     getMLBackendURL() {
-        // Use existing ML_CONFIG if available
-        if (window.ML_CONFIG) {
-            const activeProvider = window.ML_CONFIG.ACTIVE;
-            return window.ML_CONFIG[activeProvider];
-        }
-        
-        // Fallback detection
-        const isLocal = window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1';
-        return isLocal ? 'http://localhost:5001' : 'https://betyard-ml-backend.onrender.com';
+        // Always use Render backend for ESPN integration
+        // Even when serving from localhost:8080, we want the live Render backend
+        return 'https://betyard-ml-backend.onrender.com';
     }
     
     // Helper method for cached API calls with retry logic

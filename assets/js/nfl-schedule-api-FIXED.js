@@ -13,9 +13,8 @@ class NFLScheduleAPI {
                 const activeProvider = window.ML_CONFIG.ACTIVE;
                 return window.ML_CONFIG[activeProvider];
             }
-            const isLocal = window.location.hostname === 'localhost' || 
-                           window.location.hostname === '127.0.0.1';
-            return isLocal ? 'http://localhost:5001' : 'https://betyard-ml-backend.onrender.com';
+            // Always use Render backend for ESPN integration
+            return 'https://betyard-ml-backend.onrender.com';
         };
         
         this.apiConfig = {
