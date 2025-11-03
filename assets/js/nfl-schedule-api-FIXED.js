@@ -66,8 +66,9 @@ class NFLScheduleAPI {
     init() {
         console.log('🏈 NFL Schedule API: Initializing enhanced data flow with your RapidAPI key...');
         
-        // Initialize smart request queue processor
-        this.startRequestQueueProcessor();
+        // PERFORMANCE: Disable heavy roster fetching for faster loading
+        console.log('🚀 FAST MODE: Skipping enhanced roster fetch for better performance');
+        // this.startRequestQueueProcessor();
         
         // Set up daily schedule fetching at 7am EST
         this.setupDailyScheduleFetch();
@@ -508,10 +509,12 @@ class NFLScheduleAPI {
             return weekGames;
         }
         
-        // Fallback: Try dates only if week-based fetch fails
+        // Fallback: Try dates only if week-based fetch fails (FAST MODE - only 3 dates)
         console.log(`⚠️ Week ${currentWeek} API failed, trying date-based search...`);
         const datesToTry = this.generateGameDates();
-        for (let date of datesToTry) {
+        console.log(`🚀 FAST MODE: Checking only first 3 dates instead of ${datesToTry.length} for better performance`);
+        for (let i = 0; i < Math.min(3, datesToTry.length); i++) {
+            const date = datesToTry[i];
             console.log(`📅 Checking date: ${date}`);
             
             const dayGames = await this.fetchDateSchedule(date);

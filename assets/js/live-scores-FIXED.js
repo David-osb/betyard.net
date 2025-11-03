@@ -660,6 +660,10 @@ class LiveNFLScores {
         
         this.currentWeek = window.getCurrentWeek ? window.getCurrentWeek() : 8; // Dynamic week calculation
         this.lastUpdate = new Date();
+        
+        // Cache games for fast loading
+        this.cacheGames(this.games);
+        
         console.log(`✅ Live scores updated for Week ${this.currentWeek}`);
         this.updateLiveScoresDisplay();
     }
@@ -1320,7 +1324,16 @@ class LiveNFLScores {
             
             if (hasLiveOrUpcoming) {
                 console.log('🔄 Refreshing live/upcoming games...');
-                this.fetchLiveScores();
+                // Quick initialization - get games immediately from cache if available
+        const cachedGames = this.getCachedGames();
+        if (cachedGames && cachedGames.length > 0) {
+            console.log('🚀 FAST LOAD: Using cached games for immediate display');
+            this.games = cachedGames;
+            this.updateLiveScoresDisplay();
+        }
+        
+        // Then fetch fresh data in background
+        this.fetchLiveScores();
             } else {
                 console.log('⏸️ All games finished - pausing refresh');
                 this.stopAutoRefresh();
@@ -1379,6 +1392,36 @@ function selectGameTeams(awayTeam, homeTeam) {
         }
     }
     
+    // Add caching methods for fast loading
+    getCachedGames() {
+        try {
+            const cached = localStorage.getItem('nfl_games_cache');
+            if (cached) {
+                const data = JSON.parse(cached);
+                const now = Date.now();
+                // Cache is valid for 2 minutes
+                if (now - data.timestamp < 120000) {
+                    return data.games;
+                }
+            }
+        } catch (e) {
+            console.log('⚠️ Cache read error:', e);
+        }
+        return null;
+    }
+    
+    cacheGames(games) {
+        try {
+            const cacheData = {
+                games: games,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('nfl_games_cache', JSON.stringify(cacheData));
+            console.log('💾 Games cached for fast loading');
+        } catch (e) {
+            console.log('⚠️ Cache write error:', e);
+        }
+    }
 
 }
 
