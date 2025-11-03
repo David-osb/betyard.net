@@ -95,7 +95,7 @@ class NFLScheduleAPI {
             if (!this.apiOptimization.isProcessing && this.apiOptimization.requestQueue.length > 0) {
                 this.processNextRequest();
             }
-        }, this.apiOptimization.rateLimitDelay);
+        }, this.apiOptimization.rateLimitDelay * 2); // Double the delay for stability
     }
     
     async processNextRequest() {
@@ -605,7 +605,8 @@ class NFLScheduleAPI {
             
             const response = await fetch(`${this.apiConfig.baseUrl}/api/schedule/week?week=${weekNumber}`, {
                 method: 'GET',
-                headers: this.apiConfig.headers
+                headers: this.apiConfig.headers,
+                timeout: 15000
             });
             
             if (response.ok) {
@@ -619,8 +620,23 @@ class NFLScheduleAPI {
             }
         } catch (error) {
             console.log(`❌ Week ${weekNumber} fetch failed:`, error.message);
+            
+            // Try fallback using current week's static data if this is the current week
+            if (weekNumber === this.getCurrentNFLWeek()) {
+                console.log(`📅 Attempting static fallback for Week ${weekNumber}...`);
+                return this.getStaticWeekGames(weekNumber);
+            }
+            
             throw error;
         }
+    }
+    
+    // Fallback static data for current week when API fails
+    getStaticWeekGames(weekNumber) {
+        // This would contain backup data for the current week
+        // For now, return empty array to prevent crashes
+        console.log(`⚠️ No static data available for Week ${weekNumber}`);
+        return [];
     }
     
     /**

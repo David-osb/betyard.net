@@ -9,6 +9,47 @@ class ESPNDataService {
         this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
         
         console.log('🏈 ESPN Data Service initialized:', this.baseURL);
+        
+        // Warm up the service to prevent cold starts
+        this.warmUpService();
+    }
+    
+    // Warm up the backend service to prevent 502 errors
+    async warmUpService() {
+        try {
+            console.log('🔥 Warming up ESPN backend service...');
+            const response = await fetch(`${this.baseURL}/health`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ ESPN backend ready:', data.version);
+                
+                // Start keep-alive pings every 5 minutes to prevent cold starts
+                this.startKeepAlive();
+            }
+        } catch (error) {
+            console.warn('⚠️ Service warmup failed (will retry on demand):', error.message);
+        }
+    }
+    
+    // Keep the service alive to prevent Render cold starts
+    startKeepAlive() {
+        setInterval(async () => {
+            try {
+                await fetch(`${this.baseURL}/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                console.log('💓 Keep-alive ping sent');
+            } catch (error) {
+                console.warn('⚠️ Keep-alive failed:', error.message);
+            }
+        }, 5 * 60 * 1000); // Every 5 minutes
     }
     
     getMLBackendURL() {
@@ -24,8 +65,8 @@ class ESPNDataService {
         return isLocal ? 'http://localhost:5001' : 'https://betyard-ml-backend.onrender.com';
     }
     
-    // Helper method for cached API calls
-    async cachedFetch(url, options = {}) {
+    // Helper method for cached API calls with retry logic
+    async cachedFetch(url, options = {}, retries = 3) {
         const cacheKey = url + JSON.stringify(options);
         const cached = this.cache.get(cacheKey);
         
@@ -34,29 +75,51 @@ class ESPNDataService {
             return cached.data;
         }
         
-        try {
-            const response = await fetch(url, {
-                timeout: 10000,
-                ...options
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        let lastError;
+        for (let attempt = 0; attempt < retries; attempt++) {
+            try {
+                console.log(`🔄 ESPN API attempt ${attempt + 1}/${retries}:`, url);
+                
+                const response = await fetch(url, {
+                    timeout: 15000,
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // Cache successful responses
+                this.cache.set(cacheKey, {
+                    data,
+                    timestamp: Date.now()
+                });
+                
+                console.log('✅ ESPN API success:', url);
+                return data;
+                
+            } catch (error) {
+                lastError = error;
+                console.warn(`⚠️ ESPN API attempt ${attempt + 1} failed:`, error.message);
+                
+                // Wait before retrying (exponential backoff)
+                if (attempt < retries - 1) {
+                    const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+                    console.log(`⏳ Retrying in ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
             }
-            
-            const data = await response.json();
-            
-            // Cache successful responses
-            this.cache.set(cacheKey, {
-                data,
-                timestamp: Date.now()
-            });
-            
-            return data;
-        } catch (error) {
-            console.error('ESPN API Error:', error);
-            throw error;
         }
+        
+        console.error('❌ ESPN API failed after all retries:', lastError);
+        throw lastError;
     }
     
     // Get latest NFL news

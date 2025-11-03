@@ -668,6 +668,8 @@ class LiveNFLScores {
     formatGameTime(gameTime) {
         if (!gameTime || typeof gameTime !== 'string') return 'TBD';
         
+        console.log(`🕐 formatGameTime input: "${gameTime}"`);
+        
         // Handle different time formats from ESPN
         try {
             // Handle ESPN ISO format like "2025-11-03T01:20Z"
@@ -682,6 +684,7 @@ class LiveNFLScores {
                         hour12: true
                     };
                     const etTime = date.toLocaleString('en-US', options);
+                    console.log(`🕐 formatGameTime converted: "${gameTime}" → "${etTime} ET"`);
                     return `${etTime} ET`;
                 }
             }
