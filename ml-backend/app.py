@@ -42,15 +42,29 @@ app = Flask(__name__)
 
 # Configure CORS if available, otherwise set headers manually
 if CORS_AVAILABLE:
-    CORS(app)  # Allow cross-origin requests from frontend
+    CORS(app, 
+         origins=['https://betyard.net', 'http://localhost:*', 'https://localhost:*'],
+         methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+         allow_headers=['Content-Type', 'Authorization'])
 else:
-    # Manual CORS headers for Tank01 integration
+    # Manual CORS headers for all domains
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,HEAD')
+        response.headers.add('Access-Control-Allow-Credentials', 'false')
         return response
+    
+    # Handle preflight OPTIONS requests
+    @app.before_request
+    def handle_preflight():
+        if request.method == "OPTIONS":
+            response = jsonify({})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With')
+            response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,HEAD')
+            return response
 
 # Simple in-memory cache for API responses
 API_CACHE = {}
