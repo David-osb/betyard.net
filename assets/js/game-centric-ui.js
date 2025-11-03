@@ -47,6 +47,10 @@ class GameCentricUI {
         console.log('🏈 Game-Centric UI: Initializing...');
         this.createNewLayout();
         this.setupEventListeners();
+        
+        // 🚀 IMMEDIATE CACHE LOAD - Show games instantly from cache
+        this.loadCachedGamesImmediately();
+        
         console.log('✅ Game-Centric UI: Ready!');
     }
     
@@ -728,6 +732,83 @@ class GameCentricUI {
         }
     }
     
+    // 🚀 PERFORMANCE: Load cached games immediately for instant display
+    loadCachedGamesImmediately() {
+        try {
+            const cached = localStorage.getItem('nfl_games_cache');
+            if (cached) {
+                const data = JSON.parse(cached);
+                const now = Date.now();
+                // Use cache even if slightly stale (up to 5 minutes) for instant loading
+                if (now - data.timestamp < 300000) {
+                    console.log('🚀 INSTANT LOAD: Using cached games for immediate display');
+                    this.liveGames = data.games;
+                    this.loadGames();
+                    this.showLoadingComplete();
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.log('⚠️ Cache load error:', e);
+        }
+        
+        // No cache available - show loading state
+        this.showLoadingState();
+        return false;
+    }
+    
+    showLoadingState() {
+        const container = document.getElementById('games-selection-grid');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div style="
+                grid-column: 1 / -1;
+                text-align: center;
+                padding: 40px 20px;
+                background: linear-gradient(135deg, #1e40af, #3b82f6);
+                border-radius: 12px;
+                color: white;
+                margin: 20px 0;
+            ">
+                <div style="font-size: 24px; margin-bottom: 10px;">🏈</div>
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Loading Live Games...</div>
+                <div style="font-size: 14px; opacity: 0.9;">Fetching the latest NFL scores and schedules</div>
+                <div style="
+                    width: 200px;
+                    height: 4px;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 2px;
+                    margin: 20px auto;
+                    overflow: hidden;
+                ">
+                    <div style="
+                        width: 100%;
+                        height: 100%;
+                        background: white;
+                        border-radius: 2px;
+                        animation: loading-pulse 1.5s ease-in-out infinite;
+                    "></div>
+                </div>
+            </div>
+            <style>
+                @keyframes loading-pulse {
+                    0%, 100% { transform: translateX(-100%); }
+                    50% { transform: translateX(100%); }
+                }
+            </style>
+        `;
+    }
+    
+    showLoadingComplete() {
+        // Remove any loading animations smoothly
+        const container = document.getElementById('games-selection-grid');
+        if (container) {
+            container.style.transition = 'opacity 0.3s ease';
+            container.style.opacity = '1';
+        }
+    }
+
     loadGames() {
         // Get games from the live scores system if available
         const gamesData = this.getWeekGames();
@@ -735,8 +816,44 @@ class GameCentricUI {
         
         if (!container) return;
         
-        const gamesHTML = gamesData.map(game => this.createGameOptionCard(game)).join('');
-        container.innerHTML = gamesHTML;
+        // 🚀 PERFORMANCE: Use DocumentFragment for faster DOM updates
+        const fragment = document.createDocumentFragment();
+        const tempContainer = document.createElement('div');
+        
+        if (gamesData.length > 0) {
+            console.log('🚀 RENDERING: Building game cards for', gamesData.length, 'games');
+            const gamesHTML = gamesData.map(game => this.createGameOptionCard(game)).join('');
+            tempContainer.innerHTML = gamesHTML;
+            
+            // Move all elements to fragment
+            while (tempContainer.firstChild) {
+                fragment.appendChild(tempContainer.firstChild);
+            }
+        } else {
+            // Show "no games" state
+            tempContainer.innerHTML = `
+                <div style="
+                    grid-column: 1 / -1;
+                    text-align: center;
+                    padding: 40px 20px;
+                    background: #f8fafc;
+                    border: 2px dashed #cbd5e1;
+                    border-radius: 12px;
+                    color: #64748b;
+                ">
+                    <div style="font-size: 24px; margin-bottom: 10px;">🏈</div>
+                    <div style="font-size: 16px; font-weight: 600;">No Games Available</div>
+                    <div style="font-size: 14px; margin-top: 5px;">Check back later for live games and schedules</div>
+                </div>
+            `;
+            fragment.appendChild(tempContainer.firstChild);
+        }
+        
+        // Single DOM operation for maximum performance
+        container.innerHTML = '';
+        container.appendChild(fragment);
+        
+        console.log('✅ Game cards rendered successfully');
     }
     
     getWeekGames() {
@@ -786,10 +903,32 @@ class GameCentricUI {
     updateWithLiveGames(games) {
         // Store the live games data
         this.liveGames = games;
-        console.log('🎯 Game-Centric UI received', games.length, 'live games');
+        console.log('🚀 FAST UPDATE: Game-Centric UI received', games.length, 'live games');
         
-        // Reload the games display with live data
-        this.loadGames();
+        // Only reload if we have games to show (avoid clearing existing cache display)
+        if (games && games.length > 0) {
+            this.loadGames();
+            this.showLoadingComplete();
+            
+            // Cache the games for next time
+            this.cacheGamesForFastLoad(games);
+        } else {
+            console.log('⚠️ No games received - keeping existing display');
+        }
+    }
+    
+    // 🚀 PERFORMANCE: Cache games for instant future loads
+    cacheGamesForFastLoad(games) {
+        try {
+            const cacheData = {
+                games: games,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('nfl_games_cache', JSON.stringify(cacheData));
+            console.log('💾 Games cached for next instant load');
+        } catch (e) {
+            console.log('⚠️ Cache write error:', e);
+        }
     }
     
     createGameOptionCard(game) {

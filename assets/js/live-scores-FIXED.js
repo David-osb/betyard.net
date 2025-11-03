@@ -70,7 +70,16 @@ class LiveNFLScores {
         // Create live scores widget
         this.createLiveScoresWidget();
         
-        // Start fetching live data
+        // 🚀 IMMEDIATE CACHE LOAD - Update game-centric UI instantly
+        const cachedGames = getCachedGames();
+        if (cachedGames && cachedGames.length > 0) {
+            console.log('🚀 INSTANT LOAD: Loading cached games for immediate game-centric UI update');
+            this.games = cachedGames;
+            this.updateGameCentricUI(); // Update UI immediately with cached data
+            this.updateLiveScoresDisplay();
+        }
+        
+        // Start fetching fresh live data in background
         await this.fetchLiveScores();
         
         // Set up auto-refresh
@@ -1054,6 +1063,9 @@ class LiveNFLScores {
         
         // Add game context information
         this.addGameContextInfo();
+        
+        // 🚀 CACHE GAMES for instant future loads
+        cacheGames(this.games);
         
         // Update game-centric UI with current games
         this.updateGameCentricUI();

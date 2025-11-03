@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚀 FORCE RELOAD - Bypass Cache</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+    <h1>🚀 Force Reload Test</h1>
+    <p>This will immediately redirect to the uncached version...</p>
+    <script>
+        // Clear all caches
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                names.forEach(function(name) {
+                    caches.delete(name);
+                });
+            });
+        }
+        
+        // Clear storage
+        if (typeof(Storage) !== "undefined") {
+            localStorage.clear();
+            sessionStorage.clear();
+        }
+        
+        // Redirect to uncached version
+        setTimeout(() => {
+            window.location.href = 'index-BYPASS-CACHE.html?force=' + Date.now();
+        }, 1000);
+    </script>
+</body>
+</html>
