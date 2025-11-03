@@ -12,7 +12,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error, r2_score, accuracy_score
 import pickle
 import logging
+import json
 from datetime import datetime
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Add these methods to your existing NFLMLModel class in app.py
 
