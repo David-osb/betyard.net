@@ -17,12 +17,21 @@ class LiveNFLScores {
         this.lastGameSignature = null; // Track game changes to avoid redundant updates
         this.currentSport = 'NFL'; // Track current sport to detect sport changes
         
-        // Tank01 API configuration with your real key
+        // ESPN API configuration via your backend (replaces Tank01)
+        this.getMLBackendURL = () => {
+            if (window.ML_CONFIG) {
+                const activeProvider = window.ML_CONFIG.ACTIVE;
+                return window.ML_CONFIG[activeProvider];
+            }
+            const isLocal = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+            return isLocal ? 'http://localhost:5001' : 'https://betyard-ml-backend.onrender.com';
+        };
+        
         this.apiConfig = {
-            baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
+            baseUrl: this.getMLBackendURL(),
             headers: {
-                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
-                'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                'Content-Type': 'application/json'
             }
         };
         

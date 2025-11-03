@@ -4524,9 +4524,9 @@
         <!-- Tank01 Live Odds Overview -->
         <div class="panel-card full-width">
             <div class="card-header">
-                <h3><i class="material-icons">sports_football</i>NFL Odds Overview - Tank01 Data</h3>
+                <h3><i class="material-icons">sports_football</i>NFL Odds Overview - ESPN Data</h3>
                 <div class="card-actions">
-                    <small id="last-updated" style="color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap;">Live data from Tank01</small>
+                    <small id="last-updated" style="color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap;">Live data from ESPN</small>
                     <button class="btn-refresh" onclick="refreshMarketData()" title="Refresh live odds">
                         <i class="material-icons">refresh</i>
                     </button>
@@ -4640,7 +4640,7 @@
             <div class="card-header">
                 <h3><i class="material-icons">swap_horiz</i>Arbitrage Scanner</h3>
                 <div class="arbitrage-info">
-                    <span class="arbitrage-status">Auto-scanning Tank01 data</span>
+                    <span class="arbitrage-status">Auto-scanning ESPN data</span>
                 </div>
             </div>
             <div class="card-content">
@@ -4705,7 +4705,7 @@
                     </div>
                     <div class="info-section">
                         <h4>Update Frequency</h4>
-                        <p>Live odds updated in real-time via Tank01 API. Data refreshes automatically every 2 minutes or manually via refresh button.</p>
+                        <p>Live odds updated in real-time via ESPN API. Data refreshes automatically every 2 minutes or manually via refresh button.</p>
                     </div>
                 </div>
             </div>
@@ -5069,10 +5069,11 @@
     </div>
     <!-- Core JavaScript files only - removed missing files to eliminate 404 errors -->
     <script src="assets/js/nfl-schedule-2025-correct.js"></script>
-    <script src="assets/js/nfl-schedule-api.js?v=2025-10-19-GAME-STATUS-FIX&t=1729380000"></script>
+    <script src="assets/js/nfl-schedule-api.js?v=2025-11-02-ESPN-INTEGRATION&t=1730583600"></script>
+    <script src="assets/js/espn-data-service.js?v=2025-11-02-ESPN-INTEGRATION&t=1730583600"></script>
     <script src="assets/js/ml-config.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000"></script>
     <script src="assets/js/ml-integration.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000"></script>
-    <script src="assets/js/live-scores.js?v=2025-10-20-UPDATE-FIX&t=1729465300000"></script>
+    <script src="assets/js/live-scores.js?v=2025-11-02-ESPN-INTEGRATION&t=1730583600"></script>
     <script src="assets/js/game-centric-ui.js?v=2025-10-20-ML-READY&t=1729465300000"></script>
     <script>
         // Toggle expandable card functionality
@@ -5322,11 +5323,11 @@
                 }
             }
             
-            updateStatus('🔄 Loading Tank01 API...', 'info');
+            updateStatus('🔄 Loading ESPN API...', 'info');
             
-            // Load Tank01 API data
+            // Load ESPN API data
             if (typeof fetchNFLDataWithTank01Enhanced === "function") {
-                updateStatus('✅ Tank01 API functions loaded', 'success');
+                updateStatus('✅ ESPN API functions loaded', 'success');
                 try {
                     const success = await fetchNFLDataWithTank01Enhanced();
                     if (success) {
@@ -5340,11 +5341,11 @@
                         enableDropdownsAfterTank01(false);
                     }
                 } catch (error) {
-                    updateStatus('❌ Tank01 API error, using backup', 'error');
+                    updateStatus('❌ ESPN API error, using backup', 'error');
                     enableDropdownsAfterTank01(false);
                 }
             } else {
-                updateStatus('❌ Tank01 functions not found', 'error');
+                updateStatus('❌ ESPN functions not found', 'error');
             }
         });
         
@@ -5784,27 +5785,105 @@
             }
         }
         
-        function updateQBNews(qbName, teamName) {
+        async function updateQBNews(qbName, teamName) {
             const qbNewsContent = document.getElementById('qb-news-content');
+            
+            // Show loading state
             qbNewsContent.innerHTML = `
-                <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                    <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
-                    <p style="color: #374151; margin-bottom: 8px;">
-                        <strong>Injury Status:</strong> <span style="color: #10b981;">Healthy</span> - Full participation in practice
-                    </p>
-                    <p style="color: #374151; margin-bottom: 8px;">
-                        <strong>Recent Performance:</strong> 287 yards, 2 TDs, 1 INT in last game
-                    </p>
-                    <p style="color: #374151;">
-                        <strong>Matchup Analysis:</strong> Favorable matchup against opponent's 24th-ranked pass defense
-                    </p>
-                </div>
-                <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                    <p style="color: #92400e; font-size: 14px;">
-                        <strong>📰 Latest:</strong> ${qbName} expected to have strong performance based on recent form and matchup analysis
-                    </p>
+                <div style="padding: 20px; text-align: center;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 12px; color: #6b7280;">Loading ESPN data for ${qbName}...</p>
                 </div>
             `;
+            
+            try {
+                // Get latest news and injuries from ESPN
+                const [newsData, injuryData] = await Promise.all([
+                    window.ESPNDataService.getLatestNews(5),
+                    window.ESPNDataService.getCurrentInjuries()
+                ]);
+                
+                // Filter news for this player/team
+                const playerNews = newsData.news?.filter(article => 
+                    article.headline?.toLowerCase().includes(qbName.toLowerCase()) ||
+                    article.description?.toLowerCase().includes(qbName.toLowerCase())
+                ).slice(0, 3) || [];
+                
+                // Find injury info for this player
+                const playerInjury = injuryData.injuries?.find(injury => 
+                    injury.player?.toLowerCase().includes(qbName.toLowerCase())
+                );
+                
+                // Build news content with real ESPN data
+                let newsHTML = `
+                    <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
+                `;
+                
+                // Injury status from ESPN
+                if (playerInjury) {
+                    const statusColor = playerInjury.status === 'Healthy' ? '#10b981' : 
+                                       playerInjury.status === 'Questionable' ? '#f59e0b' : '#ef4444';
+                    newsHTML += `
+                        <p style="color: #374151; margin-bottom: 8px;">
+                            <strong>Injury Status:</strong> 
+                            <span style="color: ${statusColor};">${playerInjury.status}</span> 
+                            ${playerInjury.description ? '- ' + playerInjury.description : ''}
+                        </p>
+                    `;
+                } else {
+                    newsHTML += `
+                        <p style="color: #374151; margin-bottom: 8px;">
+                            <strong>Injury Status:</strong> <span style="color: #10b981;">No injury report</span>
+                        </p>
+                    `;
+                }
+                
+                newsHTML += `
+                        <p style="color: #374151; margin-bottom: 8px;">
+                            <strong>Data Source:</strong> <span style="color: #3b82f6;">ESPN API</span> - Real-time updates
+                        </p>
+                    </div>
+                `;
+                
+                // Add ESPN news articles
+                if (playerNews.length > 0) {
+                    playerNews.forEach(article => {
+                        newsHTML += `
+                            <div style="padding: 12px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9; margin-bottom: 12px;">
+                                <h5 style="color: #0c4a6e; margin-bottom: 6px; font-size: 14px;">📰 ${article.headline}</h5>
+                                <p style="color: #475569; font-size: 13px; margin-bottom: 8px;">${article.description}</p>
+                                <p style="color: #64748b; font-size: 12px;">
+                                    Published: ${new Date(article.published).toLocaleDateString()}
+                                </p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    newsHTML += `
+                        <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <p style="color: #92400e; font-size: 14px;">
+                                <strong>📰 Latest:</strong> No recent news found for ${qbName}. Check back for updates from ESPN.
+                            </p>
+                        </div>
+                    `;
+                }
+                
+                qbNewsContent.innerHTML = newsHTML;
+                
+            } catch (error) {
+                console.error('Error fetching ESPN news:', error);
+                qbNewsContent.innerHTML = `
+                    <div style="padding: 16px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <p style="color: #dc2626;">
+                            <strong>⚠️ Error:</strong> Unable to load ESPN data. Using cached information for ${qbName}.
+                        </p>
+                        <p style="color: #374151; margin-top: 8px; font-size: 14px;">
+                            Recent performance data and injury status will be updated when connection is restored.
+                        </p>
+                    </div>
+                `;
+            }
         }
 
         // Dark Theme Toggle Function

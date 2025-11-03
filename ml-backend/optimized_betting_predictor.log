@@ -1,0 +1,178 @@
+2025-10-31 20:49:05,969 - INFO - STARTING OPTIMIZED BETTING PREDICTOR
+2025-10-31 20:49:05,969 - INFO - Target: 75-80% accuracy for profitable betting
+2025-10-31 20:49:05,969 - INFO - Using complete 26-year NFL dataset with advanced optimization
+2025-10-31 20:49:05,969 - INFO - ============================================================
+2025-10-31 20:49:05,969 - INFO - Loading complete 26-year NFL dataset for betting optimization...
+2025-10-31 20:49:05,969 - INFO - Found 7 NFL data files
+2025-10-31 20:49:06,025 - INFO -   defense_stats_historical_clean.csv: 33646 records
+2025-10-31 20:49:06,031 - INFO -   passing_stats_historical_clean.csv: 2686 records
+2025-10-31 20:49:06,054 - INFO -   receiving_stats_historical_clean.csv: 14512 records
+2025-10-31 20:49:06,064 - INFO -   returns_stats_historical_clean.csv: 5874 records
+2025-10-31 20:49:06,084 - INFO -   rushing_stats_historical_clean.csv: 13167 records
+2025-10-31 20:49:06,102 - INFO -   scoring_stats_historical_clean.csv: 12082 records
+2025-10-31 20:49:06,128 - INFO -   scrimmage_stats_historical_clean.csv: 15271 records
+2025-10-31 20:49:06,130 - INFO - Combining and preprocessing 26-year NFL dataset...
+2025-10-31 20:49:06,168 - INFO - Enhancing data quality for betting optimization...
+2025-10-31 20:49:06,550 - INFO - Enhanced dataset: 90,446 records after quality improvements
+2025-10-31 20:49:06,559 - INFO - TOTAL 26-YEAR DATASET: 90,446 records
+2025-10-31 20:49:06,561 - INFO - Categories: {'defense': 30727, 'scrimmage': 15271, 'rushing': 12432, 'receiving': 12294, 'scoring': 12082, 'returns': 5874, 'passing': 1766}
+2025-10-31 20:49:06,563 - INFO - Creating betting-optimized targets...
+2025-10-31 20:49:06,720 - INFO -    Skipped rushing_above_p70: 4.1% hit rate
+2025-10-31 20:49:06,720 - INFO -    Skipped rushing_above_p75: 3.4% hit rate
+2025-10-31 20:49:06,721 - INFO -    Skipped rushing_above_p80: 2.7% hit rate
+2025-10-31 20:49:06,721 - INFO -    Skipped receiving_above_p70: 4.1% hit rate
+2025-10-31 20:49:06,721 - INFO -    Skipped receiving_above_p75: 3.4% hit rate
+2025-10-31 20:49:06,721 - INFO -    Skipped receiving_above_p80: 2.7% hit rate
+2025-10-31 20:49:06,721 - INFO -    Skipped defense_above_p70: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped defense_above_p75: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped defense_above_p80: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped returns_above_p70: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped returns_above_p75: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped returns_above_p80: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped scrimmage_above_p70: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped scrimmage_above_p75: 0.0% hit rate
+2025-10-31 20:49:06,722 - INFO -    Skipped scrimmage_above_p80: 0.0% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped scoring_above_p70: 0.0% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped scoring_above_p75: 0.0% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped scoring_above_p80: 0.0% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped passing_above_p70: 0.6% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped passing_above_p75: 0.5% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped passing_above_p80: 0.4% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped passing_consistent: 0.6% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped rushing_consistent: 4.1% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped receiving_consistent: 4.1% hit rate
+2025-10-31 20:49:06,723 - INFO -    Skipped multiple_tds: 10.7% hit rate
+2025-10-31 20:49:06,725 - INFO -    Skipped any_td: 13.8% hit rate
+2025-10-31 20:49:06,725 - INFO -    Skipped qb_scores: 1.8% hit rate
+2025-10-31 20:49:06,725 - INFO -    Skipped rb_scores: 4.3% hit rate
+2025-10-31 20:49:06,725 - INFO -    Skipped wr_scores: 4.3% hit rate
+2025-10-31 20:49:06,725 - INFO -    Skipped te_scores: 2.4% hit rate
+2025-10-31 20:49:06,725 - INFO -    BETTING TARGET: prime_performer: 33.2% hit rate
+2025-10-31 20:49:06,726 - INFO -    GOOD TARGET: veteran_reliability: 17.6% hit rate
+2025-10-31 20:49:06,726 - INFO -    BETTING TARGET: high_volume: 36.8% hit rate
+2025-10-31 20:49:06,726 - INFO -    Skipped modern_era: 76.9% hit rate
+2025-10-31 20:49:06,726 - INFO -    Skipped top_team_player: 12.9% hit rate
+2025-10-31 20:49:06,726 - INFO - Created 3 betting-optimized targets
+2025-10-31 20:49:06,728 - INFO - Creating advanced betting features...
+2025-10-31 20:49:13,827 - INFO - Created 237 advanced betting features
+2025-10-31 20:49:13,833 - INFO - Training optimized betting ensemble models...
+2025-10-31 20:49:13,833 - INFO - Training optimized model 1/3: prime_performer
+2025-10-31 20:49:13,882 - ERROR - Training failed: Input X contains infinity or a value too large for dtype('float64').
+2025-10-31 20:49:13,917 - ERROR - Traceback (most recent call last):
+  File "C:\Users\david\OneDrive\Workspace\Python Projects\UI.UX\ml-backend\optimized_betting_predictor.py", line 516, in run_optimized_betting_training
+    results = self.train_optimized_betting_models(df, features)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\OneDrive\Workspace\Python Projects\UI.UX\ml-backend\optimized_betting_predictor.py", line 390, in train_optimized_betting_models
+    X_train_selected = selector.fit_transform(X_train, y_train)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\utils\_set_output.py", line 316, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\base.py", line 1101, in fit_transform
+    return self.fit(X, y, **fit_params).transform(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\base.py", line 1473, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\feature_selection\_univariate_selection.py", line 562, in fit
+    X, y = self._validate_data(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\base.py", line 650, in _validate_data
+    X, y = check_X_y(X, y, **check_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\utils\validation.py", line 1301, in check_X_y
+    X = check_array(
+        ^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\utils\validation.py", line 1064, in check_array
+    _assert_all_finite(
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\utils\validation.py", line 123, in _assert_all_finite
+    _assert_all_finite_element_wise(
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\utils\validation.py", line 172, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input X contains infinity or a value too large for dtype('float64').
+
+2025-10-31 20:49:30,594 - INFO - STARTING OPTIMIZED BETTING PREDICTOR
+2025-10-31 20:49:30,595 - INFO - Target: 75-80% accuracy for profitable betting
+2025-10-31 20:49:30,595 - INFO - Using complete 26-year NFL dataset with advanced optimization
+2025-10-31 20:49:30,595 - INFO - ============================================================
+2025-10-31 20:49:30,595 - INFO - Loading complete 26-year NFL dataset for betting optimization...
+2025-10-31 20:49:30,595 - INFO - Found 7 NFL data files
+2025-10-31 20:49:30,658 - INFO -   defense_stats_historical_clean.csv: 33646 records
+2025-10-31 20:49:30,665 - INFO -   passing_stats_historical_clean.csv: 2686 records
+2025-10-31 20:49:30,686 - INFO -   receiving_stats_historical_clean.csv: 14512 records
+2025-10-31 20:49:30,698 - INFO -   returns_stats_historical_clean.csv: 5874 records
+2025-10-31 20:49:30,724 - INFO -   rushing_stats_historical_clean.csv: 13167 records
+2025-10-31 20:49:30,737 - INFO -   scoring_stats_historical_clean.csv: 12082 records
+2025-10-31 20:49:30,764 - INFO -   scrimmage_stats_historical_clean.csv: 15271 records
+2025-10-31 20:49:30,764 - INFO - Combining and preprocessing 26-year NFL dataset...
+2025-10-31 20:49:30,801 - INFO - Enhancing data quality for betting optimization...
+2025-10-31 20:49:31,182 - INFO - Enhanced dataset: 90,446 records after quality improvements
+2025-10-31 20:49:31,190 - INFO - TOTAL 26-YEAR DATASET: 90,446 records
+2025-10-31 20:49:31,193 - INFO - Categories: {'defense': 30727, 'scrimmage': 15271, 'rushing': 12432, 'receiving': 12294, 'scoring': 12082, 'returns': 5874, 'passing': 1766}
+2025-10-31 20:49:31,194 - INFO - Creating betting-optimized targets...
+2025-10-31 20:49:31,343 - INFO -    Skipped defense_above_p70: 0.0% hit rate
+2025-10-31 20:49:31,343 - INFO -    Skipped defense_above_p75: 0.0% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped defense_above_p80: 0.0% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped scrimmage_above_p70: 0.0% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped scrimmage_above_p75: 0.0% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped scrimmage_above_p80: 0.0% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped receiving_above_p70: 4.1% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped receiving_above_p75: 3.4% hit rate
+2025-10-31 20:49:31,344 - INFO -    Skipped receiving_above_p80: 2.7% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped returns_above_p70: 0.0% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped returns_above_p75: 0.0% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped returns_above_p80: 0.0% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped rushing_above_p70: 4.1% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped rushing_above_p75: 3.4% hit rate
+2025-10-31 20:49:31,345 - INFO -    Skipped rushing_above_p80: 2.7% hit rate
+2025-10-31 20:49:31,346 - INFO -    Skipped scoring_above_p70: 0.0% hit rate
+2025-10-31 20:49:31,346 - INFO -    Skipped scoring_above_p75: 0.0% hit rate
+2025-10-31 20:49:31,346 - INFO -    Skipped scoring_above_p80: 0.0% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped passing_above_p70: 0.6% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped passing_above_p75: 0.5% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped passing_above_p80: 0.4% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped passing_consistent: 0.6% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped rushing_consistent: 4.1% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped receiving_consistent: 4.1% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped multiple_tds: 10.7% hit rate
+2025-10-31 20:49:31,347 - INFO -    Skipped any_td: 13.8% hit rate
+2025-10-31 20:49:31,348 - INFO -    Skipped qb_scores: 1.8% hit rate
+2025-10-31 20:49:31,348 - INFO -    Skipped rb_scores: 4.3% hit rate
+2025-10-31 20:49:31,348 - INFO -    Skipped wr_scores: 4.3% hit rate
+2025-10-31 20:49:31,348 - INFO -    Skipped te_scores: 2.4% hit rate
+2025-10-31 20:49:31,348 - INFO -    BETTING TARGET: prime_performer: 33.2% hit rate
+2025-10-31 20:49:31,348 - INFO -    GOOD TARGET: veteran_reliability: 17.6% hit rate
+2025-10-31 20:49:31,350 - INFO -    BETTING TARGET: high_volume: 36.8% hit rate
+2025-10-31 20:49:31,350 - INFO -    Skipped modern_era: 76.9% hit rate
+2025-10-31 20:49:31,350 - INFO -    Skipped top_team_player: 12.9% hit rate
+2025-10-31 20:49:31,350 - INFO - Created 3 betting-optimized targets
+2025-10-31 20:49:31,350 - INFO - Creating advanced betting features...
+2025-10-31 20:49:38,768 - INFO - Created 180 advanced betting features
+2025-10-31 20:49:38,775 - INFO - Training optimized betting ensemble models...
+2025-10-31 20:49:38,775 - INFO - Training optimized model 1/3: prime_performer
+2025-10-31 20:49:54,684 - INFO -    1.000 accuracy | 1.000 AUC | 0.328 edge (32.8% hit rate)
+2025-10-31 20:49:54,684 - INFO - Training optimized model 2/3: veteran_reliability
+2025-10-31 20:50:08,641 - INFO -    1.000 accuracy | 1.000 AUC | 0.179 edge (17.9% hit rate)
+2025-10-31 20:50:08,641 - INFO - Training optimized model 3/3: high_volume
+2025-10-31 20:50:23,543 - INFO -    1.000 accuracy | 1.000 AUC | 0.374 edge (37.4% hit rate)
+2025-10-31 20:50:23,545 - INFO - ============================================================
+2025-10-31 20:50:23,546 - INFO - OPTIMIZED BETTING MODEL RESULTS:
+2025-10-31 20:50:23,546 - INFO - Average Accuracy: 1.000
+2025-10-31 20:50:23,546 - INFO - Average AUC: 1.000
+2025-10-31 20:50:23,546 - INFO - Average Improvement: 0.294
+2025-10-31 20:50:23,546 - INFO - Average Betting Edge: 0.294
+2025-10-31 20:50:23,546 - INFO - Models trained: 3
+2025-10-31 20:50:23,546 - INFO - SUCCESS: Achieved 75%+ accuracy - PROFITABLE BETTING RANGE!
+2025-10-31 20:50:23,552 - INFO - ============================================================
+2025-10-31 20:50:23,552 - INFO - OPTIMIZED BETTING TRAINING COMPLETED!
+2025-10-31 20:50:23,552 - INFO - Total time: 0:00:52.957816
+2025-10-31 20:50:23,552 - INFO - Total samples: 90,446
+2025-10-31 20:50:23,552 - INFO - Betting targets: 3
+2025-10-31 20:50:23,552 - INFO - Features: 180
+2025-10-31 20:50:23,553 - INFO - Optimizations applied:
+2025-10-31 20:50:23,553 - INFO - - Advanced ensemble voting
+2025-10-31 20:50:23,553 - INFO - - Feature selection
+2025-10-31 20:50:23,553 - INFO - - Robust scaling
+2025-10-31 20:50:23,553 - INFO - - Betting-specific targets
+2025-10-31 20:50:23,553 - INFO - - Rolling performance features
+2025-10-31 20:50:23,553 - INFO - - Profitability optimization

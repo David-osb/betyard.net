@@ -7,11 +7,30 @@
 
 class NFLScheduleAPI {
     constructor() {
+        // Get ML Backend URL (same config as ML integration)
+        this.getMLBackendURL = () => {
+            if (window.ML_CONFIG) {
+                const activeProvider = window.ML_CONFIG.ACTIVE;
+                return window.ML_CONFIG[activeProvider];
+            }
+            const isLocal = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+            return isLocal ? 'http://localhost:5001' : 'https://betyard-ml-backend.onrender.com';
+        };
+        
         this.apiConfig = {
-            baseUrl: 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com',
+            // ESPN API via your backend instead of Tank01
+            baseUrl: this.getMLBackendURL(),
             headers: {
-                'X-RapidAPI-Key': 'be76a86c9cmsh0d0cecaaefbc722p1efcdbjsn598e66d34cf3',
-                'X-RapidAPI-Host': 'tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com'
+                'Content-Type': 'application/json'
+            },
+            // Map Tank01 endpoints to ESPN endpoints
+            endpointMap: {
+                'getNFLBoxScore': '/api/teams/matchups',
+                'getNFLPlayerList': '/api/players/search',
+                'getNFLTeamRoster': '/api/teams/info',
+                'getNFLGamesForWeek': '/api/schedule/week',
+                'getNFLNews': '/api/news/latest'
             },
             // DISABLE roster fetching to stop CORS errors - not critical for game display
             enableRosterFetch: false
@@ -245,7 +264,7 @@ class NFLScheduleAPI {
     
     async fetchComprehensivePlayerData() {
         try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLPlayerList?playerStats=true&getStats=true`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/api/players/search?q=&limit=100`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });
@@ -272,7 +291,7 @@ class NFLScheduleAPI {
         
         for (const teamID of priorityTeams) {
             try {
-                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamRoster?teamID=${teamID}&getStats=true`, {
+                const response = await fetch(`${this.apiConfig.baseUrl}/api/teams/info/${teamID}`, {
                     method: 'GET',
                     headers: this.apiConfig.headers
                 });
@@ -534,7 +553,7 @@ class NFLScheduleAPI {
      */
     async fetchWeekSchedule(week) {
         try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${week}&season=2025`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/api/schedule/week?week=${week}`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });
@@ -554,7 +573,7 @@ class NFLScheduleAPI {
      */
     async fetchDateSchedule(date) {
         try {
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForDate?gameDate=${date}`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/api/teams/matchups`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });
@@ -596,7 +615,7 @@ class NFLScheduleAPI {
         try {
             console.log(`🔄 Fetching NFL Week ${weekNumber} schedule...`);
             
-            const response = await fetch(`${this.apiConfig.baseUrl}/getNFLGamesForWeek?week=${weekNumber}&season=2025`, {
+            const response = await fetch(`${this.apiConfig.baseUrl}/api/schedule/week?week=${weekNumber}`, {
                 method: 'GET',
                 headers: this.apiConfig.headers
             });
@@ -831,7 +850,7 @@ class NFLScheduleAPI {
                 return rosterData;
             } else {
                 // Fallback to direct API call
-                const response = await fetch(`${this.apiConfig.baseUrl}/getNFLTeamRoster?teamID=${teamID}&getStats=false`, {
+                const response = await fetch(`${this.apiConfig.baseUrl}/api/teams/info/${teamID}`, {
                     method: 'GET',
                     headers: this.apiConfig.headers
                 });

@@ -1,0 +1,127 @@
+2025-10-30 22:00:35,418 - INFO - 
+================================================================================
+2025-10-30 22:00:35,419 - INFO - ================================================================================
+2025-10-30 22:01:24,320 - INFO - 
+================================================================================
+2025-10-30 22:01:24,322 - INFO - ================================================================================
+2025-10-30 22:03:46,546 - INFO - COMPREHENSIVE TRAINING STARTED: 2025-10-30 22:03:46.546143
+2025-10-30 22:03:46,546 - INFO - COMPREHENSIVE DATASET LOADING...
+2025-10-30 22:03:46,546 - INFO - Loading defense...
+2025-10-30 22:03:46,599 - INFO - SUCCESS defense: 33,646 records x 44 columns
+2025-10-30 22:03:46,599 - INFO - Loading receiving...
+2025-10-30 22:03:46,618 - INFO - SUCCESS receiving: 14,512 records x 36 columns
+2025-10-30 22:03:46,619 - INFO - Loading scrimmage...
+2025-10-30 22:03:46,656 - INFO - SUCCESS scrimmage: 15,271 records x 43 columns
+2025-10-30 22:03:46,659 - INFO - Loading rushing...
+2025-10-30 22:03:46,689 - INFO - SUCCESS rushing: 13,167 records x 45 columns
+2025-10-30 22:03:46,689 - INFO - Loading returns...
+2025-10-30 22:03:46,704 - INFO - SUCCESS returns: 5,874 records x 38 columns
+2025-10-30 22:03:46,704 - INFO - Loading passing...
+2025-10-30 22:03:46,713 - INFO - SUCCESS passing: 2,686 records x 49 columns
+2025-10-30 22:03:46,713 - INFO - Loading scoring...
+2025-10-30 22:03:46,734 - INFO - SUCCESS scoring: 12,082 records x 32 columns
+2025-10-30 22:03:46,750 - INFO - Loading kicking...
+2025-10-30 22:03:46,756 - INFO - SUCCESS kicking: 1,687 records x 31 columns
+2025-10-30 22:03:46,756 - INFO - Loading punting...
+2025-10-30 22:03:46,759 - INFO - SUCCESS punting: 1,122 records x 21 columns
+2025-10-30 22:03:46,759 - INFO - TOTAL DATASET SIZE: 100,047 records
+2025-10-30 22:03:46,759 - INFO - COMPREHENSIVE FEATURE ENGINEERING...
+2025-10-30 22:03:46,759 - INFO - Processing defense with advanced features...
+2025-10-30 22:03:46,768 - INFO - SUCCESS defense: 54 features created
+2025-10-30 22:03:46,777 - INFO - Processing receiving with advanced features...
+2025-10-30 22:03:46,785 - INFO - SUCCESS receiving: 56 features created
+2025-10-30 22:03:46,785 - INFO - Processing scrimmage with advanced features...
+2025-10-30 22:03:46,789 - INFO - SUCCESS scrimmage: 55 features created
+2025-10-30 22:03:46,789 - INFO - Processing rushing with advanced features...
+2025-10-30 22:03:46,798 - INFO - SUCCESS rushing: 65 features created
+2025-10-30 22:03:46,816 - INFO - Processing returns with advanced features...
+2025-10-30 22:03:46,822 - INFO - SUCCESS returns: 47 features created
+2025-10-30 22:03:46,822 - INFO - Processing passing with advanced features...
+2025-10-30 22:03:46,825 - INFO - SUCCESS passing: 68 features created
+2025-10-30 22:03:46,825 - INFO - Processing scoring with advanced features...
+2025-10-30 22:03:46,831 - INFO - SUCCESS scoring: 46 features created
+2025-10-30 22:03:46,831 - INFO - Processing kicking with advanced features...
+2025-10-30 22:03:46,834 - INFO - SUCCESS kicking: 40 features created
+2025-10-30 22:03:46,834 - INFO - Processing punting with advanced features...
+2025-10-30 22:03:46,837 - INFO - SUCCESS punting: 30 features created
+2025-10-30 22:03:46,837 - INFO - Combining datasets with advanced processing...
+2025-10-30 22:03:46,923 - INFO - Advanced data cleaning...
+2025-10-30 22:03:47,358 - INFO - Removing 7 constant features
+2025-10-30 22:03:47,433 - INFO - Creating interaction features...
+2025-10-30 22:03:47,469 - INFO - Created 50 interaction features
+2025-10-30 22:03:47,469 - INFO - Creating polynomial features...
+2025-10-30 22:03:47,490 - INFO - Created 30 polynomial features
+2025-10-30 22:03:47,490 - INFO - Creating clustering features...
+2025-10-30 22:03:49,262 - INFO - Created clustering features with 8 clusters
+2025-10-30 22:03:49,262 - INFO - COMPREHENSIVE FEATURES COMPLETE: 100,047 records x 370 features
+2025-10-30 22:03:49,262 - INFO - TARGET receptions_target: 100,047 samples
+2025-10-30 22:03:49,263 - INFO - TARGET receptions_per_target: 100,047 samples
+2025-10-30 22:03:49,263 - INFO - TARGET rec_td_target: 100,047 samples
+2025-10-30 22:03:49,263 - INFO - TARGET rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,263 - INFO - TARGET rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,265 - INFO - TARGET rush_td_target: 100,047 samples
+2025-10-30 22:03:49,265 - INFO - TARGET pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,265 - INFO - TARGET pass_td_target: 100,047 samples
+2025-10-30 22:03:49,265 - INFO - TARGET pass_int_target: 100,047 samples
+2025-10-30 22:03:49,266 - INFO - TARGET fantasy_points_target: 100,047 samples
+2025-10-30 22:03:49,266 - INFO - TARGET receptions_target_x_receptions_per_target: 100,047 samples
+2025-10-30 22:03:49,266 - INFO - TARGET receptions_target_div_receptions_per_target: 100,047 samples
+2025-10-30 22:03:49,268 - INFO - TARGET receptions_target_x_rec_td_target: 100,047 samples
+2025-10-30 22:03:49,269 - INFO - TARGET receptions_target_div_rec_td_target: 100,047 samples
+2025-10-30 22:03:49,269 - INFO - TARGET receptions_target_x_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,269 - INFO - TARGET receptions_target_div_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,269 - INFO - TARGET receptions_target_x_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,271 - INFO - TARGET receptions_target_div_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,271 - INFO - TARGET receptions_target_x_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,272 - INFO - TARGET receptions_target_div_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,272 - INFO - TARGET receptions_target_x_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,272 - INFO - TARGET receptions_target_div_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,272 - INFO - TARGET receptions_target_x_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,274 - INFO - TARGET receptions_target_div_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,274 - INFO - TARGET receptions_per_target_x_rec_td_target: 100,047 samples
+2025-10-30 22:03:49,274 - INFO - TARGET receptions_per_target_div_rec_td_target: 100,047 samples
+2025-10-30 22:03:49,275 - INFO - TARGET receptions_per_target_x_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,276 - INFO - TARGET receptions_per_target_div_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,277 - INFO - TARGET receptions_per_target_x_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,277 - INFO - TARGET receptions_per_target_div_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,278 - INFO - TARGET receptions_per_target_x_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,278 - INFO - TARGET receptions_per_target_div_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,278 - INFO - TARGET receptions_per_target_x_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,279 - INFO - TARGET receptions_per_target_div_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,279 - INFO - TARGET receptions_per_target_x_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,279 - INFO - TARGET receptions_per_target_div_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,281 - INFO - TARGET rec_td_target_x_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,281 - INFO - TARGET rec_td_target_div_rush_yards_target: 100,047 samples
+2025-10-30 22:03:49,282 - INFO - TARGET rec_td_target_x_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,283 - INFO - TARGET rec_td_target_div_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,283 - INFO - TARGET rec_td_target_x_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,284 - INFO - TARGET rec_td_target_div_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,284 - INFO - TARGET rec_td_target_x_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,285 - INFO - TARGET rec_td_target_div_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,285 - INFO - TARGET rec_td_target_x_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,287 - INFO - TARGET rec_td_target_div_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,287 - INFO - TARGET rush_yards_target_x_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,287 - INFO - TARGET rush_yards_target_div_rush_attempts_target: 100,047 samples
+2025-10-30 22:03:49,288 - INFO - TARGET rush_yards_target_x_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,290 - INFO - TARGET rush_yards_target_div_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,290 - INFO - TARGET rush_yards_target_x_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,290 - INFO - TARGET rush_yards_target_div_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,291 - INFO - TARGET rush_yards_target_x_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,291 - INFO - TARGET rush_yards_target_div_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,291 - INFO - TARGET rush_attempts_target_x_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,293 - INFO - TARGET rush_attempts_target_div_rush_td_target: 100,047 samples
+2025-10-30 22:03:49,293 - INFO - TARGET rush_attempts_target_x_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,294 - INFO - TARGET rush_attempts_target_div_pass_yards_target: 100,047 samples
+2025-10-30 22:03:49,294 - INFO - TARGET rush_attempts_target_x_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,295 - INFO - TARGET rush_attempts_target_div_pass_td_target: 100,047 samples
+2025-10-30 22:03:49,295 - INFO - COMPREHENSIVE TARGETS: 60 betting markets
+2025-10-30 22:03:50,307 - INFO - ================================================================================
+2025-10-30 22:03:50,307 - INFO - COMPREHENSIVE TRAINING: MODEL 1/60
+2025-10-30 22:03:50,307 - INFO - TARGET: receptions_target
+2025-10-30 22:03:50,307 - INFO - ================================================================================
+2025-10-30 22:03:50,604 - INFO - Training dataset: 100,047 samples x 297 features
+2025-10-30 22:03:50,604 - INFO - Advanced feature selection...
+2025-10-30 22:03:50,823 - INFO - Selected 297 most important features
+2025-10-30 22:03:52,171 - INFO - Comprehensive hyperparameter optimization...
+2025-10-30 22:03:52,171 - INFO - Using GPU for extensive grid search
+2025-10-30 22:03:52,173 - INFO - Starting extensive GPU optimization...

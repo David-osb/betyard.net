@@ -1,0 +1,151 @@
+2025-10-31 20:38:36,166 - INFO - Starting NFL Stats Betting Trainer
+2025-10-31 20:38:36,166 - INFO - Using real NFL statistics for betting predictions
+2025-10-31 20:38:36,166 - INFO - ============================================================
+2025-10-31 20:38:36,166 - INFO - Loading position-specific NFL data...
+2025-10-31 20:38:36,177 - INFO - Loaded passing: 2686 records
+2025-10-31 20:38:36,200 - INFO - Loaded rushing: 13167 records
+2025-10-31 20:38:36,226 - INFO - Loaded receiving: 14512 records
+2025-10-31 20:38:36,227 - INFO - Total NFL stats records: 30365
+2025-10-31 20:38:36,229 - INFO - Creating real NFL betting targets...
+2025-10-31 20:38:36,230 - INFO - Created 10 passing betting targets
+2025-10-31 20:38:36,234 - INFO - Created 9 rushing betting targets
+2025-10-31 20:38:36,236 - INFO - Created 11 receiving betting targets
+2025-10-31 20:38:36,289 - INFO -    qb_over_250_yards: 49.1% hit rate
+2025-10-31 20:38:36,289 - INFO -    qb_over_300_yards: 47.5% hit rate
+2025-10-31 20:38:36,289 - INFO -    qb_under_200_yards: 48.5% hit rate
+2025-10-31 20:38:36,289 - INFO -    qb_2plus_tds: 57.8% hit rate
+2025-10-31 20:38:36,291 - INFO -    qb_3plus_tds: 53.7% hit rate
+2025-10-31 20:38:36,291 - INFO -    qb_any_td: 67.3% hit rate
+2025-10-31 20:38:36,291 - INFO -    qb_over_20_completions: 54.2% hit rate
+2025-10-31 20:38:36,291 - INFO -    qb_over_25_completions: 52.3% hit rate
+2025-10-31 20:38:36,291 - INFO -    qb_any_interception: 66.7% hit rate
+2025-10-31 20:38:36,292 - INFO -    qb_clean_game: 30.4% hit rate
+2025-10-31 20:38:36,292 - INFO -    rb_over_50_yards: 29.6% hit rate
+2025-10-31 20:38:36,292 - INFO -    rb_over_75_yards: 25.0% hit rate
+2025-10-31 20:38:36,294 - INFO -    rb_over_100_yards: 22.2% hit rate
+2025-10-31 20:38:36,294 - INFO -    rb_under_40_yards: 68.0% hit rate
+2025-10-31 20:38:36,294 - INFO -    rb_any_td: 32.6% hit rate
+2025-10-31 20:38:36,294 - INFO -    rb_2plus_tds: 22.7% hit rate
+2025-10-31 20:38:36,294 - INFO -    rb_no_td: 67.4% hit rate
+2025-10-31 20:38:36,295 - INFO -    rb_over_15_attempts: 27.7% hit rate
+2025-10-31 20:38:36,295 - INFO -    rb_over_20_attempts: 24.8% hit rate
+2025-10-31 20:38:36,295 - INFO -    wr_over_50_yards: 58.5% hit rate
+2025-10-31 20:38:36,297 - INFO -    wr_over_75_yards: 52.1% hit rate
+2025-10-31 20:38:36,297 - INFO -    wr_over_100_yards: 47.0% hit rate
+2025-10-31 20:38:36,297 - INFO -    wr_under_40_yards: 38.1% hit rate
+2025-10-31 20:38:36,297 - INFO -    wr_over_5_catches: 58.9% hit rate
+2025-10-31 20:38:36,298 - INFO -    wr_over_7_catches: 54.0% hit rate
+2025-10-31 20:38:36,298 - INFO -    wr_under_4_catches: 34.7% hit rate
+2025-10-31 20:38:36,298 - INFO -    wr_any_td: 71.0% hit rate
+2025-10-31 20:38:36,298 - INFO -    wr_no_td: 22.6% hit rate
+2025-10-31 20:38:36,300 - INFO -    wr_over_8_targets: 59.9% hit rate
+2025-10-31 20:38:36,300 - INFO -    wr_over_10_targets: 56.3% hit rate
+2025-10-31 20:38:36,300 - INFO - Selected 30 betting targets
+2025-10-31 20:38:36,300 - INFO - Creating NFL statistical features...
+2025-10-31 20:38:36,365 - INFO - Created 114 NFL statistical features
+2025-10-31 20:38:36,366 - INFO - Training NFL betting models...
+2025-10-31 20:38:36,366 - INFO - Training model 1/30: qb_over_250_yards
+2025-10-31 20:38:36,480 - ERROR - Training failed: Invalid classes inferred from unique values of `y`.  Expected: [0 1 2], got [ 0.  1. nan]
+2025-10-31 20:38:36,482 - ERROR - Traceback (most recent call last):
+  File "C:\Users\david\OneDrive\Workspace\Python Projects\UI.UX\ml-backend\nfl_stats_betting_trainer.py", line 461, in run_nfl_betting_training
+    results = self.train_betting_models(df, features)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\david\OneDrive\Workspace\Python Projects\UI.UX\ml-backend\nfl_stats_betting_trainer.py", line 382, in train_betting_models
+    model.fit(X_train_scaled, y_train)
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\xgboost\core.py", line 726, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\david\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\xgboost\sklearn.py", line 1491, in fit
+    raise ValueError(
+ValueError: Invalid classes inferred from unique values of `y`.  Expected: [0 1 2], got [ 0.  1. nan]
+
+2025-10-31 20:39:14,554 - INFO - Starting NFL Stats Betting Trainer
+2025-10-31 20:39:14,554 - INFO - Using real NFL statistics for betting predictions
+2025-10-31 20:39:14,554 - INFO - ============================================================
+2025-10-31 20:39:14,556 - INFO - Loading position-specific NFL data...
+2025-10-31 20:39:14,563 - INFO - Loaded passing: 2686 records
+2025-10-31 20:39:14,584 - INFO - Loaded rushing: 13167 records
+2025-10-31 20:39:14,607 - INFO - Loaded receiving: 14512 records
+2025-10-31 20:39:14,607 - INFO - Total NFL stats records: 30365
+2025-10-31 20:39:14,608 - INFO - Creating real NFL betting targets...
+2025-10-31 20:39:14,609 - INFO - Created 10 passing betting targets
+2025-10-31 20:39:14,612 - INFO - Created 9 rushing betting targets
+2025-10-31 20:39:14,616 - INFO - Created 11 receiving betting targets
+2025-10-31 20:39:14,626 - INFO - Data before cleaning: 30365 records
+2025-10-31 20:39:14,670 - INFO - Data after cleaning: 30365 records
+2025-10-31 20:39:14,692 - INFO -    Skipped qb_over_250_yards: 4.3% hit rate
+2025-10-31 20:39:14,692 - INFO -    Skipped qb_over_300_yards: 4.2% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_under_200_yards: 4.3% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_2plus_tds: 5.1% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_3plus_tds: 4.8% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_any_td: 6.0% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_over_20_completions: 4.8% hit rate
+2025-10-31 20:39:14,694 - INFO -    Skipped qb_over_25_completions: 4.6% hit rate
+2025-10-31 20:39:14,695 - INFO -    Skipped qb_any_interception: 5.9% hit rate
+2025-10-31 20:39:14,695 - INFO -    Skipped qb_clean_game: 2.7% hit rate
+2025-10-31 20:39:14,695 - INFO -    Skipped rb_over_50_yards: 12.8% hit rate
+2025-10-31 20:39:14,695 - INFO -    Skipped rb_over_75_yards: 10.8% hit rate
+2025-10-31 20:39:14,697 - INFO -    Skipped rb_over_100_yards: 9.6% hit rate
+2025-10-31 20:39:14,697 - INFO -    rb_under_40_yards: 29.5% hit rate
+2025-10-31 20:39:14,697 - INFO -    Skipped rb_any_td: 14.1% hit rate
+2025-10-31 20:39:14,697 - INFO -    Skipped rb_2plus_tds: 9.8% hit rate
+2025-10-31 20:39:14,697 - INFO -    rb_no_td: 29.2% hit rate
+2025-10-31 20:39:14,697 - INFO -    Skipped rb_over_15_attempts: 12.0% hit rate
+2025-10-31 20:39:14,698 - INFO -    Skipped rb_over_20_attempts: 10.8% hit rate
+2025-10-31 20:39:14,698 - INFO -    wr_over_50_yards: 28.0% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_over_75_yards: 24.9% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_over_100_yards: 22.5% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_under_40_yards: 18.2% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_over_5_catches: 28.2% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_over_7_catches: 25.8% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_under_4_catches: 16.6% hit rate
+2025-10-31 20:39:14,699 - INFO -    wr_any_td: 33.9% hit rate
+2025-10-31 20:39:14,699 - INFO -    Skipped wr_no_td: 10.8% hit rate
+2025-10-31 20:39:14,701 - INFO -    wr_over_8_targets: 28.6% hit rate
+2025-10-31 20:39:14,701 - INFO -    wr_over_10_targets: 26.9% hit rate
+2025-10-31 20:39:14,701 - INFO - Selected 12 clean betting targets
+2025-10-31 20:39:14,701 - INFO - Creating NFL statistical features...
+2025-10-31 20:39:14,768 - INFO - Created 132 NFL statistical features
+2025-10-31 20:39:14,768 - INFO - Training NFL betting models...
+2025-10-31 20:39:14,768 - INFO - Training model 1/12: rb_under_40_yards
+2025-10-31 20:39:19,201 - INFO -    rb_under_40_yards: 1.000 accuracy (29.6% hit rate)
+2025-10-31 20:39:19,201 - INFO - Training model 2/12: rb_no_td
+2025-10-31 20:39:23,306 - INFO -    rb_no_td: 1.000 accuracy (29.3% hit rate)
+2025-10-31 20:39:23,306 - INFO - Training model 3/12: wr_over_50_yards
+2025-10-31 20:39:27,220 - INFO -    wr_over_50_yards: 1.000 accuracy (28.4% hit rate)
+2025-10-31 20:39:27,220 - INFO - Training model 4/12: wr_over_75_yards
+2025-10-31 20:39:31,094 - INFO -    wr_over_75_yards: 1.000 accuracy (25.4% hit rate)
+2025-10-31 20:39:31,094 - INFO - Training model 5/12: wr_over_100_yards
+2025-10-31 20:39:35,710 - INFO -    wr_over_100_yards: 0.999 accuracy (22.9% hit rate)
+2025-10-31 20:39:35,710 - INFO - Training model 6/12: wr_under_40_yards
+2025-10-31 20:39:40,455 - INFO -    wr_under_40_yards: 1.000 accuracy (17.7% hit rate)
+2025-10-31 20:39:40,455 - INFO - Training model 7/12: wr_over_5_catches
+2025-10-31 20:39:44,182 - INFO -    wr_over_5_catches: 1.000 accuracy (28.3% hit rate)
+2025-10-31 20:39:44,182 - INFO - Training model 8/12: wr_over_7_catches
+2025-10-31 20:39:47,926 - INFO -    wr_over_7_catches: 1.000 accuracy (26.0% hit rate)
+2025-10-31 20:39:47,928 - INFO - Training model 9/12: wr_under_4_catches
+2025-10-31 20:39:52,993 - INFO -    wr_under_4_catches: 1.000 accuracy (16.3% hit rate)
+2025-10-31 20:39:52,995 - INFO - Training model 10/12: wr_any_td
+2025-10-31 20:39:56,977 - INFO -    wr_any_td: 1.000 accuracy (34.2% hit rate)
+2025-10-31 20:39:56,977 - INFO - Training model 11/12: wr_over_8_targets
+2025-10-31 20:40:00,454 - INFO -    wr_over_8_targets: 1.000 accuracy (28.9% hit rate)
+2025-10-31 20:40:00,454 - INFO - Training model 12/12: wr_over_10_targets
+2025-10-31 20:40:03,924 - INFO -    wr_over_10_targets: 1.000 accuracy (27.3% hit rate)
+2025-10-31 20:40:03,926 - INFO - ============================================================
+2025-10-31 20:40:03,926 - INFO - NFL BETTING MODEL RESULTS:
+2025-10-31 20:40:03,926 - INFO - Average Accuracy: 1.000
+2025-10-31 20:40:03,926 - INFO - Average AUC: 1.000
+2025-10-31 20:40:03,926 - INFO - Models trained: 12
+2025-10-31 20:40:03,926 - INFO - SUCCESS: Achieved 80%+ accuracy target!
+2025-10-31 20:40:03,926 - INFO - ============================================================
+2025-10-31 20:40:03,926 - INFO - NFL STATS BETTING TRAINING COMPLETED!
+2025-10-31 20:40:03,926 - INFO - Total time: 0:00:49.371719
+2025-10-31 20:40:03,926 - INFO - Total samples: 30365
+2025-10-31 20:40:03,926 - INFO - Betting targets: 12
+2025-10-31 20:40:03,926 - INFO - Features: 132
+2025-10-31 20:40:03,926 - INFO - Real NFL betting scenarios:
+2025-10-31 20:40:03,927 - INFO -   - rb_under_40_yards
+2025-10-31 20:40:03,927 - INFO -   - rb_no_td
+2025-10-31 20:40:03,927 - INFO -   - wr_over_50_yards
+2025-10-31 20:40:03,927 - INFO -   - wr_over_75_yards
+2025-10-31 20:40:03,927 - INFO -   - wr_over_100_yards
