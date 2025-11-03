@@ -662,7 +662,7 @@ class LiveNFLScores {
         this.lastUpdate = new Date();
         
         // Cache games for fast loading
-        this.cacheGames(this.games);
+        cacheGames(this.games);
         
         console.log(`✅ Live scores updated for Week ${this.currentWeek}`);
         this.updateLiveScoresDisplay();
@@ -1325,7 +1325,7 @@ class LiveNFLScores {
             if (hasLiveOrUpcoming) {
                 console.log('🔄 Refreshing live/upcoming games...');
                 // Quick initialization - get games immediately from cache if available
-        const cachedGames = this.getCachedGames();
+        const cachedGames = getCachedGames();
         if (cachedGames && cachedGames.length > 0) {
             console.log('🚀 FAST LOAD: Using cached games for immediate display');
             this.games = cachedGames;
@@ -1391,9 +1391,10 @@ function selectGameTeams(awayTeam, homeTeam) {
             }
         }
     }
-    
-    // Add caching methods for fast loading
-    getCachedGames() {
+}
+
+// Add caching methods for fast loading
+function getCachedGames() {
         try {
             const cached = localStorage.getItem('nfl_games_cache');
             if (cached) {
@@ -1409,20 +1410,18 @@ function selectGameTeams(awayTeam, homeTeam) {
         }
         return null;
     }
-    
-    cacheGames(games) {
-        try {
-            const cacheData = {
-                games: games,
-                timestamp: Date.now()
-            };
-            localStorage.setItem('nfl_games_cache', JSON.stringify(cacheData));
-            console.log('💾 Games cached for fast loading');
-        } catch (e) {
-            console.log('⚠️ Cache write error:', e);
-        }
-    }
 
+function cacheGames(games) {
+    try {
+        const cacheData = {
+            games: games,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('nfl_games_cache', JSON.stringify(cacheData));
+        console.log('💾 Games cached for fast loading');
+    } catch (e) {
+        console.log('⚠️ Cache write error:', e);
+    }
 }
 
 // Initialize when DOM is ready
