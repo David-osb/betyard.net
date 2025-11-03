@@ -679,6 +679,15 @@ class NFLMLModel:
 logger.info("Initializing NFL ML Model...")
 ml_model = NFLMLModel()
 
+# Initialize ESPN Website Data Service
+try:
+    from espn_website_data_service import ESPNWebsiteDataService
+    espn_data_service = ESPNWebsiteDataService()
+    logger.info("✅ ESPN Website Data Service initialized")
+except ImportError:
+    espn_data_service = None
+    logger.warning("⚠️ ESPN Website Data Service not available")
+
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -690,8 +699,9 @@ def health_check():
             'WR': 'WR' in ml_model.models,
             'TE': 'TE' in ml_model.models
         },
+        'espn_service': espn_data_service is not None,
         'timestamp': datetime.now().isoformat(),
-        'version': 'v2024-10-20-multi-position'
+        'version': 'v2024-11-02-espn-integration'
     })
 
 @app.route('/debug/config', methods=['GET'])
@@ -1017,6 +1027,210 @@ def nfl_games_proxy():
         
     except Exception as e:
         logger.error(f"Games proxy error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+# =============================================================================
+# ESPN WEBSITE DATA ENDPOINTS - TANK01 REPLACEMENT
+# =============================================================================
+
+@app.route('/api/news/latest', methods=['GET'])
+def get_latest_news():
+    """Get latest NFL news from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        limit = int(request.args.get('limit', 10))
+        news = espn_data_service.get_latest_news(limit)
+        
+        return jsonify({
+            'success': True,
+            'news': news,
+            'count': len(news),
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting news: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/teams/matchups', methods=['GET'])
+def get_team_matchups():
+    """Get current week team matchups from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        week = request.args.get('week')
+        if week:
+            week = int(week)
+        
+        matchups = espn_data_service.get_team_matchups(week)
+        
+        return jsonify({
+            'success': True,
+            'matchups': matchups,
+            'count': len(matchups),
+            'week': week,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting matchups: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/players/search', methods=['GET'])
+def search_players():
+    """Search for players by name using ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        query = request.args.get('q', '')
+        limit = int(request.args.get('limit', 10))
+        
+        if not query:
+            return jsonify({'error': 'Missing search query parameter "q"'}), 400
+        
+        players = espn_data_service.search_players(query, limit)
+        
+        return jsonify({
+            'success': True,
+            'players': players,
+            'count': len(players),
+            'query': query,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error searching players: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/teams/info/<team_id>', methods=['GET'])
+def get_team_info(team_id):
+    """Get detailed team information from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        team_info = espn_data_service.get_team_info(team_id)
+        
+        if not team_info:
+            return jsonify({'error': f'Team {team_id} not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'team': team_info,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting team info: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/injuries/current', methods=['GET'])
+def get_current_injuries():
+    """Get current injury reports from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        team_id = request.args.get('team_id')
+        injuries = espn_data_service.get_current_injuries(team_id)
+        
+        return jsonify({
+            'success': True,
+            'injuries': injuries,
+            'count': len(injuries),
+            'team_id': team_id,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting injuries: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/schedule/week', methods=['GET'])
+def get_weekly_schedule():
+    """Get weekly schedule from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        week = request.args.get('week')
+        if week:
+            week = int(week)
+        
+        schedule = espn_data_service.get_weekly_schedule(week)
+        
+        return jsonify({
+            'success': True,
+            'schedule': schedule,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting schedule: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/standings/current', methods=['GET'])
+def get_current_standings():
+    """Get current NFL standings from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        standings = espn_data_service.get_current_standings()
+        
+        return jsonify({
+            'success': True,
+            'standings': standings,
+            'count': len(standings),
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting standings: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/players/trending', methods=['GET'])
+def get_trending_players():
+    """Get trending/popular players from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        limit = int(request.args.get('limit', 10))
+        trending = espn_data_service.get_trending_players(limit)
+        
+        return jsonify({
+            'success': True,
+            'players': trending,
+            'count': len(trending),
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting trending players: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# Tank01 Compatibility Endpoints
+@app.route('/api/tank01/team-stats/<team_id>', methods=['GET'])
+def get_tank01_team_stats(team_id):
+    """Tank01 compatibility - team stats using ESPN data"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        team_stats = espn_data_service.get_tank01_team_stats(team_id)
+        return jsonify(team_stats)
+    except Exception as e:
+        logger.error(f"Error getting Tank01 team stats: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/tank01/player-game-logs/<player_id>', methods=['GET'])
+def get_tank01_player_logs(player_id):
+    """Tank01 compatibility - player game logs using ESPN data"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        game_logs = espn_data_service.get_tank01_player_game_logs(player_id)
+        return jsonify(game_logs)
+    except Exception as e:
+        logger.error(f"Error getting Tank01 player logs: {e}")
         return jsonify({'error': str(e)}), 500
 
 # =============================================================================
