@@ -64,6 +64,7 @@ else:
             response.headers['Access-Control-Allow-Origin'] = '*'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,X-Requested-With'
             response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS,HEAD'
+            response.headers['Access-Control-Allow-Credentials'] = 'false'
             return response
 
 # Simple in-memory cache for API responses
