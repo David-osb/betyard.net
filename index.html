@@ -5149,10 +5149,47 @@
         // Initialize the ML service immediately
         window.BetYardML = new BetYardMLService();
         console.log('🚀 BetYard ML Service initialized');
+        
+        // Weekly Schedule Management Functions
+        function refreshWeeklySchedule() {
+            console.log('🔄 Manual schedule refresh requested');
+            if (window.weeklyScheduleManager) {
+                window.weeklyScheduleManager.forceRefresh();
+                document.getElementById('refresh-schedule-btn').textContent = '🔄 Refreshing...';
+                document.getElementById('refresh-schedule-btn').disabled = true;
+                
+                setTimeout(() => {
+                    document.getElementById('refresh-schedule-btn').textContent = '🔄 Refresh Games';
+                    document.getElementById('refresh-schedule-btn').disabled = false;
+                }, 3000);
+            } else {
+                console.error('Weekly Schedule Manager not available');
+            }
+        }
+        
+        // Update week display when schedule manager is ready
+        window.addEventListener('weeklyScheduleUpdated', (event) => {
+            const weekInfo = event.detail;
+            const weekDisplay = document.getElementById('current-week-display');
+            const lastUpdate = document.getElementById('last-update-time');
+            
+            if (weekDisplay) {
+                weekDisplay.textContent = `${weekInfo.season} Season - Week ${weekInfo.week} (${weekInfo.games?.length || 0} games)`;
+            }
+            
+            if (lastUpdate) {
+                const now = new Date();
+                lastUpdate.textContent = `Updated: ${now.toLocaleTimeString()}`;
+            }
+        });
+        
+        // Make functions globally available
+        window.refreshWeeklySchedule = refreshWeeklySchedule;
     </script>
     
     <!-- NFL Schedule API removed - using ESPN directly -->
-    <script src="assets/js/game-centric-ui.js?v=2025-11-03-ML-ERROR-DETAILS&t=1730664500000" async></script>
+    <script src="assets/js/weekly-schedule-manager.js?v=2025-11-04-WEEKLY-UPDATES&t=1730764800000" async></script>
+    <script src="assets/js/game-centric-ui.js?v=2025-11-04-WEEKLY-UPDATES&t=1730764800000" async></script>
     <script src="assets/js/enhanced-betting-insights.js?v=2025-11-03-PLAYER-ID-FIX&t=1730661500000" async></script>
     
     <!-- SECONDARY: Static Data & Configuration - Load After -->
@@ -7138,5 +7175,93 @@
         });
 
     </script>
+    <!-- Weekly Schedule Admin Panel (Development Only) -->
+    <div id="weekly-schedule-admin" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.9); color: white; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; z-index: 10000; max-width: 300px;">
+        <div style="font-weight: bold; margin-bottom: 10px; color: #00ff00;">📅 Weekly Schedule Status</div>
+        
+        <div style="margin-bottom: 8px;">
+            <strong>Current Week:</strong> <span id="admin-current-week">Loading...</span>
+        </div>
+        
+        <div style="margin-bottom: 8px;">
+            <strong>Season:</strong> <span id="admin-current-season">Loading...</span>
+        </div>
+        
+        <div style="margin-bottom: 8px;">
+            <strong>Games Loaded:</strong> <span id="admin-games-count">0</span>
+        </div>
+        
+        <div style="margin-bottom: 8px;">
+            <strong>Last Update:</strong> <span id="admin-last-update">Never</span>
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+            <strong>Next Tuesday Check:</strong> <span id="admin-next-tuesday">Calculating...</span>
+        </div>
+        
+        <div style="border-top: 1px solid #444; padding-top: 10px;">
+            <button onclick="refreshWeeklySchedule()" style="background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                🔄 Force Refresh
+            </button>
+            
+            <button onclick="toggleScheduleAdmin()" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                ❌ Close
+            </button>
+        </div>
+        
+        <div style="margin-top: 10px; font-size: 10px; color: #888;">
+            Tuesday 9 AM ET auto-update active
+        </div>
+    </div>
+    
+    <script>
+        // Admin panel functions
+        function toggleScheduleAdmin() {
+            const panel = document.getElementById('weekly-schedule-admin');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function updateAdminPanel() {
+            if (window.weeklyScheduleManager) {
+                const weekInfo = window.weeklyScheduleManager.getCurrentWeekInfo();
+                const games = window.weeklyScheduleManager.getCurrentWeekGames();
+                
+                document.getElementById('admin-current-week').textContent = weekInfo.week || 'Unknown';
+                document.getElementById('admin-current-season').textContent = weekInfo.season || 'Unknown';
+                document.getElementById('admin-games-count').textContent = games.length || 0;
+                
+                const lastUpdate = localStorage.getItem('lastScheduleUpdate');
+                document.getElementById('admin-last-update').textContent = lastUpdate || 'Never';
+                
+                // Calculate next Tuesday
+                const now = new Date();
+                const nextTuesday = new Date(now);
+                const daysTillTuesday = (2 - now.getDay() + 7) % 7 || 7;
+                nextTuesday.setDate(now.getDate() + daysTillTuesday);
+                nextTuesday.setHours(9, 0, 0, 0); // 9 AM
+                
+                document.getElementById('admin-next-tuesday').textContent = nextTuesday.toLocaleDateString() + ' 9 AM ET';
+            }
+        }
+        
+        // Update admin panel every 5 seconds
+        setInterval(updateAdminPanel, 5000);
+        
+        // Initial update after components load
+        setTimeout(updateAdminPanel, 3000);
+        
+        // Hide admin panel in production (check if localhost)
+        if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+            document.getElementById('weekly-schedule-admin').style.display = 'none';
+        }
+        
+        // Keyboard shortcut to toggle admin panel (Ctrl+Shift+W)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'W') {
+                toggleScheduleAdmin();
+            }
+        });
+    </script>
+
 </body>
 </html>

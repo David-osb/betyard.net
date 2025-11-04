@@ -1526,8 +1526,10 @@ class GameCentricUI {
         const positionData = this.predictionTypes[this.selectedPosition];
         const opponent = this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away;
         
-        // Get current week dynamically
-        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8, title: 'Week 8' };
+        // Get current week dynamically from Weekly Schedule Manager
+        const currentWeekInfo = window.weeklyScheduleManager ? 
+            window.weeklyScheduleManager.getCurrentWeekInfo() : 
+            (window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 10, title: 'Week 10' });
         
         // Show loading state
         container.innerHTML = `
@@ -2165,10 +2167,49 @@ class GameCentricUI {
     }
     
     setupEventListeners() {
-        // Connect directly to ESPN Data Service for current week games
-        this.connectToESPNService();
+        // Listen for weekly schedule updates
+        window.addEventListener('weeklyScheduleUpdated', (event) => {
+            console.log('📅 Weekly schedule updated:', event.detail);
+            this.liveGames = event.detail.games;
+            this.loadGames(); // Refresh the games display
+        });
         
-        console.log('� Event listeners set up for direct ESPN integration');
+        // Connect to Weekly Schedule Manager for current week games
+        this.connectToWeeklySchedule();
+        
+        console.log('🔧 Event listeners set up for weekly schedule integration');
+    }
+    
+    async connectToWeeklySchedule() {
+        try {
+            // Wait for Weekly Schedule Manager to be available
+            if (!window.weeklyScheduleManager) {
+                console.log('⏳ Waiting for Weekly Schedule Manager...');
+                setTimeout(() => this.connectToWeeklySchedule(), 1000);
+                return;
+            }
+            
+            console.log('🗓️ Connecting to Weekly Schedule Manager...');
+            
+            // Get current week games
+            const games = window.weeklyScheduleManager.getCurrentWeekGames();
+            const weekInfo = window.weeklyScheduleManager.getCurrentWeekInfo();
+            
+            console.log(`✅ Loaded ${games.length} games for ${weekInfo.title}:`, games);
+            
+            // Store games for the UI
+            this.liveGames = games;
+            this.currentWeekInfo = weekInfo;
+            
+            // Update the games display
+            this.loadGames();
+            
+        } catch (error) {
+            console.error('❌ Failed to connect to Weekly Schedule Manager:', error);
+            
+            // Fallback to ESPN Data Service
+            this.connectToESPNService();
+        }
     }
     
     async connectToESPNService() {
