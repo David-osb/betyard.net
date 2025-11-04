@@ -278,12 +278,12 @@ class GameCentricUI {
                 }
                 
                 .status-live {
-                    background: #dc2626;
+                    background: #10b981;
                     color: white;
                 }
                 
                 .status-scheduled {
-                    background: #059669;
+                    background: #003da5;
                     color: white;
                 }
                 
@@ -783,27 +783,44 @@ class GameCentricUI {
         if (this.liveGames && this.liveGames.length > 0) {
             console.log('🎯 Transforming live games data:', this.liveGames);
             return this.liveGames.map(game => {
-                // Handle both object and string team formats
-                const awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
-                const homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
+                // Handle ESPN API format vs Tank01 format
+                let awayTeamObj, homeTeamObj, awayScore, homeScore, status;
                 
-                // Get scores directly from Tank01 data
-                const awayScore = game.awayScore || awayTeamObj.score || 0;
-                const homeScore = game.homeScore || homeTeamObj.score || 0;
+                if (game.away_team && game.home_team) {
+                    // ESPN API format
+                    awayTeamObj = {
+                        code: game.away_team.abbreviation,
+                        name: game.away_team.name,
+                        score: parseInt(game.away_team.score) || 0
+                    };
+                    homeTeamObj = {
+                        code: game.home_team.abbreviation,
+                        name: game.home_team.name,
+                        score: parseInt(game.home_team.score) || 0
+                    };
+                    awayScore = parseInt(game.away_team.score) || 0;
+                    homeScore = parseInt(game.home_team.score) || 0;
+                    status = game.status || 'SCHEDULED';
+                } else {
+                    // Tank01 format (fallback)
+                    awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
+                    homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
+                    awayScore = game.awayScore || awayTeamObj.score || 0;
+                    homeScore = game.homeScore || homeTeamObj.score || 0;
+                    status = game.status || 'SCHEDULED';
+                }
                 
-                // TRUST TANK01 STATUS - Already processed by live-scores.js mapGameStatus()
-                const status = game.status || 'SCHEDULED';
-                
-                console.log(`🎯 Game: ${game.away || awayTeamObj.code} (${awayScore}) @ ${game.home || homeTeamObj.code} (${homeScore}) - Status from Tank01: ${status}`);
+                console.log(`🎯 Game: ${awayTeamObj.code} (${awayScore}) @ ${homeTeamObj.code} (${homeScore}) - Status: ${status}`);
+                console.log(`📍 ESPN Raw Data: away_team=${game.away_team?.abbreviation}, home_team=${game.home_team?.abbreviation}`);
                 
                 const transformedGame = {
-                    away: awayTeamObj.code || awayTeamObj.name || game.awayTeam,
-                    home: homeTeamObj.code || homeTeamObj.name || game.homeTeam,
+                    away: awayTeamObj.code,
+                    home: homeTeamObj.code,
                     awayTeam: awayTeamObj,
                     homeTeam: homeTeamObj,
-                    status: status,  // Use Tank01 status directly
-                    time: game.gameTime || game.time,
-                    gameDate: game.gameDate || '',
+                    status: status,
+                    time: game.gameTime || game.time || game.date,
+                    gameDate: game.gameDate || game.date || '',
                     awayRecord: game.awayRecord || 'TBD',
                     homeRecord: game.homeRecord || 'TBD',
                     awayScore: awayScore,
@@ -817,8 +834,8 @@ class GameCentricUI {
             });
         }
         
-        // Fallback static data - NO REAL DATA AVAILABLE, RETURN EMPTY
-        console.log('⚠️ No live games data - returning empty array until real data arrives');
+        // Wait for live games data to arrive from prioritized ESPN endpoint
+        console.log('⚠️ No live games data yet - waiting for ESPN endpoint (loading prioritized)');
         return [];
     }
 
@@ -826,8 +843,10 @@ class GameCentricUI {
         // Store the live games data
         this.liveGames = games;
         console.log('🎯 Game-Centric UI received', games.length, 'live games');
+        console.log('📋 Game data structure (first game):', JSON.stringify(games[0], null, 2)); // Show detailed structure
         
         // Reload the games display with live data
+        this.loadGames();
         this.loadGames();
     }
     
@@ -849,18 +868,28 @@ class GameCentricUI {
         
         console.log(`🎯 Creating game card: ${awayTeamName} (${awayScore}) @ ${homeTeamName} (${homeScore}) - Status: ${game.status}`);
         
-        switch (game.status) {
+        switch (game.status.toUpperCase()) {
             case 'LIVE':
+            case 'IN PROGRESS':
                 statusBadge = `<div class="game-status-badge status-live">🔴 LIVE ${game.quarter ? '- ' + game.quarter : ''} ${game.timeRemaining || ''}</div>`;
-                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #dc2626; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #10b981; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
                 gameInfo = `<div class="game-details">Live Score</div>`;
                 break;
+            case 'HALFTIME':
+            case 'HALF TIME':
+            case 'HALF':
+                statusBadge = `<div class="game-status-badge status-live">🔴 HALFTIME</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #10b981; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                gameInfo = `<div class="game-details">Halftime Score</div>`;
+                break;
             case 'FINAL':
+            case 'COMPLETED':
                 statusBadge = `<div class="game-status-badge status-final">FINAL${game.quarter && game.quarter.includes('OT') ? ' (OT)' : ''}</div>`;
                 scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #6b7280; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
                 gameInfo = `<div class="game-details">Final Score</div>`;
                 break;
             case 'SCHEDULED':
+            case 'UPCOMING':
                 statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
                 // Use actual week and date from Tank01 game data
                 let weekDisplay = game.week ? `Week ${game.week}` : 'Upcoming Game';
@@ -878,7 +907,7 @@ class GameCentricUI {
                 gameInfo = `<div class="game-details">${game.time || game.gameTime || 'TBD'}</div>`;
                 break;
             default:
-                statusBadge = `<div class="game-status-badge status-scheduled">${game.status}</div>`;
+                statusBadge = `<div class="game-status-badge status-final">${game.status}</div>`;
                 scoreDisplay = '';
                 gameInfo = `<div class="game-details">Status: ${game.status}</div>`;
         }
@@ -1564,13 +1593,46 @@ class GameCentricUI {
         console.log('🔍 Checking ML backend availability:', {
             hasBetYardML: !!window.BetYardML,
             isAvailable: window.BetYardML?.isAvailable,
-            baseURL: window.BetYardML?.baseURL
+            baseURL: window.BetYardML?.baseURL,
+            hasInitPromise: !!window.BetYardML?.initPromise
         });
+        
+        // Wait for BetYardML to initialize if it exists
+        if (window.BetYardML) {
+            try {
+                console.log('⏳ Waiting for ML backend initialization...');
+                if (window.BetYardML.initPromise) {
+                    await window.BetYardML.initPromise;
+                    console.log('✅ ML backend initialization completed');
+                } else {
+                    // Force a health check if no init promise
+                    console.log('⚡ No init promise, forcing health check...');
+                    await window.BetYardML.checkHealth();
+                }
+                
+                console.log('🔍 Final ML backend status:', {
+                    isAvailable: window.BetYardML.isAvailable,
+                    lastHealthCheck: window.BetYardML.lastHealthCheck
+                });
+            } catch (error) {
+                console.warn('⚠️ ML backend initialization error:', error);
+            }
+        }
         
         if (window.BetYardML && window.BetYardML.isAvailable) {
             try {
                 console.log(`🧠 Fetching real ML ${position} prediction for`, playerName);
-                mlPrediction = await window.BetYardML.getPrediction(playerName, this.selectedTeam.code, null, position);
+                
+                // Get opponent team from selected game
+                const opponentTeam = this.selectedGame?.away === this.selectedTeam.code ? 
+                                   this.selectedGame?.home : this.selectedGame?.away;
+                
+                mlPrediction = await window.BetYardML.getPrediction(
+                    playerName, 
+                    this.selectedTeam.code, 
+                    opponentTeam, 
+                    position
+                );
                 console.log('✅ Got real ML prediction:', mlPrediction);
             } catch (error) {
                 console.warn('⚠️ ML prediction failed, using smart fallback:', error);
@@ -2103,8 +2165,72 @@ class GameCentricUI {
     }
     
     setupEventListeners() {
-        // Add any additional event listeners needed
-        console.log('🎮 Event listeners set up');
+        // Connect directly to ESPN Data Service for current week games
+        this.connectToESPNService();
+        
+        console.log('� Event listeners set up for direct ESPN integration');
+    }
+    
+    async connectToESPNService() {
+        try {
+            // Wait for ESPN Data Service to be available
+            if (!window.ESPNDataService) {
+                console.log('⏳ Waiting for ESPN Data Service...');
+                setTimeout(() => this.connectToESPNService(), 1000);
+                return;
+            }
+            
+            console.log('🏈 Connecting directly to ESPN for current week games...');
+            
+            // Get current week games directly from ESPN using the existing method
+            const data = await window.ESPNDataService.getWeeklySchedule();
+            console.log('✅ ESPN current week data:', data);
+            
+            // Extract games from the ESPN response structure
+            let games = [];
+            if (data && data.schedule) {
+                if (Array.isArray(data.schedule)) {
+                    games = data.schedule;
+                } else if (data.schedule.games) {
+                    games = data.schedule.games;
+                } else if (data.schedule.events) {
+                    games = data.schedule.events;
+                }
+            } else if (Array.isArray(data)) {
+                games = data;
+            }
+            
+            console.log('🎯 Extracted games:', games);
+            
+            if (games && games.length > 0) {
+                console.log(`🎯 Found ${games.length} current week games from ESPN`);
+                this.updateWithLiveGames(games);
+            } else {
+                console.log('⚠️ No games found in ESPN response');
+                this.showNoGamesMessage();
+            }
+        } catch (error) {
+            console.error('❌ Error connecting to ESPN:', error);
+            this.showNoGamesMessage();
+        }
+    }
+    
+    showNoGamesMessage() {
+        const gamesGrid = document.getElementById('gamesGrid');
+        if (gamesGrid) {
+            gamesGrid.innerHTML = `
+                <div class="mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card mdl-shadow--2dp" style="width: 100%;">
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">🏈 No Games Available</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Unable to load current week games. Please check back later.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     }
 }
 

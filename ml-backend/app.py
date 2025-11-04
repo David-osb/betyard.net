@@ -208,20 +208,8 @@ class NFLMLModel:
     
     def __init__(self):
         self.models = {}  # Store models for each position
-        self.feature_names = {
-            'QB': ['recent_form', 'home_advantage', 'opponent_defense_rank',
-                   'temperature', 'wind_speed', 'injury_factor', 'experience',
-                   'season_avg_yards', 'season_avg_tds', 'weather_impact'],
-            'RB': ['recent_form', 'home_advantage', 'opponent_rush_defense_rank',
-                   'temperature', 'injury_factor', 'experience',
-                   'season_avg_yards', 'season_avg_tds', 'carries_per_game'],
-            'WR': ['recent_form', 'home_advantage', 'opponent_pass_defense_rank',
-                   'temperature', 'wind_speed', 'injury_factor', 'experience',
-                   'season_avg_yards', 'season_avg_receptions', 'target_share'],
-            'TE': ['recent_form', 'home_advantage', 'opponent_pass_defense_rank',
-                   'temperature', 'injury_factor', 'experience',
-                   'season_avg_yards', 'season_avg_receptions', 'blocking_snaps']
-        }
+        self.scalers = {}  # Store scalers for each position
+        self.feature_names = {}  # Will be loaded from model file or default
         self.weather_service = NFLWeatherService()
         self.injury_service = NFLInjuryService()
         
@@ -230,7 +218,38 @@ class NFLMLModel:
     
     def _initialize_models(self):
         """Initialize XGBoost models for all positions"""
+        try:
+            # Try to load the comprehensive multiposition model first
+            multiposition_path = 'modern_multiposition_models.pkl'
+            if os.path.exists(multiposition_path):
+                logger.info("Loading comprehensive multiposition models...")
+                with open(multiposition_path, 'rb') as f:
+                    multiposition_data = pickle.load(f)
+                
+                self.models = multiposition_data['models']
+                self.scalers = multiposition_data['scalers']
+                self.feature_names = multiposition_data['features']
+                logger.info(f"✅ Loaded models for positions: {list(self.models.keys())}")
+                return
+            
+        except Exception as e:
+            logger.warning(f"Could not load multiposition models: {e}")
+        
+        # Fallback to individual model files
         positions = ['QB', 'RB', 'WR', 'TE']
+        
+        # Set default feature names if not loaded from comprehensive model
+        if not self.feature_names:
+            self.feature_names = {
+                'QB': ['Age', 'experience', 'career_games', 'age_prime', 'veteran', 
+                       'prev_yards_per_game', 'prev_td_per_game', 'prev_completions_per_game'],
+                'RB': ['Age', 'experience', 'career_games', 'age_prime', 'veteran', 
+                       'prev_yards_per_game', 'prev_td_per_game', 'prev_attempts_per_game'],
+                'WR': ['Age', 'experience', 'career_games', 'age_prime', 'veteran', 
+                       'prev_yards_per_game', 'prev_td_per_game', 'prev_receptions_per_game'],
+                'TE': ['Age', 'experience', 'career_games', 'age_prime', 'veteran', 
+                       'prev_yards_per_game', 'prev_td_per_game', 'prev_receptions_per_game']
+            }
         
         for position in positions:
             model_path = f'{position.lower()}_model.pkl'
@@ -398,46 +417,45 @@ class NFLMLModel:
         injury = self.injury_service.get_qb_injury_status(qb_name, team_code)
         
         # Mock QB historical stats (in production, fetch from database)
-        qb_stats = {
-            'recent_form': np.random.normal(0.75, 0.15),
-            'season_avg_yards': np.random.normal(260, 40),
-            'season_avg_tds': np.random.normal(1.9, 0.6),
-            'experience': np.random.uniform(2, 15)
-        }
+        # These should match the features the model was trained on
+        age = np.random.uniform(22, 38)  # Age
+        experience = max(0, age - 22)    # experience (years in league)
+        career_games = experience * 16   # career_games (estimate)
+        age_prime = 1 if (25 <= age <= 30) else 0  # age_prime (boolean)
+        veteran = 1 if age >= 32 else 0  # veteran (boolean)
         
-        # Create feature vector matching real data training
-        # QB model expects: completions, attempts, passing_tds, interceptions, sacks,
-        # passing_air_yards, passing_yards_after_catch, passing_first_downs
+        # Previous season performance (would come from database in production)
+        prev_yards_per_game = np.random.normal(250, 50)  # prev_yards_per_game
+        prev_td_per_game = np.random.normal(1.5, 0.5)    # prev_td_per_game
+        prev_completions_per_game = np.random.normal(22, 5)  # prev_completions_per_game
         
-        # Estimate typical game stats based on season averages
-        est_attempts = np.clip(qb_stats['season_avg_yards'] / 7.5 + np.random.normal(0, 3), 25, 55)
-        est_completions = est_attempts * 0.65 * qb_stats['recent_form']
-        est_tds = qb_stats['season_avg_tds'] * qb_stats['recent_form']
-        est_ints = max(0, np.random.poisson(1) * (1.5 - qb_stats['recent_form']))
-        est_sacks = max(0, np.random.poisson(2))
-        est_air_yards = qb_stats['season_avg_yards'] * 0.6
-        est_yac = qb_stats['season_avg_yards'] * 0.4
-        est_first_downs = qb_stats['season_avg_yards'] / 15
-        
+        # Create feature vector matching training data
         features = np.array([[
-            est_completions,
-            est_attempts,
-            est_tds,
-            est_ints,
-            est_sacks,
-            est_air_yards,
-            est_yac,
-            est_first_downs
+            age,
+            experience,
+            career_games,
+            age_prime,
+            veteran,
+            prev_yards_per_game,
+            prev_td_per_game,
+            prev_completions_per_game
         ]])
         
-        # Make prediction using QB model
-        pred_yards = self.models['QB'].predict(features)[0]
+        # Apply the same scaling that was used during training
+        if hasattr(self, 'scalers') and 'QB' in self.scalers:
+            features_scaled = self.scalers['QB'].transform(features)
+        else:
+            # If no scaler available, use features as-is
+            features_scaled = features
         
-        # Calculate other stats based on yards
+        # Make prediction using QB model
+        pred_yards = self.models['QB'].predict(features_scaled)[0]
+        
+        # Calculate other stats based on predicted yards
         attempts = np.clip(pred_yards / 7.5 + np.random.normal(0, 3), 25, 55)
         completions = attempts * np.clip(np.random.normal(0.65, 0.05), 0.4, 0.8)
         touchdowns = max(0, pred_yards / 120 + np.random.normal(0, 0.8))
-        interceptions = max(0, np.random.poisson(1.2) * (1 - qb_stats['recent_form']))
+        interceptions = max(0, np.random.poisson(1.2) * (1 - (prev_yards_per_game / 300)))
         
         # Calculate QB rating
         comp_pct = completions / attempts * 100
@@ -474,7 +492,7 @@ class NFLMLModel:
             injury.get('injury_factor', 1.0) * 
             weather_factor * 
             wind_factor * 
-            qb_stats['recent_form'] +
+            (prev_yards_per_game / 300) +  # Use performance as form indicator
             np.random.normal(0, 3), 65, 92
         )
         

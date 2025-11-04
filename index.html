@@ -98,8 +98,10 @@
             padding: 24px 32px;
             box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
             border: 1px solid rgba(99, 102, 241, 0.1);
-            margin: 16px 8px;
+            margin: 80px 8px 24px 8px;
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         .sport-icon {
@@ -228,56 +230,7 @@
             pointer-events: none !important;
         }
 
-        /* Live Game Container Enhanced */
-        .live-scores-container {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
-            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25) !important;
-        }
 
-        .game-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
-            border: 1px solid rgba(99, 102, 241, 0.12) !important;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1) !important;
-        }
-
-        .game-card:hover {
-            background: linear-gradient(135deg, #fefeff 0%, #f0f4ff 100%) !important;
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2) !important;
-        }
-
-        /* Navigation Controls Enhanced */
-        .navigation-controls {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
-            border: 1px solid rgba(99, 102, 241, 0.12) !important;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1) !important;
-        }
-
-        .nav-btn {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
-            border: 1px solid rgba(99, 102, 241, 0.2) !important;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1) !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .prev-btn {
-            background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%) !important;
-            color: white !important;
-        }
-
-        .prev-btn:hover {
-            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
-            box-shadow: 0 4px 16px rgba(100, 116, 139, 0.3) !important;
-        }
-
-        .next-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-            color: white !important;
-        }
-
-        .next-btn:hover {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4) !important;
-        }
 
         /* Status Banners Enhanced */
         .status-banner, #qb-news-section, #betting-recommendations {
@@ -1367,118 +1320,11 @@
             color: #94a3b8 !important;
         }
 
-        /* Live Game Container Dark Theme */
-        body.dark-theme .live-scores-container {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
-            border: 1px solid rgba(71, 85, 105, 0.3) !important;
-        }
 
-        body.dark-theme .live-scores-header {
-            color: #e2e8f0 !important;
-        }
 
-        body.dark-theme .live-indicator {
-            color: #e2e8f0 !important;
-        }
 
-        body.dark-theme .live-text {
-            color: #e2e8f0 !important;
-        }
 
-        body.dark-theme .last-update {
-            color: #94a3b8 !important;
-        }
 
-        body.dark-theme #live-games-container {
-            background: transparent !important;
-        }
-
-        body.dark-theme .game-card {
-            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
-            border: 1px solid rgba(71, 85, 105, 0.3) !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .game-card:hover {
-            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
-            transform: translateY(-2px) !important;
-        }
-
-        body.dark-theme .game-status {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .status-live {
-            background: #dc2626 !important;
-            color: white !important;
-        }
-
-        body.dark-theme .status-final {
-            background: #64748b !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .status-scheduled {
-            background: #475569 !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .teams-container {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .team {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .team-name {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .team-score {
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .loading-games {
-            color: #94a3b8 !important;
-        }
-
-        /* Navigation Controls Dark Theme */
-        body.dark-theme .navigation-controls {
-            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
-            border: 1px solid rgba(71, 85, 105, 0.3) !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .nav-btn {
-            background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
-            border: 1px solid rgba(71, 85, 105, 0.3) !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .prev-btn {
-            background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
-            color: #e2e8f0 !important;
-        }
-
-        body.dark-theme .prev-btn:hover {
-            background: linear-gradient(135deg, #64748b 0%, #6b7280 100%) !important;
-        }
-
-        body.dark-theme .next-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-            color: white !important;
-        }
-
-        body.dark-theme .next-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-        }
-
-        body.dark-theme .nav-btn:disabled {
-            background: linear-gradient(135deg, #374151 0%, #475569 100%) !important;
-            color: #6b7280 !important;
-            opacity: 0.6 !important;
-        }
 
         body.dark-theme .progress-indicator {
             background: transparent !important;
@@ -1503,24 +1349,7 @@
             border-color: #047857 !important;
         }
 
-        /* Live Scores Widget Scrollbar */
-        body.dark-theme .live-games-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
 
-        body.dark-theme .live-games-scroll::-webkit-scrollbar-track {
-            background: rgba(71, 85, 105, 0.2);
-            border-radius: 2px;
-        }
-
-        body.dark-theme .live-games-scroll::-webkit-scrollbar-thumb {
-            background: rgba(71, 85, 105, 0.5);
-            border-radius: 2px;
-        }
-
-        body.dark-theme .live-games-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(71, 85, 105, 0.7);
-        }
 
         body.dark-theme .game-header {
             color: #e2e8f0 !important;
@@ -1656,6 +1485,98 @@
             color: #94a3b8 !important;
         }
 
+        /* Comprehensive Dark Theme Coverage */
+        body.dark-theme * {
+            scrollbar-color: #475569 #1e293b;
+        }
+
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, 
+        body.dark-theme h4, body.dark-theme h5, body.dark-theme h6 {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .mdl-grid {
+            background: transparent !important;
+        }
+
+        body.dark-theme .mdl-cell {
+            background: transparent !important;
+        }
+
+        body.dark-theme .loading-text {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme .success-highlight {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%) !important;
+            color: #a7f3d0 !important;
+            border-color: #059669 !important;
+        }
+
+        body.dark-theme .error-highlight {
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+            color: #fca5a5 !important;
+            border-color: #dc2626 !important;
+        }
+
+        body.dark-theme .loading-spinner {
+            border-color: #374151 !important;
+            border-top-color: #6366f1 !important;
+        }
+
+        /* Theme toggle button */
+        body.dark-theme #theme-toggle {
+            background: linear-gradient(135deg, #374151 0%, #475569 100%) !important;
+            color: #fbbf24 !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+        }
+
+        /* Ensure all text content is visible in dark mode */
+        body.dark-theme .mdl-card__title-text,
+        body.dark-theme .mdl-card__supporting-text,
+        body.dark-theme .card-text,
+        body.dark-theme .description,
+        body.dark-theme span,
+        body.dark-theme div:not([class*="icon"]) {
+            color: #e2e8f0 !important;
+        }
+
+        /* Comprehensive div dark theme styling */
+        body.dark-theme div {
+            background-color: transparent !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-theme div[style*="background-color: white"],
+        body.dark-theme div[style*="background-color: #ffffff"],
+        body.dark-theme div[style*="background-color: #f8fafc"],
+        body.dark-theme div[style*="background-color: #f1f5f9"],
+        body.dark-theme div[style*="background: white"],
+        body.dark-theme div[style*="background: #ffffff"],
+        body.dark-theme div[style*="background: #f8fafc"],
+        body.dark-theme div[style*="background: linear-gradient"][style*="#ffffff"] {
+            background: linear-gradient(135deg, #1e293b 0%, #374151 100%) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(71, 85, 105, 0.3) !important;
+        }
+
+        body.dark-theme div[style*="color: black"],
+        body.dark-theme div[style*="color: #000000"],
+        body.dark-theme div[style*="color: #333333"],
+        body.dark-theme div[style*="color: #666666"],
+        body.dark-theme div[style*="color: #1f2937"] {
+            color: #e2e8f0 !important;
+        }
+
+        /* Content containers */
+        body.dark-theme div.container,
+        body.dark-theme div.content,
+        body.dark-theme div.wrapper,
+        body.dark-theme div.section {
+            background: transparent !important;
+            color: #e2e8f0 !important;
+        }
+
         /* Better card styling */
         .mdl-card {
             border-radius: 12px !important;
@@ -1678,9 +1599,7 @@
             50% { opacity: 0.7; }
         }
 
-        .live-indicator {
-            animation: pulse 2s infinite;
-        }
+
 
         /* Spinner animation */
         @keyframes spin {
@@ -1695,8 +1614,10 @@
             padding: 24px 32px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid rgba(226, 232, 240, 0.8);
-            margin: 16px 8px;
+            margin: 80px 8px 24px 8px;
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         .sport-selector-title {
@@ -1780,7 +1701,7 @@
         @media (max-width: 768px) {
             .sport-selector-header {
                 padding: 16px;
-                margin: 12px 4px;
+                margin: 70px 4px 20px 4px;
             }
 
             .sport-icons-container {
@@ -2177,11 +2098,18 @@
         
         /* Layout content - seamless integration with status section */
         .mdl-layout__content {
-            padding: 0;
+            padding: 120px 0 0 0;
             margin: 0;
             background: transparent;
             position: relative;
             z-index: 1;
+        }
+        
+        /* Mobile responsive top padding */
+        @media (max-width: 768px) {
+            .mdl-layout__content {
+                padding: 100px 0 0 0;
+            }
         }
         
         /* Header mobile optimization */
@@ -3123,12 +3051,14 @@
         /* Sport Selector Improvements */
         .sport-selector-header {
             max-width: 1200px;
-            margin: 0 auto 32px auto;
+            margin: 80px auto 32px auto;
             padding: 24px;
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 1px solid #e5e7eb;
+            position: relative;
+            z-index: 1;
         }
         
         .sport-icons-container {
@@ -3219,7 +3149,7 @@
             
             .sport-selector-header {
                 padding: 20px;
-                margin-bottom: 24px;
+                margin: 70px auto 24px auto;
             }
         }
         
@@ -3262,7 +3192,7 @@
             
             /* Sport Selector Mobile */
             .sport-selector-header {
-                margin: 8px 0 20px 0;
+                margin: 70px 0 20px 0;
                 padding: 16px 12px;
                 border-radius: 12px;
             }
@@ -3539,7 +3469,7 @@
             }
             
             .sport-selector-header {
-                margin: 4px 0 16px 0;
+                margin: 70px 0 16px 0;
                 padding: 12px 8px;
             }
             
@@ -3837,21 +3767,7 @@
             color: var(--honda-blue);
         }
 
-        /* Live feed indicator */
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-right: 1rem;
-        }
 
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ef4444;
-            animation: pulse 2s infinite;
-        }
 
         .live-dot.connected {
             background: #22c55e;
@@ -3860,28 +3776,6 @@
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
-        }
-
-        /* Odds ticker */
-        .odds-ticker {
-            height: 100px;
-            overflow-y: auto;
-            background: rgba(0, 61, 165, 0.02);
-            border-radius: 6px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .ticker-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(0, 61, 165, 0.1);
-        }
-
-        .ticker-item:last-child {
-            border-bottom: none;
         }
 
         .ticker-game {
@@ -4767,11 +4661,6 @@
         </div>
     </div>
             </div>
-                <div class="live-odds-container">
-                    <div class="odds-ticker" id="odds-ticker">
-                        <!-- Real-time odds updates -->
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -5123,14 +5012,153 @@
         </main>
     </div>
     <!-- Core JavaScript files only - removed missing files to eliminate 404 errors -->
-    <script src="assets/js/nfl-schedule-2025-correct.js"></script>
-    <script src="assets/js/nfl-schedule-api-FIXED.js?v=BYPASS-CACHE&t=1730600000"></script>
-    <script src="assets/js/espn-data-service-FIXED.js?v=BYPASS-CACHE&t=1730600000"></script>
-    <script src="assets/js/ml-config.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000"></script>
-    <script src="assets/js/ml-integration.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000"></script>
-    <script src="assets/js/live-scores-FIXED.js?v=BYPASS-CACHE&t=1730600000"></script>
-    <script src="assets/js/game-centric-ui.js?v=2025-11-03-ESPN-ENHANCED&t=1699027200001"></script>
-    <script src="assets/js/enhanced-betting-insights.js?v=2025-11-03-ESPN-APIS&t=1699027500000"></script>
+    <!-- PRIORITY: Game Data & ESPN Scripts - Load First -->
+    <script src="assets/js/espn-data-service-FIXED.js?v=BYPASS-CACHE&t=1730600000" async></script>
+    
+    <!-- BetYard ML Backend Service - MUST Load Before Game-Centric UI -->
+    <script>
+        /* ===============================================
+         * BETYARD ML BACKEND SERVICE
+         * =============================================== */
+        
+        class BetYardMLService {
+            constructor() {
+                console.log('🚀 BetYardMLService constructor called');
+                this.baseURL = 'https://betyard-ml-backend.onrender.com';
+                this.isAvailable = false;
+                this.lastHealthCheck = null;
+                this.healthCheckInterval = 300000; // 5 minutes
+                console.log('🔧 Starting initialization...');
+                this.initPromise = this.init();
+                console.log('🔧 Init promise created:', this.initPromise);
+            }
+            
+            async init() {
+                console.log('🧠 Initializing BetYard ML Backend Service...');
+                try {
+                    const result = await this.checkHealth();
+                    console.log('🔍 Initial health check result:', result);
+                    
+                    // Periodic health checks
+                    setInterval(() => {
+                        console.log('⏰ Running periodic health check...');
+                        this.checkHealth();
+                    }, this.healthCheckInterval);
+                    
+                    console.log('✅ BetYard ML Service initialization complete, available:', this.isAvailable);
+                    return this.isAvailable;
+                } catch (error) {
+                    console.error('❌ ML Service initialization failed:', error);
+                    return false;
+                }
+            }
+            
+            async checkHealth() {
+                try {
+                    const response = await fetch(`${this.baseURL}/health`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const healthData = await response.json();
+                        this.isAvailable = true;
+                        this.lastHealthCheck = Date.now();
+                        console.log('✅ ML Backend available:', healthData);
+                        return true;
+                    } else {
+                        throw new Error(`Health check failed: ${response.status}`);
+                    }
+                } catch (error) {
+                    this.isAvailable = false;
+                    console.warn('⚠️ ML Backend unavailable:', error.message);
+                    return false;
+                }
+            }
+            
+            async getPrediction(playerName, teamCode, opponentCode = null, position = 'QB') {
+                // Wait for initialization to complete
+                await this.initPromise;
+                
+                if (!this.isAvailable) {
+                    // Try one more health check
+                    await this.checkHealth();
+                    if (!this.isAvailable) {
+                        throw new Error('ML Backend is not available');
+                    }
+                }
+                
+                try {
+                    console.log(`🧠 Fetching ${position} prediction for ${playerName} (${teamCode})`);
+                    
+                    const payload = {
+                        player_name: playerName,
+                        team_code: teamCode,
+                        opponent_code: opponentCode,
+                        position: position.toUpperCase()
+                    };
+                    
+                    const response = await fetch(`${this.baseURL}/predict`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        let errorMsg = `Prediction request failed: ${response.status} ${response.statusText}`;
+                        
+                        try {
+                            const errorData = JSON.parse(errorText);
+                            if (errorData.error) {
+                                errorMsg = `ML Backend Error: ${errorData.error}`;
+                            }
+                        } catch (e) {
+                            // Keep original error message if JSON parsing fails
+                        }
+                        
+                        throw new Error(errorMsg);
+                    }
+                    
+                    const prediction = await response.json();
+                    console.log('✅ Real ML prediction received:', prediction);
+                    
+                    // Transform to expected format
+                    return {
+                        ...prediction,
+                        confidence: prediction.prediction_likelihood || prediction.confidence || 85,
+                        metadata: {
+                            source: 'ml_backend',
+                            model_accuracy: prediction.model_accuracy,
+                            position: prediction.position
+                        }
+                    };
+                    
+                } catch (error) {
+                    console.error('❌ ML prediction error:', error);
+                    this.isAvailable = false; // Mark as unavailable on error
+                    throw error;
+                }
+            }
+        }
+        
+        // Initialize the ML service immediately
+        window.BetYardML = new BetYardMLService();
+        console.log('🚀 BetYard ML Service initialized');
+    </script>
+    
+    <!-- NFL Schedule API removed - using ESPN directly -->
+    <script src="assets/js/game-centric-ui.js?v=2025-11-03-ML-ERROR-DETAILS&t=1730664500000" async></script>
+    <script src="assets/js/enhanced-betting-insights.js?v=2025-11-03-PLAYER-ID-FIX&t=1730661500000" async></script>
+    
+    <!-- SECONDARY: Static Data & Configuration - Load After -->
+    <script src="assets/js/nfl-schedule-2025-correct.js" defer></script>
+    <script src="assets/js/ml-config.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000" defer></script>
+    <!-- ml-integration.js DISABLED - using new BetYardMLService instead -->
     <script>
         // Toggle expandable card functionality
         function toggleCard(cardId) {
@@ -5327,7 +5355,7 @@
         async function selectSport(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
             
-            // Update current sport globally so live-scores.js can detect changes
+            // Update current sport globally
             currentSport = sport;
             window.selectedSport = sport;
             
@@ -7108,6 +7136,7 @@
                 window.analytics.stopAutoRefresh();
             }
         });
+
     </script>
 </body>
 </html>

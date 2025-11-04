@@ -16,13 +16,14 @@ class EnhancedBettingInsights {
             winProbabilities: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{EVENT_ID}/competitions/{EVENT_ID}/probabilities?limit=200',
             competitionOdds: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{EVENT_ID}/competitions/{EVENT_ID}/odds',
             gamePredictor: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{EVENT_ID}/competitions/{EVENT_ID}/predictor',
-            againstTheSpread: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/types/2/teams/{TEAM_ID}/ats',
-            futures: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/futures',
+            // Updated to working endpoints from espn endpoints.txt
+            againstTheSpread: 'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byteam',
+            futures: 'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byteam',
             headToHead: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{EVENT_ID}/competitions/{EVENT_ID}/odds/{BET_PROVIDER_ID}/head-to-heads',
             oddsRecords: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/types/0/teams/{TEAM_ID}/odds-records',
             gameOddsMovement: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{EVENT_ID}/competitions/{EVENT_ID}/odds/{BET_PROVIDER_ID}/history/0/movement?limit=100',
-            qbrStats: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/types/2/weeks/{WEEK_NUM}/qbr/10000',
-            pastPerformances: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams/{TEAM_ID}/odds/{BET_PROVIDER_ID}/past-performances?limit=200'
+            qbrStats: 'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{PLAYER_ID}/stats',
+            pastPerformances: 'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{PLAYER_ID}/gamelog'
         };
         
         // Initialize enhanced insights
@@ -70,11 +71,10 @@ class EnhancedBettingInsights {
     /**
      * Fetch QBR data for current week
      */
-    async fetchQBRData(year, week) {
+    async fetchQBRData(playerId) {
         try {
             const endpoint = this.espnEndpoints.qbrStats
-                .replace('{YEAR}', year)
-                .replace('{WEEK_NUM}', week);
+                .replace('{PLAYER_ID}', playerId);
             
             const response = await fetch(endpoint);
             if (response.ok) {
@@ -93,20 +93,45 @@ class EnhancedBettingInsights {
      */
     async fetchAtsData(teamId, year) {
         try {
+            // Handle team code variations for ESPN API
+            const espnTeamId = this.normalizeTeamCode(teamId);
+            
             const endpoint = this.espnEndpoints.againstTheSpread
                 .replace('{YEAR}', year)
-                .replace('{TEAM_ID}', teamId);
+                .replace('{TEAM_ID}', espnTeamId);
             
             const response = await fetch(endpoint);
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ ESPN ATS data fetched');
                 return data;
+            } else {
+                console.log(`ℹ️ ESPN ATS data not available for team ${teamId}: ${response.status} ${response.statusText}`);
             }
         } catch (error) {
             console.log('ℹ️ ESPN ATS data not available:', error.message);
         }
         return null;
+    }
+
+    /**
+     * Normalize team codes for ESPN API compatibility
+     */
+    normalizeTeamCode(teamId) {
+        const teamCodeMap = {
+            'ARI': 'ARZ',  // Arizona Cardinals
+            'ARZ': 'ARZ',  // Ensure ARZ stays ARZ
+            'LA': 'LAR',   // Los Angeles Rams
+            'LV': 'LVR',   // Las Vegas Raiders
+            'NO': 'NOS',   // New Orleans Saints (sometimes)
+            'GB': 'GBP',   // Green Bay Packers (sometimes)
+            'NE': 'NEP',   // New England Patriots (sometimes)
+            'TB': 'TBB',   // Tampa Bay Buccaneers (sometimes)
+            'SF': 'SFO',   // San Francisco 49ers (sometimes)
+            'KC': 'KCC',   // Kansas City Chiefs (sometimes)
+        };
+        
+        return teamCodeMap[teamId] || teamId;
     }
 
     /**
@@ -131,20 +156,18 @@ class EnhancedBettingInsights {
     /**
      * Fetch past performances for team
      */
-    async fetchPastPerformances(teamId) {
+    async fetchPastPerformances(playerId) {
         try {
-            // This would need to be enhanced with bet provider ID
-            // For demo purposes, simulate the structure
-            const betProviderId = 'fanduel'; // or 'draftkings', 'caesars', etc.
             const endpoint = this.espnEndpoints.pastPerformances
-                .replace('{TEAM_ID}', teamId)
-                .replace('{BET_PROVIDER_ID}', betProviderId);
+                .replace('{PLAYER_ID}', playerId);
             
             const response = await fetch(endpoint);
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ ESPN past performances fetched');
                 return data;
+            } else {
+                console.log(`ℹ️ ESPN past performances not available for player ${playerId}: ${response.status} ${response.statusText}`);
             }
         } catch (error) {
             console.log('ℹ️ ESPN past performances not available:', error.message);
@@ -195,10 +218,10 @@ class EnhancedBettingInsights {
                 pastPerformances
             ] = await Promise.allSettled([
                 this.fetchESPNOdds(),
-                this.fetchQBRData(currentYear, currentWeek),
+                this.fetchQBRData(playerId),
                 this.fetchAtsData(teamId, currentYear),
                 this.fetchFuturesData(currentYear),
-                this.fetchPastPerformances(teamId)
+                this.fetchPastPerformances(playerId)
             ]);
 
             // Process ESPN data into betting insights
@@ -242,7 +265,7 @@ class EnhancedBettingInsights {
         const hotTrend = this.analyzeTrendsDetailed(qbrData, atsData, position, pastPerformances);
         const marketInsight = this.analyzeMarketInsightsDetailed(oddsData, futuresData, atsData, position);
         const riskAssessment = this.analyzeRiskFactorsDetailed(pastPerformances, atsData, position, qbrData);
-        const espnStatus = this.getESPNIntegrationStatusDetailed(oddsData, qbrData, atsData, futuresData, pastPerformances);
+        const espnStatus = this.getESPNIntegrationStatus(oddsData, qbrData, atsData);
         
         // Advanced ESPN analytics
         const advancedAnalytics = this.generateAdvancedAnalytics(data);
@@ -2083,6 +2106,72 @@ class EnhancedBettingInsights {
             const existingSections = container.querySelectorAll('.advanced-analytics, .odds-trends, .performance-metrics, .betting-recommendations');
             existingSections.forEach(section => section.remove());
         }
+    }
+
+    /**
+     * Initialize ESPN API connection and validate services
+     */
+    async initializeESPNConnection() {
+        try {
+            console.log('🔗 Initializing ESPN API connection...');
+            
+            // Check if ESPN data service is available
+            if (typeof window.ESPNDataService !== 'undefined') {
+                this.espnService = window.ESPNDataService;
+                console.log('✅ ESPN Data Service connected');
+            } else {
+                console.log('⚠️ ESPN Data Service not yet available, will retry');
+            }
+            
+            // Check ML backend connectivity
+            if (typeof window.BetYardMLAPI !== 'undefined') {
+                this.mlAPI = window.BetYardMLAPI;
+                console.log('✅ ML Backend API connected');
+            } else {
+                console.log('⚠️ ML Backend API not yet available');
+            }
+            
+            // Set up connection retry mechanism
+            this.setupConnectionRetry();
+            
+        } catch (error) {
+            console.error('❌ Error initializing ESPN connection:', error);
+        }
+    }
+
+    /**
+     * Set up retry mechanism for API connections
+     */
+    setupConnectionRetry() {
+        // Retry ESPN service connection every 2 seconds for up to 30 seconds
+        let retryCount = 0;
+        const maxRetries = 15;
+        
+        const retryInterval = setInterval(() => {
+            if (retryCount >= maxRetries) {
+                clearInterval(retryInterval);
+                console.log('⏰ ESPN connection retry timeout - proceeding with available services');
+                return;
+            }
+            
+            if (typeof window.ESPNDataService !== 'undefined' && !this.espnService) {
+                this.espnService = window.ESPNDataService;
+                console.log('✅ ESPN Data Service connected on retry');
+            }
+            
+            if (typeof window.BetYardMLAPI !== 'undefined' && !this.mlAPI) {
+                this.mlAPI = window.BetYardMLAPI;
+                console.log('✅ ML Backend API connected on retry');
+            }
+            
+            // Stop retrying if both services are connected
+            if (this.espnService && this.mlAPI) {
+                clearInterval(retryInterval);
+                console.log('🎯 All ESPN services connected successfully');
+            }
+            
+            retryCount++;
+        }, 2000);
     }
 
     /**

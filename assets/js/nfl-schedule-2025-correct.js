@@ -84,10 +84,10 @@ function getCurrentNFLWeek() {
         }
     }
     
-    // Default to Week 8 (current week as of Oct 25, 2025)
+    // Default to Week 9 (current week as of Nov 3, 2025)
     return {
-        week: 8,
-        title: 'Week 8 - October 2025',
+        week: 9,
+        title: 'Week 9 - November 2025',
         status: 'regular_season', 
         season: '2025'
     };

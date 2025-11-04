@@ -469,15 +469,7 @@ class NFLScheduleAPI {
                 };
                 this.cache.lastScheduleFetch = new Date();
                 
-                // Process games and fetch detailed info
-                await this.processScheduledGames(scheduleData);
-                
-                // Dispatch custom event for other systems
-                window.dispatchEvent(new CustomEvent('nflScheduleUpdated', {
-                    detail: { schedule: scheduleData, timestamp: new Date() }
-                }));
-                
-                return scheduleData;
+                return gamesData;
             }
         } catch (error) {
             console.error('❌ Error fetching NFL schedule:', error);
@@ -496,17 +488,33 @@ class NFLScheduleAPI {
         console.log('🏈 Fetching current week\'s NFL games...');
         
         // Get current NFL week dynamically (Tuesday to Monday cycle)
-        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8 };
-        const currentWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 8);
+        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 9 };
+        const currentWeek = currentWeekInfo.week || (window.getCurrentWeek ? window.getCurrentWeek() : 9);
         
         console.log(`📅 Current NFL Week: ${currentWeek} (Tuesday to Monday)`);
         
         // Fetch ONLY the current week's games (not next weeks)
         const weekGames = await this.fetchWeeklySchedule(currentWeek);
-        if (weekGames && weekGames.body && weekGames.body.length > 0) {
-            console.log(`✅ Found ${weekGames.body.length} games in Week ${currentWeek}`);
-            console.log(`📊 Games include: Finished + Upcoming from this week`);
-            return weekGames;
+        if (weekGames) {
+            // Handle both ESPN format (direct array) and Tank01 format (.body)
+            const games = Array.isArray(weekGames) ? weekGames : (weekGames.body || []);
+            if (games.length > 0) {
+                console.log(`✅ Found ${games.length} games in Week ${currentWeek}`);
+                console.log(`📊 Games include: Finished + Upcoming from this week`);
+                
+                // Store current games for other systems to access
+                this.currentGames = Array.isArray(weekGames) ? weekGames : weekGames;
+                
+                // Process games and fetch detailed info
+                await this.processScheduledGames(weekGames);
+                
+                // Dispatch custom event for other systems
+                window.dispatchEvent(new CustomEvent('nflScheduleUpdated', {
+                    detail: { schedule: weekGames, timestamp: new Date() }
+                }));
+                
+                return weekGames;
+            }
         }
         
         // Fallback: Try dates only if week-based fetch fails (FAST MODE - only 3 dates)
