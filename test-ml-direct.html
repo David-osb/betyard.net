@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Backend Test</title>
+</head>
+<body>
+    <h1>ML Backend Test</h1>
+    <button onclick="testML()">Test ML Prediction</button>
+    <div id="results"></div>
+
+    <script>
+        async function testML() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing ML prediction...</p>';
+            
+            try {
+                console.log('🧠 Testing ML prediction...');
+                
+                const payload = {
+                    player_name: "Josh Allen", 
+                    team_code: "BUF",
+                    opponent_code: "KC",
+                    position: "QB"
+                };
+                
+                console.log('📤 Sending payload:', payload);
+                
+                const response = await fetch('https://betyard-ml-backend.onrender.com/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                console.log('📥 Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const prediction = await response.json();
+                console.log('✅ Raw prediction from backend:', prediction);
+                
+                // Test the transformation logic
+                const transformed = {
+                    ...prediction.prediction,  // Flatten the nested prediction object
+                    confidence: prediction.prediction.prediction_likelihood || prediction.prediction.confidence || 85,
+                    metadata: {
+                        source: 'ml_backend',
+                        model_accuracy: prediction.prediction.model_accuracy,
+                        position: prediction.prediction.position,
+                        timestamp: prediction.metadata.timestamp
+                    }
+                };
+                
+                console.log('🔄 Transformed prediction:', transformed);
+                
+                resultsDiv.innerHTML = `
+                    <h3>✅ Success!</h3>
+                    <p><strong>Player:</strong> ${prediction.metadata.player_name}</p>
+                    <p><strong>Passing Yards:</strong> ${Math.round(transformed.passing_yards)}</p>
+                    <p><strong>Completions:</strong> ${Math.round(transformed.completions)}</p>
+                    <p><strong>Attempts:</strong> ${Math.round(transformed.attempts)}</p>
+                    <p><strong>Touchdowns:</strong> ${Math.round(transformed.touchdowns)}</p>
+                    <p><strong>Interceptions:</strong> ${Math.round(transformed.interceptions)}</p>
+                    <p><strong>QB Rating:</strong> ${Math.round(transformed.qb_rating)}</p>
+                    <p><strong>Confidence:</strong> ${Math.round(transformed.confidence)}%</p>
+                    <details>
+                        <summary>Raw Response</summary>
+                        <pre>${JSON.stringify(prediction, null, 2)}</pre>
+                    </details>
+                    <details>
+                        <summary>Transformed Data</summary>
+                        <pre>${JSON.stringify(transformed, null, 2)}</pre>
+                    </details>
+                `;
+                
+            } catch (error) {
+                console.error('❌ ML test failed:', error);
+                resultsDiv.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

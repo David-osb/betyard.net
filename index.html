@@ -5127,14 +5127,15 @@
                     const prediction = await response.json();
                     console.log('✅ Real ML prediction received:', prediction);
                     
-                    // Transform to expected format
+                    // Transform to expected format - flatten prediction object
                     return {
-                        ...prediction,
-                        confidence: prediction.prediction_likelihood || prediction.confidence || 85,
+                        ...prediction.prediction,  // Flatten the nested prediction object
+                        confidence: prediction.prediction.prediction_likelihood || prediction.prediction.confidence || 85,
                         metadata: {
                             source: 'ml_backend',
-                            model_accuracy: prediction.model_accuracy,
-                            position: prediction.position
+                            model_accuracy: prediction.prediction.model_accuracy,
+                            position: prediction.prediction.position,
+                            timestamp: prediction.metadata.timestamp
                         }
                     };
                     

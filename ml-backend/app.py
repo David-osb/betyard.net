@@ -554,8 +554,15 @@ class NFLMLModel:
             est_rec_tds
         ]])
         
+        # Scale features if scaler is available
+        if hasattr(self, 'scalers') and 'RB' in self.scalers:
+            features_scaled = self.scalers['RB'].transform(features)
+        else:
+            # If no scaler available, use features as-is
+            features_scaled = features
+        
         # Make prediction using RB model
-        pred_yards = self.models['RB'].predict(features)[0]
+        pred_yards = self.models['RB'].predict(features_scaled)[0]
         
         # Calculate derived stats
         attempts = np.clip(rb_stats['carries_per_game'] + np.random.normal(0, 3), 8, 30)
@@ -617,8 +624,15 @@ class NFLMLModel:
             est_first_downs
         ]])
         
+        # Scale features if scaler is available
+        if hasattr(self, 'scalers') and 'WR' in self.scalers:
+            features_scaled = self.scalers['WR'].transform(features)
+        else:
+            # If no scaler available, use features as-is
+            features_scaled = features
+        
         # Make prediction using WR model
-        pred_yards = self.models['WR'].predict(features)[0]
+        pred_yards = self.models['WR'].predict(features_scaled)[0]
         
         # Calculate derived stats
         targets = np.clip(wr_stats['target_share'] * 40 + np.random.normal(0, 2), 3, 15)
@@ -682,8 +696,15 @@ class NFLMLModel:
             est_first_downs
         ]])
         
+        # Scale features if scaler is available
+        if hasattr(self, 'scalers') and 'TE' in self.scalers:
+            features_scaled = self.scalers['TE'].transform(features)
+        else:
+            # If no scaler available, use features as-is
+            features_scaled = features
+        
         # Make prediction using TE model
-        pred_yards = self.models['TE'].predict(features)[0]
+        pred_yards = self.models['TE'].predict(features_scaled)[0]
         
         # Calculate derived stats
         targets = np.clip(np.random.normal(6, 2), 2, 12)
