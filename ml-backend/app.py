@@ -600,7 +600,15 @@ class NFLMLModel:
             features_scaled = features
         
         # Make prediction using RB model
-        pred_yards = self.models['RB'].predict(features_scaled)[0]
+        raw_prediction = self.models['RB'].predict(features_scaled)[0]
+        
+        # CRITICAL FIX: The model was trained on ALL RBs including backups (mean ~13.6 yards)
+        # Need to scale prediction based on usage level for realistic starter predictions
+        usage_multiplier = max(1.0, est_carries / 10.0)  # Scale based on carries per game
+        pred_yards = raw_prediction * usage_multiplier * 1.5  # Additional scaling for starters
+        
+        # Ensure realistic bounds
+        pred_yards = np.clip(pred_yards, 10, 150)  # Realistic RB yards range
         
         # Calculate derived stats
         attempts = np.clip(rb_stats['carries_per_game'] + np.random.normal(0, 3), 8, 30)
@@ -670,7 +678,14 @@ class NFLMLModel:
             features_scaled = features
         
         # Make prediction using WR model
-        pred_yards = self.models['WR'].predict(features_scaled)[0]
+        raw_prediction = self.models['WR'].predict(features_scaled)[0]
+        
+        # CRITICAL FIX: Scale prediction based on target share for realistic starter predictions
+        target_multiplier = max(1.0, wr_stats['target_share'] / 0.15)  # Scale based on target share
+        pred_yards = raw_prediction * target_multiplier * 1.8  # Additional scaling for starters
+        
+        # Ensure realistic bounds
+        pred_yards = np.clip(pred_yards, 5, 150)  # Realistic WR yards range
         
         # Calculate derived stats
         targets = np.clip(wr_stats['target_share'] * 40 + np.random.normal(0, 2), 3, 15)
@@ -742,10 +757,17 @@ class NFLMLModel:
             features_scaled = features
         
         # Make prediction using TE model
-        pred_yards = self.models['TE'].predict(features_scaled)[0]
+        raw_prediction = self.models['TE'].predict(features_scaled)[0]
         
-        # Calculate derived stats
+        # Calculate derived stats first
         targets = np.clip(np.random.normal(6, 2), 2, 12)
+        
+        # CRITICAL FIX: Scale prediction based on targets for realistic starter predictions
+        usage_multiplier = max(1.0, targets / 4.0)  # Scale based on targets per game
+        pred_yards = raw_prediction * usage_multiplier * 1.6  # Additional scaling for starters
+        
+        # Ensure realistic bounds
+        pred_yards = np.clip(pred_yards, 2, 120)  # Realistic TE yards range
         receptions = targets * np.clip(np.random.normal(0.65, 0.1), 0.4, 0.85)
         touchdowns = max(0, pred_yards / 120 + np.random.normal(0, 0.4))
         
