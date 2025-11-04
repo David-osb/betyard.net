@@ -200,7 +200,26 @@ class WeeklyScheduleManager {
             const awayTeam = competitors.find(c => c.homeAway === 'away');
             
             const gameDate = new Date(event.date);
-            const status = competition.status.type.name;
+            const espnStatus = competition.status.type.name;
+            
+            // Normalize ESPN status to our expected format
+            let status;
+            switch(espnStatus) {
+                case 'STATUS_SCHEDULED':
+                case 'STATUS_POSTPONED':
+                    status = 'SCHEDULED';
+                    break;
+                case 'STATUS_IN_PROGRESS':
+                case 'STATUS_HALFTIME':
+                    status = 'LIVE';
+                    break;
+                case 'STATUS_FINAL':
+                case 'STATUS_FINAL_OVERTIME':
+                    status = 'FINAL';
+                    break;
+                default:
+                    status = espnStatus.replace('STATUS_', '') || 'SCHEDULED';
+            }
             
             return {
                 id: event.id,
@@ -210,7 +229,8 @@ class WeeklyScheduleManager {
                 week: this.currentWeek,
                 season: this.currentSeason,
                 status: status,
-                completed: status === 'STATUS_FINAL',
+                espnStatus: espnStatus, // Keep original for debugging
+                completed: status === 'FINAL',
                 
                 // Team information
                 away: awayTeam.team.abbreviation,

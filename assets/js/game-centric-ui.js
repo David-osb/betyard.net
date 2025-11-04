@@ -890,7 +890,7 @@ class GameCentricUI {
                 break;
             case 'SCHEDULED':
             case 'UPCOMING':
-                statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
+                statusBadge = `<div class="game-status-badge status-scheduled">UPCOMING</div>`;
                 // Use actual week and date from Tank01 game data
                 let weekDisplay = game.week ? `Week ${game.week}` : 'Upcoming Game';
                 if (game.gameDate) {
