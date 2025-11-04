@@ -206,12 +206,16 @@ class NFLInjuryService:
 class NFLMLModel:
     """XGBoost models for NFL multi-position predictions"""
     
-    def __init__(self):
+    def __init__(self, espn_data_service=None, enhanced_espn_service=None):
         self.models = {}  # Store models for each position
         self.scalers = {}  # Store scalers for each position
         self.feature_names = {}  # Will be loaded from model file or default
         self.weather_service = NFLWeatherService()
         self.injury_service = NFLInjuryService()
+        
+        # Store ESPN services for real data access
+        self.espn_data_service = espn_data_service
+        self.enhanced_espn_service = enhanced_espn_service
         
         # Initialize or load models for all positions
         self._initialize_models()
@@ -515,33 +519,67 @@ class NFLMLModel:
     def predict_rb_performance(self, rb_name: str, team_code: str, 
                              opponent_code: str = None, 
                              date: str = None) -> PlayerPrediction:
-        """Predict RB performance using real ML model"""
+        """Predict RB performance using real ML model with ESPN data"""
         
         # Get real-time data
         weather = self.weather_service.get_game_weather(team_code, date)
-        injury = self.injury_service.get_qb_injury_status(rb_name, team_code)  # Reuse injury service
+        injury = self.injury_service.get_qb_injury_status(rb_name, team_code)
         
-        # Mock RB historical stats
-        rb_stats = {
-            'recent_form': np.random.normal(0.75, 0.15),
-            'season_avg_yards': np.random.normal(70, 25),
-            'season_avg_tds': np.random.normal(0.6, 0.3),
-            'experience': np.random.uniform(1, 12),
-            'carries_per_game': np.random.normal(15, 5)
-        }
+        # Try to get real ESPN player stats
+        try:
+            # First, try to find the player ID from ESPN data service
+            player_data = None
+            if hasattr(self, 'espn_data_service') and self.espn_data_service:
+                # Look for player in ESPN data
+                player_data = self.espn_data_service.find_player_by_name(rb_name, team_code)
+            
+            if player_data and 'id' in player_data:
+                # Get real player stats from enhanced ESPN service
+                if hasattr(self, 'enhanced_espn_service') and self.enhanced_espn_service:
+                    espn_stats = self.enhanced_espn_service.get_player_stats(player_data['id'])
+                    season_stats = espn_stats.get('season_stats', {})
+                    
+                    # Extract real RB stats
+                    rb_stats = {
+                        'recent_form': 1.0,  # Default to full form
+                        'season_avg_yards': season_stats.get('rushing_yards_per_game', 65),
+                        'season_avg_tds': season_stats.get('rushing_touchdowns', 0.5) / 17,  # Per game
+                        'experience': season_stats.get('years_pro', 3),
+                        'carries_per_game': season_stats.get('rushing_attempts_per_game', 15),
+                        'receiving_yards': season_stats.get('receiving_yards_per_game', 15),
+                        'receptions_per_game': season_stats.get('receptions_per_game', 2.5)
+                    }
+                    logger.info(f"✅ Using real ESPN stats for {rb_name}: {rb_stats}")
+                else:
+                    raise Exception("Enhanced ESPN service not available")
+            else:
+                raise Exception("Player not found in ESPN data")
+                
+        except Exception as e:
+            logger.warning(f"⚠️ Could not get real stats for {rb_name}: {e}. Using realistic defaults.")
+            # Fall back to realistic default values based on typical NFL RB performance
+            rb_stats = {
+                'recent_form': 0.85,  # Assume good form
+                'season_avg_yards': 65,  # Typical RB yards per game
+                'season_avg_tds': 0.5,  # About 8-9 TDs per season
+                'experience': 4,  # Average NFL experience
+                'carries_per_game': 16,  # Typical RB carries
+                'receiving_yards': 18,  # RB receiving yards per game
+                'receptions_per_game': 2.8  # RB receptions per game
+            }
         
-        # Create feature vector matching real data training
+        # Create feature vector using real stats
         # RB model expects: carries, rushing_tds, rushing_fumbles, rushing_first_downs,
         # receptions, targets, receiving_yards, receiving_tds
         
         est_carries = rb_stats['carries_per_game'] * rb_stats['recent_form']
         est_rush_tds = rb_stats['season_avg_tds'] * rb_stats['recent_form']
-        est_fumbles = max(0, np.random.poisson(0.1))
-        est_first_downs = rb_stats['season_avg_yards'] / 10
-        est_receptions = np.clip(np.random.normal(3, 2), 0, 10)
-        est_targets = est_receptions * 1.5
-        est_rec_yards = est_receptions * np.random.normal(8, 3)
-        est_rec_tds = max(0, np.random.poisson(0.2))
+        est_fumbles = 0.05  # Low fumble rate
+        est_first_downs = rb_stats['season_avg_yards'] / 10  # ~1 first down per 10 yards
+        est_receptions = rb_stats['receptions_per_game'] * rb_stats['recent_form'] 
+        est_targets = est_receptions * 1.25  # Target rate
+        est_rec_yards = rb_stats['receiving_yards'] * rb_stats['recent_form']
+        est_rec_tds = 0.15  # Low receiving TD rate for RBs
         
         features = np.array([[
             est_carries,
@@ -729,9 +767,8 @@ class NFLMLModel:
         )
 
 
-# Initialize ML model
-logger.info("Initializing NFL ML Model...")
-ml_model = NFLMLModel()
+# Initialize ESPN services first
+logger.info("Initializing ESPN services...")
 
 # Initialize ESPN Website Data Service
 try:
@@ -741,6 +778,25 @@ try:
 except ImportError:
     espn_data_service = None
     logger.warning("⚠️ ESPN Website Data Service not available")
+
+# Initialize Enhanced ESPN Service
+try:
+    from enhanced_espn_service import EnhancedESPNService
+    enhanced_espn_service = EnhancedESPNService()
+    logger.info("✅ Enhanced ESPN service initialized")
+    ENHANCED_ESPN_AVAILABLE = True
+except ImportError:
+    enhanced_espn_service = None
+    logger.warning("⚠️ Enhanced ESPN service not available")
+    ENHANCED_ESPN_AVAILABLE = False
+except Exception as e:
+    enhanced_espn_service = None
+    logger.error(f"❌ Enhanced ESPN service failed: {e}")
+    ENHANCED_ESPN_AVAILABLE = False
+
+# Initialize ML model with ESPN services
+logger.info("Initializing NFL ML Model...")
+ml_model = NFLMLModel(espn_data_service=espn_data_service, enhanced_espn_service=enhanced_espn_service)
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -1857,20 +1913,7 @@ def find_arbitrage_opportunities(sport):
             'error': str(e)
         }), 500
 
-# Initialize Enhanced ESPN Service
-try:
-    from enhanced_espn_service import EnhancedESPNService
-    enhanced_espn_service = EnhancedESPNService()
-    logger.info("✅ Enhanced ESPN service initialized")
-    ENHANCED_ESPN_AVAILABLE = True
-except ImportError as e:
-    logger.warning(f"⚠️ Enhanced ESPN service not available: {e}")
-    enhanced_espn_service = None
-    ENHANCED_ESPN_AVAILABLE = False
-except Exception as e:
-    logger.error(f"❌ Error initializing Enhanced ESPN service: {e}")
-    enhanced_espn_service = None
-    ENHANCED_ESPN_AVAILABLE = False
+# Enhanced ESPN service already initialized above with ml_model
 
 # =============================================================================
 # ENHANCED ESPN BETTING INSIGHTS ENDPOINTS
