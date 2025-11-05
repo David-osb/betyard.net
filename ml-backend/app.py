@@ -982,7 +982,9 @@ def predict_player():
         
         if prediction.receiving_yards is not None:
             response_prediction['receiving_yards'] = float(prediction.receiving_yards)
+        if prediction.receptions is not None:
             response_prediction['receptions'] = float(prediction.receptions)
+        if prediction.targets is not None:
             response_prediction['targets'] = float(prediction.targets)
         
         if prediction.touchdowns is not None:
