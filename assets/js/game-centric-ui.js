@@ -1318,10 +1318,18 @@ class GameCentricUI {
         // For QB, prioritize by experience and known starters
         if (position.toUpperCase() === 'QB') {
             return players.sort((a, b) => {
-                // Known starters for Seattle: Sam Darnold is likely starter
                 const aName = (a.longName || '').toLowerCase();
                 const bName = (b.longName || '').toLowerCase();
                 
+                // Browns: Dillon Gabriel is the starting QB
+                if (teamCode === 'CLE') {
+                    if (aName.includes('dillon gabriel')) return -1;
+                    if (bName.includes('dillon gabriel')) return 1;
+                    if (aName.includes('deshaun watson')) return 1; // Backup
+                    if (bName.includes('deshaun watson')) return -1; // Backup
+                }
+                
+                // Known starters for Seattle: Sam Darnold is likely starter
                 if (aName.includes('sam darnold')) return -1;
                 if (bName.includes('sam darnold')) return 1;
                 if (aName.includes('drew lock')) return -1;
