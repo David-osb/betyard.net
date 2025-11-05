@@ -1145,6 +1145,85 @@ def nfl_roster_proxy():
         logger.error(f"Roster proxy error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/espn/depth-chart/<team_code>', methods=['GET'])
+@cache_response(duration=1800)  # Cache depth charts for 30 minutes
+def espn_depth_chart(team_code):
+    """
+    ESPN-powered depth chart with starter/backup status
+    Usage: /api/espn/depth-chart/CLE
+    Returns accurate depth chart from ESPN roster API
+    """
+    try:
+        if not enhanced_espn_service:
+            return jsonify({'error': 'Enhanced ESPN service not available'}), 503
+        
+        # Convert team code to ESPN team ID if needed
+        team_mapping = {
+            'ARI': '22', 'ATL': '1', 'BAL': '33', 'BUF': '2', 'CAR': '29', 'CHI': '3',
+            'CIN': '4', 'CLE': '5', 'DAL': '6', 'DEN': '7', 'DET': '8', 'GB': '9',
+            'HOU': '34', 'IND': '11', 'JAX': '30', 'KC': '12', 'LV': '13', 'LAC': '24',
+            'LAR': '14', 'MIA': '15', 'MIN': '16', 'NE': '17', 'NO': '18', 'NYG': '19',
+            'NYJ': '20', 'PHI': '21', 'PIT': '23', 'SF': '25', 'SEA': '26', 'TB': '27',
+            'TEN': '10', 'WAS': '28'
+        }
+        
+        team_id = team_mapping.get(team_code.upper())
+        if not team_id:
+            return jsonify({'error': f'Invalid team code: {team_code}'}), 400
+        
+        logger.info(f"🏈 Fetching ESPN depth chart for {team_code} (ID: {team_id})")
+        
+        # Get roster with depth information from ESPN
+        roster_data = enhanced_espn_service.get_roster_with_depth(team_id)
+        
+        # Process depth chart with proper starter/backup assignments
+        depth_chart = {}
+        for position, players in roster_data.items():
+            depth_chart[position] = []
+            
+            for i, player in enumerate(players):
+                # Determine starter status based on ESPN depth rank
+                is_starter = player.get('depth_rank', 999) == 1
+                
+                # For QB, only first player is starter
+                if position == 'QB':
+                    is_starter = i == 0
+                # For RB, first 2 can be starters
+                elif position == 'RB':
+                    is_starter = i < 2
+                # For WR, first 3 can be starters
+                elif position == 'WR':
+                    is_starter = i < 3
+                # For TE, first 2 can be starters
+                elif position == 'TE':
+                    is_starter = i < 2
+                
+                depth_chart[position].append({
+                    'id': player.get('id'),
+                    'name': player.get('name'),
+                    'jersey': player.get('jersey'),
+                    'position': position,
+                    'depth_rank': player.get('depth_rank', i + 1),
+                    'is_starter': is_starter,
+                    'status': 'STARTER' if is_starter else 'BACKUP',
+                    'experience': player.get('experience', 0),
+                    'age': player.get('age', 0),
+                    'espn_data': True
+                })
+        
+        return jsonify({
+            'success': True,
+            'team_code': team_code.upper(),
+            'team_id': team_id,
+            'depth_chart': depth_chart,
+            'data_source': 'ESPN Roster API',
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"ESPN depth chart error for {team_code}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/proxy/nfl/games', methods=['GET'])
 def nfl_games_proxy():
     """

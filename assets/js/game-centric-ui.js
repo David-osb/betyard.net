@@ -1153,14 +1153,14 @@ class GameCentricUI {
 
     async fetchFromESPNRoster(teamCode, position) {
         try {
-            console.log(`🏈 Fetching roster data for ${teamCode} from ESPN backend...`);
+            console.log(`🏈 Fetching ESPN depth chart for ${teamCode}...`);
             
             const baseURL = 'https://betyard-ml-backend.onrender.com';
             
-            // Use the working roster endpoint that was confirmed in terminal tests
-            const url = `${baseURL}/api/proxy/nfl/roster?teamAbv=${teamCode}&getStats=true`;
+            // Use the new ESPN depth chart endpoint
+            const url = `${baseURL}/api/espn/depth-chart/${teamCode}`;
             
-            console.log(`🌐 Fetching from ESPN Roster API: ${url}`);
+            console.log(`🌐 Fetching from ESPN Depth Chart API: ${url}`);
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -1172,32 +1172,59 @@ class GameCentricUI {
             });
             
             if (!response.ok) {
-                throw new Error(`ESPN roster API failed: ${response.status} ${response.statusText}`);
+                throw new Error(`ESPN depth chart API failed: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log(`📋 ESPN Roster response for ${teamCode}:`, data);
+            console.log(`📋 ESPN Depth Chart response for ${teamCode}:`, data);
             
-            // Handle the actual data structure: data.body.roster (confirmed from terminal test)
-            if (data && data.data && data.data.body && data.data.body.roster && Array.isArray(data.data.body.roster)) {
-                console.log(`✅ Found roster under data.data.body.roster with ${data.data.body.roster.length} players`);
-                return this.processESPNRosterData(data.data.body.roster, teamCode, position);
-            } else if (data && data.body && data.body.roster && Array.isArray(data.body.roster)) {
-                console.log(`✅ Found roster under data.body.roster with ${data.body.roster.length} players`);
-                return this.processESPNRosterData(data.body.roster, teamCode, position);
-            } else if (data && data.roster && Array.isArray(data.roster)) {
-                console.log(`✅ Found roster under data.roster with ${data.roster.length} players`);
-                return this.processESPNRosterData(data.roster, teamCode, position);
-            } else if (data && Array.isArray(data)) {
-                console.log(`✅ Found roster as array with ${data.length} players`);
-                return this.processESPNRosterData(data, teamCode, position);
+            // Handle the ESPN depth chart structure
+            if (data && data.success && data.depth_chart) {
+                console.log(`✅ Found ESPN depth chart with positions:`, Object.keys(data.depth_chart));
+                return this.processESPNDepthChart(data.depth_chart, teamCode, position);
             }
             
-            console.warn(`⚠️ Unexpected data structure from ESPN roster API:`, data);
+            console.warn(`⚠️ Unexpected data structure from ESPN depth chart API:`, data);
             return [];
         } catch (error) {
-            console.error(`❌ ESPN Roster API error for ${teamCode}:`, error);
+            console.error(`❌ ESPN Depth Chart API error for ${teamCode}:`, error);
             throw error;
+        }
+    }
+
+    processESPNDepthChart(depthChart, teamCode, position) {
+        try {
+            console.log(`🔍 Processing ESPN depth chart for ${teamCode} ${position}`);
+            
+            // Get players for the requested position
+            const positionPlayers = depthChart[position.toUpperCase()] || depthChart[position] || [];
+            
+            if (!positionPlayers || positionPlayers.length === 0) {
+                console.warn(`⚠️ No ${position} players found in ESPN depth chart for ${teamCode}`);
+                return [];
+            }
+            
+            console.log(`🎯 Found ${positionPlayers.length} ${position} players with ESPN depth data`);
+            
+            // Process players with ESPN-determined starter/backup status
+            return positionPlayers
+                .slice(0, 4) // Limit to 4 players
+                .map((player, index) => ({
+                    id: player.id || `${teamCode}_${position}_${index}`,
+                    name: player.name || 'Unknown Player',
+                    number: player.jersey || '0',
+                    position: position,
+                    isStarter: player.is_starter || false, // Use ESPN-determined starter status
+                    realData: true,
+                    espnDepthChart: true,
+                    depthRank: player.depth_rank || index + 1,
+                    status: player.status || (player.is_starter ? 'STARTER' : 'BACKUP'),
+                    experience: player.experience || 0,
+                    age: player.age || 0
+                }));
+        } catch (error) {
+            console.error(`❌ Error processing ESPN depth chart:`, error);
+            return [];
         }
     }
 
@@ -1299,7 +1326,12 @@ class GameCentricUI {
             });
     }
 
-    // Determine number of starters for each position
+    // ========================================
+    // DEPRECATED: Old hardcoded depth logic
+    // Now using ESPN depth chart API instead
+    // ========================================
+    
+    // Determine number of starters for each position (LEGACY - for fallback only)
     getStarterCount(position) {
         const starterCounts = {
             'QB': 1,  // Only 1 starting QB
@@ -1313,7 +1345,7 @@ class GameCentricUI {
         return starterCounts[position.toUpperCase()] || 2;
     }
 
-    // Sort players by depth chart priority
+    // Sort players by depth chart priority (LEGACY - ESPN depth chart preferred)
     sortPlayersByDepth(players, position, teamCode) {
         // For QB, prioritize by experience and known starters
         if (position.toUpperCase() === 'QB') {
