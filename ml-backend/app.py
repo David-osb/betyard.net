@@ -1233,12 +1233,24 @@ def sort_players_by_depth(players, position, team_code):
             elif 'deshaun watson' in name:
                 return 1  # Second
             else:
-                return 2 + int(player.get('experience', 0))  # By experience
+                # Safe experience parsing
+                exp = player.get('experience', '0')
+                try:
+                    return 2 + int(exp)
+                except (ValueError, TypeError):
+                    return 999  # Unknown experience goes last
         
         return sorted(players, key=qb_sort_key)
     
     # Default: sort by experience (higher = better depth position)
-    return sorted(players, key=lambda p: int(p.get('experience', 0)), reverse=True)
+    def safe_exp_sort(player):
+        exp = player.get('experience', '0')
+        try:
+            return int(exp)
+        except (ValueError, TypeError):
+            return 0  # Default to 0 for non-numeric experience
+    
+    return sorted(players, key=safe_exp_sort, reverse=True)
 
 def get_starter_count_for_position(position):
     """Get number of starters for each position"""
