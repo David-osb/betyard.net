@@ -1773,6 +1773,10 @@ class GameCentricUI {
                         value = Math.round(mlPrediction.rushing_attempts || 0);
                         confidence = Math.round(baseConfidence);
                         break;
+                    case 'Carries':  // Same as Rushing Attempts
+                        value = Math.round(mlPrediction.rushing_attempts || 0);
+                        confidence = Math.round(baseConfidence);
+                        break;
                     case 'Touchdowns':
                         value = Math.round(mlPrediction.touchdowns || 0);
                         confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
@@ -1780,6 +1784,10 @@ class GameCentricUI {
                     case 'Receiving Yards':
                         value = Math.round(mlPrediction.receiving_yards || 0);
                         confidence = Math.round(baseConfidence * 0.98); // RB receiving slightly less predictable
+                        break;
+                    case 'Receptions':
+                        value = Math.round(mlPrediction.receptions || 0);
+                        confidence = Math.round(baseConfidence * 0.90); // Receptions can be variable
                         break;
                     case 'Fantasy Points':
                         // Calculate fantasy points: 0.1 per rush yard + 0.1 per rec yard + 6 per TD + 1 per reception (PPR)

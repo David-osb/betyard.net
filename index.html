@@ -5130,7 +5130,7 @@
                     // Transform to expected format - flatten prediction object
                     return {
                         ...prediction.prediction,  // Flatten the nested prediction object
-                        confidence: prediction.prediction.prediction_likelihood || prediction.prediction.confidence || 85,
+                        confidence: prediction.prediction.confidence || (prediction.prediction.prediction_likelihood * 100) || 85,
                         metadata: {
                             source: 'ml_backend',
                             model_accuracy: prediction.prediction.model_accuracy,

@@ -614,6 +614,10 @@ class NFLMLModel:
         attempts = np.clip(rb_stats['carries_per_game'] + np.random.normal(0, 3), 8, 30)
         touchdowns = max(0, pred_yards / 100 + np.random.normal(0, 0.5))
         
+        # Add receiving stats for RBs (many RBs catch passes)
+        receptions = max(0, rb_stats.get('receptions_per_game', 2.8) + np.random.normal(0, 1))
+        receiving_yards = max(0, rb_stats.get('receiving_yards', 18) + np.random.normal(0, 8))
+        
         # Calculate confidence
         feature_importance = self.models['RB'].feature_importances_
         confidence = np.clip(
@@ -625,7 +629,9 @@ class NFLMLModel:
             rushing_yards=float(round(pred_yards, 1)),
             rushing_attempts=float(round(attempts, 1)),
             touchdowns=float(round(touchdowns, 1)),
-            fantasy_points=float(round(pred_yards * 0.1 + touchdowns * 6, 1)),
+            receptions=float(round(receptions, 1)),
+            receiving_yards=float(round(receiving_yards, 1)),
+            fantasy_points=float(round(pred_yards * 0.1 + touchdowns * 6 + receiving_yards * 0.1 + receptions * 0.5, 1)),
             confidence=float(round(confidence, 1)),
             position='RB'
         )
@@ -2130,6 +2136,7 @@ def enhanced_trending_opportunities():
         })
         
     except Exception as e:
+
         logger.error(f"Trending opportunities error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
