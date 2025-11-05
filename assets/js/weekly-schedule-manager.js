@@ -24,76 +24,61 @@ class WeeklyScheduleManager {
         this.init();
     }
     
-    init() {
+    async init() {
         console.log('🗓️ Weekly Schedule Manager: Initializing...');
-        this.determineCurrentWeek();
+        await this.determineCurrentWeek();
         this.setupAutoUpdate();
-        this.loadWeeklyGames();
+        await this.loadWeeklyGames();
         console.log('✅ Weekly Schedule Manager: Ready!');
     }
     
     /**
-     * Determine the current NFL week based on date
+     * Determine the current NFL week from ESPN API
      */
-    determineCurrentWeek() {
-        const now = new Date();
-        const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    async determineCurrentWeek() {
+        console.log('🔍 Getting current NFL week from ESPN API...');
         
-        // NFL 2024 season started September 5, 2024 (Week 1)
-        const season2024Start = new Date(2024, 8, 5); // September 5, 2024
-        
-        // For the 2024 season, calculate current week
-        // Real-world context: We're currently in November 2024 NFL season
-        this.currentSeason = 2024;
-        
-        if (currentDate >= season2024Start) {
-            const daysDifference = Math.floor((currentDate - season2024Start) / (1000 * 60 * 60 * 24));
-            this.currentWeek = Math.min(Math.floor(daysDifference / 7) + 1, 18);
-        } else {
-            // Preseason or before season start
-            this.currentWeek = 1;
-        }
-        
-        // Override: If we're in November 2024 (real current time), we should be around Week 10-12
-        const currentMonth = now.getMonth(); // 0-based: 0=Jan, 10=Nov
-        const currentYear = now.getFullYear();
-        
-        if (currentYear === 2024 && currentMonth >= 10) { // November or later in 2024
-            // Week 10 started around November 7, 2024
-            if (now.getDate() < 7) {
-                this.currentWeek = 9;  // Early November = Week 9
-            } else if (now.getDate() < 14) {
-                this.currentWeek = 10; // Mid November = Week 10  
-            } else if (now.getDate() < 21) {
-                this.currentWeek = 11; // Late November = Week 11
-            } else {
-                this.currentWeek = 12; // Very late November = Week 12
+        try {
+            // Get current week from ESPN's authoritative API
+            const response = await fetch(this.espnEndpoints.scoreboard);
+            if (!response.ok) {
+                throw new Error(`ESPN API error: ${response.status}`);
             }
+            
+            const data = await response.json();
+            
+            // Extract current season and week from ESPN
+            this.currentSeason = data.season?.year || 2025;
+            this.currentWeek = data.week?.number || 10;
+            
+            console.log(`🏈 ESPN says: Season ${this.currentSeason}, Week ${this.currentWeek}`);
+            
+            // Store in localStorage for persistence
+            localStorage.setItem('nflCurrentWeek', this.currentWeek.toString());
+            localStorage.setItem('nflCurrentSeason', this.currentSeason.toString());
+            
+            return { week: this.currentWeek, season: this.currentSeason };
+            
+        } catch (error) {
+            console.error('❌ Failed to get current week from ESPN:', error);
+            
+            // Fallback to localStorage cache
+            const cachedWeek = localStorage.getItem('nflCurrentWeek');
+            const cachedSeason = localStorage.getItem('nflCurrentSeason');
+            
+            if (cachedWeek && cachedSeason) {
+                this.currentWeek = parseInt(cachedWeek);
+                this.currentSeason = parseInt(cachedSeason);
+                console.log(`📱 Using cached: Season ${this.currentSeason}, Week ${this.currentWeek}`);
+                return { week: this.currentWeek, season: this.currentSeason };
+            }
+            
+            // Last resort fallback 
+            this.currentSeason = 2025;
+            this.currentWeek = 10;
+            console.log(`⚠️ Using fallback: Season ${this.currentSeason}, Week ${this.currentWeek}`);
+            return { week: this.currentWeek, season: this.currentSeason };
         }
-        
-        // If context suggests we're testing in a future date, adjust accordingly
-        if (currentYear === 2025) {
-            // For 2025 context, calculate from September 2024 base
-            const realSeasonStart = new Date(2024, 8, 5);
-            const testDate = new Date(2024, 10, 5); // Simulate November 5, 2024
-            const daysDiff = Math.floor((testDate - realSeasonStart) / (1000 * 60 * 60 * 24));
-            this.currentWeek = Math.min(Math.floor(daysDiff / 7) + 1, 18);
-            console.log('🕒 Future date detected: Simulating current NFL week for November 2024');
-        }
-        
-        // Adjust for Tuesday updates (look ahead to next week on Tuesday)
-        if (now.getDay() === 2) { // Tuesday = 2
-            this.currentWeek = Math.min(this.currentWeek + 1, 18);
-            console.log('📅 Tuesday detected: Looking ahead to next week');
-        }
-        
-        console.log(`🏈 Current NFL Season: ${this.currentSeason}, Week: ${this.currentWeek}`);
-        
-        // Store in localStorage for persistence
-        localStorage.setItem('nflCurrentWeek', this.currentWeek.toString());
-        localStorage.setItem('nflCurrentSeason', this.currentSeason.toString());
-        
-        return { week: this.currentWeek, season: this.currentSeason };
     }
     
     /**
@@ -131,7 +116,7 @@ class WeeklyScheduleManager {
         console.log('🔄 Updating weekly schedule from ESPN...');
         
         try {
-            this.determineCurrentWeek(); // Recalculate current week
+            await this.determineCurrentWeek(); // Recalculate current week from ESPN
             await this.loadWeeklyGames();
             
             this.lastUpdateTime = Date.now();
