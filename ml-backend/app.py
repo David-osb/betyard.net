@@ -1183,14 +1183,21 @@ def espn_depth_chart(team_code):
             if position not in depth_chart:
                 depth_chart[position] = []
             
+            # Safe parsing of numeric fields
+            def safe_int(value, default=0):
+                try:
+                    return int(value) if value else default
+                except (ValueError, TypeError):
+                    return default
+            
             # Add player to position group
             depth_chart[position].append({
                 'id': player.get('playerID', ''),
                 'name': player.get('longName', player.get('espnName', 'Unknown')),
                 'jersey': player.get('jerseyNum', '0'),
                 'position': position,
-                'experience': player.get('exp', 0),
-                'age': player.get('age', 0),
+                'experience': safe_int(player.get('exp'), 0),
+                'age': safe_int(player.get('age'), 0),
                 'school': player.get('school', ''),
                 'tank01_data': True
             })
