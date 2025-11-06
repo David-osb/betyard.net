@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best NFL Betting Props - BetYard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .props-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .prop-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .prop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .prop-card.high-confidence {
+            border-left: 4px solid #00ff00;
+        }
+        
+        .prop-card.medium-confidence {
+            border-left: 4px solid #ffff00;
+        }
+        
+        .prop-card.low-confidence {
+            border-left: 4px solid #ff8800;
+        }
+        
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .position-badge {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .prop-details {
+            margin-bottom: 15px;
+        }
+        
+        .prop-type {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+        
+        .prop-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .value-item {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        
+        .value-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 2px;
+        }
+        
+        .value-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .recommendation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bet-direction {
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+        
+        .bet-direction.UNDER {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+        }
+        
+        .edge-percentage {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .sportsbook-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .sportsbook-name {
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .odds {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #ffff44, #44ff44);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #FFD700;
+            color: #1e3c72;
+            border-color: #FFD700;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 0 auto;
+            display: block;
+            margin-bottom: 30px;
+        }
+        
+        .refresh-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .props-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .prop-values {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 Best NFL Betting Props</h1>
+            <p>AI-Powered Predictions vs Sportsbook Odds</p>
+        </div>
+        
+        <button class="refresh-btn" onclick="loadDailyProps()">
+            🔄 Refresh Latest Props
+        </button>
+        
+        <div class="filters">
+            <div class="filter-btn active" onclick="filterProps('all')">All Props</div>
+            <div class="filter-btn" onclick="filterProps('high-confidence')">High Confidence</div>
+            <div class="filter-btn" onclick="filterProps('QB')">Quarterbacks</div>
+            <div class="filter-btn" onclick="filterProps('RB')">Running Backs</div>
+            <div class="filter-btn" onclick="filterProps('WR')">Wide Receivers</div>
+            <div class="filter-btn" onclick="filterProps('TE')">Tight Ends</div>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading best betting opportunities...</p>
+        </div>
+        
+        <div id="summary-stats" class="summary-stats" style="display: none;"></div>
+        
+        <div id="props-container" class="props-grid" style="display: none;"></div>
+    </div>
+
+    <script>
+        let allProps = [];
+        let currentFilter = 'all';
+        
+        // API base URL - adjust this to your backend URL
+        const API_BASE = 'https://betyard-ml-backend.onrender.com';
+        // For local development: const API_BASE = 'http://localhost:5001';
+        
+        async function loadDailyProps() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('summary-stats').style.display = 'none';
+            document.getElementById('props-container').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE}/betting/daily-props`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    allProps = data.daily_best_props;
+                    displaySummaryStats(data.summary);
+                    displayProps(allProps);
+                } else {
+                    throw new Error(data.error || 'Failed to load props');
+                }
+            } catch (error) {
+                console.error('Error loading props:', error);
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: #ff6b6b;">❌ Error loading props: ${error.message}</p>
+                    <button onclick="loadDailyProps()" style="margin-top: 15px; padding: 10px 20px; background: #FFD700; color: #1e3c72; border: none; border-radius: 5px; cursor: pointer;">Try Again</button>
+                `;
+            }
+        }
+        
+        function displaySummaryStats(summary) {
+            const statsContainer = document.getElementById('summary-stats');
+            
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${summary.total_props_analyzed || 0}</div>
+                    <div class="stat-label">Props Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${summary.high_confidence_count || 0}</div>
+                    <div class="stat-label">High Confidence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${(summary.average_edge || 0).toFixed(1)}%</div>
+                    <div class="stat-label">Average Edge</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+${(summary.total_expected_profit || 0).toFixed(1)}%</div>
+                    <div class="stat-label">Total Expected ROI</div>
+                </div>
+            `;
+            
+            statsContainer.style.display = 'grid';
+        }
+        
+        function displayProps(props) {
+            const container = document.getElementById('props-container');
+            
+            if (props.length === 0) {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No props match your current filter.</p>';
+            } else {
+                container.innerHTML = props.map(prop => createPropCard(prop)).join('');
+            }
+            
+            document.getElementById('loading').style.display = 'none';
+            container.style.display = 'grid';
+        }
+        
+        function createPropCard(prop) {
+            const confidenceClass = getConfidenceClass(prop.confidence);
+            const statTypeFormatted = prop.stat_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            
+            return `
+                <div class="prop-card ${confidenceClass}" data-position="${prop.position}" data-confidence="${prop.confidence}">
+                    <div class="player-info">
+                        <div class="player-name">${prop.player_name}</div>
+                        <div class="position-badge">${prop.position}</div>
+                    </div>
+                    
+                    <div class="prop-details">
+                        <div class="prop-type">${statTypeFormatted}</div>
+                        <div class="prop-values">
+                            <div class="value-item">
+                                <div class="value-label">Our Prediction</div>
+                                <div class="value-number">${prop.predicted_value}</div>
+                            </div>
+                            <div class="value-item">
+                                <div class="value-label">Sportsbook Line</div>
+                                <div class="value-number">${prop.line}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation">
+                        <div class="bet-direction ${prop.bet_direction}">${prop.bet_direction}</div>
+                        <div class="edge-percentage">+${prop.edge_percentage}% Edge</div>
+                    </div>
+                    
+                    <div class="sportsbook-info">
+                        <div class="sportsbook-name">📱 ${prop.sportsbook}</div>
+                        <div class="odds">${prop.odds > 0 ? '+' : ''}${prop.odds}</div>
+                    </div>
+                    
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${prop.confidence}%"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 5px; font-size: 0.9rem;">
+                        ${prop.confidence}% Confidence • ${prop.bet_size} Bet Size
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getConfidenceClass(confidence) {
+            if (confidence >= 85) return 'high-confidence';
+            if (confidence >= 75) return 'medium-confidence';
+            return 'low-confidence';
+        }
+        
+        function filterProps(filter) {
+            currentFilter = filter;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let filteredProps = allProps;
+            
+            if (filter === 'high-confidence') {
+                filteredProps = allProps.filter(prop => prop.confidence >= 85);
+            } else if (filter !== 'all') {
+                filteredProps = allProps.filter(prop => prop.position === filter);
+            }
+            
+            displayProps(filteredProps);
+        }
+        
+        // Load props when page loads
+        window.addEventListener('load', loadDailyProps);
+        
+        // Auto-refresh every 5 minutes
+        setInterval(loadDailyProps, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

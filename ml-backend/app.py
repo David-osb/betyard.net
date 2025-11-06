@@ -206,6 +206,147 @@ class NFLInjuryService:
             'injury_type': 'None' if status == 'Healthy' else 'Shoulder'
         }
 
+class SportsbookOddsService:
+    """Service for fetching and comparing odds from multiple sportsbooks"""
+    
+    def __init__(self):
+        self.sportsbooks = {
+            'fanduel': {'name': 'FanDuel', 'priority': 1},
+            'draftkings': {'name': 'DraftKings', 'priority': 2}, 
+            'caesars': {'name': 'Caesars', 'priority': 3},
+            'betmgm': {'name': 'BetMGM', 'priority': 4},
+            'pointsbet': {'name': 'PointsBet', 'priority': 5}
+        }
+        
+        # Mock odds data structure - in production, this would fetch from odds API
+        self.mock_odds_cache = {}
+        self._generate_mock_odds()
+    
+    def _generate_mock_odds(self):
+        """Generate realistic mock odds for testing"""
+        players = [
+            {'name': 'Lamar Jackson', 'position': 'QB', 'team': 'BAL'},
+            {'name': 'Josh Allen', 'position': 'QB', 'team': 'BUF'},
+            {'name': 'Jalen Hurts', 'position': 'QB', 'team': 'PHI'},
+            {'name': 'Christian McCaffrey', 'position': 'RB', 'team': 'SF'},
+            {'name': 'Derrick Henry', 'position': 'RB', 'team': 'BAL'},
+            {'name': 'Saquon Barkley', 'position': 'RB', 'team': 'PHI'},
+            {'name': 'Tyreek Hill', 'position': 'WR', 'team': 'MIA'},
+            {'name': 'Stefon Diggs', 'position': 'WR', 'team': 'HOU'},
+            {'name': 'Davante Adams', 'position': 'WR', 'team': 'LV'},
+            {'name': 'Travis Kelce', 'position': 'TE', 'team': 'KC'},
+            {'name': 'Mark Andrews', 'position': 'TE', 'team': 'BAL'},
+            {'name': 'George Kittle', 'position': 'TE', 'team': 'SF'}
+        ]
+        
+        for player in players:
+            self.mock_odds_cache[player['name']] = self._generate_player_odds(player)
+    
+    def _generate_player_odds(self, player):
+        """Generate realistic odds for a specific player"""
+        position = player['position']
+        
+        # Generate different prop types based on position
+        props = {}
+        
+        if position == 'QB':
+            # Passing yards
+            base_line = np.random.randint(220, 290)
+            props['passing_yards'] = self._generate_prop_odds(base_line, 'yards')
+            
+            # Passing TDs
+            base_line = round(np.random.uniform(1.5, 2.5), 1)
+            props['passing_touchdowns'] = self._generate_prop_odds(base_line, 'touchdowns')
+            
+            # Rushing yards
+            base_line = np.random.randint(15, 45)
+            props['rushing_yards'] = self._generate_prop_odds(base_line, 'yards')
+            
+        elif position == 'RB':
+            # Rushing yards
+            base_line = np.random.randint(65, 120)
+            props['rushing_yards'] = self._generate_prop_odds(base_line, 'yards')
+            
+            # Rushing TDs
+            base_line = round(np.random.uniform(0.5, 1.5), 1)
+            props['rushing_touchdowns'] = self._generate_prop_odds(base_line, 'touchdowns')
+            
+            # Receiving yards
+            base_line = np.random.randint(15, 40)
+            props['receiving_yards'] = self._generate_prop_odds(base_line, 'yards')
+            
+        elif position in ['WR', 'TE']:
+            # Receiving yards
+            base_line = np.random.randint(45, 85) if position == 'WR' else np.random.randint(35, 65)
+            props['receiving_yards'] = self._generate_prop_odds(base_line, 'yards')
+            
+            # Receptions
+            base_line = round(np.random.uniform(4.5, 7.5), 1) if position == 'WR' else round(np.random.uniform(3.5, 5.5), 1)
+            props['receptions'] = self._generate_prop_odds(base_line, 'receptions')
+            
+            # Receiving TDs
+            base_line = round(np.random.uniform(0.5, 1.0), 1)
+            props['receiving_touchdowns'] = self._generate_prop_odds(base_line, 'touchdowns')
+        
+        return props
+    
+    def _generate_prop_odds(self, line, prop_type):
+        """Generate odds for a specific prop line"""
+        # Generate slightly different odds for each sportsbook
+        sportsbook_odds = {}
+        
+        for book_id, book_info in self.sportsbooks.items():
+            # Slightly adjust line for each book
+            line_adjustment = np.random.uniform(-2.5, 2.5) if prop_type == 'yards' else np.random.uniform(-0.2, 0.2)
+            adjusted_line = line + line_adjustment
+            
+            if prop_type in ['touchdowns', 'receptions']:
+                adjusted_line = round(adjusted_line, 1)
+            else:
+                adjusted_line = int(adjusted_line)
+            
+            # Generate over/under odds (typically around -110)
+            over_odds = np.random.randint(-125, -100)
+            under_odds = np.random.randint(-125, -100)
+            
+            sportsbook_odds[book_id] = {
+                'line': adjusted_line,
+                'over_odds': over_odds,
+                'under_odds': under_odds,
+                'sportsbook': book_info['name']
+            }
+        
+        return sportsbook_odds
+    
+    def get_player_odds(self, player_name):
+        """Get all odds for a specific player"""
+        return self.mock_odds_cache.get(player_name, {})
+    
+    def find_best_odds(self, player_name, prop_type, bet_direction='over'):
+        """Find the best odds for a specific prop"""
+        player_odds = self.get_player_odds(player_name)
+        
+        if prop_type not in player_odds:
+            return None
+        
+        prop_odds = player_odds[prop_type]
+        best_odds = None
+        best_sportsbook = None
+        
+        for book_id, odds_data in prop_odds.items():
+            current_odds = odds_data[f'{bet_direction}_odds']
+            
+            if best_odds is None or current_odds > best_odds:
+                best_odds = current_odds
+                best_sportsbook = {
+                    'id': book_id,
+                    'name': odds_data['sportsbook'],
+                    'line': odds_data['line'],
+                    'odds': current_odds
+                }
+        
+        return best_sportsbook
+
 class BettingOptimizer:
     """Enhance predictions specifically for betting accuracy"""
     
@@ -223,6 +364,89 @@ class BettingOptimizer:
             'medium_confidence': 75,
             'low_confidence': 65
         }
+        
+        # Initialize odds service
+        self.odds_service = SportsbookOddsService()
+    
+    def find_best_betting_props(self, prediction: PlayerPrediction, player_name: str, position: str) -> list:
+        """Find the best betting props for a player across all sportsbooks"""
+        best_props = []
+        
+        # Map position to relevant stat types
+        stat_mapping = {
+            'QB': ['passing_yards', 'passing_touchdowns', 'rushing_yards'],
+            'RB': ['rushing_yards', 'rushing_touchdowns', 'receiving_yards'], 
+            'WR': ['receiving_yards', 'receptions', 'receiving_touchdowns'],
+            'TE': ['receiving_yards', 'receptions', 'receiving_touchdowns']
+        }
+        
+        relevant_stats = stat_mapping.get(position, [])
+        
+        for stat_type in relevant_stats:
+            # Get our prediction for this stat
+            predicted_value = getattr(prediction, stat_type, None)
+            if predicted_value is None:
+                continue
+            
+            # Get market adjustment
+            market_factor = self.market_adjustments.get(position, {}).get(stat_type, 1.0)
+            adjusted_prediction = predicted_value * market_factor
+            
+            # Find best odds for both over and under
+            for direction in ['over', 'under']:
+                best_sportsbook = self.odds_service.find_best_odds(player_name, stat_type, direction)
+                
+                if best_sportsbook:
+                    line = best_sportsbook['line']
+                    
+                    # Calculate edge
+                    if direction == 'over':
+                        edge = (adjusted_prediction - line) / line if line > 0 else 0
+                    else:
+                        edge = (line - adjusted_prediction) / line if line > 0 else 0
+                    
+                    # Only include if we have a significant edge
+                    if edge > 0.05:  # 5% minimum edge
+                        betting_analysis = self.calculate_betting_edge(prediction, line, position, stat_type)
+                        
+                        if betting_analysis['recommendation'] != 'PASS':
+                            best_props.append({
+                                'player_name': player_name,
+                                'position': position,
+                                'stat_type': stat_type,
+                                'bet_direction': direction.upper(),
+                                'predicted_value': round(adjusted_prediction, 1),
+                                'line': line,
+                                'edge_percentage': round(edge * 100, 2),
+                                'sportsbook': best_sportsbook['name'],
+                                'odds': best_sportsbook['odds'],
+                                'recommendation': betting_analysis['recommendation'],
+                                'bet_size': betting_analysis['bet_size'],
+                                'kelly_fraction': round(betting_analysis['kelly_fraction'], 3),
+                                'confidence': prediction.confidence,
+                                'expected_profit': self._calculate_expected_profit(edge, betting_analysis['kelly_fraction'], best_sportsbook['odds'])
+                            })
+        
+        # Sort by expected profit (descending)
+        best_props.sort(key=lambda x: x['expected_profit'], reverse=True)
+        return best_props
+    
+    def _calculate_expected_profit(self, edge: float, kelly_fraction: float, odds: int) -> float:
+        """Calculate expected profit for a bet"""
+        # Convert American odds to decimal
+        if odds > 0:
+            decimal_odds = (odds / 100) + 1
+        else:
+            decimal_odds = (100 / abs(odds)) + 1
+        
+        # Win probability based on edge
+        win_prob = 0.5 + (edge / 2)  # Simplified calculation
+        
+        # Expected value calculation
+        expected_value = (win_prob * (decimal_odds - 1)) - ((1 - win_prob) * 1)
+        
+        # Scale by Kelly fraction (bet size)
+        return expected_value * kelly_fraction * 100  # Convert to percentage
     
     def calculate_betting_edge(self, prediction: PlayerPrediction, betting_line: float, 
                              position: str, stat_type: str) -> dict:
@@ -1348,6 +1572,205 @@ def bulk_betting_recommendations():
         
     except Exception as e:
         logger.error(f"Bulk betting error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/betting/best-props', methods=['POST'])
+def best_betting_props():
+    """Find the best betting props for a specific player across all sportsbooks"""
+    try:
+        data = request.get_json()
+        
+        # Required fields
+        player_name = data.get('player_name')
+        position = data.get('position')
+        team_code = data.get('team_code')
+        
+        # Optional fields
+        opponent_code = data.get('opponent_code')
+        min_edge = data.get('min_edge', 5)  # Minimum edge percentage
+        
+        if not all([player_name, position, team_code]):
+            return jsonify({'error': 'Missing required fields: player_name, position, team_code'}), 400
+        
+        if position not in ['QB', 'RB', 'WR', 'TE']:
+            return jsonify({'error': f'Invalid position: {position}. Must be QB, RB, WR, or TE'}), 400
+        
+        # Get base prediction
+        if position == 'QB':
+            prediction = ml_model.predict_qb_performance(player_name, team_code, opponent_code)
+        elif position == 'RB':
+            prediction = ml_model.predict_rb_performance(player_name, team_code, opponent_code)
+        elif position == 'WR':
+            prediction = ml_model.predict_wr_performance(player_name, team_code, opponent_code)
+        elif position == 'TE':
+            prediction = ml_model.predict_te_performance(player_name, team_code, opponent_code)
+        
+        # Find best betting props
+        best_props = betting_optimizer.find_best_betting_props(prediction, player_name, position)
+        
+        # Filter by minimum edge
+        filtered_props = [prop for prop in best_props if prop['edge_percentage'] >= min_edge]
+        
+        return jsonify({
+            'success': True,
+            'player_info': {
+                'name': player_name,
+                'position': position,
+                'team': team_code,
+                'opponent': opponent_code
+            },
+            'best_props': filtered_props[:10],  # Top 10 best props
+            'summary': {
+                'total_props_found': len(best_props),
+                'props_above_min_edge': len(filtered_props),
+                'highest_edge': max([prop['edge_percentage'] for prop in filtered_props], default=0),
+                'total_expected_profit': sum([prop['expected_profit'] for prop in filtered_props])
+            },
+            'model_confidence': prediction.confidence,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Best props error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/betting/daily-props', methods=['GET'])
+def daily_best_props():
+    """Get the best betting props for today's games across all players"""
+    try:
+        # Featured players for today (in production, this would be dynamic based on today's games)
+        featured_players = [
+            {'name': 'Lamar Jackson', 'position': 'QB', 'team': 'BAL'},
+            {'name': 'Josh Allen', 'position': 'QB', 'team': 'BUF'},
+            {'name': 'Jalen Hurts', 'position': 'QB', 'team': 'PHI'},
+            {'name': 'Christian McCaffrey', 'position': 'RB', 'team': 'SF'},
+            {'name': 'Derrick Henry', 'position': 'RB', 'team': 'BAL'},
+            {'name': 'Saquon Barkley', 'position': 'RB', 'team': 'PHI'},
+            {'name': 'Tyreek Hill', 'position': 'WR', 'team': 'MIA'},
+            {'name': 'Stefon Diggs', 'position': 'WR', 'team': 'HOU'},
+            {'name': 'Davante Adams', 'position': 'WR', 'team': 'LV'},
+            {'name': 'Travis Kelce', 'position': 'TE', 'team': 'KC'},
+            {'name': 'Mark Andrews', 'position': 'TE', 'team': 'BAL'},
+            {'name': 'George Kittle', 'position': 'TE', 'team': 'SF'}
+        ]
+        
+        all_best_props = []
+        
+        for player in featured_players:
+            try:
+                # Get prediction for each player
+                if player['position'] == 'QB':
+                    prediction = ml_model.predict_qb_performance(player['name'], player['team'])
+                elif player['position'] == 'RB':
+                    prediction = ml_model.predict_rb_performance(player['name'], player['team'])
+                elif player['position'] == 'WR':
+                    prediction = ml_model.predict_wr_performance(player['name'], player['team'])
+                elif player['position'] == 'TE':
+                    prediction = ml_model.predict_te_performance(player['name'], player['team'])
+                
+                # Find best props for this player
+                player_props = betting_optimizer.find_best_betting_props(prediction, player['name'], player['position'])
+                
+                # Add top 3 props per player to the overall list
+                all_best_props.extend(player_props[:3])
+                
+            except Exception as player_error:
+                logger.warning(f"Error processing {player['name']}: {player_error}")
+                continue
+        
+        # Sort all props by expected profit and take top 20
+        all_best_props.sort(key=lambda x: x['expected_profit'], reverse=True)
+        top_props = all_best_props[:20]
+        
+        # Categorize by confidence
+        high_confidence = [p for p in top_props if p['confidence'] >= 85]
+        medium_confidence = [p for p in top_props if 75 <= p['confidence'] < 85]
+        
+        return jsonify({
+            'success': True,
+            'daily_best_props': top_props,
+            'categories': {
+                'high_confidence': high_confidence[:10],
+                'medium_confidence': medium_confidence[:10],
+                'by_position': {
+                    'QB': [p for p in top_props if p['position'] == 'QB'][:5],
+                    'RB': [p for p in top_props if p['position'] == 'RB'][:5],
+                    'WR': [p for p in top_props if p['position'] == 'WR'][:5],
+                    'TE': [p for p in top_props if p['position'] == 'TE'][:5]
+                }
+            },
+            'summary': {
+                'total_props_analyzed': len(all_best_props),
+                'high_confidence_count': len(high_confidence),
+                'medium_confidence_count': len(medium_confidence),
+                'total_expected_profit': sum([prop['expected_profit'] for prop in top_props]),
+                'average_edge': sum([prop['edge_percentage'] for prop in top_props]) / len(top_props) if top_props else 0
+            },
+            'timestamp': datetime.now().isoformat(),
+            'note': 'These are the most profitable betting opportunities based on our ML predictions vs current sportsbook odds'
+        })
+        
+    except Exception as e:
+        logger.error(f"Daily props error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/betting/sportsbook-comparison', methods=['POST'])
+def sportsbook_comparison():
+    """Compare odds across all sportsbooks for a specific prop"""
+    try:
+        data = request.get_json()
+        
+        player_name = data.get('player_name')
+        prop_type = data.get('prop_type')  # e.g., 'passing_yards', 'receiving_yards'
+        
+        if not all([player_name, prop_type]):
+            return jsonify({'error': 'Missing required fields: player_name, prop_type'}), 400
+        
+        # Get odds comparison
+        all_odds = betting_optimizer.odds_service.get_player_odds(player_name)
+        
+        if prop_type not in all_odds:
+            return jsonify({'error': f'No odds found for {player_name} - {prop_type}'}), 404
+        
+        prop_odds = all_odds[prop_type]
+        
+        # Format for easy comparison
+        comparison = []
+        for book_id, odds_data in prop_odds.items():
+            comparison.append({
+                'sportsbook': odds_data['sportsbook'],
+                'line': odds_data['line'],
+                'over_odds': odds_data['over_odds'],
+                'under_odds': odds_data['under_odds'],
+                'book_id': book_id
+            })
+        
+        # Find best odds
+        best_over = max(comparison, key=lambda x: x['over_odds'])
+        best_under = max(comparison, key=lambda x: x['under_odds'])
+        
+        return jsonify({
+            'success': True,
+            'player_name': player_name,
+            'prop_type': prop_type,
+            'all_sportsbooks': comparison,
+            'best_odds': {
+                'over': {
+                    'sportsbook': best_over['sportsbook'],
+                    'line': best_over['line'],
+                    'odds': best_over['over_odds']
+                },
+                'under': {
+                    'sportsbook': best_under['sportsbook'],
+                    'line': best_under['line'],
+                    'odds': best_under['under_odds']
+                }
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Sportsbook comparison error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # ============================================================================
