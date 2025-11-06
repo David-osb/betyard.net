@@ -45,27 +45,178 @@ class ESPNWebsiteDataService:
             return {}
     
     def get_latest_news(self, limit: int = 10) -> List[Dict]:
-        """Get latest NFL news"""
+        """Get latest NFL news with enhanced metadata"""
         try:
-            data = self._make_request("news", {"limit": limit})
+            data = self._make_request("news", {"limit": limit * 2})  # Get more to filter and enhance
             
             news_items = []
-            for article in data.get("articles", [])[:limit]:
-                news_items.append({
+            for article in data.get("articles", [])[:limit * 2]:
+                # Enhanced article processing
+                headline = article.get("headline", "")
+                description = article.get("description", "")
+                
+                # Skip if too short or generic
+                if len(headline) < 10 or len(description) < 20:
+                    continue
+                
+                # Enhanced article data
+                enhanced_article = {
                     "id": article.get("id"),
-                    "headline": article.get("headline", ""),
-                    "description": article.get("description", ""),
+                    "headline": headline,
+                    "description": description,
                     "published": article.get("published"),
                     "images": article.get("images", []),
                     "links": article.get("links", {}),
-                    "categories": [cat.get("description", "") for cat in article.get("categories", [])]
-                })
+                    "categories": [cat.get("description", "") for cat in article.get("categories", [])],
+                    
+                    # Enhanced metadata
+                    "content_type": self._categorize_content(headline, description),
+                    "teams_mentioned": self._extract_teams(f"{headline} {description}"),
+                    "players_mentioned": self._extract_players(f"{headline} {description}"),
+                    "relevance_score": self._calculate_relevance(headline, description),
+                    "fantasy_impact": self._assess_fantasy_impact(headline, description),
+                    "breaking_news": self._is_breaking_news(headline),
+                    "content_length": "standard" if len(description) < 100 else "detailed"
+                }
+                
+                news_items.append(enhanced_article)
+                
+                if len(news_items) >= limit:
+                    break
             
-            return news_items
+            # Sort by relevance and recency
+            news_items.sort(key=lambda x: (x.get('relevance_score', 0) * 0.6 + 
+                                         (50 if x.get('breaking_news') else 0) * 0.4), reverse=True)
+            
+            return news_items[:limit]
             
         except Exception as e:
-            print(f"Error getting news: {e}")
+            print(f"Error getting enhanced news: {e}")
             return []
+    
+    def _categorize_content(self, headline: str, description: str) -> str:
+        """Categorize news content by type"""
+        content = f"{headline} {description}".lower()
+        
+        if any(word in content for word in ['injury', 'hurt', 'injured', 'questionable', 'doubtful', 'out', 'ir', 'reserve']):
+            return 'injury'
+        elif any(word in content for word in ['trade', 'traded', 'deal', 'acquire', 'sign', 'release', 'waiver', 'cut']):
+            return 'transaction'
+        elif any(word in content for word in ['touchdown', 'yards', 'stats', 'performance', 'record', 'milestone']):
+            return 'performance'
+        elif any(word in content for word in ['fantasy', 'start', 'sit', 'week', 'lineup', 'dfs']):
+            return 'fantasy'
+        elif any(word in content for word in ['coach', 'coaching', 'fire', 'hire', 'staff']):
+            return 'coaching'
+        elif any(word in content for word in ['playoff', 'division', 'wildcard', 'standings', 'seed']):
+            return 'playoff'
+        elif any(word in content for word in ['draft', 'rookie', 'prospect', 'college']):
+            return 'draft'
+        else:
+            return 'general'
+    
+    def _extract_teams(self, content: str) -> List[str]:
+        """Extract team codes from content"""
+        content_lower = content.lower()
+        teams_found = []
+        
+        team_mapping = {
+            'cardinals': 'ARI', 'arizona': 'ARI', 'falcons': 'ATL', 'atlanta': 'ATL',
+            'ravens': 'BAL', 'baltimore': 'BAL', 'bills': 'BUF', 'buffalo': 'BUF',
+            'panthers': 'CAR', 'carolina': 'CAR', 'bears': 'CHI', 'chicago': 'CHI',
+            'bengals': 'CIN', 'cincinnati': 'CIN', 'browns': 'CLE', 'cleveland': 'CLE',
+            'cowboys': 'DAL', 'dallas': 'DAL', 'broncos': 'DEN', 'denver': 'DEN',
+            'lions': 'DET', 'detroit': 'DET', 'packers': 'GB', 'green bay': 'GB',
+            'texans': 'HOU', 'houston': 'HOU', 'colts': 'IND', 'indianapolis': 'IND',
+            'jaguars': 'JAX', 'jacksonville': 'JAX', 'chiefs': 'KC', 'kansas city': 'KC',
+            'raiders': 'LV', 'las vegas': 'LV', 'chargers': 'LAC', 'rams': 'LAR',
+            'dolphins': 'MIA', 'miami': 'MIA', 'vikings': 'MIN', 'minnesota': 'MIN',
+            'patriots': 'NE', 'new england': 'NE', 'saints': 'NO', 'new orleans': 'NO',
+            'giants': 'NYG', 'jets': 'NYJ', 'eagles': 'PHI', 'philadelphia': 'PHI',
+            'steelers': 'PIT', 'pittsburgh': 'PIT', '49ers': 'SF', 'san francisco': 'SF',
+            'seahawks': 'SEA', 'seattle': 'SEA', 'buccaneers': 'TB', 'tampa bay': 'TB',
+            'titans': 'TEN', 'tennessee': 'TEN', 'commanders': 'WAS', 'washington': 'WAS'
+        }
+        
+        for team_name, code in team_mapping.items():
+            if team_name in content_lower and code not in teams_found:
+                teams_found.append(code)
+        
+        return teams_found
+    
+    def _extract_players(self, content: str) -> List[str]:
+        """Extract potential player names from content"""
+        import re
+        
+        # Look for capitalized names (basic pattern)
+        name_pattern = r'\b[A-Z][a-z]+ [A-Z][a-z]+(?:\s[A-Z][a-z]+)?\b'
+        potential_names = re.findall(name_pattern, content)
+        
+        # Filter out common non-player names
+        exclude_terms = {
+            'New York', 'Los Angeles', 'Green Bay', 'Las Vegas', 'Kansas City',
+            'San Francisco', 'Tampa Bay', 'New England', 'New Orleans', 'Super Bowl',
+            'Monday Night', 'Sunday Night', 'Thursday Night', 'Pro Bowl', 'Hall Fame'
+        }
+        
+        player_names = []
+        for name in potential_names:
+            if name not in exclude_terms and len(name.split()) >= 2:
+                player_names.append(name)
+        
+        return player_names[:3]  # Limit to avoid noise
+    
+    def _calculate_relevance(self, headline: str, description: str) -> float:
+        """Calculate relevance score for article"""
+        score = 50.0
+        content = f"{headline} {description}".lower()
+        
+        # Boost for fantasy-relevant terms
+        fantasy_terms = ['fantasy', 'start', 'sit', 'touchdown', 'yards', 'points']
+        score += sum(5 for term in fantasy_terms if term in content)
+        
+        # Boost for breaking news indicators
+        breaking_terms = ['breaking', 'update', 'just in', 'developing', 'latest']
+        score += sum(10 for term in breaking_terms if term in headline.lower())
+        
+        # Boost for high-impact terms
+        impact_terms = ['injury', 'trade', 'sign', 'release', 'suspension', 'record']
+        score += sum(8 for term in impact_terms if term in content)
+        
+        return min(score, 100.0)
+    
+    def _assess_fantasy_impact(self, headline: str, description: str) -> Dict:
+        """Assess fantasy football impact"""
+        content = f"{headline} {description}".lower()
+        
+        impact = {
+            'level': 'low',
+            'recommendation': 'monitor',
+            'categories': []
+        }
+        
+        # High impact indicators
+        if any(term in content for term in ['injured', 'out', 'questionable', 'traded', 'released']):
+            impact['level'] = 'high'
+            impact['recommendation'] = 'immediate action'
+            
+            if any(term in content for term in ['injured', 'out', 'questionable']):
+                impact['categories'].append('injury')
+            if any(term in content for term in ['traded', 'released']):
+                impact['categories'].append('roster_change')
+        
+        # Medium impact indicators
+        elif any(term in content for term in ['touchdown', 'breakout', 'targets', 'carries', 'snap']):
+            impact['level'] = 'medium'
+            impact['recommendation'] = 'consider for lineup'
+            impact['categories'].append('performance')
+        
+        return impact
+    
+    def _is_breaking_news(self, headline: str) -> bool:
+        """Determine if this is breaking news"""
+        breaking_indicators = ['breaking', 'just in', 'update', 'developing', 'latest', 'now']
+        return any(indicator in headline.lower() for indicator in breaking_indicators)
     
     def get_team_matchups(self, week: Optional[int] = None) -> List[Dict]:
         """Get current/specified week matchups"""
