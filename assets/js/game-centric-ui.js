@@ -17,7 +17,7 @@ class GameCentricUI {
             'QB': {
                 name: 'Quarterback',
                 icon: '🎯',
-                stats: ['Passing Yards', 'Touchdowns', 'Completions', 'Attempts', 'QB Rating'],
+                stats: ['Passing Yards', 'Passing TDs', 'Rushing TDs', 'Completions', 'QB Rating'],
                 color: '#3b82f6'
             },
             'RB': {
@@ -1718,7 +1718,15 @@ class GameCentricUI {
                         value = Math.round(mlPrediction.passing_yards);
                         confidence = Math.round(baseConfidence);
                         break;
-                    case 'Touchdowns':
+                    case 'Passing TDs':
+                        value = Math.round(mlPrediction.passing_touchdowns || mlPrediction.touchdowns || 0);
+                        confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
+                        break;
+                    case 'Rushing TDs':
+                        value = Math.round(mlPrediction.rushing_touchdowns || 0);
+                        confidence = Math.round(baseConfidence * 0.85); // Lower for rushing TDs (less predictable)
+                        break;
+                    case 'Touchdowns': // Legacy field for compatibility
                         value = Math.round(mlPrediction.touchdowns);
                         confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
                         break;

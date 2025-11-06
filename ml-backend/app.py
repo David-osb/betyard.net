@@ -129,7 +129,10 @@ class PlayerPrediction:
     targets: Optional[float] = None
     
     # Common stats
-    touchdowns: float = 0
+    touchdowns: float = 0  # Legacy field - will be deprecated
+    passing_touchdowns: Optional[float] = None  # NEW: Separate passing TDs
+    rushing_touchdowns: Optional[float] = None  # NEW: Separate rushing TDs
+    receiving_touchdowns: Optional[float] = None  # For WRs/TEs/RBs
     interceptions: Optional[float] = None
     fumbles: Optional[float] = None
     qb_rating: Optional[float] = None
@@ -458,20 +461,48 @@ class NFLMLModel:
         # Calculate other stats based on predicted yards
         attempts = np.clip(pred_yards / 7.5 + np.random.normal(0, 3), 25, 55)
         completions = attempts * np.clip(np.random.normal(0.65, 0.05), 0.4, 0.8)
-        touchdowns = max(0, pred_yards / 120 + np.random.normal(0, 0.8))
+        
+        # ENHANCED: Separate passing and rushing touchdown predictions
+        passing_touchdowns = max(0, pred_yards / 120 + np.random.normal(0, 0.8))
+        
+        # QB rushing touchdown prediction based on QB mobility and game script
+        # Mobile QBs (Lamar, Josh Allen, Kyler, etc.) have higher rushing TD rates
+        qb_mobility_factor = 1.0  # Default
+        
+        # Adjust based on QB name/profile (would be enhanced with real data)
+        qb_name_lower = qb_name.lower() if qb_name else ""
+        if any(name in qb_name_lower for name in ['lamar', 'jackson', 'josh', 'allen', 'kyler', 'murray', 'jalen', 'hurts']):
+            qb_mobility_factor = 2.5  # High mobility QBs
+        elif any(name in qb_name_lower for name in ['daniel', 'jones', 'justin', 'fields', 'anthony', 'richardson']):
+            qb_mobility_factor = 1.8  # Medium mobility QBs
+        elif any(name in qb_name_lower for name in ['cam', 'newton', 'dak', 'prescott', 'russell', 'wilson']):
+            qb_mobility_factor = 1.4  # Some mobility
+        
+        # Base rushing TD rate: ~0.3 per game average, adjusted by mobility
+        base_rushing_td_rate = 0.3 * qb_mobility_factor
+        
+        # Game script factor (red zone opportunities, team rushing tendency)
+        game_script_factor = np.random.normal(1.0, 0.3)  # Varies by game situation
+        
+        # Calculate rushing touchdowns
+        rushing_touchdowns = max(0, np.random.poisson(base_rushing_td_rate * game_script_factor))
+        
+        # Total touchdowns for QB rating calculation (use passing TDs primarily)
+        total_touchdowns = passing_touchdowns + rushing_touchdowns
+        
         interceptions = max(0, np.random.poisson(1.2) * (1 - (prev_yards_per_game / 300)))
         
         # Calculate QB rating
         comp_pct = completions / attempts * 100
         yards_per_att = pred_yards / attempts
-        td_pct = touchdowns / attempts * 100
+        passing_td_pct = passing_touchdowns / attempts * 100  # Only passing TDs count for QB rating
         int_pct = interceptions / attempts * 100
         
-        # Simplified QB rating calculation
+        # Simplified QB rating calculation (uses only passing stats)
         qb_rating = min(158.3, max(0, 
             (comp_pct - 30) * 0.05 + 
             (yards_per_att - 3) * 0.25 + 
-            td_pct * 0.2 - 
+            passing_td_pct * 0.2 - 
             int_pct * 0.25
         ) * 100)
         
@@ -507,7 +538,10 @@ class NFLMLModel:
             passing_yards=float(round(pred_yards, 1)),
             completions=float(round(completions, 1)),
             attempts=float(round(attempts, 1)),
-            touchdowns=float(round(touchdowns, 1)),
+            # Enhanced touchdown predictions
+            touchdowns=float(round(total_touchdowns, 1)),  # Legacy total
+            passing_touchdowns=float(round(passing_touchdowns, 1)),  # NEW
+            rushing_touchdowns=float(round(rushing_touchdowns, 1)),  # NEW
             interceptions=float(round(interceptions, 1)),
             qb_rating=float(round(qb_rating, 1)),
             confidence=float(round(confidence, 1)),
@@ -989,6 +1023,16 @@ def predict_player():
         
         if prediction.touchdowns is not None:
             response_prediction['touchdowns'] = float(prediction.touchdowns)
+        
+        # Enhanced touchdown breakdown for QB predictions
+        if prediction.passing_touchdowns is not None:
+            response_prediction['passing_touchdowns'] = float(prediction.passing_touchdowns)
+        
+        if prediction.rushing_touchdowns is not None:
+            response_prediction['rushing_touchdowns'] = float(prediction.rushing_touchdowns)
+        
+        if prediction.receiving_touchdowns is not None:
+            response_prediction['receiving_touchdowns'] = float(prediction.receiving_touchdowns)
         
         if prediction.interceptions is not None:
             response_prediction['interceptions'] = float(prediction.interceptions)
