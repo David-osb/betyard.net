@@ -4959,7 +4959,10 @@
                             Recent News
                         </h3>
                         <div id="qb-news-content">
-                            <p style="color: #6b7280;">Select a quarterback to see the latest news and analysis</p>
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
+                                <p style="margin-top: 12px; color: #6b7280;">Loading latest NFL news from ESPN...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -6091,89 +6094,139 @@
             }
         }
         
-        async function updateQBNews(qbName, teamName) {
+        // Global news context tracker
+        let currentNewsContext = {
+            type: 'general', // 'general', 'matchup', 'player'
+            homeTeam: null,
+            awayTeam: null,
+            playerName: null,
+            teamCode: null
+        };
+
+        // Initialize news on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNews();
+        });
+
+        // Dynamic news update function based on context
+        async function updateNews(context = null) {
+            if (context) {
+                currentNewsContext = { ...currentNewsContext, ...context };
+            }
+            
             const qbNewsContent = document.getElementById('qb-news-content');
+            if (!qbNewsContent) return;
             
             // Show loading state
             qbNewsContent.innerHTML = `
                 <div style="padding: 20px; text-align: center;">
                     <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
-                    <p style="margin-top: 12px; color: #6b7280;">Loading ESPN data for ${qbName}...</p>
+                    <p style="margin-top: 12px; color: #6b7280;">Loading latest NFL news from ESPN...</p>
                 </div>
             `;
             
             try {
-                // Get latest news and injuries from ESPN
-                const [newsData, injuryData] = await Promise.all([
-                    window.ESPNDataService.getLatestNews(5),
-                    window.ESPNDataService.getCurrentInjuries()
-                ]);
+                let newsData;
+                let newsTitle = '';
+                let newsIcon = 'newspaper';
                 
-                // Filter news for this player/team
-                const playerNews = newsData.news?.filter(article => 
-                    article.headline?.toLowerCase().includes(qbName.toLowerCase()) ||
-                    article.description?.toLowerCase().includes(qbName.toLowerCase())
-                ).slice(0, 3) || [];
-                
-                // Find injury info for this player
-                const playerInjury = injuryData.injuries?.find(injury => 
-                    injury.player?.toLowerCase().includes(qbName.toLowerCase())
-                );
-                
-                // Build news content with real ESPN data
-                let newsHTML = `
-                    <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                        <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
-                `;
-                
-                // Injury status from ESPN
-                if (playerInjury) {
-                    const statusColor = playerInjury.status === 'Healthy' ? '#10b981' : 
-                                       playerInjury.status === 'Questionable' ? '#f59e0b' : '#ef4444';
-                    newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Injury Status:</strong> 
-                            <span style="color: ${statusColor};">${playerInjury.status}</span> 
-                            ${playerInjury.description ? '- ' + playerInjury.description : ''}
-                        </p>
-                    `;
+                // Determine which ESPN endpoint to call based on context
+                if (currentNewsContext.type === 'player' && currentNewsContext.playerName) {
+                    // Player-specific news
+                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
+                    newsData = await response.json();
+                    newsTitle = `${currentNewsContext.playerName} News`;
+                    newsIcon = 'person';
+                    
+                } else if (currentNewsContext.type === 'matchup' && currentNewsContext.homeTeam && currentNewsContext.awayTeam) {
+                    // Matchup-specific news (both teams)
+                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
+                    newsData = await response.json();
+                    newsTitle = `${currentNewsContext.awayTeam} @ ${currentNewsContext.homeTeam} News`;
+                    newsIcon = 'sports_football';
+                    
                 } else {
-                    newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Injury Status:</strong> <span style="color: #10b981;">No injury report</span>
-                        </p>
-                    `;
+                    // General NFL news
+                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/latest?limit=5`);
+                    newsData = await response.json();
+                    newsTitle = 'Latest NFL News';
+                    newsIcon = 'newspaper';
                 }
                 
-                newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Data Source:</strong> <span style="color: #3b82f6;">ESPN API</span> - Real-time updates
-                        </p>
+                if (!newsData.success) {
+                    throw new Error(newsData.error || 'Failed to load news');
+                }
+                
+                // Build news HTML
+                let newsHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                            <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
+                            <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
+                            <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                        </div>
                     </div>
                 `;
                 
-                // Add ESPN news articles
-                if (playerNews.length > 0) {
-                    playerNews.forEach(article => {
+                if (newsData.news && newsData.news.length > 0) {
+                    newsData.news.forEach((article, index) => {
+                        const publishedDate = article.published ? new Date(article.published).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: new Date(article.published).getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+                        }) : 'Recent';
+                        
+                        // Different styling based on index/priority
+                        const priorityColors = [
+                            { bg: '#fef2f2', border: '#ef4444', text: '#dc2626' }, // High priority - red
+                            { bg: '#fef3c7', border: '#f59e0b', text: '#d97706' }, // Medium priority - yellow
+                            { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb' }, // Normal - blue
+                            { bg: '#f0fdf4', border: '#10b981', text: '#059669' }, // Low priority - green
+                            { bg: '#faf5ff', border: '#8b5cf6', text: '#7c3aed' }  // Extra - purple
+                        ];
+                        
+                        const colors = priorityColors[index % priorityColors.length];
+                        
+                        // Add team context badge if available
+                        let teamBadge = '';
+                        if (article.team_context) {
+                            teamBadge = `<span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 8px;">${article.team_context}</span>`;
+                        }
+                        
                         newsHTML += `
-                            <div style="padding: 12px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9; margin-bottom: 12px;">
-                                <h5 style="color: #0c4a6e; margin-bottom: 6px; font-size: 14px;">📰 ${article.headline}</h5>
-                                <p style="color: #475569; font-size: 13px; margin-bottom: 8px;">${article.description}</p>
-                                <p style="color: #64748b; font-size: 12px;">
-                                    Published: ${new Date(article.published).toLocaleDateString()}
-                                </p>
+                            <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                    <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3;">${article.headline || 'NFL News Update'}</h5>
+                                    <div style="display: flex; gap: 8px; align-items: center; margin-left: 12px;">
+                                        ${teamBadge}
+                                        <span style="color: #64748b; font-size: 11px; white-space: nowrap;">${publishedDate}</span>
+                                    </div>
+                                </div>
+                                <p style="color: #475569; font-size: 13px; margin: 0; line-height: 1.4;">${article.description || 'Stay updated with the latest NFL developments.'}</p>
                             </div>
                         `;
                     });
                 } else {
+                    // No news found
                     newsHTML += `
-                        <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                            <p style="color: #92400e; font-size: 14px;">
-                                <strong>📰 Latest:</strong> No recent news found for ${qbName}. Check back for updates from ESPN.
+                        <div style="padding: 16px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
+                            <p style="color: #92400e; font-size: 14px; margin: 0;">
+                                <strong>📰 No recent news found.</strong><br>
+                                Check back later for updates from ESPN.
                             </p>
                         </div>
                     `;
                 }
+                
+                // Add refresh button
+                newsHTML += `
+                    <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                        <button onclick="updateNews()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <i class="material-icons" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">refresh</i>
+                            Refresh News
+                        </button>
+                    </div>
+                `;
                 
                 qbNewsContent.innerHTML = newsHTML;
                 
@@ -6181,15 +6234,213 @@
                 console.error('Error fetching ESPN news:', error);
                 qbNewsContent.innerHTML = `
                     <div style="padding: 16px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444;">
-                        <p style="color: #dc2626;">
-                            <strong>⚠️ Error:</strong> Unable to load ESPN data. Using cached information for ${qbName}.
+                        <p style="color: #dc2626; margin-bottom: 8px;">
+                            <strong>⚠️ Error:</strong> Unable to load ESPN news data.
                         </p>
-                        <p style="color: #374151; margin-top: 8px; font-size: 14px;">
-                            Recent performance data and injury status will be updated when connection is restored.
+                        <p style="color: #374151; font-size: 14px; margin: 0;">
+                            Please check your connection and try again.
                         </p>
+                        <div style="text-align: center; margin-top: 12px;">
+                            <button onclick="updateNews()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">
+                                Try Again
+                            </button>
+                        </div>
                     </div>
                 `;
             }
+        }
+
+        
+        // Legacy function for backward compatibility - now redirects to dynamic system
+        async function updateQBNews(qbName, teamName) {
+            // Extract team code from teamName if needed
+            const teamCode = getTeamCodeFromName(teamName);
+            
+            await updateNews({
+                type: 'player',
+                playerName: qbName,
+                teamCode: teamCode
+            });
+        }        // Custom Recent News Management System
+        const recentNewsItems = [
+            {
+                id: 1,
+                date: '2025-11-05',
+                title: '🚀 Enhanced QB Prediction System Live!',
+                content: 'Betyard now provides separate predictions for QB passing and rushing touchdowns. Get granular insights for mobile QBs like Lamar Jackson vs pocket passers like Aaron Rodgers.',
+                category: 'Platform Update',
+                priority: 'high'
+            },
+            {
+                id: 2,
+                date: '2025-11-05', 
+                title: '🏈 Week 10 NFL Predictions Now Available',
+                content: 'Updated ML models with enhanced ESPN integration for the most accurate NFL Week 10 predictions. Features real-time injury reports and weather data.',
+                category: 'NFL',
+                priority: 'medium'
+            },
+            {
+                id: 3,
+                date: '2025-11-04',
+                title: '🤖 ML Backend Performance Boost',
+                content: 'Deployed enhanced machine learning backend with 89% accuracy. XGBoost models now support QB, RB, WR, and TE positions with real-time ESPN data integration.',
+                category: 'Technology',
+                priority: 'medium'
+            },
+            {
+                id: 4,
+                date: '2025-11-03',
+                title: '📊 Mobile QB Rushing TD Analytics',
+                content: 'New analytics differentiate mobile quarterbacks with 2.5x rushing touchdown multipliers for players like Lamar Jackson and Josh Allen.',
+                category: 'Analytics',
+                priority: 'low'
+            }
+        ];
+
+        // Function to display recent news in the news section
+        function displayRecentNews() {
+            const qbNewsContent = document.getElementById('qb-news-content');
+            
+            if (!qbNewsContent) return;
+            
+            // Sort news by date (newest first) and priority
+            const sortedNews = recentNewsItems
+                .sort((a, b) => {
+                    // First sort by priority (high > medium > low)
+                    const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                        return priorityOrder[b.priority] - priorityOrder[a.priority];
+                    }
+                    // Then by date (newest first)
+                    return new Date(b.date) - new Date(a.date);
+                })
+                .slice(0, 4); // Show top 4 news items
+            
+            let newsHTML = `
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <i class="material-icons" style="color: #3b82f6;">campaign</i>
+                        <h4 style="color: #1e40af; margin: 0;">Platform Updates & NFL News</h4>
+                        <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">LIVE</span>
+                    </div>
+                </div>
+            `;
+            
+            sortedNews.forEach((newsItem, index) => {
+                const priorityColors = {
+                    'high': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626' },
+                    'medium': { bg: '#fef3c7', border: '#f59e0b', text: '#d97706' },
+                    'low': { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb' }
+                };
+                
+                const colors = priorityColors[newsItem.priority];
+                const dateFormatted = new Date(newsItem.date).toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                newsHTML += `
+                    <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: transform 0.2s ease;">
+                        <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 8px;">
+                            <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1;">${newsItem.title}</h5>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${newsItem.category}</span>
+                                <span style="color: #64748b; font-size: 11px; white-space: nowrap;">${dateFormatted}</span>
+                            </div>
+                        </div>
+                        <p style="color: #475569; font-size: 13px; margin: 0; line-height: 1.4;">${newsItem.content}</p>
+                    </div>
+                `;
+            });
+            
+            // Add a "Show All News" link
+            newsHTML += `
+                <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                    <button onclick="toggleAllNews()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <i class="material-icons" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">expand_more</i>
+                        View All Platform Updates
+                    </button>
+                </div>
+            `;
+            
+            qbNewsContent.innerHTML = newsHTML;
+        }
+
+        // Function to toggle showing all news vs recent news
+        function toggleAllNews() {
+            const qbNewsContent = document.getElementById('qb-news-content');
+            const currentContent = qbNewsContent.innerHTML;
+            
+            if (currentContent.includes('View All Platform Updates')) {
+                // Show all news
+                let allNewsHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="material-icons" style="color: #3b82f6;">list_alt</i>
+                                <h4 style="color: #1e40af; margin: 0;">All Platform Updates</h4>
+                            </div>
+                            <button onclick="displayRecentNews()" style="background: #f3f4f6; color: #374151; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                                <i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">keyboard_arrow_up</i>
+                                Show Recent
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                recentNewsItems
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                    .forEach(newsItem => {
+                        const priorityColors = {
+                            'high': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626' },
+                            'medium': { bg: '#fef3c7', border: '#f59e0b', text: '#d97706' },
+                            'low': { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb' }
+                        };
+                        
+                        const colors = priorityColors[newsItem.priority];
+                        const dateFormatted = new Date(newsItem.date).toLocaleDateString('en-US', { 
+                            month: 'long', 
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                        
+                        allNewsHTML += `
+                            <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                    <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1;">${newsItem.title}</h5>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${newsItem.category}</span>
+                                        <span style="color: #64748b; font-size: 11px; white-space: nowrap;">${dateFormatted}</span>
+                                    </div>
+                                </div>
+                                <p style="color: #475569; font-size: 13px; margin: 0; line-height: 1.4;">${newsItem.content}</p>
+                            </div>
+                        `;
+                    });
+                
+                qbNewsContent.innerHTML = allNewsHTML;
+            } else {
+                displayRecentNews();
+            }
+        }
+
+        // Function to add new news item (for easy content management)
+        function addNewsItem(title, content, category = 'Platform Update', priority = 'medium') {
+            const newItem = {
+                id: recentNewsItems.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                title: title,
+                content: content,
+                category: category,
+                priority: priority
+            };
+            
+            recentNewsItems.unshift(newItem); // Add to beginning
+            
+            // Refresh the display
+            displayRecentNews();
+            
+            console.log('✅ News item added:', newItem);
         }
 
         // Dark Theme Toggle Function

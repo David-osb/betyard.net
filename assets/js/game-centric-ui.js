@@ -948,10 +948,20 @@ class GameCentricUI {
         // Update team selection step
         this.updateTeamSelection();
         
+        // Update news context to show matchup news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'matchup',
+                homeTeam: homeTeam,
+                awayTeam: awayTeam
+            });
+        }
+        
         // Enable next button
         document.getElementById('next-step').disabled = false;
         
         console.log('🎯 Game selected:', this.selectedGame);
+        console.log('📰 News updated for matchup:', `${awayTeam} @ ${homeTeam}`);
     }
     
     updateTeamSelection() {
@@ -1553,10 +1563,20 @@ class GameCentricUI {
         document.querySelectorAll('.player-option').forEach(el => el.classList.remove('selected'));
         event.currentTarget.classList.add('selected');
         
+        // Update news context to show player-specific news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'player',
+                playerName: playerName,
+                teamCode: this.selectedTeam?.code
+            });
+        }
+        
         // Generate prediction
         this.generatePrediction();
         
         console.log('🌟 Player selected:', this.selectedPlayer);
+        console.log('📰 News updated for player:', playerName);
     }
     
     async generatePrediction() {
@@ -2214,12 +2234,25 @@ class GameCentricUI {
         this.selectedPosition = null;
         this.selectedPlayer = null;
         
+        // Reset news context to general NFL news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'general',
+                homeTeam: null,
+                awayTeam: null,
+                playerName: null,
+                teamCode: null
+            });
+        }
+        
         // Show first step
         document.querySelectorAll('.selection-step').forEach(step => step.classList.remove('active'));
         document.getElementById('step-game-selection').classList.add('active');
         
         // Reset progress
         this.updateProgressDots();
+        
+        console.log('🔄 Starting over - News reset to general NFL');
     }
     
     setupEventListeners() {

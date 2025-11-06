@@ -487,6 +487,13 @@ class NFLMLModel:
         # Calculate rushing touchdowns
         rushing_touchdowns = max(0, np.random.poisson(base_rushing_td_rate * game_script_factor))
         
+        # DEBUG: Log the touchdown calculations
+        logger.info(f"🏈 QB {qb_name} Touchdown Breakdown:")
+        logger.info(f"   Passing TDs: {passing_touchdowns:.2f}")
+        logger.info(f"   Rushing TDs: {rushing_touchdowns:.2f}")
+        logger.info(f"   Mobility Factor: {qb_mobility_factor}x")
+        logger.info(f"   Base Rushing TD Rate: {base_rushing_td_rate:.3f}")
+        
         # Total touchdowns for QB rating calculation (use passing TDs primarily)
         total_touchdowns = passing_touchdowns + rushing_touchdowns
         
@@ -1024,15 +1031,18 @@ def predict_player():
         if prediction.touchdowns is not None:
             response_prediction['touchdowns'] = float(prediction.touchdowns)
         
-        # Enhanced touchdown breakdown for QB predictions
+        # Enhanced touchdown breakdown for QB predictions (include 0 values)
         if prediction.passing_touchdowns is not None:
             response_prediction['passing_touchdowns'] = float(prediction.passing_touchdowns)
+            logger.info(f"🎯 API Response: Adding passing_touchdowns = {prediction.passing_touchdowns}")
         
         if prediction.rushing_touchdowns is not None:
             response_prediction['rushing_touchdowns'] = float(prediction.rushing_touchdowns)
+            logger.info(f"🎯 API Response: Adding rushing_touchdowns = {prediction.rushing_touchdowns}")
         
         if prediction.receiving_touchdowns is not None:
             response_prediction['receiving_touchdowns'] = float(prediction.receiving_touchdowns)
+            logger.info(f"🎯 API Response: Adding receiving_touchdowns = {prediction.receiving_touchdowns}")
         
         if prediction.interceptions is not None:
             response_prediction['interceptions'] = float(prediction.interceptions)
@@ -1356,6 +1366,146 @@ def get_latest_news():
         })
     except Exception as e:
         logger.error(f"Error getting news: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/news/team/<team_code>', methods=['GET'])
+def get_team_news(team_code):
+    """Get latest news for a specific team from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        limit = int(request.args.get('limit', 5))
+        
+        # Get general news and filter for this team
+        all_news = espn_data_service.get_latest_news(limit * 3)  # Get more to filter
+        
+        # Filter news by team
+        team_news = []
+        team_names = {
+            'ARI': ['Cardinals', 'Arizona'], 'ATL': ['Falcons', 'Atlanta'], 'BAL': ['Ravens', 'Baltimore'],
+            'BUF': ['Bills', 'Buffalo'], 'CAR': ['Panthers', 'Carolina'], 'CHI': ['Bears', 'Chicago'],
+            'CIN': ['Bengals', 'Cincinnati'], 'CLE': ['Browns', 'Cleveland'], 'DAL': ['Cowboys', 'Dallas'],
+            'DEN': ['Broncos', 'Denver'], 'DET': ['Lions', 'Detroit'], 'GB': ['Packers', 'Green Bay'],
+            'HOU': ['Texans', 'Houston'], 'IND': ['Colts', 'Indianapolis'], 'JAX': ['Jaguars', 'Jacksonville'],
+            'KC': ['Chiefs', 'Kansas City'], 'LV': ['Raiders', 'Las Vegas'], 'LAC': ['Chargers', 'Los Angeles'],
+            'LAR': ['Rams', 'Los Angeles'], 'MIA': ['Dolphins', 'Miami'], 'MIN': ['Vikings', 'Minnesota'],
+            'NE': ['Patriots', 'New England'], 'NO': ['Saints', 'New Orleans'], 'NYG': ['Giants', 'New York'],
+            'NYJ': ['Jets', 'New York'], 'PHI': ['Eagles', 'Philadelphia'], 'PIT': ['Steelers', 'Pittsburgh'],
+            'SF': ['49ers', 'San Francisco'], 'SEA': ['Seahawks', 'Seattle'], 'TB': ['Buccaneers', 'Tampa Bay'],
+            'TEN': ['Titans', 'Tennessee'], 'WAS': ['Commanders', 'Washington']
+        }
+        
+        team_keywords = team_names.get(team_code.upper(), [team_code])
+        
+        for article in all_news:
+            headline = article.get('headline', '').lower()
+            description = article.get('description', '').lower()
+            
+            if any(keyword.lower() in headline or keyword.lower() in description for keyword in team_keywords):
+                team_news.append(article)
+                if len(team_news) >= limit:
+                    break
+        
+        return jsonify({
+            'success': True,
+            'news': team_news,
+            'count': len(team_news),
+            'team': team_code.upper(),
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting team news: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/news/player/<player_name>', methods=['GET'])
+def get_player_news(player_name):
+    """Get latest news for a specific player from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        limit = int(request.args.get('limit', 3))
+        
+        # Get general news and filter for this player
+        all_news = espn_data_service.get_latest_news(limit * 5)  # Get more to filter
+        
+        # Filter news by player name
+        player_news = []
+        
+        for article in all_news:
+            headline = article.get('headline', '').lower()
+            description = article.get('description', '').lower()
+            
+            # Check if player name appears in headline or description
+            if player_name.lower() in headline or player_name.lower() in description:
+                player_news.append(article)
+                if len(player_news) >= limit:
+                    break
+        
+        return jsonify({
+            'success': True,
+            'news': player_news,
+            'count': len(player_news),
+            'player': player_name,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting player news: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/news/matchup', methods=['GET'])
+def get_matchup_news():
+    """Get latest news for a matchup (both teams) from ESPN"""
+    if not espn_data_service:
+        return jsonify({'error': 'ESPN service not available'}), 503
+    
+    try:
+        home_team = request.args.get('home_team', '').upper()
+        away_team = request.args.get('away_team', '').upper()
+        limit = int(request.args.get('limit', 4))
+        
+        if not home_team or not away_team:
+            return jsonify({'error': 'Both home_team and away_team required'}), 400
+        
+        # Get team news for both teams
+        home_news_response = get_team_news(home_team)
+        away_news_response = get_team_news(away_team)
+        
+        home_news = home_news_response.get_json().get('news', [])
+        away_news = away_news_response.get_json().get('news', [])
+        
+        # Combine and deduplicate news
+        all_matchup_news = []
+        seen_headlines = set()
+        
+        # Add home team news
+        for article in home_news[:limit//2]:
+            headline = article.get('headline', '')
+            if headline not in seen_headlines:
+                article['team_context'] = home_team
+                all_matchup_news.append(article)
+                seen_headlines.add(headline)
+        
+        # Add away team news
+        for article in away_news[:limit//2]:
+            headline = article.get('headline', '')
+            if headline not in seen_headlines:
+                article['team_context'] = away_team
+                all_matchup_news.append(article)
+                seen_headlines.add(headline)
+        
+        return jsonify({
+            'success': True,
+            'news': all_matchup_news,
+            'count': len(all_matchup_news),
+            'matchup': f"{away_team} @ {home_team}",
+            'home_team': home_team,
+            'away_team': away_team,
+            'source': 'ESPN'
+        })
+    except Exception as e:
+        logger.error(f"Error getting matchup news: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/teams/matchups', methods=['GET'])
