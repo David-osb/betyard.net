@@ -1953,15 +1953,6 @@ def _get_fantasy_relevance(player_name: str) -> dict:
         'week_outlook': 'gathering data...',
         'season_outlook': 'analyzing trends...'
     }
-            'count': len(all_matchup_news),
-            'matchup': f"{away_team} @ {home_team}",
-            'home_team': home_team,
-            'away_team': away_team,
-            'source': 'ESPN'
-        })
-    except Exception as e:
-        logger.error(f"Error getting matchup news: {e}")
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/teams/matchups', methods=['GET'])
 def get_team_matchups():
