@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable News Test - BetYard</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .demo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .explanation {
+            background: #e0f2fe;
+            border-left: 4px solid #0288d1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🔗 Clickable News Articles Demo</h1>
+        
+        <div class="explanation">
+            <h3>✅ News Enhancement Complete!</h3>
+            <p><strong>What's New:</strong></p>
+            <ul>
+                <li>📰 News articles are now <strong>clickable links</strong> that open ESPN articles in new tabs</li>
+                <li>🔗 Visual indicators show which articles are clickable (link icon + cursor change)</li>
+                <li>🚀 Articles maintain your site's styling while providing direct access to source content</li>
+                <li>📱 Mobile-friendly implementation with responsive design</li>
+            </ul>
+        </div>
+
+        <div id="news-demo"></div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="loadDemoNews()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">newspaper</i>
+                Load Live News Demo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        async function loadDemoNews() {
+            const newsContainer = document.getElementById('news-demo');
+            
+            // Show loading
+            newsContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="display: inline-block; width: 30px; height: 30px; border: 3px solid #3b82f6; border-radius: 50%; border-top: 3px solid transparent; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 15px; color: #6b7280;">Loading live news from ESPN...</p>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/news/latest?limit=4');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error('Failed to load news');
+                }
+                
+                let newsHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #1e40af; display: flex; align-items: center; gap: 8px;">
+                            <i class="material-icons">newspaper</i>
+                            Live NFL News (Clickable!)
+                            <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                        </h3>
+                    </div>
+                `;
+                
+                data.news.forEach((article, index) => {
+                    const publishedDate = article.published ? new Date(article.published).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric'
+                    }) : 'Recent';
+                    
+                    // Get colors based on content type
+                    const getContentTypeColor = (contentType) => {
+                        const colors = {
+                            'injury': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626', icon: 'healing' },
+                            'transaction': { bg: '#fff7ed', border: '#f97316', text: '#ea580c', icon: 'swap_horiz' },
+                            'performance': { bg: '#f0fdf4', border: '#22c55e', text: '#16a34a', icon: 'trending_up' },
+                            'fantasy': { bg: '#faf5ff', border: '#8b5cf6', text: '#7c3aed', icon: 'star' },
+                            'general': { bg: '#f8fafc', border: '#64748b', text: '#475569', icon: 'newspaper' }
+                        };
+                        return colors[contentType] || colors['general'];
+                    };
+                    
+                    const colors = getContentTypeColor(article.content_type || 'general');
+                    const relevanceScore = article.relevance_score || 50;
+                    const isPriority = relevanceScore > 70;
+                    
+                    // Extract web URL for clickable link
+                    const webUrl = article.links && article.links.web && article.links.web.href ? 
+                                  article.links.web.href : null;
+                    
+                    // Determine if this should be clickable
+                    const isClickable = webUrl && webUrl.includes('espn.com');
+                    
+                    // Create badges
+                    let badges = '';
+                    if (article.content_type && article.content_type !== 'general') {
+                        badges += `<span style="background: ${colors.bg}; color: ${colors.text}; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px; border: 1px solid ${colors.border};">${article.content_type.toUpperCase()}</span>`;
+                    }
+                    if (isPriority) {
+                        badges += `<span style="background: #dc2626; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px;">🔥 HOT</span>`;
+                    }
+                    
+                    // Create the article card with optional click functionality
+                    const cardElement = isClickable ? 
+                        `<a href="${webUrl}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">` :
+                        '<div>';
+                    
+                    const cardCloseElement = isClickable ? '</a>' : '</div>';
+                    
+                    newsHTML += `
+                        ${cardElement}
+                            <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''} ${isClickable ? 'cursor: pointer;' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                        <i class="material-icons" style="color: ${colors.border}; font-size: 18px;">${colors.icon}</i>
+                                        <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3;">${article.headline || 'NFL News Update'}</h5>
+                                        ${isClickable ? `<i class="material-icons" style="color: #3b82f6; font-size: 16px; margin-left: 4px;" title="Click to read full article on ESPN">open_in_new</i>` : ''}
+                                    </div>
+                                    <span style="color: #64748b; font-size: 11px; white-space: nowrap; margin-left: 12px;">${publishedDate}</span>
+                                </div>
+                                
+                                ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
+                                
+                                <div style="color: #475569; font-size: 13px; line-height: 1.4;">
+                                    ${article.description || 'Stay updated with the latest NFL developments.'}
+                                    ${isClickable ? `<div style="margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500;"><i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">link</i>Read full article on ESPN.com</div>` : ''}
+                                </div>
+                                
+                                ${relevanceScore ? `
+                                    <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                        Relevance: ${Math.round(relevanceScore)}% ${isClickable ? '• Click to read more' : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ${cardCloseElement}
+                    `;
+                });
+                
+                newsContainer.innerHTML = newsHTML;
+                
+            } catch (error) {
+                newsContainer.innerHTML = `
+                    <div style="padding: 20px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444; text-align: center;">
+                        <p style="color: #dc2626; margin: 0;">
+                            <strong>⚠️ Error loading news:</strong> ${error.message}
+                        </p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Auto-load demo on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDemoNews();
+        });
+    </script>
+</body>
+</html>

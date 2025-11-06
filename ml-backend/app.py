@@ -2031,63 +2031,56 @@ def nfl_games_proxy():
 
 @app.route('/api/news/latest', methods=['GET'])
 def get_latest_news():
-    """Get comprehensive NFL news from multiple sources"""
+    """Get only real ESPN news articles with clickable links"""
     if not espn_data_service:
         return jsonify({'error': 'ESPN service not available'}), 503
     
     try:
         limit = int(request.args.get('limit', 15))
-        include_transactions = request.args.get('transactions', 'true').lower() == 'true'
-        include_injuries = request.args.get('injuries', 'true').lower() == 'true'
         include_fantasy = request.args.get('fantasy', 'true').lower() == 'true'
         
         # Get base ESPN news
-        espn_news = espn_data_service.get_latest_news(limit)
+        espn_news = espn_data_service.get_latest_news(limit * 2)  # Get more to filter
         
-        # Enhance with additional content types
-        comprehensive_news = []
+        # Only include real ESPN articles with clickable links
+        clickable_news = []
         
-        # Add ESPN news with enhanced metadata
         for article in espn_news:
-            enhanced_article = article.copy()
-            enhanced_article.update({
-                'content_type': _categorize_news_content(article.get('headline', '')),
-                'relevance_score': _calculate_relevance_score(article),
-                'fantasy_impact': _assess_fantasy_impact(article) if include_fantasy else None,
-                'teams_mentioned': _extract_teams_from_content(article),
-                'players_mentioned': _extract_players_from_content(article)
-            })
-            comprehensive_news.append(enhanced_article)
-        
-        # Add transaction news if requested
-        if include_transactions:
-            transaction_news = _get_transaction_news(limit // 3)
-            comprehensive_news.extend(transaction_news)
-        
-        # Add injury news if requested
-        if include_injuries:
-            injury_news = _get_injury_news(limit // 3)
-            comprehensive_news.extend(injury_news)
+            # Only include articles that have ESPN web links for clickability
+            if (article.get('links') and 
+                article.get('links', {}).get('web', {}).get('href') and
+                'espn.com' in str(article.get('links', {}).get('web', {}).get('href', ''))):
+                
+                enhanced_article = article.copy()
+                enhanced_article.update({
+                    'content_type': _categorize_news_content(article.get('headline', '')),
+                    'relevance_score': _calculate_relevance_score(article),
+                    'fantasy_impact': _assess_fantasy_impact(article) if include_fantasy else None,
+                    'teams_mentioned': _extract_teams_from_content(article),
+                    'players_mentioned': _extract_players_from_content(article)
+                })
+                clickable_news.append(enhanced_article)
+                
+                if len(clickable_news) >= limit:
+                    break
         
         # Sort by relevance and recency
-        comprehensive_news.sort(key=lambda x: (
+        clickable_news.sort(key=lambda x: (
             x.get('relevance_score', 0) * 0.7 + 
             _get_recency_score(x.get('published', '')) * 0.3
         ), reverse=True)
         
-        # Limit final results
-        comprehensive_news = comprehensive_news[:limit]
-        
         return jsonify({
             'success': True,
-            'news': comprehensive_news,
-            'count': len(comprehensive_news),
-            'source': 'Enhanced ESPN + Aggregated',
-            'content_types': list(set(article.get('content_type', 'general') for article in comprehensive_news)),
-            'last_updated': datetime.now().isoformat()
+            'news': clickable_news,
+            'count': len(clickable_news),
+            'source': 'ESPN Real Articles Only',
+            'content_types': list(set(article.get('content_type', 'general') for article in clickable_news)),
+            'last_updated': datetime.now().isoformat(),
+            'note': 'All articles are clickable ESPN links'
         })
     except Exception as e:
-        logger.error(f"Error getting comprehensive news: {e}")
+        logger.error(f"Error getting clickable news: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/news/team/<team_code>', methods=['GET'])

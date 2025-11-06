@@ -6705,34 +6705,52 @@
                             enhancedContent += `<div style="margin-top: 6px; font-size: 12px; color: ${article.performance_context.trend === 'positive' ? '#16a34a' : '#dc2626'};">${perfIcon} Performance: ${article.performance_context.trend}</div>`;
                         }
                         
+                        // Extract web URL for clickable link
+                        const webUrl = article.links && article.links.web && article.links.web.href ? 
+                                      article.links.web.href : null;
+                        
+                        // Determine if this should be clickable
+                        const isClickable = webUrl && webUrl.includes('espn.com');
+                        
+                        // Create the article card with optional click functionality
+                        const cardElement = isClickable ? 
+                            `<a href="${webUrl}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">` :
+                            '<div>';
+                        
+                        const cardCloseElement = isClickable ? '</a>' : '</div>';
+                        
                         newsHTML += `
-                            <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
-                                        <i class="material-icons" style="color: ${colors.border}; font-size: 18px;">${colors.icon}</i>
-                                        <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3;">${article.headline || 'NFL News Update'}</h5>
+                            ${cardElement}
+                                <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''} ${isClickable ? 'cursor: pointer;' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                        <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                            <i class="material-icons" style="color: ${colors.border}; font-size: 18px;">${colors.icon}</i>
+                                            <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3;">${article.headline || 'NFL News Update'}</h5>
+                                            ${isClickable ? `<i class="material-icons" style="color: #3b82f6; font-size: 16px; margin-left: 4px;" title="Click to read full article on ESPN">open_in_new</i>` : ''}
+                                        </div>
+                                        <span style="color: #64748b; font-size: 11px; white-space: nowrap; margin-left: 12px;">${publishedDate}</span>
                                     </div>
-                                    <span style="color: #64748b; font-size: 11px; white-space: nowrap; margin-left: 12px;">${publishedDate}</span>
+                                    
+                                    ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
+                                    
+                                    <div style="color: #475569; font-size: 13px; line-height: 1.4;">
+                                        ${enhancedContent}
+                                        ${isClickable ? `<div style="margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500;"><i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">link</i>Read full article on ESPN.com</div>` : ''}
+                                    </div>
+                                    
+                                    ${article.fantasy_impact && article.fantasy_impact.recommendation ? `
+                                        <div style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; border-left: 3px solid #8b5cf6;">
+                                            <div style="font-size: 12px; color: #7c3aed; font-weight: 600;">Fantasy Impact: ${article.fantasy_impact.recommendation}</div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${relevanceScore ? `
+                                        <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                            Relevance: ${Math.round(relevanceScore)}%
+                                        </div>
+                                    ` : ''}
                                 </div>
-                                
-                                ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
-                                
-                                <div style="color: #475569; font-size: 13px; line-height: 1.4;">
-                                    ${enhancedContent}
-                                </div>
-                                
-                                ${article.fantasy_impact && article.fantasy_impact.recommendation ? `
-                                    <div style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; border-left: 3px solid #8b5cf6;">
-                                        <div style="font-size: 12px; color: #7c3aed; font-weight: 600;">Fantasy Impact: ${article.fantasy_impact.recommendation}</div>
-                                    </div>
-                                ` : ''}
-                                
-                                ${relevanceScore ? `
-                                    <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
-                                        Relevance: ${Math.round(relevanceScore)}%
-                                    </div>
-                                ` : ''}
-                            </div>
+                            ${cardCloseElement}
                         `;
                     });
                 } else {
