@@ -373,6 +373,229 @@ class GameCentricUI {
                 .team-choice-details {
                     font-size: 14px;
                     color: #6b7280;
+                    margin-bottom: 16px;
+                }
+                
+                .team-rankings-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                    margin-top: 16px;
+                }
+                
+                .ranking-card {
+                    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 12px;
+                    text-align: center;
+                    transition: all 0.2s ease;
+                }
+                
+                .ranking-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                }
+                
+                .ranking-card-title {
+                    font-size: 13px;
+                    font-weight: bold;
+                    color: #374151;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                }
+                
+                .ranking-stat {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 4px;
+                    font-size: 11px;
+                }
+                
+                .ranking-stat-label {
+                    color: #6b7280;
+                    font-weight: 500;
+                }
+                
+                .ranking-stat-value {
+                    font-weight: bold;
+                    font-size: 11px;
+                }
+                
+                .team-record {
+                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 6px;
+                    margin-top: 12px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                
+                .moneyline-prediction-card {
+                    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+                    border: 1px solid #4b5563;
+                    border-radius: 16px;
+                    padding: 24px;
+                    margin: 24px 0;
+                    color: white;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+                    transition: all 0.3s ease;
+                    width: 100%;
+                    max-width: none;
+                }
+                
+                .moneyline-prediction-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+                }
+                
+                .moneyline-header {
+                    text-align: center;
+                    margin-bottom: 24px;
+                }
+                
+                .moneyline-title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #fbbf24;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+                
+                .moneyline-subtitle {
+                    font-size: 14px;
+                    color: #9ca3af;
+                }
+                
+                .moneyline-matchup {
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr auto;
+                    align-items: center;
+                    gap: 24px;
+                    margin-bottom: 24px;
+                    max-width: 800px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                
+                .moneyline-team {
+                    text-align: center;
+                    padding: 20px;
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 16px;
+                    border: 2px solid transparent;
+                    transition: all 0.3s ease;
+                    min-height: 120px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+                
+                .moneyline-team.predicted-winner {
+                    border-color: #10b981;
+                    background: rgba(16, 185, 129, 0.15);
+                    transform: scale(1.02);
+                }
+                
+                .moneyline-team-name {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-bottom: 12px;
+                    letter-spacing: 1px;
+                }
+                
+                .moneyline-odds {
+                    font-size: 28px;
+                    font-weight: bold;
+                    color: #fbbf24;
+                    margin-bottom: 8px;
+                }
+                
+                .moneyline-probability {
+                    font-size: 14px;
+                    color: #9ca3af;
+                    font-weight: 500;
+                }
+                
+                .moneyline-vs {
+                    font-size: 18px;
+                    color: #6b7280;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                
+                .moneyline-confidence {
+                    text-align: center;
+                    padding: 16px 24px;
+                    background: rgba(59, 130, 246, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(59, 130, 246, 0.3);
+                    max-width: 200px;
+                    margin: 0 auto;
+                }
+                
+                .confidence-label {
+                    font-size: 12px;
+                    color: #93c5fd;
+                    margin-bottom: 4px;
+                }
+                
+                .confidence-value {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #3b82f6;
+                }
+                
+                .moneyline-strength {
+                    font-size: 11px;
+                    color: #6b7280;
+                    margin-top: 4px;
+                    font-weight: 500;
+                }
+                
+                .model-info {
+                    margin-top: 20px;
+                    padding: 16px;
+                    background: rgba(16, 185, 129, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(16, 185, 129, 0.3);
+                }
+                
+                .model-details {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    font-size: 12px;
+                }
+                
+                .model-type {
+                    font-weight: bold;
+                    color: #10b981;
+                    background: rgba(16, 185, 129, 0.2);
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                }
+                
+                .model-positions {
+                    color: #047857;
+                    font-weight: 500;
+                }
+                
+                .prediction-winner {
+                    text-align: center;
+                    font-size: 14px;
+                    color: #047857;
+                    font-weight: 600;
                 }
                 
                 .position-grid {
@@ -746,6 +969,33 @@ class GameCentricUI {
                         flex-direction: column;
                     }
                     
+                    .team-rankings-container {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .moneyline-matchup {
+                        grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+                    
+                    .moneyline-vs {
+                        order: 1;
+                        margin: 8px 0;
+                    }
+                    
+                    .moneyline-prediction-card {
+                        padding: 16px;
+                        margin: 16px 0;
+                    }
+                    
+                    .moneyline-title {
+                        font-size: 20px;
+                    }
+                    
+                    .moneyline-odds {
+                        font-size: 24px;
+                    }
+                    
                     .position-grid {
                         grid-template-columns: repeat(2, 1fr);
                     }
@@ -758,6 +1008,49 @@ class GameCentricUI {
                     .nav-btn {
                         width: 100%;
                     }
+                }
+                
+                /* Dark Theme Support */
+                body.dark-theme .ranking-card {
+                    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+                    border-color: #4b5563;
+                    color: #e5e7eb;
+                }
+                
+                body.dark-theme .ranking-card-title {
+                    color: #e5e7eb;
+                }
+                
+                body.dark-theme .ranking-stat-label {
+                    color: #9ca3af;
+                }
+                
+                body.dark-theme .ranking-card:hover {
+                    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                }
+                
+                body.dark-theme .team-record {
+                    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+                }
+                
+                body.dark-theme .moneyline-prediction-card {
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    border-color: #334155;
+                }
+                
+                body.dark-theme .moneyline-team {
+                    background: rgba(255,255,255,0.03);
+                }
+                
+                body.dark-theme .moneyline-team.predicted-winner {
+                    border-color: #059669;
+                    background: rgba(5, 150, 105, 0.15);
+                }
+                
+                body.dark-theme .moneyline-confidence {
+                    background: rgba(37, 99, 235, 0.1);
+                    border-color: rgba(37, 99, 235, 0.2);
                 }
             </style>
         `;
@@ -938,15 +1231,15 @@ class GameCentricUI {
         `;
     }
     
-    selectGame(awayTeam, homeTeam, status) {
+    async selectGame(awayTeam, homeTeam, status) {
         this.selectedGame = { away: awayTeam, home: homeTeam, status: status };
         
         // Mark game as selected
         document.querySelectorAll('.game-option').forEach(el => el.classList.remove('selected'));
         event.currentTarget.classList.add('selected');
         
-        // Update team selection step
-        this.updateTeamSelection();
+        // Update team selection step (await the async function)
+        await this.updateTeamSelection();
         
         // Update news context to show matchup news
         if (typeof updateNews === 'function') {
@@ -964,23 +1257,141 @@ class GameCentricUI {
         console.log('📰 News updated for matchup:', `${awayTeam} @ ${homeTeam}`);
     }
     
-    updateTeamSelection() {
+    async updateTeamSelection() {
         const container = document.getElementById('team-selection-container');
         if (!container || !this.selectedGame) return;
+        
+        // Show loading state while fetching rankings
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="font-size: 24px; margin-bottom: 16px;">⏳</div>
+                <div style="color: #6b7280;">Loading team rankings...</div>
+            </div>
+        `;
+        
+        // Get team rankings for both teams
+        const [awayRankings, homeRankings] = await Promise.all([
+            this.getTeamRankings(this.selectedGame.away),
+            this.getTeamRankings(this.selectedGame.home)
+        ]);
         
         container.innerHTML = `
             <div class="team-choice" onclick="gameCentricUI.selectTeam('${this.selectedGame.away}', 'away')">
                 <div class="team-logo">🏈</div>
                 <div class="team-choice-name">${this.selectedGame.away}</div>
                 <div class="team-choice-details">Away Team</div>
+                
+                <div class="team-rankings-container">
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🏈 Offense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.total_rank)}">#${awayRankings.offense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Passing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.passing_rank)}">#${awayRankings.offense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Rushing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.rushing_rank)}">#${awayRankings.offense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PPG:</span>
+                            <span class="ranking-stat-value">${awayRankings.offense.points_per_game.toFixed(1)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🛡️ Defense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.total_rank)}">#${awayRankings.defense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Pass:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.passing_rank)}">#${awayRankings.defense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Rush:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.rushing_rank)}">#${awayRankings.defense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PTS Allowed:</span>
+                            <span class="ranking-stat-value">${awayRankings.defense.points_allowed.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-record">
+                    📊 Record: ${awayRankings.overall.record}
+                </div>
             </div>
             
             <div class="team-choice" onclick="gameCentricUI.selectTeam('${this.selectedGame.home}', 'home')">
                 <div class="team-logo">🏟️</div>
                 <div class="team-choice-name">${this.selectedGame.home}</div>
                 <div class="team-choice-details">Home Team</div>
+                
+                <div class="team-rankings-container">
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🏈 Offense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.total_rank)}">#${homeRankings.offense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Passing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.passing_rank)}">#${homeRankings.offense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Rushing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.rushing_rank)}">#${homeRankings.offense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PPG:</span>
+                            <span class="ranking-stat-value">${homeRankings.offense.points_per_game.toFixed(1)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🛡️ Defense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.total_rank)}">#${homeRankings.defense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Pass:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.passing_rank)}">#${homeRankings.defense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Rush:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.rushing_rank)}">#${homeRankings.defense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PTS Allowed:</span>
+                            <span class="ranking-stat-value">${homeRankings.defense.points_allowed.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-record">
+                    📊 Record: ${homeRankings.overall.record}
+                </div>
             </div>
         `;
+        
+        // Add moneyline prediction card after the team selection
+        const moneylinePrediction = await this.generateMoneylinePrediction(awayRankings, homeRankings);
+        container.insertAdjacentHTML('afterend', moneylinePrediction);
     }
     
     selectTeam(teamCode, homeAway) {
@@ -1116,7 +1527,7 @@ class GameCentricUI {
         try {
             console.log(`🔍 Fetching ${position} players for ${teamCode} using ESPN player search API...`);
             
-            const baseURL = 'https://betyard-ml-backend.onrender.com';
+            const baseURL = 'http://localhost:5001';
             
             // Map team codes to full team names for better search results
             const teamNames = {
@@ -1165,7 +1576,7 @@ class GameCentricUI {
         try {
             console.log(`🏈 Fetching ESPN depth chart for ${teamCode}...`);
             
-            const baseURL = 'https://betyard-ml-backend.onrender.com';
+            const baseURL = 'http://localhost:5001';
             
             // Use the new ESPN depth chart endpoint
             const url = `${baseURL}/api/espn/depth-chart/${teamCode}`;
@@ -2361,6 +2772,714 @@ class GameCentricUI {
                 </div>
             `;
         }
+    }
+    
+    // Team Rankings Methods
+    async getTeamRankings(teamCode) {
+        try {
+            console.log(`📊 Fetching rankings for team: ${teamCode}`);
+            
+            // Check if ML service is available
+            if (window.betYardMLService && window.betYardMLService.isAvailable) {
+                const response = await fetch(`${window.betYardMLService.baseURL}/api/teams/rankings/${teamCode}`);
+                if (response.ok) {
+                    const rankings = await response.json();
+                    console.log(`✅ Got rankings for ${teamCode}:`, rankings);
+                    return rankings;
+                }
+            }
+            
+            // Fallback to default rankings if service unavailable
+            return this.getDefaultRankings(teamCode);
+            
+        } catch (error) {
+            console.warn(`⚠️ Error fetching rankings for ${teamCode}:`, error);
+            return this.getDefaultRankings(teamCode);
+        }
+    }
+    
+    getDefaultRankings(teamCode) {
+        // Realistic team rankings for 2024-25 NFL season
+        const teamRankings = {
+            'CLE': { 
+                offense: { 
+                    total_rank: 18, 
+                    passing_rank: 20, 
+                    rushing_rank: 17, 
+                    points_per_game: 18.5, 
+                    yards_per_game: 310.0 
+                }, 
+                defense: { 
+                    total_rank: 12, 
+                    passing_rank: 13, 
+                    rushing_rank: 10, 
+                    points_allowed: 21.2, 
+                    yards_allowed: 325.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'NYJ': { 
+                offense: { 
+                    total_rank: 22, 
+                    passing_rank: 24, 
+                    rushing_rank: 20, 
+                    points_per_game: 16.8, 
+                    yards_per_game: 290.0 
+                }, 
+                defense: { 
+                    total_rank: 18, 
+                    passing_rank: 19, 
+                    rushing_rank: 15, 
+                    points_allowed: 22.5, 
+                    yards_allowed: 340.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'BUF': { 
+                offense: { 
+                    total_rank: 5, 
+                    passing_rank: 4, 
+                    rushing_rank: 8, 
+                    points_per_game: 28.3, 
+                    yards_per_game: 385.0 
+                }, 
+                defense: { 
+                    total_rank: 8, 
+                    passing_rank: 6, 
+                    rushing_rank: 12, 
+                    points_allowed: 18.9, 
+                    yards_allowed: 310.0 
+                }, 
+                overall: { record: '9-1' }
+            },
+            'MIA': { 
+                offense: { 
+                    total_rank: 12, 
+                    passing_rank: 10, 
+                    rushing_rank: 16, 
+                    points_per_game: 22.1, 
+                    yards_per_game: 355.0 
+                }, 
+                defense: { 
+                    total_rank: 20, 
+                    passing_rank: 22, 
+                    rushing_rank: 18, 
+                    points_allowed: 24.8, 
+                    yards_allowed: 365.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'NE': { 
+                offense: { 
+                    total_rank: 28, 
+                    passing_rank: 30, 
+                    rushing_rank: 25, 
+                    points_per_game: 14.2, 
+                    yards_per_game: 275.0 
+                }, 
+                defense: { 
+                    total_rank: 15, 
+                    passing_rank: 14, 
+                    rushing_rank: 17, 
+                    points_allowed: 20.8, 
+                    yards_allowed: 330.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'BAL': { 
+                offense: { 
+                    total_rank: 8, 
+                    passing_rank: 12, 
+                    rushing_rank: 4, 
+                    points_per_game: 26.5, 
+                    yards_per_game: 375.0 
+                }, 
+                defense: { 
+                    total_rank: 14, 
+                    passing_rank: 16, 
+                    rushing_rank: 11, 
+                    points_allowed: 22.1, 
+                    yards_allowed: 335.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'CIN': { 
+                offense: { 
+                    total_rank: 10, 
+                    passing_rank: 8, 
+                    rushing_rank: 14, 
+                    points_per_game: 24.7, 
+                    yards_per_game: 365.0 
+                }, 
+                defense: { 
+                    total_rank: 22, 
+                    passing_rank: 25, 
+                    rushing_rank: 19, 
+                    points_allowed: 26.3, 
+                    yards_allowed: 375.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'PIT': { 
+                offense: { 
+                    total_rank: 16, 
+                    passing_rank: 18, 
+                    rushing_rank: 12, 
+                    points_per_game: 20.8, 
+                    yards_per_game: 320.0 
+                }, 
+                defense: { 
+                    total_rank: 6, 
+                    passing_rank: 5, 
+                    rushing_rank: 8, 
+                    points_allowed: 17.2, 
+                    yards_allowed: 295.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'KC': { 
+                offense: { 
+                    total_rank: 3, 
+                    passing_rank: 5, 
+                    rushing_rank: 6, 
+                    points_per_game: 29.1, 
+                    yards_per_game: 390.0 
+                }, 
+                defense: { 
+                    total_rank: 10, 
+                    passing_rank: 9, 
+                    rushing_rank: 13, 
+                    points_allowed: 19.5, 
+                    yards_allowed: 315.0 
+                }, 
+                overall: { record: '9-1' }
+            },
+            'LAC': { 
+                offense: { 
+                    total_rank: 14, 
+                    passing_rank: 15, 
+                    rushing_rank: 11, 
+                    points_per_game: 21.9, 
+                    yards_per_game: 345.0 
+                }, 
+                defense: { 
+                    total_rank: 16, 
+                    passing_rank: 17, 
+                    rushing_rank: 14, 
+                    points_allowed: 23.1, 
+                    yards_allowed: 345.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'DEN': { 
+                offense: { 
+                    total_rank: 20, 
+                    passing_rank: 22, 
+                    rushing_rank: 18, 
+                    points_per_game: 18.9, 
+                    yards_per_game: 305.0 
+                }, 
+                defense: { 
+                    total_rank: 9, 
+                    passing_rank: 8, 
+                    rushing_rank: 9, 
+                    points_allowed: 18.7, 
+                    yards_allowed: 300.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'LV': { 
+                offense: { 
+                    total_rank: 26, 
+                    passing_rank: 28, 
+                    rushing_rank: 23, 
+                    points_per_game: 16.3, 
+                    yards_per_game: 280.0 
+                }, 
+                defense: { 
+                    total_rank: 25, 
+                    passing_rank: 26, 
+                    rushing_rank: 24, 
+                    points_allowed: 27.8, 
+                    yards_allowed: 385.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'DAL': { 
+                offense: { 
+                    total_rank: 21, 
+                    passing_rank: 19, 
+                    rushing_rank: 24, 
+                    points_per_game: 19.2, 
+                    yards_per_game: 315.0 
+                }, 
+                defense: { 
+                    total_rank: 24, 
+                    passing_rank: 23, 
+                    rushing_rank: 26, 
+                    points_allowed: 26.9, 
+                    yards_allowed: 380.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'NYG': { 
+                offense: { 
+                    total_rank: 30, 
+                    passing_rank: 32, 
+                    rushing_rank: 27, 
+                    points_per_game: 13.8, 
+                    yards_per_game: 260.0 
+                }, 
+                defense: { 
+                    total_rank: 19, 
+                    passing_rank: 20, 
+                    rushing_rank: 16, 
+                    points_allowed: 24.2, 
+                    yards_allowed: 355.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'PHI': { 
+                offense: { 
+                    total_rank: 7, 
+                    passing_rank: 9, 
+                    rushing_rank: 5, 
+                    points_per_game: 27.1, 
+                    yards_per_game: 380.0 
+                }, 
+                defense: { 
+                    total_rank: 11, 
+                    passing_rank: 12, 
+                    rushing_rank: 7, 
+                    points_allowed: 20.3, 
+                    yards_allowed: 320.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'WAS': { 
+                offense: { 
+                    total_rank: 6, 
+                    passing_rank: 6, 
+                    rushing_rank: 9, 
+                    points_per_game: 27.8, 
+                    yards_per_game: 375.0 
+                }, 
+                defense: { 
+                    total_rank: 21, 
+                    passing_rank: 21, 
+                    rushing_rank: 22, 
+                    points_allowed: 25.5, 
+                    yards_allowed: 370.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'GB': { 
+                offense: { 
+                    total_rank: 4, 
+                    passing_rank: 3, 
+                    rushing_rank: 7, 
+                    points_per_game: 28.9, 
+                    yards_per_game: 385.0 
+                }, 
+                defense: { 
+                    total_rank: 13, 
+                    passing_rank: 11, 
+                    rushing_rank: 20, 
+                    points_allowed: 21.7, 
+                    yards_allowed: 340.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'CHI': { 
+                offense: { 
+                    total_rank: 24, 
+                    passing_rank: 26, 
+                    rushing_rank: 21, 
+                    points_per_game: 17.5, 
+                    yards_per_game: 295.0 
+                }, 
+                defense: { 
+                    total_rank: 7, 
+                    passing_rank: 7, 
+                    rushing_rank: 6, 
+                    points_allowed: 17.8, 
+                    yards_allowed: 290.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'DET': { 
+                offense: { 
+                    total_rank: 1, 
+                    passing_rank: 1, 
+                    rushing_rank: 3, 
+                    points_per_game: 31.2, 
+                    yards_per_game: 410.0 
+                }, 
+                defense: { 
+                    total_rank: 17, 
+                    passing_rank: 15, 
+                    rushing_rank: 21, 
+                    points_allowed: 23.8, 
+                    yards_allowed: 350.0 
+                }, 
+                overall: { record: '8-2' }
+            },
+            'MIN': { 
+                offense: { 
+                    total_rank: 9, 
+                    passing_rank: 7, 
+                    rushing_rank: 13, 
+                    points_per_game: 25.3, 
+                    yards_per_game: 370.0 
+                }, 
+                defense: { 
+                    total_rank: 5, 
+                    passing_rank: 4, 
+                    rushing_rank: 5, 
+                    points_allowed: 16.9, 
+                    yards_allowed: 285.0 
+                }, 
+                overall: { record: '8-2' }
+            },
+            'ATL': { 
+                offense: { 
+                    total_rank: 15, 
+                    passing_rank: 13, 
+                    rushing_rank: 19, 
+                    points_per_game: 21.4, 
+                    yards_per_game: 340.0 
+                }, 
+                defense: { 
+                    total_rank: 26, 
+                    passing_rank: 27, 
+                    rushing_rank: 25, 
+                    points_allowed: 28.1, 
+                    yards_allowed: 390.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'CAR': { 
+                offense: { 
+                    total_rank: 25, 
+                    passing_rank: 25, 
+                    rushing_rank: 26, 
+                    points_per_game: 16.7, 
+                    yards_per_game: 285.0 
+                }, 
+                defense: { 
+                    total_rank: 29, 
+                    passing_rank: 30, 
+                    rushing_rank: 28, 
+                    points_allowed: 29.5, 
+                    yards_allowed: 405.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'NO': { 
+                offense: { 
+                    total_rank: 29, 
+                    passing_rank: 29, 
+                    rushing_rank: 30, 
+                    points_per_game: 14.8, 
+                    yards_per_game: 270.0 
+                }, 
+                defense: { 
+                    total_rank: 23, 
+                    passing_rank: 24, 
+                    rushing_rank: 23, 
+                    points_allowed: 26.7, 
+                    yards_allowed: 375.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'TB': { 
+                offense: { 
+                    total_rank: 11, 
+                    passing_rank: 11, 
+                    rushing_rank: 15, 
+                    points_per_game: 23.6, 
+                    yards_per_game: 360.0 
+                }, 
+                defense: { 
+                    total_rank: 27, 
+                    passing_rank: 28, 
+                    rushing_rank: 27, 
+                    points_allowed: 28.9, 
+                    yards_allowed: 395.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'ARI': { 
+                offense: { 
+                    total_rank: 13, 
+                    passing_rank: 14, 
+                    rushing_rank: 10, 
+                    points_per_game: 22.8, 
+                    yards_per_game: 350.0 
+                }, 
+                defense: { 
+                    total_rank: 28, 
+                    passing_rank: 29, 
+                    rushing_rank: 29, 
+                    points_allowed: 29.2, 
+                    yards_allowed: 400.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'LAR': { 
+                offense: { 
+                    total_rank: 17, 
+                    passing_rank: 16, 
+                    rushing_rank: 22, 
+                    points_per_game: 20.5, 
+                    yards_per_game: 325.0 
+                }, 
+                defense: { 
+                    total_rank: 3, 
+                    passing_rank: 2, 
+                    rushing_rank: 4, 
+                    points_allowed: 15.8, 
+                    yards_allowed: 275.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'SEA': { 
+                offense: { 
+                    total_rank: 2, 
+                    passing_rank: 2, 
+                    rushing_rank: 2, 
+                    points_per_game: 30.1, 
+                    yards_per_game: 395.0 
+                }, 
+                defense: { 
+                    total_rank: 30, 
+                    passing_rank: 31, 
+                    rushing_rank: 30, 
+                    points_allowed: 30.7, 
+                    yards_allowed: 415.0 
+                }, 
+                overall: { record: '5-5' }
+            },
+            'SF': { 
+                offense: { 
+                    total_rank: 19, 
+                    passing_rank: 21, 
+                    rushing_rank: 1, 
+                    points_per_game: 19.8, 
+                    yards_per_game: 335.0 
+                }, 
+                defense: { 
+                    total_rank: 4, 
+                    passing_rank: 3, 
+                    rushing_rank: 3, 
+                    points_allowed: 16.2, 
+                    yards_allowed: 280.0 
+                }, 
+                overall: { record: '5-5' }
+            }
+        };
+        
+        const defaultRanking = { 
+            offense: { 
+                total_rank: 16, 
+                passing_rank: 16, 
+                rushing_rank: 16, 
+                points_per_game: 22.0, 
+                yards_per_game: 340.0 
+            }, 
+            defense: { 
+                total_rank: 16, 
+                passing_rank: 16, 
+                rushing_rank: 16, 
+                points_allowed: 23.0, 
+                yards_allowed: 350.0 
+            }, 
+            overall: { record: '5-5' }
+        };
+        
+        return teamRankings[teamCode] || defaultRanking;
+    }
+    
+    async generateMoneylinePrediction(awayRankings, homeRankings) {
+        try {
+            console.log('💰 Generating XGBoost-powered moneyline prediction...');
+            
+            // Get team names for the API call
+            const awayTeam = this.selectedGame.away;
+            const homeTeam = this.selectedGame.home;
+            
+            console.log(`🤖 Calling XGBoost backend for ${awayTeam} vs ${homeTeam}`);
+            
+            // Call the XGBoost backend API
+            const response = await fetch('http://localhost:5001/api/moneyline/prediction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    team1: awayTeam,
+                    team2: homeTeam
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`XGBoost API error: ${response.status}`);
+            }
+            
+            const prediction = await response.json();
+            console.log('🎯 XGBoost prediction received:', prediction);
+            
+            // Extract prediction data
+            const awayPrediction = prediction.predictions.team1;
+            const homePrediction = prediction.predictions.team2;
+            
+            // Determine predicted winner
+            const predictedWinner = homePrediction.win_probability > awayPrediction.win_probability ? 'home' : 'away';
+            const winnerData = predictedWinner === 'home' ? homePrediction : awayPrediction;
+            
+            return `
+            <div class="moneyline-prediction-card">
+                <div class="moneyline-header">
+                    <div class="moneyline-title">
+                        🤖 XGBoost Moneyline Prediction
+                    </div>
+                    <div class="moneyline-subtitle">
+                        AI-powered prediction using ${prediction.model_info.training_games.toLocaleString()} NFL games
+                    </div>
+                </div>
+                
+                <div class="moneyline-matchup">
+                    <div class="moneyline-team ${predictedWinner === 'away' ? 'predicted-winner' : ''}">
+                        <div class="moneyline-team-name">${awayPrediction.name}</div>
+                        <div class="moneyline-odds">${awayPrediction.american_odds}</div>
+                        <div class="moneyline-probability">${awayPrediction.win_probability}% chance</div>
+                        <div class="moneyline-strength">Strength: ${awayPrediction.strength_score}</div>
+                    </div>
+                    
+                    <div class="moneyline-vs">VS</div>
+                    
+                    <div class="moneyline-team ${predictedWinner === 'home' ? 'predicted-winner' : ''}">
+                        <div class="moneyline-team-name">${homePrediction.name}</div>
+                        <div class="moneyline-odds">${homePrediction.american_odds}</div>
+                        <div class="moneyline-probability">${homePrediction.win_probability}% chance</div>
+                        <div class="moneyline-strength">Strength: ${homePrediction.strength_score}</div>
+                    </div>
+                </div>
+                
+                <div class="moneyline-confidence">
+                    <div class="confidence-label">Model Confidence</div>
+                    <div class="confidence-value">${prediction.confidence}%</div>
+                </div>
+                
+                <div class="model-info">
+                    <div class="model-details">
+                        <span class="model-type">${prediction.model_info.type}</span>
+                        <span class="model-positions">${prediction.model_info.positions.join(', ')} Models</span>
+                    </div>
+                    <div class="prediction-winner">
+                        🏆 Predicted Winner: <strong>${winnerData.name}</strong> (${winnerData.win_probability}%)
+                    </div>
+                </div>
+            </div>
+            `;
+            
+        } catch (error) {
+            console.warn('⚠️ Error generating XGBoost prediction:', error);
+            console.log('🔄 Falling back to basic ranking algorithm...');
+            
+            // Fallback to the original simple algorithm
+            try {
+                // Calculate team strength scores based on rankings
+                const awayOffenseScore = (33 - awayRankings.offense.total_rank) / 32;
+                const awayDefenseScore = (33 - awayRankings.defense.total_rank) / 32;
+                const homeOffenseScore = (33 - homeRankings.offense.total_rank) / 32;
+                const homeDefenseScore = (33 - homeRankings.defense.total_rank) / 32;
+                
+                // Add home field advantage (typically 3 points in NFL)
+                const homeFieldAdvantage = 0.1;
+                
+                // Calculate overall team strength
+                const awayStrength = (awayOffenseScore + awayDefenseScore) / 2;
+                const homeStrength = ((homeOffenseScore + homeDefenseScore) / 2) + homeFieldAdvantage;
+                
+                // Normalize to get win probabilities
+                const totalStrength = awayStrength + homeStrength;
+                const awayWinProb = awayStrength / totalStrength;
+                const homeWinProb = homeStrength / totalStrength;
+                
+                // Convert probabilities to American odds
+                const awayOdds = this.probabilityToAmericanOdds(awayWinProb);
+                const homeOdds = this.probabilityToAmericanOdds(homeWinProb);
+                
+                // Determine predicted winner
+                const predictedWinner = homeWinProb > awayWinProb ? 'home' : 'away';
+                const confidence = Math.max(homeWinProb, awayWinProb);
+                
+                return `
+                <div class="moneyline-prediction-card">
+                    <div class="moneyline-header">
+                        <div class="moneyline-title">
+                            💰 Moneyline Prediction (Fallback)
+                        </div>
+                        <div class="moneyline-subtitle">Ranking-based prediction (XGBoost temporarily unavailable)</div>
+                    </div>
+                    
+                    <div class="moneyline-matchup">
+                        <div class="moneyline-team ${predictedWinner === 'away' ? 'predicted-winner' : ''}">
+                            <div class="moneyline-team-name">${this.selectedGame.away}</div>
+                            <div class="moneyline-odds">${awayOdds}</div>
+                            <div class="moneyline-probability">${(awayWinProb * 100).toFixed(1)}% chance</div>
+                        </div>
+                        
+                        <div class="moneyline-vs">VS</div>
+                        
+                        <div class="moneyline-team ${predictedWinner === 'home' ? 'predicted-winner' : ''}">
+                            <div class="moneyline-team-name">${this.selectedGame.home}</div>
+                            <div class="moneyline-odds">${homeOdds}</div>
+                            <div class="moneyline-probability">${(homeWinProb * 100).toFixed(1)}% chance</div>
+                        </div>
+                    </div>
+                    
+                    <div class="moneyline-confidence">
+                        <div class="confidence-label">Model Confidence</div>
+                        <div class="confidence-value">${(confidence * 100).toFixed(1)}%</div>
+                    </div>
+                </div>
+                `;
+            } catch (fallbackError) {
+                console.error('❌ Fallback prediction also failed:', fallbackError);
+                return `
+                <div class="moneyline-prediction-card">
+                    <div class="moneyline-header">
+                        <div class="moneyline-title">💰 Moneyline Prediction</div>
+                        <div class="moneyline-subtitle">Prediction temporarily unavailable</div>
+                    </div>
+                    <div style="text-align: center; padding: 20px; color: #9ca3af;">
+                        Unable to generate prediction at this time
+                    </div>
+                </div>
+                `;
+            }
+        }
+    }
+    
+    probabilityToAmericanOdds(probability) {
+        if (probability > 0.5) {
+            // Favorite (negative odds)
+            const odds = Math.round(-100 / (probability / (1 - probability)));
+            return odds.toString();
+        } else {
+            // Underdog (positive odds) 
+            const odds = Math.round(100 * ((1 - probability) / probability));
+            return `+${odds}`;
+        }
+    }
+    
+    getRankingColor(rank) {
+        // Color code rankings: Green (1-10), Yellow (11-20), Red (21-32)
+        if (rank <= 10) return '#059669'; // Green - Top tier
+        if (rank <= 20) return '#d97706'; // Orange - Middle tier  
+        return '#dc2626'; // Red - Bottom tier
     }
 }
 

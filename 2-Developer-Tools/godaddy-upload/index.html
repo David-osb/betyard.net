@@ -4271,6 +4271,399 @@
                 font-size: 11px;
             }
         }
+
+        /* Best Props Styles */
+        .best-props-container {
+            margin-top: 20px;
+        }
+
+        .props-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .props-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .props-stats .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 61, 165, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 61, 165, 0.2);
+        }
+
+        .props-stats .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003da5;
+            margin-bottom: 5px;
+        }
+
+        .props-stats .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .props-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .refresh-props-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #003da5, #0056d3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-props-btn:hover {
+            background: linear-gradient(135deg, #0056d3, #0066ff);
+            transform: translateY(-2px);
+        }
+
+        #props-filter {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .props-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .prop-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 61, 165, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 61, 165, 0.2);
+        }
+
+        .prop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #003da5;
+        }
+
+        .prop-card.high-confidence::before {
+            background: #10b981;
+        }
+
+        .prop-card.medium-confidence::before {
+            background: #f59e0b;
+        }
+
+        .prop-card.low-confidence::before {
+            background: #ef4444;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .player-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003da5;
+        }
+
+        .position-badge {
+            background: rgba(0, 61, 165, 0.1);
+            color: #003da5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .prop-details {
+            margin-bottom: 15px;
+        }
+
+        .prop-type {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        .prop-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .value-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .value-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .value-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .recommendation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .bet-direction {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .bet-direction.UNDER {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .edge-percentage {
+            font-size: 16px;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .sportsbook-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .sportsbook-name {
+            font-weight: bold;
+            color: #003da5;
+            font-size: 14px;
+        }
+
+        .odds {
+            font-size: 16px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .confidence-text {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #003da5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .props-footer {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #003da5;
+        }
+
+        .disclaimer {
+            margin: 0;
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Dark theme styles for best props */
+        body.dark-theme .props-stats .stat-item {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.2);
+        }
+
+        body.dark-theme .props-stats .stat-value {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .props-stats .stat-label {
+            color: #94a3b8;
+        }
+
+        body.dark-theme #props-filter {
+            background: #374151;
+            color: white;
+            border-color: #4b5563;
+        }
+
+        body.dark-theme .prop-card {
+            background: #374151;
+            border-color: rgba(96, 165, 250, 0.2);
+        }
+
+        body.dark-theme .player-name {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .position-badge {
+            background: rgba(96, 165, 250, 0.2);
+            color: #60a5fa;
+        }
+
+        body.dark-theme .prop-type {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .value-item {
+            background: #4b5563;
+            border-color: #6b7280;
+        }
+
+        body.dark-theme .value-number {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .value-label {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .sportsbook-info {
+            background: #4b5563;
+        }
+
+        body.dark-theme .sportsbook-name {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .odds {
+            color: #e2e8f0;
+        }
+
+        body.dark-theme .confidence-bar {
+            background: #4b5563;
+        }
+
+        body.dark-theme .confidence-text {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .props-footer {
+            background: #374151;
+        }
+
+        body.dark-theme .disclaimer {
+            color: #9ca3af;
+        }
+
+        /* Responsive design for best props */
+        @media (max-width: 768px) {
+            .props-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .props-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prop-values {
+                grid-template-columns: 1fr;
+            }
+
+            .props-controls {
+                justify-content: center;
+            }
+
+            .props-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100">
@@ -4333,6 +4726,10 @@
             <!-- Tools Section -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Tools</div>
+                <a href="#best-props" class="sidebar-item">
+                    <i class="material-icons">trending_up</i>
+                    Best Props
+                </a>
                 <a href="#calculator" class="sidebar-item">
                     <i class="material-icons">calculate</i>
                     Odds Calculator
@@ -4782,6 +5179,65 @@
                 </div>
             </div>
 
+            <div id="best-props-panel" class="content-panel">
+                <h2><i class="material-icons">trending_up</i>Best Betting Props</h2>
+                <p>AI-powered analysis finds the most profitable betting opportunities by comparing our ML predictions vs sportsbook odds.</p>
+                
+                <div class="best-props-container">
+                    <div class="props-header">
+                        <div class="props-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="props-analyzed">--</div>
+                                <div class="stat-label">Props Analyzed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="high-confidence-props">--</div>
+                                <div class="stat-label">High Confidence</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="avg-edge">--</div>
+                                <div class="stat-label">Avg Edge</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="expected-roi">--</div>
+                                <div class="stat-label">Expected ROI</div>
+                            </div>
+                        </div>
+                        
+                        <div class="props-controls">
+                            <button class="refresh-props-btn" onclick="loadBestProps()">
+                                <i class="material-icons">refresh</i> Refresh Props
+                            </button>
+                            <select id="props-filter" onchange="filterBestProps(this.value)">
+                                <option value="all">All Positions</option>
+                                <option value="high-confidence">High Confidence</option>
+                                <option value="QB">Quarterbacks</option>
+                                <option value="RB">Running Backs</option>
+                                <option value="WR">Wide Receivers</option>
+                                <option value="TE">Tight Ends</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="best-props-loading" class="loading-container" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Loading best betting opportunities...</p>
+                    </div>
+                    
+                    <div id="best-props-grid" class="props-grid">
+                        <!-- Props will be dynamically loaded here -->
+                    </div>
+                    
+                    <div class="props-footer">
+                        <p class="disclaimer">
+                            <i class="material-icons">info</i>
+                            Props are ranked by expected profit based on our ML predictions vs current sportsbook odds. 
+                            Always bet responsibly and within your limits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div id="calculator-panel" class="content-panel">
                 <h2><i class="material-icons">calculate</i>Odds Calculator</h2>
                 <p>Calculate potential payouts, compare betting strategies, and optimize your wagers.</p>
@@ -4959,7 +5415,10 @@
                             Recent News
                         </h3>
                         <div id="qb-news-content">
-                            <p style="color: #6b7280;">Select a quarterback to see the latest news and analysis</p>
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
+                                <p style="margin-top: 12px; color: #6b7280;">Loading latest NFL news from ESPN...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -5024,7 +5483,7 @@
         class BetYardMLService {
             constructor() {
                 console.log('🚀 BetYardMLService constructor called');
-                this.baseURL = 'https://betyard-ml-backend.onrender.com';
+                this.baseURL = 'http://localhost:5001';
                 this.isAvailable = false;
                 this.lastHealthCheck = null;
                 this.healthCheckInterval = 300000; // 5 minutes
@@ -5130,7 +5589,7 @@
                     // Transform to expected format - flatten prediction object
                     return {
                         ...prediction.prediction,  // Flatten the nested prediction object
-                        confidence: prediction.prediction.prediction_likelihood || prediction.prediction.confidence || 85,
+                        confidence: prediction.prediction.confidence || (prediction.prediction.prediction_likelihood * 100) || 85,
                         metadata: {
                             source: 'ml_backend',
                             model_accuracy: prediction.prediction.model_accuracy,
@@ -6091,89 +6550,230 @@
             }
         }
         
-        async function updateQBNews(qbName, teamName) {
+        // Global news context tracker
+        let currentNewsContext = {
+            type: 'general', // 'general', 'matchup', 'player'
+            homeTeam: null,
+            awayTeam: null,
+            playerName: null,
+            teamCode: null
+        };
+
+        // Initialize news on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNews();
+        });
+
+        // Dynamic news update function based on context
+        async function updateNews(context = null) {
+            if (context) {
+                currentNewsContext = { ...currentNewsContext, ...context };
+            }
+            
             const qbNewsContent = document.getElementById('qb-news-content');
+            if (!qbNewsContent) return;
             
             // Show loading state
             qbNewsContent.innerHTML = `
                 <div style="padding: 20px; text-align: center;">
                     <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
-                    <p style="margin-top: 12px; color: #6b7280;">Loading ESPN data for ${qbName}...</p>
+                    <p style="margin-top: 12px; color: #6b7280;">Loading latest NFL news from ESPN...</p>
                 </div>
             `;
             
             try {
-                // Get latest news and injuries from ESPN
-                const [newsData, injuryData] = await Promise.all([
-                    window.ESPNDataService.getLatestNews(5),
-                    window.ESPNDataService.getCurrentInjuries()
-                ]);
+                let newsData;
+                let newsTitle = '';
+                let newsIcon = 'newspaper';
                 
-                // Filter news for this player/team
-                const playerNews = newsData.news?.filter(article => 
-                    article.headline?.toLowerCase().includes(qbName.toLowerCase()) ||
-                    article.description?.toLowerCase().includes(qbName.toLowerCase())
-                ).slice(0, 3) || [];
-                
-                // Find injury info for this player
-                const playerInjury = injuryData.injuries?.find(injury => 
-                    injury.player?.toLowerCase().includes(qbName.toLowerCase())
-                );
-                
-                // Build news content with real ESPN data
-                let newsHTML = `
-                    <div style="margin-bottom: 16px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                        <h4 style="color: #1e40af; margin-bottom: 8px;">🏈 ${qbName} - ${teamName}</h4>
-                `;
-                
-                // Injury status from ESPN
-                if (playerInjury) {
-                    const statusColor = playerInjury.status === 'Healthy' ? '#10b981' : 
-                                       playerInjury.status === 'Questionable' ? '#f59e0b' : '#ef4444';
-                    newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Injury Status:</strong> 
-                            <span style="color: ${statusColor};">${playerInjury.status}</span> 
-                            ${playerInjury.description ? '- ' + playerInjury.description : ''}
-                        </p>
-                    `;
+                // Determine which ESPN endpoint to call based on context
+                if (currentNewsContext.type === 'player' && currentNewsContext.playerName) {
+                    // Player-specific news
+                    const response = await fetch(`http://localhost:5001/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
+                    newsData = await response.json();
+                    newsTitle = `${currentNewsContext.playerName} News`;
+                    newsIcon = 'person';
+                    
+                } else if (currentNewsContext.type === 'matchup' && currentNewsContext.homeTeam && currentNewsContext.awayTeam) {
+                    // Matchup-specific news (both teams)
+                    const response = await fetch(`http://localhost:5001/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
+                    newsData = await response.json();
+                    newsTitle = `${currentNewsContext.awayTeam} @ ${currentNewsContext.homeTeam} News`;
+                    newsIcon = 'sports_football';
+                    
                 } else {
-                    newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Injury Status:</strong> <span style="color: #10b981;">No injury report</span>
-                        </p>
-                    `;
+                    // General NFL news
+                    const response = await fetch(`http://localhost:5001/api/news/latest?limit=8&transactions=true&injuries=true&fantasy=true`);
+                    newsData = await response.json();
+                    newsTitle = 'Latest NFL News';
+                    newsIcon = 'newspaper';
                 }
                 
-                newsHTML += `
-                        <p style="color: #374151; margin-bottom: 8px;">
-                            <strong>Data Source:</strong> <span style="color: #3b82f6;">ESPN API</span> - Real-time updates
-                        </p>
+                if (!newsData.success) {
+                    throw new Error(newsData.error || 'Failed to load news');
+                }
+                
+                // Build news HTML
+                let newsHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                            <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
+                            <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
+                            <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                        </div>
                     </div>
                 `;
                 
-                // Add ESPN news articles
-                if (playerNews.length > 0) {
-                    playerNews.forEach(article => {
+                if (newsData.news && newsData.news.length > 0) {
+                    newsData.news.forEach((article, index) => {
+                        const publishedDate = article.published ? new Date(article.published).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: new Date(article.published).getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+                        }) : 'Recent';
+                        
+                        // Enhanced styling based on content type and relevance
+                        const getContentTypeColor = (contentType) => {
+                            const colors = {
+                                'injury': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626', icon: 'healing' },
+                                'transaction': { bg: '#fff7ed', border: '#f97316', text: '#ea580c', icon: 'swap_horiz' },
+                                'performance': { bg: '#f0fdf4', border: '#22c55e', text: '#16a34a', icon: 'trending_up' },
+                                'fantasy': { bg: '#faf5ff', border: '#8b5cf6', text: '#7c3aed', icon: 'star' },
+                                'playoff': { bg: '#fef3c7', border: '#f59e0b', text: '#d97706', icon: 'emoji_events' },
+                                'coaching': { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb', icon: 'group' },
+                                'general': { bg: '#f8fafc', border: '#64748b', text: '#475569', icon: 'newspaper' }
+                            };
+                            return colors[contentType] || colors['general'];
+                        };
+                        
+                        const colors = getContentTypeColor(article.content_type || 'general');
+                        
+                        // Calculate priority based on relevance score
+                        const relevanceScore = article.relevance_score || article.team_relevance_score || article.player_relevance_score || 50;
+                        const isPriority = relevanceScore > 70;
+                        
+                        // Add enhanced badges
+                        let badges = '';
+                        
+                        // Team context badge
+                        if (article.team_context) {
+                            badges += `<span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px;">${article.team_context}</span>`;
+                        }
+                        
+                        // Content type badge
+                        if (article.content_type && article.content_type !== 'general') {
+                            badges += `<span style="background: ${colors.bg}; color: ${colors.text}; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px; border: 1px solid ${colors.border};">${article.content_type.toUpperCase()}</span>`;
+                        }
+                        
+                        // Fantasy impact badge
+                        if (article.fantasy_impact && article.fantasy_impact.level !== 'low') {
+                            const fantasyColors = {
+                                'high': '#ef4444',
+                                'critical': '#dc2626',
+                                'medium': '#f59e0b'
+                            };
+                            const fantasyColor = fantasyColors[article.fantasy_impact.level] || '#6b7280';
+                            badges += `<span style="background: ${fantasyColor}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px;">FANTASY ${article.fantasy_impact.level.toUpperCase()}</span>`;
+                        }
+                        
+                        // Priority indicator
+                        if (isPriority) {
+                            badges += `<span style="background: #dc2626; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 6px;">🔥 HOT</span>`;
+                        }
+                        
+                        // Enhanced content display
+                        let enhancedContent = article.description || 'Stay updated with the latest NFL developments.';
+                        
+                        // Add player names if extracted
+                        if (article.players_mentioned && article.players_mentioned.length > 0) {
+                            const playerTags = article.players_mentioned.slice(0, 3).map(player => 
+                                `<span style="background: #e0e7ff; color: #3730a3; padding: 1px 4px; border-radius: 4px; font-size: 11px; font-weight: 500;">${player}</span>`
+                            ).join(' ');
+                            enhancedContent += `<div style="margin-top: 8px;">${playerTags}</div>`;
+                        }
+                        
+                        // Add injury context if available
+                        if (article.injury_context && article.injury_context.detected) {
+                            const injuryIcon = article.injury_context.severity === 'severe' ? '🚨' : 
+                                            article.injury_context.severity === 'moderate' ? '⚠️' : 'ℹ️';
+                            enhancedContent += `<div style="margin-top: 6px; font-size: 12px; color: #dc2626;">${injuryIcon} Injury Status: ${article.injury_context.severity}</div>`;
+                        }
+                        
+                        // Add performance context if available
+                        if (article.performance_context && article.performance_context.detected) {
+                            const perfIcon = article.performance_context.trend === 'positive' ? '📈' : '📉';
+                            enhancedContent += `<div style="margin-top: 6px; font-size: 12px; color: ${article.performance_context.trend === 'positive' ? '#16a34a' : '#dc2626'};">${perfIcon} Performance: ${article.performance_context.trend}</div>`;
+                        }
+                        
+                        // Extract web URL for clickable link
+                        const webUrl = article.links && article.links.web && article.links.web.href ? 
+                                      article.links.web.href : null;
+                        
+                        // Determine if this should be clickable
+                        const isClickable = webUrl && webUrl.includes('espn.com');
+                        
+                        // Create the article card with optional click functionality
+                        const cardElement = isClickable ? 
+                            `<a href="${webUrl}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">` :
+                            '<div>';
+                        
+                        const cardCloseElement = isClickable ? '</a>' : '</div>';
+                        
                         newsHTML += `
-                            <div style="padding: 12px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9; margin-bottom: 12px;">
-                                <h5 style="color: #0c4a6e; margin-bottom: 6px; font-size: 14px;">📰 ${article.headline}</h5>
-                                <p style="color: #475569; font-size: 13px; margin-bottom: 8px;">${article.description}</p>
-                                <p style="color: #64748b; font-size: 12px;">
-                                    Published: ${new Date(article.published).toLocaleDateString()}
-                                </p>
-                            </div>
+                            ${cardElement}
+                                <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''} ${isClickable ? 'cursor: pointer;' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                        <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                            <i class="material-icons" style="color: ${colors.border}; font-size: 18px;">${colors.icon}</i>
+                                            <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3;">${article.headline || 'NFL News Update'}</h5>
+                                            ${isClickable ? `<i class="material-icons" style="color: #3b82f6; font-size: 16px; margin-left: 4px;" title="Click to read full article on ESPN">open_in_new</i>` : ''}
+                                        </div>
+                                        <span style="color: #64748b; font-size: 11px; white-space: nowrap; margin-left: 12px;">${publishedDate}</span>
+                                    </div>
+                                    
+                                    ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
+                                    
+                                    <div style="color: #475569; font-size: 13px; line-height: 1.4;">
+                                        ${enhancedContent}
+                                        ${isClickable ? `<div style="margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500;"><i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">link</i>Read full article on ESPN.com</div>` : ''}
+                                    </div>
+                                    
+                                    ${article.fantasy_impact && article.fantasy_impact.recommendation ? `
+                                        <div style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; border-left: 3px solid #8b5cf6;">
+                                            <div style="font-size: 12px; color: #7c3aed; font-weight: 600;">Fantasy Impact: ${article.fantasy_impact.recommendation}</div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${relevanceScore ? `
+                                        <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                            Relevance: ${Math.round(relevanceScore)}%
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ${cardCloseElement}
                         `;
                     });
                 } else {
+                    // No news found
                     newsHTML += `
-                        <div style="padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                            <p style="color: #92400e; font-size: 14px;">
-                                <strong>📰 Latest:</strong> No recent news found for ${qbName}. Check back for updates from ESPN.
+                        <div style="padding: 16px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
+                            <p style="color: #92400e; font-size: 14px; margin: 0;">
+                                <strong>📰 No recent news found.</strong><br>
+                                Check back later for updates from ESPN.
                             </p>
                         </div>
                     `;
                 }
+                
+                // Add refresh button
+                newsHTML += `
+                    <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                        <button onclick="updateNews()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <i class="material-icons" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">refresh</i>
+                            Refresh News
+                        </button>
+                    </div>
+                `;
                 
                 qbNewsContent.innerHTML = newsHTML;
                 
@@ -6181,15 +6781,213 @@
                 console.error('Error fetching ESPN news:', error);
                 qbNewsContent.innerHTML = `
                     <div style="padding: 16px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444;">
-                        <p style="color: #dc2626;">
-                            <strong>⚠️ Error:</strong> Unable to load ESPN data. Using cached information for ${qbName}.
+                        <p style="color: #dc2626; margin-bottom: 8px;">
+                            <strong>⚠️ Error:</strong> Unable to load ESPN news data.
                         </p>
-                        <p style="color: #374151; margin-top: 8px; font-size: 14px;">
-                            Recent performance data and injury status will be updated when connection is restored.
+                        <p style="color: #374151; font-size: 14px; margin: 0;">
+                            Please check your connection and try again.
                         </p>
+                        <div style="text-align: center; margin-top: 12px;">
+                            <button onclick="updateNews()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">
+                                Try Again
+                            </button>
+                        </div>
                     </div>
                 `;
             }
+        }
+
+        
+        // Legacy function for backward compatibility - now redirects to dynamic system
+        async function updateQBNews(qbName, teamName) {
+            // Extract team code from teamName if needed
+            const teamCode = getTeamCodeFromName(teamName);
+            
+            await updateNews({
+                type: 'player',
+                playerName: qbName,
+                teamCode: teamCode
+            });
+        }        // Custom Recent News Management System
+        const recentNewsItems = [
+            {
+                id: 1,
+                date: '2025-11-05',
+                title: '🚀 Enhanced QB Prediction System Live!',
+                content: 'Betyard now provides separate predictions for QB passing and rushing touchdowns. Get granular insights for mobile QBs like Lamar Jackson vs pocket passers like Aaron Rodgers.',
+                category: 'Platform Update',
+                priority: 'high'
+            },
+            {
+                id: 2,
+                date: '2025-11-05', 
+                title: '🏈 Week 10 NFL Predictions Now Available',
+                content: 'Updated ML models with enhanced ESPN integration for the most accurate NFL Week 10 predictions. Features real-time injury reports and weather data.',
+                category: 'NFL',
+                priority: 'medium'
+            },
+            {
+                id: 3,
+                date: '2025-11-04',
+                title: '🤖 ML Backend Performance Boost',
+                content: 'Deployed enhanced machine learning backend with 89% accuracy. XGBoost models now support QB, RB, WR, and TE positions with real-time ESPN data integration.',
+                category: 'Technology',
+                priority: 'medium'
+            },
+            {
+                id: 4,
+                date: '2025-11-03',
+                title: '📊 Mobile QB Rushing TD Analytics',
+                content: 'New analytics differentiate mobile quarterbacks with 2.5x rushing touchdown multipliers for players like Lamar Jackson and Josh Allen.',
+                category: 'Analytics',
+                priority: 'low'
+            }
+        ];
+
+        // Function to display recent news in the news section
+        function displayRecentNews() {
+            const qbNewsContent = document.getElementById('qb-news-content');
+            
+            if (!qbNewsContent) return;
+            
+            // Sort news by date (newest first) and priority
+            const sortedNews = recentNewsItems
+                .sort((a, b) => {
+                    // First sort by priority (high > medium > low)
+                    const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                        return priorityOrder[b.priority] - priorityOrder[a.priority];
+                    }
+                    // Then by date (newest first)
+                    return new Date(b.date) - new Date(a.date);
+                })
+                .slice(0, 4); // Show top 4 news items
+            
+            let newsHTML = `
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <i class="material-icons" style="color: #3b82f6;">campaign</i>
+                        <h4 style="color: #1e40af; margin: 0;">Platform Updates & NFL News</h4>
+                        <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">LIVE</span>
+                    </div>
+                </div>
+            `;
+            
+            sortedNews.forEach((newsItem, index) => {
+                const priorityColors = {
+                    'high': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626' },
+                    'medium': { bg: '#fef3c7', border: '#f59e0b', text: '#d97706' },
+                    'low': { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb' }
+                };
+                
+                const colors = priorityColors[newsItem.priority];
+                const dateFormatted = new Date(newsItem.date).toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                newsHTML += `
+                    <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: transform 0.2s ease;">
+                        <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 8px;">
+                            <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1;">${newsItem.title}</h5>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${newsItem.category}</span>
+                                <span style="color: #64748b; font-size: 11px; white-space: nowrap;">${dateFormatted}</span>
+                            </div>
+                        </div>
+                        <p style="color: #475569; font-size: 13px; margin: 0; line-height: 1.4;">${newsItem.content}</p>
+                    </div>
+                `;
+            });
+            
+            // Add a "Show All News" link
+            newsHTML += `
+                <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                    <button onclick="toggleAllNews()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <i class="material-icons" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">expand_more</i>
+                        View All Platform Updates
+                    </button>
+                </div>
+            `;
+            
+            qbNewsContent.innerHTML = newsHTML;
+        }
+
+        // Function to toggle showing all news vs recent news
+        function toggleAllNews() {
+            const qbNewsContent = document.getElementById('qb-news-content');
+            const currentContent = qbNewsContent.innerHTML;
+            
+            if (currentContent.includes('View All Platform Updates')) {
+                // Show all news
+                let allNewsHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="material-icons" style="color: #3b82f6;">list_alt</i>
+                                <h4 style="color: #1e40af; margin: 0;">All Platform Updates</h4>
+                            </div>
+                            <button onclick="displayRecentNews()" style="background: #f3f4f6; color: #374151; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">
+                                <i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">keyboard_arrow_up</i>
+                                Show Recent
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                recentNewsItems
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                    .forEach(newsItem => {
+                        const priorityColors = {
+                            'high': { bg: '#fef2f2', border: '#ef4444', text: '#dc2626' },
+                            'medium': { bg: '#fef3c7', border: '#f59e0b', text: '#d97706' },
+                            'low': { bg: '#f0f9ff', border: '#3b82f6', text: '#2563eb' }
+                        };
+                        
+                        const colors = priorityColors[newsItem.priority];
+                        const dateFormatted = new Date(newsItem.date).toLocaleDateString('en-US', { 
+                            month: 'long', 
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                        
+                        allNewsHTML += `
+                            <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                    <h5 style="color: ${colors.text}; margin: 0; font-size: 14px; font-weight: 600; flex: 1;">${newsItem.title}</h5>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <span style="background: ${colors.border}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${newsItem.category}</span>
+                                        <span style="color: #64748b; font-size: 11px; white-space: nowrap;">${dateFormatted}</span>
+                                    </div>
+                                </div>
+                                <p style="color: #475569; font-size: 13px; margin: 0; line-height: 1.4;">${newsItem.content}</p>
+                            </div>
+                        `;
+                    });
+                
+                qbNewsContent.innerHTML = allNewsHTML;
+            } else {
+                displayRecentNews();
+            }
+        }
+
+        // Function to add new news item (for easy content management)
+        function addNewsItem(title, content, category = 'Platform Update', priority = 'medium') {
+            const newItem = {
+                id: recentNewsItems.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                title: title,
+                content: content,
+                category: category,
+                priority: priority
+            };
+            
+            recentNewsItems.unshift(newItem); // Add to beginning
+            
+            // Refresh the display
+            displayRecentNews();
+            
+            console.log('✅ News item added:', newItem);
         }
 
         // Dark Theme Toggle Function
@@ -6408,7 +7206,7 @@
         
         class AdvancedAnalytics {
             constructor() {
-                this.apiBaseUrl = 'https://betyard-ml-backend.onrender.com/api';
+                this.apiBaseUrl = 'http://localhost:5001/api';
                 this.currentSport = 'nfl';
                 this.refreshInterval = null;
                 this.liveFeedActive = false;
@@ -7262,6 +8060,188 @@
                 toggleScheduleAdmin();
             }
         });
+
+        /* ===============================================
+         * BEST PROPS FUNCTIONALITY
+         * =============================================== */
+        
+        let bestPropsData = [];
+        
+        // API configuration
+        const BEST_PROPS_API = 'http://localhost:5001';
+        
+        async function loadBestProps() {
+            const loadingElement = document.getElementById('best-props-loading');
+            const gridElement = document.getElementById('best-props-grid');
+            
+            if (loadingElement) loadingElement.style.display = 'block';
+            if (gridElement) gridElement.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${BEST_PROPS_API}/betting/daily-props`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    bestPropsData = data.daily_best_props;
+                    updatePropsStats(data.summary);
+                    displayBestProps(bestPropsData);
+                } else {
+                    throw new Error(data.error || 'Failed to load props');
+                }
+            } catch (error) {
+                console.error('Error loading best props:', error);
+                if (gridElement) {
+                    gridElement.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                            <p style="color: #ef4444; margin-bottom: 15px;">❌ Error loading props: ${error.message}</p>
+                            <button onclick="loadBestProps()" style="padding: 10px 20px; background: #003da5; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                Try Again
+                            </button>
+                        </div>
+                    `;
+                }
+            } finally {
+                if (loadingElement) loadingElement.style.display = 'none';
+                if (gridElement) gridElement.style.display = 'grid';
+            }
+        }
+        
+        function updatePropsStats(summary) {
+            const elements = {
+                'props-analyzed': summary.total_props_analyzed || 0,
+                'high-confidence-props': summary.high_confidence_count || 0,
+                'avg-edge': (summary.average_edge || 0).toFixed(1) + '%',
+                'expected-roi': '+' + (summary.total_expected_profit || 0).toFixed(1) + '%'
+            };
+            
+            Object.entries(elements).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            });
+        }
+        
+        function displayBestProps(props) {
+            const gridElement = document.getElementById('best-props-grid');
+            if (!gridElement) return;
+            
+            if (props.length === 0) {
+                gridElement.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No props found matching your criteria.</p>';
+                return;
+            }
+            
+            gridElement.innerHTML = props.map(prop => createPropCard(prop)).join('');
+        }
+        
+        function createPropCard(prop) {
+            const confidenceClass = getConfidenceClass(prop.confidence);
+            const statTypeFormatted = prop.stat_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            
+            return `
+                <div class="prop-card ${confidenceClass}">
+                    <div class="player-info">
+                        <div class="player-name">${prop.player_name}</div>
+                        <div class="position-badge">${prop.position}</div>
+                    </div>
+                    
+                    <div class="prop-details">
+                        <div class="prop-type">${statTypeFormatted}</div>
+                        <div class="prop-values">
+                            <div class="value-item">
+                                <div class="value-label">Our Prediction</div>
+                                <div class="value-number">${prop.predicted_value}</div>
+                            </div>
+                            <div class="value-item">
+                                <div class="value-label">Sportsbook Line</div>
+                                <div class="value-number">${prop.line}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation">
+                        <div class="bet-direction ${prop.bet_direction}">${prop.bet_direction}</div>
+                        <div class="edge-percentage">+${prop.edge_percentage}% Edge</div>
+                    </div>
+                    
+                    <div class="sportsbook-info">
+                        <div class="sportsbook-name">📱 ${prop.sportsbook}</div>
+                        <div class="odds">${prop.odds > 0 ? '+' : ''}${prop.odds}</div>
+                    </div>
+                    
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${prop.confidence}%"></div>
+                    </div>
+                    <div class="confidence-text">
+                        ${prop.confidence}% Confidence • ${prop.bet_size} Bet Size
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getConfidenceClass(confidence) {
+            if (confidence >= 85) return 'high-confidence';
+            if (confidence >= 75) return 'medium-confidence';
+            return 'low-confidence';
+        }
+        
+        function filterBestProps(filter) {
+            let filteredProps = bestPropsData;
+            
+            if (filter === 'high-confidence') {
+                filteredProps = bestPropsData.filter(prop => prop.confidence >= 85);
+            } else if (filter !== 'all') {
+                filteredProps = bestPropsData.filter(prop => prop.position === filter);
+            }
+            
+            displayBestProps(filteredProps);
+        }
+        
+        // Auto-load best props when panel is shown
+        function showPanel(panelId) {
+            // Hide all panels
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // Get main content
+            const mainContent = document.getElementById('main-content');
+            
+            if (panelId === 'dashboard-panel') {
+                // Dashboard shows the main content (home functionality)
+                if (mainContent) {
+                    mainContent.style.display = 'block';
+                }
+            } else {
+                // Hide main content and show selected panel
+                if (mainContent) {
+                    mainContent.style.display = 'none';
+                }
+                
+                // Show selected panel
+                const targetPanel = document.getElementById(panelId);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                    
+                    // Auto-load best props when panel is shown
+                    if (panelId === 'best-props-panel') {
+                        setTimeout(() => loadBestProps(), 100);
+                    }
+                }
+            }
+            
+            // Update sidebar active state
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => item.classList.remove('active'));
+            
+            // Find and activate the clicked sidebar item
+            const activeItem = document.querySelector(`[onclick*="${panelId}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                setTimeout(() => closeSidebar(), 300);
+            }
+        }
     </script>
 
 </body>

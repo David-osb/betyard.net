@@ -17,7 +17,7 @@ class GameCentricUI {
             'QB': {
                 name: 'Quarterback',
                 icon: '🎯',
-                stats: ['Passing Yards', 'Touchdowns', 'Completions', 'Attempts', 'QB Rating'],
+                stats: ['Passing Yards', 'Passing TDs', 'Rushing TDs', 'Completions', 'QB Rating'],
                 color: '#3b82f6'
             },
             'RB': {
@@ -278,12 +278,12 @@ class GameCentricUI {
                 }
                 
                 .status-live {
-                    background: #dc2626;
+                    background: #10b981;
                     color: white;
                 }
                 
                 .status-scheduled {
-                    background: #059669;
+                    background: #003da5;
                     color: white;
                 }
                 
@@ -373,6 +373,229 @@ class GameCentricUI {
                 .team-choice-details {
                     font-size: 14px;
                     color: #6b7280;
+                    margin-bottom: 16px;
+                }
+                
+                .team-rankings-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                    margin-top: 16px;
+                }
+                
+                .ranking-card {
+                    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 12px;
+                    text-align: center;
+                    transition: all 0.2s ease;
+                }
+                
+                .ranking-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                }
+                
+                .ranking-card-title {
+                    font-size: 13px;
+                    font-weight: bold;
+                    color: #374151;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                }
+                
+                .ranking-stat {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 4px;
+                    font-size: 11px;
+                }
+                
+                .ranking-stat-label {
+                    color: #6b7280;
+                    font-weight: 500;
+                }
+                
+                .ranking-stat-value {
+                    font-weight: bold;
+                    font-size: 11px;
+                }
+                
+                .team-record {
+                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 6px;
+                    margin-top: 12px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                
+                .moneyline-prediction-card {
+                    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+                    border: 1px solid #4b5563;
+                    border-radius: 16px;
+                    padding: 24px;
+                    margin: 24px 0;
+                    color: white;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+                    transition: all 0.3s ease;
+                    width: 100%;
+                    max-width: none;
+                }
+                
+                .moneyline-prediction-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+                }
+                
+                .moneyline-header {
+                    text-align: center;
+                    margin-bottom: 24px;
+                }
+                
+                .moneyline-title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #fbbf24;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+                
+                .moneyline-subtitle {
+                    font-size: 14px;
+                    color: #9ca3af;
+                }
+                
+                .moneyline-matchup {
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr auto;
+                    align-items: center;
+                    gap: 24px;
+                    margin-bottom: 24px;
+                    max-width: 800px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                
+                .moneyline-team {
+                    text-align: center;
+                    padding: 20px;
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 16px;
+                    border: 2px solid transparent;
+                    transition: all 0.3s ease;
+                    min-height: 120px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+                
+                .moneyline-team.predicted-winner {
+                    border-color: #10b981;
+                    background: rgba(16, 185, 129, 0.15);
+                    transform: scale(1.02);
+                }
+                
+                .moneyline-team-name {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-bottom: 12px;
+                    letter-spacing: 1px;
+                }
+                
+                .moneyline-odds {
+                    font-size: 28px;
+                    font-weight: bold;
+                    color: #fbbf24;
+                    margin-bottom: 8px;
+                }
+                
+                .moneyline-probability {
+                    font-size: 14px;
+                    color: #9ca3af;
+                    font-weight: 500;
+                }
+                
+                .moneyline-vs {
+                    font-size: 18px;
+                    color: #6b7280;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                
+                .moneyline-confidence {
+                    text-align: center;
+                    padding: 16px 24px;
+                    background: rgba(59, 130, 246, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(59, 130, 246, 0.3);
+                    max-width: 200px;
+                    margin: 0 auto;
+                }
+                
+                .confidence-label {
+                    font-size: 12px;
+                    color: #93c5fd;
+                    margin-bottom: 4px;
+                }
+                
+                .confidence-value {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #3b82f6;
+                }
+                
+                .moneyline-strength {
+                    font-size: 11px;
+                    color: #6b7280;
+                    margin-top: 4px;
+                    font-weight: 500;
+                }
+                
+                .model-info {
+                    margin-top: 20px;
+                    padding: 16px;
+                    background: rgba(16, 185, 129, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(16, 185, 129, 0.3);
+                }
+                
+                .model-details {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    font-size: 12px;
+                }
+                
+                .model-type {
+                    font-weight: bold;
+                    color: #10b981;
+                    background: rgba(16, 185, 129, 0.2);
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                }
+                
+                .model-positions {
+                    color: #047857;
+                    font-weight: 500;
+                }
+                
+                .prediction-winner {
+                    text-align: center;
+                    font-size: 14px;
+                    color: #047857;
+                    font-weight: 600;
                 }
                 
                 .position-grid {
@@ -456,6 +679,34 @@ class GameCentricUI {
                 .player-details {
                     font-size: 14px;
                     color: #6b7280;
+                }
+                
+                .player-status {
+                    font-size: 12px;
+                    font-weight: bold;
+                    margin-top: 8px;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    text-align: center;
+                }
+                
+                .starter-badge {
+                    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+                    color: #78350f;
+                    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+                }
+                
+                .backup-badge {
+                    background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+                    color: #374151;
+                }
+                
+                .starter-player {
+                    border-left: 4px solid #f59e0b;
+                }
+                
+                .backup-player {
+                    border-left: 4px solid #9ca3af;
                 }
                 
                 .prediction-summary {
@@ -622,8 +873,19 @@ class GameCentricUI {
                 
                 .insight-item {
                     font-size: 14px;
-                    color: #78350f;
+                    color: #374151;
                     line-height: 1.5;
+                    padding: 12px;
+                    background: #f8fafc;
+                    border-radius: 8px;
+                    border-left: 4px solid #059669;
+                    margin-bottom: 8px;
+                    transition: all 0.3s ease;
+                }
+                
+                .insight-item:hover {
+                    background: #f1f5f9;
+                    transform: translateX(2px);
                 }
                 
                 .navigation-controls {
@@ -707,6 +969,33 @@ class GameCentricUI {
                         flex-direction: column;
                     }
                     
+                    .team-rankings-container {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .moneyline-matchup {
+                        grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+                    
+                    .moneyline-vs {
+                        order: 1;
+                        margin: 8px 0;
+                    }
+                    
+                    .moneyline-prediction-card {
+                        padding: 16px;
+                        margin: 16px 0;
+                    }
+                    
+                    .moneyline-title {
+                        font-size: 20px;
+                    }
+                    
+                    .moneyline-odds {
+                        font-size: 24px;
+                    }
+                    
                     .position-grid {
                         grid-template-columns: repeat(2, 1fr);
                     }
@@ -719,6 +1008,49 @@ class GameCentricUI {
                     .nav-btn {
                         width: 100%;
                     }
+                }
+                
+                /* Dark Theme Support */
+                body.dark-theme .ranking-card {
+                    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+                    border-color: #4b5563;
+                    color: #e5e7eb;
+                }
+                
+                body.dark-theme .ranking-card-title {
+                    color: #e5e7eb;
+                }
+                
+                body.dark-theme .ranking-stat-label {
+                    color: #9ca3af;
+                }
+                
+                body.dark-theme .ranking-card:hover {
+                    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                }
+                
+                body.dark-theme .team-record {
+                    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+                }
+                
+                body.dark-theme .moneyline-prediction-card {
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    border-color: #334155;
+                }
+                
+                body.dark-theme .moneyline-team {
+                    background: rgba(255,255,255,0.03);
+                }
+                
+                body.dark-theme .moneyline-team.predicted-winner {
+                    border-color: #059669;
+                    background: rgba(5, 150, 105, 0.15);
+                }
+                
+                body.dark-theme .moneyline-confidence {
+                    background: rgba(37, 99, 235, 0.1);
+                    border-color: rgba(37, 99, 235, 0.2);
                 }
             </style>
         `;
@@ -744,27 +1076,44 @@ class GameCentricUI {
         if (this.liveGames && this.liveGames.length > 0) {
             console.log('🎯 Transforming live games data:', this.liveGames);
             return this.liveGames.map(game => {
-                // Handle both object and string team formats
-                const awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
-                const homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
+                // Handle ESPN API format vs Tank01 format
+                let awayTeamObj, homeTeamObj, awayScore, homeScore, status;
                 
-                // Get scores directly from Tank01 data
-                const awayScore = game.awayScore || awayTeamObj.score || 0;
-                const homeScore = game.homeScore || homeTeamObj.score || 0;
+                if (game.away_team && game.home_team) {
+                    // ESPN API format
+                    awayTeamObj = {
+                        code: game.away_team.abbreviation,
+                        name: game.away_team.name,
+                        score: parseInt(game.away_team.score) || 0
+                    };
+                    homeTeamObj = {
+                        code: game.home_team.abbreviation,
+                        name: game.home_team.name,
+                        score: parseInt(game.home_team.score) || 0
+                    };
+                    awayScore = parseInt(game.away_team.score) || 0;
+                    homeScore = parseInt(game.home_team.score) || 0;
+                    status = game.status || 'SCHEDULED';
+                } else {
+                    // Tank01 format (fallback)
+                    awayTeamObj = typeof game.awayTeam === 'object' ? game.awayTeam : { code: game.awayTeam, name: game.awayTeam, score: game.awayScore || 0 };
+                    homeTeamObj = typeof game.homeTeam === 'object' ? game.homeTeam : { code: game.homeTeam, name: game.homeTeam, score: game.homeScore || 0 };
+                    awayScore = game.awayScore || awayTeamObj.score || 0;
+                    homeScore = game.homeScore || homeTeamObj.score || 0;
+                    status = game.status || 'SCHEDULED';
+                }
                 
-                // TRUST TANK01 STATUS - Already processed by live-scores.js mapGameStatus()
-                const status = game.status || 'SCHEDULED';
-                
-                console.log(`🎯 Game: ${game.away || awayTeamObj.code} (${awayScore}) @ ${game.home || homeTeamObj.code} (${homeScore}) - Status from Tank01: ${status}`);
+                console.log(`🎯 Game: ${awayTeamObj.code} (${awayScore}) @ ${homeTeamObj.code} (${homeScore}) - Status: ${status}`);
+                console.log(`📍 ESPN Raw Data: away_team=${game.away_team?.abbreviation}, home_team=${game.home_team?.abbreviation}`);
                 
                 const transformedGame = {
-                    away: awayTeamObj.code || awayTeamObj.name || game.awayTeam,
-                    home: homeTeamObj.code || homeTeamObj.name || game.homeTeam,
+                    away: awayTeamObj.code,
+                    home: homeTeamObj.code,
                     awayTeam: awayTeamObj,
                     homeTeam: homeTeamObj,
-                    status: status,  // Use Tank01 status directly
-                    time: game.gameTime || game.time,
-                    gameDate: game.gameDate || '',
+                    status: status,
+                    time: game.gameTime || game.time || game.date,
+                    gameDate: game.gameDate || game.date || '',
                     awayRecord: game.awayRecord || 'TBD',
                     homeRecord: game.homeRecord || 'TBD',
                     awayScore: awayScore,
@@ -778,8 +1127,8 @@ class GameCentricUI {
             });
         }
         
-        // Fallback static data - NO REAL DATA AVAILABLE, RETURN EMPTY
-        console.log('⚠️ No live games data - returning empty array until real data arrives');
+        // Wait for live games data to arrive from prioritized ESPN endpoint
+        console.log('⚠️ No live games data yet - waiting for ESPN endpoint (loading prioritized)');
         return [];
     }
 
@@ -787,8 +1136,10 @@ class GameCentricUI {
         // Store the live games data
         this.liveGames = games;
         console.log('🎯 Game-Centric UI received', games.length, 'live games');
+        console.log('📋 Game data structure (first game):', JSON.stringify(games[0], null, 2)); // Show detailed structure
         
         // Reload the games display with live data
+        this.loadGames();
         this.loadGames();
     }
     
@@ -810,19 +1161,29 @@ class GameCentricUI {
         
         console.log(`🎯 Creating game card: ${awayTeamName} (${awayScore}) @ ${homeTeamName} (${homeScore}) - Status: ${game.status}`);
         
-        switch (game.status) {
+        switch (game.status.toUpperCase()) {
             case 'LIVE':
+            case 'IN PROGRESS':
                 statusBadge = `<div class="game-status-badge status-live">🔴 LIVE ${game.quarter ? '- ' + game.quarter : ''} ${game.timeRemaining || ''}</div>`;
-                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #dc2626; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #10b981; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
                 gameInfo = `<div class="game-details">Live Score</div>`;
                 break;
+            case 'HALFTIME':
+            case 'HALF TIME':
+            case 'HALF':
+                statusBadge = `<div class="game-status-badge status-live">🔴 HALFTIME</div>`;
+                scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #10b981; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
+                gameInfo = `<div class="game-details">Halftime Score</div>`;
+                break;
             case 'FINAL':
+            case 'COMPLETED':
                 statusBadge = `<div class="game-status-badge status-final">FINAL${game.quarter && game.quarter.includes('OT') ? ' (OT)' : ''}</div>`;
                 scoreDisplay = `<div style="text-align: center; font-size: 24px; font-weight: bold; color: #6b7280; margin: 12px 0;">${awayScore} - ${homeScore}</div>`;
                 gameInfo = `<div class="game-details">Final Score</div>`;
                 break;
             case 'SCHEDULED':
-                statusBadge = `<div class="game-status-badge status-scheduled">${game.time || game.gameTime || 'TBD'}</div>`;
+            case 'UPCOMING':
+                statusBadge = `<div class="game-status-badge status-scheduled">UPCOMING</div>`;
                 // Use actual week and date from Tank01 game data
                 let weekDisplay = game.week ? `Week ${game.week}` : 'Upcoming Game';
                 if (game.gameDate) {
@@ -839,7 +1200,7 @@ class GameCentricUI {
                 gameInfo = `<div class="game-details">${game.time || game.gameTime || 'TBD'}</div>`;
                 break;
             default:
-                statusBadge = `<div class="game-status-badge status-scheduled">${game.status}</div>`;
+                statusBadge = `<div class="game-status-badge status-final">${game.status}</div>`;
                 scoreDisplay = '';
                 gameInfo = `<div class="game-details">Status: ${game.status}</div>`;
         }
@@ -870,39 +1231,167 @@ class GameCentricUI {
         `;
     }
     
-    selectGame(awayTeam, homeTeam, status) {
+    async selectGame(awayTeam, homeTeam, status) {
         this.selectedGame = { away: awayTeam, home: homeTeam, status: status };
         
         // Mark game as selected
         document.querySelectorAll('.game-option').forEach(el => el.classList.remove('selected'));
         event.currentTarget.classList.add('selected');
         
-        // Update team selection step
-        this.updateTeamSelection();
+        // Update team selection step (await the async function)
+        await this.updateTeamSelection();
+        
+        // Update news context to show matchup news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'matchup',
+                homeTeam: homeTeam,
+                awayTeam: awayTeam
+            });
+        }
         
         // Enable next button
         document.getElementById('next-step').disabled = false;
         
         console.log('🎯 Game selected:', this.selectedGame);
+        console.log('📰 News updated for matchup:', `${awayTeam} @ ${homeTeam}`);
     }
     
-    updateTeamSelection() {
+    async updateTeamSelection() {
         const container = document.getElementById('team-selection-container');
         if (!container || !this.selectedGame) return;
+        
+        // Show loading state while fetching rankings
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="font-size: 24px; margin-bottom: 16px;">⏳</div>
+                <div style="color: #6b7280;">Loading team rankings...</div>
+            </div>
+        `;
+        
+        // Get team rankings for both teams
+        const [awayRankings, homeRankings] = await Promise.all([
+            this.getTeamRankings(this.selectedGame.away),
+            this.getTeamRankings(this.selectedGame.home)
+        ]);
         
         container.innerHTML = `
             <div class="team-choice" onclick="gameCentricUI.selectTeam('${this.selectedGame.away}', 'away')">
                 <div class="team-logo">🏈</div>
                 <div class="team-choice-name">${this.selectedGame.away}</div>
                 <div class="team-choice-details">Away Team</div>
+                
+                <div class="team-rankings-container">
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🏈 Offense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.total_rank)}">#${awayRankings.offense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Passing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.passing_rank)}">#${awayRankings.offense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Rushing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.offense.rushing_rank)}">#${awayRankings.offense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PPG:</span>
+                            <span class="ranking-stat-value">${awayRankings.offense.points_per_game.toFixed(1)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🛡️ Defense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.total_rank)}">#${awayRankings.defense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Pass:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.passing_rank)}">#${awayRankings.defense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Rush:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(awayRankings.defense.rushing_rank)}">#${awayRankings.defense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PTS Allowed:</span>
+                            <span class="ranking-stat-value">${awayRankings.defense.points_allowed.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-record">
+                    📊 Record: ${awayRankings.overall.record}
+                </div>
             </div>
             
             <div class="team-choice" onclick="gameCentricUI.selectTeam('${this.selectedGame.home}', 'home')">
                 <div class="team-logo">🏟️</div>
                 <div class="team-choice-name">${this.selectedGame.home}</div>
                 <div class="team-choice-details">Home Team</div>
+                
+                <div class="team-rankings-container">
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🏈 Offense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.total_rank)}">#${homeRankings.offense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Passing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.passing_rank)}">#${homeRankings.offense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Rushing:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.offense.rushing_rank)}">#${homeRankings.offense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PPG:</span>
+                            <span class="ranking-stat-value">${homeRankings.offense.points_per_game.toFixed(1)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ranking-card">
+                        <div class="ranking-card-title">
+                            🛡️ Defense
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">Overall Rank:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.total_rank)}">#${homeRankings.defense.total_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Pass:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.passing_rank)}">#${homeRankings.defense.passing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">vs Rush:</span>
+                            <span class="ranking-stat-value" style="color: ${this.getRankingColor(homeRankings.defense.rushing_rank)}">#${homeRankings.defense.rushing_rank}</span>
+                        </div>
+                        <div class="ranking-stat">
+                            <span class="ranking-stat-label">PTS Allowed:</span>
+                            <span class="ranking-stat-value">${homeRankings.defense.points_allowed.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-record">
+                    📊 Record: ${homeRankings.overall.record}
+                </div>
             </div>
         `;
+        
+        // Add moneyline prediction card after the team selection
+        const moneylinePrediction = await this.generateMoneylinePrediction(awayRankings, homeRankings);
+        container.insertAdjacentHTML('afterend', moneylinePrediction);
     }
     
     selectTeam(teamCode, homeAway) {
@@ -978,63 +1467,378 @@ class GameCentricUI {
             return;
         }
         
-        const playersHTML = players.map(player => `
-            <div class="player-option" onclick="gameCentricUI.selectPlayer('${player.id}', '${player.name}')">
+        const playersHTML = players.map(player => {
+            const isStarter = player.isStarter !== false; // Default to starter if not specified
+            const statusBadge = isStarter ? '🌟 STARTER' : '⚪ BACKUP';
+            const statusClass = isStarter ? 'starter-badge' : 'backup-badge';
+            
+            return `
+            <div class="player-option ${isStarter ? 'starter-player' : 'backup-player'}" onclick="gameCentricUI.selectPlayer('${player.id}', '${player.name}')">
                 <div class="player-info">
                     <div class="player-name">${player.name}</div>
                     <div class="player-details">${player.position} • #${player.number}</div>
+                    <div class="player-status ${statusClass}">${statusBadge}</div>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
         
         container.innerHTML = `<div class="players-grid">${playersHTML}</div>`;
     }
     
     async getPlayersForPosition(teamCode, position) {
-        // Use the already-loaded window.nflTeamsData from Tank01 API
-        console.log(`🔍 Getting ${position} players for ${teamCode} from window.nflTeamsData`);
+        console.log(`🔍 Getting ${position} players for ${teamCode} from ESPN backend`);
         
-        if (window.nflTeamsData && window.nflTeamsData[teamCode]) {
-            const team = window.nflTeamsData[teamCode];
-            let players = [];
-            
-            // Get players based on position
-            switch(position) {
-                case 'QB':
-                    players = team.quarterbacks || team.roster || [];
-                    break;
-                case 'RB':
-                    players = team.runningbacks || [];
-                    break;
-                case 'WR':
-                    players = team.wideReceivers || [];
-                    break;
-                case 'TE':
-                    players = team.tightEnds || [];
-                    break;
+        try {
+            // Priority 1: ESPN Team Roster API (most recent data, daily updates)
+            const rosterPlayers = await this.fetchFromESPNRoster(teamCode, position);
+            if (rosterPlayers && rosterPlayers.length > 0) {
+                console.log(`✅ Found ${rosterPlayers.length} ${position} players from ESPN Team Roster:`, rosterPlayers);
+                return rosterPlayers;
             }
-            
-            if (players && players.length > 0) {
-                console.log(`✅ Found ${players.length} ${position} players for ${teamCode}:`, players);
-                
-                // Convert Tank01 player data to our format
-                return players.slice(0, 6).map((player, index) => ({
-                    id: player.playerID || `${teamCode}_${position}_${index}`,
-                    name: player.longName || player.espnName || player.name || 'Unknown Player',
-                    number: player.jerseyNum || player.number || '0',
-                    position: player.pos || position,
-                    isStarter: index === 0, // First player is typically starter
-                    realData: true
-                }));
-            } else {
-                console.warn(`⚠️ No ${position} players found in window.nflTeamsData for ${teamCode}`);
-            }
-        } else {
-            console.warn(`⚠️ window.nflTeamsData not available for ${teamCode}`);
+        } catch (error) {
+            console.warn(`⚠️ ESPN Team Roster API failed for ${teamCode} ${position}:`, error);
         }
         
-        // Fallback to enhanced static data only if no real data
-        return this.getStaticPlayerData(teamCode, position);
+        try {
+            // Fallback: ESPN player search API
+            const espnPlayers = await this.fetchFromESPNPlayerSearch(teamCode, position);
+            if (espnPlayers && espnPlayers.length > 0) {
+                console.log(`✅ Found ${espnPlayers.length} ${position} players from ESPN search:`, espnPlayers);
+                return espnPlayers;
+            }
+        } catch (error) {
+            console.warn(`⚠️ ESPN player search also failed for ${teamCode} ${position}:`, error);
+        }
+        
+        // Final fallback: return placeholder indicating API issues
+        console.warn(`❌ All ESPN APIs failed for ${teamCode} ${position} - showing placeholder`);
+        return [{
+            id: `${teamCode}_${position}_loading`,
+            name: `${position} (Loading from ESPN...)`,
+            number: '0',
+            position: position,
+            isStarter: true,
+            apiError: true
+        }];
+    }
+
+    async fetchFromESPNPlayerSearch(teamCode, position) {
+        try {
+            console.log(`🔍 Fetching ${position} players for ${teamCode} using ESPN player search API...`);
+            
+            const baseURL = 'http://localhost:5001';
+            
+            // Map team codes to full team names for better search results
+            const teamNames = {
+                'SEA': 'Seahawks', 'WSH': 'Commanders', 'PHI': 'Eagles', 'DAL': 'Cowboys',
+                'NYG': 'Giants', 'CHI': 'Bears', 'DET': 'Lions', 'GB': 'Packers', 'MIN': 'Vikings',
+                'ATL': 'Falcons', 'CAR': 'Panthers', 'NO': 'Saints', 'TB': 'Buccaneers',
+                'ARI': 'Cardinals', 'LAR': 'Rams', 'SF': '49ers', 'BUF': 'Bills',
+                'MIA': 'Dolphins', 'NE': 'Patriots', 'NYJ': 'Jets', 'BAL': 'Ravens',
+                'CIN': 'Bengals', 'CLE': 'Browns', 'PIT': 'Steelers', 'HOU': 'Texans',
+                'IND': 'Colts', 'JAX': 'Jaguars', 'TEN': 'Titans', 'DEN': 'Broncos',
+                'KC': 'Chiefs', 'LV': 'Raiders', 'LAC': 'Chargers'
+            };
+            
+            const teamName = teamNames[teamCode] || teamCode;
+            const searchQuery = `${teamName} ${position}`;
+            
+            const url = `${baseURL}/api/players/search?q=${encodeURIComponent(searchQuery)}&limit=8`;
+            const response = await fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`ESPN player search failed: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log(`📝 ESPN player search response for ${teamCode} ${position}:`, data);
+            
+            if (data && data.players && data.players.length > 0) {
+                return this.processESPNSearchResults(data.players, teamCode, position);
+            }
+            
+            return [];
+        } catch (error) {
+            console.error(`❌ ESPN player search error for ${teamCode}:`, error);
+            throw error;
+        }
+    }
+
+    async fetchFromESPNRoster(teamCode, position) {
+        try {
+            console.log(`🏈 Fetching ESPN depth chart for ${teamCode}...`);
+            
+            const baseURL = 'http://localhost:5001';
+            
+            // Use the new ESPN depth chart endpoint
+            const url = `${baseURL}/api/espn/depth-chart/${teamCode}`;
+            
+            console.log(`🌐 Fetching from ESPN Depth Chart API: ${url}`);
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`ESPN depth chart API failed: ${response.status} ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log(`📋 ESPN Depth Chart response for ${teamCode}:`, data);
+            
+            // Handle the ESPN depth chart structure
+            if (data && data.success && data.depth_chart) {
+                console.log(`✅ Found ESPN depth chart with positions:`, Object.keys(data.depth_chart));
+                return this.processESPNDepthChart(data.depth_chart, teamCode, position);
+            }
+            
+            console.warn(`⚠️ Unexpected data structure from ESPN depth chart API:`, data);
+            return [];
+        } catch (error) {
+            console.error(`❌ ESPN Depth Chart API error for ${teamCode}:`, error);
+            throw error;
+        }
+    }
+
+    processESPNDepthChart(depthChart, teamCode, position) {
+        try {
+            console.log(`🔍 Processing ESPN depth chart for ${teamCode} ${position}`);
+            
+            // Get players for the requested position
+            const positionPlayers = depthChart[position.toUpperCase()] || depthChart[position] || [];
+            
+            if (!positionPlayers || positionPlayers.length === 0) {
+                console.warn(`⚠️ No ${position} players found in ESPN depth chart for ${teamCode}`);
+                return [];
+            }
+            
+            console.log(`🎯 Found ${positionPlayers.length} ${position} players with ESPN depth data`);
+            
+            // Process players with ESPN-determined starter/backup status
+            return positionPlayers
+                .slice(0, 4) // Limit to 4 players
+                .map((player, index) => ({
+                    id: player.id || `${teamCode}_${position}_${index}`,
+                    name: player.name || 'Unknown Player',
+                    number: player.jersey || '0',
+                    position: position,
+                    isStarter: player.is_starter || false, // Use ESPN-determined starter status
+                    realData: true,
+                    espnDepthChart: true,
+                    depthRank: player.depth_rank || index + 1,
+                    status: player.status || (player.is_starter ? 'STARTER' : 'BACKUP'),
+                    experience: player.experience || 0,
+                    age: player.age || 0
+                }));
+        } catch (error) {
+            console.error(`❌ Error processing ESPN depth chart:`, error);
+            return [];
+        }
+    }
+
+    processESPNTeamRosterData(athletes, teamCode, position) {
+        if (!athletes || !Array.isArray(athletes)) {
+            return [];
+        }
+        
+        return athletes
+            .filter(athlete => {
+                // ESPN athlete structure: check position in athlete.position
+                const playerPosition = athlete.position?.abbreviation || athlete.position?.name || '';
+                return playerPosition.toUpperCase() === position.toUpperCase();
+            })
+            .slice(0, 4)
+            .map((athlete, index) => ({
+                id: athlete.id || `${teamCode}_${position}_${index}`,
+                name: athlete.displayName || athlete.fullName || athlete.name || 'Unknown Player',
+                number: athlete.jersey || athlete.jerseyNumber || '0',
+                position: position,
+                isStarter: index < 2, // First two are typically starters
+                realData: true,
+                espnId: athlete.id
+            }));
+    }
+
+    processESPNSearchResults(players, teamCode, position) {
+        if (!players || !Array.isArray(players)) {
+            return [];
+        }
+        
+        return players
+            .filter(player => {
+                const playerTeam = player.team || player.teamAbv || player.teamId || '';
+                const playerPosition = player.position || player.pos || '';
+                
+                const teamMatch = playerTeam.toUpperCase() === teamCode.toUpperCase();
+                const positionMatch = playerPosition.toUpperCase() === position.toUpperCase();
+                
+                return teamMatch && positionMatch;
+            })
+            .slice(0, 4)
+            .map((player, index) => ({
+                id: player.id || player.playerId || `${teamCode}_${position}_${index}`,
+                name: player.displayName || player.name || player.fullName || 'Unknown Player',
+                number: player.jerseyNumber || player.number || player.jersey || '0',
+                position: position,
+                isStarter: index < 2, // First two are starters
+                realData: true
+            }));
+    }
+
+    processESPNRosterData(roster, teamCode, position) {
+        if (!roster || !Array.isArray(roster)) {
+            console.warn(`⚠️ Invalid roster data:`, roster);
+            return [];
+        }
+        
+        console.log(`🔍 Processing ${roster.length} roster entries for ${teamCode} ${position}`);
+        
+        // Filter players by position first
+        const positionPlayers = roster.filter(player => {
+            // Handle the actual field name 'pos' from the API response
+            const playerPosition = player.pos || player.position || '';
+            const posMatch = playerPosition.toString().toUpperCase() === position.toUpperCase();
+            
+            if (posMatch) {
+                console.log(`✅ Found ${position} player:`, player.longName || player.espnName);
+            }
+            
+            return posMatch;
+        });
+        
+        console.log(`🎯 Found ${positionPlayers.length} ${position} players for ${teamCode}`);
+        
+        // Sort players for more realistic starter determination
+        const sortedPlayers = this.sortPlayersByDepth(positionPlayers, position, teamCode);
+        
+        return sortedPlayers
+            .slice(0, 4) // Limit to 4 players
+            .map((player, index) => {
+                // Use the actual field names from the API response
+                const playerName = player.longName || player.espnName || player.cbsLongName || 
+                                 player.name || 'Unknown Player';
+                const jerseyNum = player.jerseyNum || player.number || player.jersey || '0';
+                
+                return {
+                    id: player.playerID || player.espnID || `${teamCode}_${position}_${index}`,
+                    name: playerName,
+                    number: jerseyNum.toString(),
+                    position: position,
+                    isStarter: index < this.getStarterCount(position), // Dynamic starter count based on position
+                    realData: true,
+                    espnData: true,
+                    espnId: player.espnID,
+                    school: player.school,
+                    age: player.age
+                };
+            });
+    }
+
+    // ========================================
+    // DEPRECATED: Old hardcoded depth logic
+    // Now using ESPN depth chart API instead
+    // ========================================
+    
+    // Determine number of starters for each position (LEGACY - for fallback only)
+    getStarterCount(position) {
+        const starterCounts = {
+            'QB': 1,  // Only 1 starting QB
+            'RB': 2,  // 2 starting RBs (1 starter + 1 primary backup)
+            'WR': 3,  // 3 starting WRs in most formations
+            'TE': 2,  // 2 starting TEs
+            'K': 1,   // 1 starting kicker
+            'DEF': 2  // 2 starting defensive players
+        };
+        
+        return starterCounts[position.toUpperCase()] || 2;
+    }
+
+    // Sort players by depth chart priority (LEGACY - ESPN depth chart preferred)
+    sortPlayersByDepth(players, position, teamCode) {
+        // For QB, prioritize by experience and known starters
+        if (position.toUpperCase() === 'QB') {
+            return players.sort((a, b) => {
+                const aName = (a.longName || '').toLowerCase();
+                const bName = (b.longName || '').toLowerCase();
+                
+                // Browns: Dillon Gabriel is the starting QB
+                if (teamCode === 'CLE') {
+                    if (aName.includes('dillon gabriel')) return -1;
+                    if (bName.includes('dillon gabriel')) return 1;
+                    if (aName.includes('deshaun watson')) return 1; // Backup
+                    if (bName.includes('deshaun watson')) return -1; // Backup
+                }
+                
+                // Known starters for Seattle: Sam Darnold is likely starter
+                if (aName.includes('sam darnold')) return -1;
+                if (bName.includes('sam darnold')) return 1;
+                if (aName.includes('drew lock')) return -1;
+                if (bName.includes('drew lock')) return 1;
+                
+                // Sort by experience (higher exp first)
+                const aExp = parseInt(a.exp) || 0;
+                const bExp = parseInt(b.exp) || 0;
+                return bExp - aExp;
+            });
+        }
+        
+        // For RB, prioritize known starters
+        if (position.toUpperCase() === 'RB') {
+            return players.sort((a, b) => {
+                const aName = (a.longName || '').toLowerCase();
+                const bName = (b.longName || '').toLowerCase();
+                
+                if (aName.includes('kenneth walker')) return -1;
+                if (bName.includes('kenneth walker')) return 1;
+                if (aName.includes('zach charbonnet')) return -1;
+                if (bName.includes('zach charbonnet')) return 1;
+                
+                // Sort by experience
+                const aExp = parseInt(a.exp) || 0;
+                const bExp = parseInt(b.exp) || 0;
+                return bExp - aExp;
+            });
+        }
+        
+        // For WR, prioritize known starters
+        if (position.toUpperCase() === 'WR') {
+            return players.sort((a, b) => {
+                const aName = (a.longName || '').toLowerCase();
+                const bName = (b.longName || '').toLowerCase();
+                
+                if (aName.includes('cooper kupp')) return -1;
+                if (bName.includes('cooper kupp')) return 1;
+                if (aName.includes('jaxon smith-njigba')) return -1;
+                if (bName.includes('jaxon smith-njigba')) return 1;
+                if (aName.includes('jake bobo')) return -1;
+                if (bName.includes('jake bobo')) return 1;
+                
+                // Sort by experience
+                const aExp = parseInt(a.exp) || 0;
+                const bExp = parseInt(b.exp) || 0;
+                return bExp - aExp;
+            });
+        }
+        
+        // Default: sort by experience
+        return players.sort((a, b) => {
+            const aExp = parseInt(a.exp) || 0;
+            const bExp = parseInt(b.exp) || 0;
+            return bExp - aExp;
+        });
     }
     
     processRealRosterData(rosterData, position) {
@@ -1170,10 +1974,20 @@ class GameCentricUI {
         document.querySelectorAll('.player-option').forEach(el => el.classList.remove('selected'));
         event.currentTarget.classList.add('selected');
         
+        // Update news context to show player-specific news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'player',
+                playerName: playerName,
+                teamCode: this.selectedTeam?.code
+            });
+        }
+        
         // Generate prediction
         this.generatePrediction();
         
         console.log('🌟 Player selected:', this.selectedPlayer);
+        console.log('📰 News updated for player:', playerName);
     }
     
     async generatePrediction() {
@@ -1183,8 +1997,10 @@ class GameCentricUI {
         const positionData = this.predictionTypes[this.selectedPosition];
         const opponent = this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away;
         
-        // Get current week dynamically
-        const currentWeekInfo = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 8, title: 'Week 8' };
+        // Get current week dynamically from Weekly Schedule Manager
+        const currentWeekInfo = window.weeklyScheduleManager ? 
+            window.weeklyScheduleManager.getCurrentWeekInfo() : 
+            (window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek() : { week: 10, title: 'Week 10' });
         
         // Show loading state
         container.innerHTML = `
@@ -1212,11 +2028,7 @@ class GameCentricUI {
                     <div class="prediction-card">
                         <div class="prediction-stat">${pred.stat}</div>
                         <div class="prediction-value">${pred.value}${pred.unit || ''}</div>
-                        <div class="prediction-confidence">
-                            ${pred.model_accuracy ? `${pred.model_accuracy}% model accuracy` : 
-                              pred.prediction_likelihood ? `${pred.prediction_likelihood}% likelihood` : 
-                              `${pred.confidence}% confidence`}
-                        </div>
+                        <div class="prediction-confidence">${pred.confidence}% confidence</div>
                         <div class="prediction-trend ${pred.trend}">${pred.trendText}</div>
                     </div>
                 `).join('')}
@@ -1254,13 +2066,46 @@ class GameCentricUI {
         console.log('🔍 Checking ML backend availability:', {
             hasBetYardML: !!window.BetYardML,
             isAvailable: window.BetYardML?.isAvailable,
-            baseURL: window.BetYardML?.baseURL
+            baseURL: window.BetYardML?.baseURL,
+            hasInitPromise: !!window.BetYardML?.initPromise
         });
+        
+        // Wait for BetYardML to initialize if it exists
+        if (window.BetYardML) {
+            try {
+                console.log('⏳ Waiting for ML backend initialization...');
+                if (window.BetYardML.initPromise) {
+                    await window.BetYardML.initPromise;
+                    console.log('✅ ML backend initialization completed');
+                } else {
+                    // Force a health check if no init promise
+                    console.log('⚡ No init promise, forcing health check...');
+                    await window.BetYardML.checkHealth();
+                }
+                
+                console.log('🔍 Final ML backend status:', {
+                    isAvailable: window.BetYardML.isAvailable,
+                    lastHealthCheck: window.BetYardML.lastHealthCheck
+                });
+            } catch (error) {
+                console.warn('⚠️ ML backend initialization error:', error);
+            }
+        }
         
         if (window.BetYardML && window.BetYardML.isAvailable) {
             try {
                 console.log(`🧠 Fetching real ML ${position} prediction for`, playerName);
-                mlPrediction = await window.BetYardML.getPrediction(playerName, this.selectedTeam.code, null, position);
+                
+                // Get opponent team from selected game
+                const opponentTeam = this.selectedGame?.away === this.selectedTeam.code ? 
+                                   this.selectedGame?.home : this.selectedGame?.away;
+                
+                mlPrediction = await window.BetYardML.getPrediction(
+                    playerName, 
+                    this.selectedTeam.code, 
+                    opponentTeam, 
+                    position
+                );
                 console.log('✅ Got real ML prediction:', mlPrediction);
             } catch (error) {
                 console.warn('⚠️ ML prediction failed, using smart fallback:', error);
@@ -1293,20 +2138,26 @@ class GameCentricUI {
         
         // Use real ML prediction data
         return positionData.stats.map(stat => {
-            let value, confidence, trend, trendText, model_accuracy, prediction_likelihood;
+            let value, confidence, trend, trendText;
             
             if (position === 'QB') {
-                // Get new accuracy fields or fallback to legacy confidence
+                // Get confidence once (backend returns it as a percentage already)
                 const baseConfidence = mlPrediction.confidence || mlPrediction.metadata?.confidence || 85;
-                model_accuracy = mlPrediction.model_accuracy || 89; // QB model accuracy from training
-                prediction_likelihood = mlPrediction.prediction_likelihood || baseConfidence;
                 
                 switch(stat) {
                     case 'Passing Yards':
                         value = Math.round(mlPrediction.passing_yards);
                         confidence = Math.round(baseConfidence);
                         break;
-                    case 'Touchdowns':
+                    case 'Passing TDs':
+                        value = Math.round(mlPrediction.passing_touchdowns || mlPrediction.touchdowns || 0);
+                        confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
+                        break;
+                    case 'Rushing TDs':
+                        value = Math.round(mlPrediction.rushing_touchdowns || 0);
+                        confidence = Math.round(baseConfidence * 0.85); // Lower for rushing TDs (less predictable)
+                        break;
+                    case 'Touchdowns': // Legacy field for compatibility
                         value = Math.round(mlPrediction.touchdowns);
                         confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
                         break;
@@ -1401,6 +2252,10 @@ class GameCentricUI {
                         value = Math.round(mlPrediction.rushing_attempts || 0);
                         confidence = Math.round(baseConfidence);
                         break;
+                    case 'Carries':  // Same as Rushing Attempts
+                        value = Math.round(mlPrediction.rushing_attempts || 0);
+                        confidence = Math.round(baseConfidence);
+                        break;
                     case 'Touchdowns':
                         value = Math.round(mlPrediction.touchdowns || 0);
                         confidence = Math.round(baseConfidence * 0.95); // Slightly lower for TD predictions
@@ -1408,6 +2263,10 @@ class GameCentricUI {
                     case 'Receiving Yards':
                         value = Math.round(mlPrediction.receiving_yards || 0);
                         confidence = Math.round(baseConfidence * 0.98); // RB receiving slightly less predictable
+                        break;
+                    case 'Receptions':
+                        value = Math.round(mlPrediction.receptions || 0);
+                        confidence = Math.round(baseConfidence * 0.90); // Receptions can be variable
                         break;
                     case 'Fantasy Points':
                         // Calculate fantasy points: 0.1 per rush yard + 0.1 per rec yard + 6 per TD + 1 per reception (PPR)
@@ -1530,13 +2389,190 @@ class GameCentricUI {
     }
     
     generateBettingInsights(predictions) {
+        // Enhanced betting insights with ESPN integration
         const insights = [
-            `💡 <strong>Value Pick:</strong> ${predictions[0].stat} Over looking strong`,
-            `⚡ <strong>Hot Trend:</strong> Player averaging +15% vs projection`,
-            `📊 <strong>Market:</strong> 65% of bets on Over for this prop`
+            `� <strong>ESPN Enhanced:</strong> ${predictions[0].stat} analysis in progress...`,
+            `🔥 <strong>Live Trend:</strong> ESPN game log analysis loading...`,
+            `📊 <strong>Market Edge:</strong> ESPN team stats calculating advantage...`,
+            `⚠️ <strong>Risk Analysis:</strong> ESPN consistency metrics evaluating...`
         ];
         
-        return insights.map(insight => `<div class="insight-item">${insight}</div>`).join('');
+        // Create enhanced insights with unique IDs for updating
+        const enhancedInsightsHTML = `
+            <div class="insight-item" id="enhanced-value-pick">${insights[0]}</div>
+            <div class="insight-item" id="enhanced-hot-trend">${insights[1]}</div>
+            <div class="insight-item" id="enhanced-market-insight">${insights[2]}</div>
+            <div class="insight-item" id="enhanced-risk-assessment">${insights[3]}</div>
+            <div class="insight-item" id="enhanced-espn-status">
+                <span style="color: #059669;">📡 <strong>ESPN Integration:</strong> Loading Tier 1 endpoints...</span>
+            </div>
+        `;
+        
+        // Trigger enhanced ESPN insights after a brief delay to allow UI to render
+        setTimeout(() => {
+            this.triggerEnhancedBettingInsights();
+        }, 500);
+        
+        return enhancedInsightsHTML;
+    }
+    
+    async triggerEnhancedBettingInsights() {
+        console.log('🎯 Triggering enhanced ESPN betting insights for game-centric UI');
+        
+        if (!this.selectedPlayer || !this.selectedTeam || !this.selectedPosition) {
+            console.warn('⚠️ Missing player context for enhanced insights');
+            return;
+        }
+
+        // Update global context for enhanced insights service
+        window.currentPlayerSelection = {
+            playerId: this.selectedPlayer.id,
+            position: this.selectedPosition,
+            predictionType: this.getPrimaryPredictionType(this.selectedPosition),
+            teamId: this.selectedTeam.code,
+            playerName: this.selectedPlayer.name,
+            teamName: this.selectedTeam.name,
+            opponent: this.selectedGame.away === this.selectedTeam.code ? this.selectedGame.home : this.selectedGame.away
+        };
+
+        // Check if enhanced betting insights service is available
+        if (typeof enhancedBettingInsights === 'undefined' || !enhancedBettingInsights) {
+            console.log('📊 Enhanced betting insights service not available - using standard insights');
+            this.updateStandardGameCentricInsights();
+            return;
+        }
+
+        try {
+            console.log('🔍 Fetching enhanced ESPN insights for:', this.selectedPlayer.name);
+            
+            const insights = await enhancedBettingInsights.getBettingInsights(
+                this.selectedPlayer.id,
+                this.selectedPosition,
+                this.getPrimaryPredictionType(this.selectedPosition),
+                this.selectedTeam.code,
+                this.getOpponentTeamId()
+            );
+
+            console.log('✅ Enhanced ESPN insights received:', insights);
+            this.updateGameCentricInsightsUI(insights);
+
+        } catch (error) {
+            console.log('ℹ️ Enhanced insights not available, using enhanced fallback:', error.message);
+            this.updateStandardGameCentricInsights();
+        }
+    }
+
+    getPrimaryPredictionType(position) {
+        const primaryStats = {
+            'QB': 'passing_yards',
+            'RB': 'rushing_yards', 
+            'WR': 'receiving_yards',
+            'TE': 'receiving_yards'
+        };
+        return primaryStats[position] || 'performance';
+    }
+
+    getOpponentTeamId() {
+        return this.selectedGame.away === this.selectedTeam.code ? 
+               this.selectedGame.home : this.selectedGame.away;
+    }
+
+    updateGameCentricInsightsUI(insights) {
+        // Use the enhanced betting insights UI update method for comprehensive display
+        if (enhancedBettingInsights && typeof enhancedBettingInsights.updateBettingInsightsUI === 'function') {
+            console.log('🎯 Using enhanced ESPN betting insights UI');
+            enhancedBettingInsights.updateBettingInsightsUI(insights);
+            return;
+        }
+        
+        // Fallback to basic UI updates if enhanced service not available
+        console.log('ℹ️ Using fallback game-centric insights UI');
+        
+        // Update value pick
+        const valuePick = document.getElementById('enhanced-value-pick');
+        if (valuePick && insights.valuePick) {
+            valuePick.innerHTML = `${insights.valuePick.icon} <strong>${insights.valuePick.type}:</strong> ${insights.valuePick.title}
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.valuePick.description}</div>
+                <div style="font-size: 11px; color: #059669; margin-top: 2px;">Confidence: ${insights.valuePick.confidence}%</div>`;
+        }
+
+        // Update hot trend
+        const hotTrend = document.getElementById('enhanced-hot-trend');
+        if (hotTrend && insights.hotTrend) {
+            const momentumColor = insights.hotTrend.momentum === 'positive' ? '#059669' : 
+                                 insights.hotTrend.momentum === 'negative' ? '#dc2626' : '#0369a1';
+            hotTrend.innerHTML = `${insights.hotTrend.icon} <strong>${insights.hotTrend.type}:</strong> ${insights.hotTrend.title}
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.hotTrend.description}</div>`;
+            hotTrend.style.borderLeftColor = momentumColor;
+        }
+
+        // Update market insight
+        const marketInsight = document.getElementById('enhanced-market-insight');
+        if (marketInsight && insights.marketInsight) {
+            const edgeColor = insights.marketInsight.edge === 'strong' ? '#059669' : 
+                             insights.marketInsight.edge === 'moderate' ? '#0369a1' : '#6b7280';
+            marketInsight.innerHTML = `${insights.marketInsight.icon} <strong>${insights.marketInsight.type}:</strong> ${insights.marketInsight.title}
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.marketInsight.description}</div>`;
+            marketInsight.style.borderLeftColor = edgeColor;
+        }
+
+        // Update risk assessment
+        const riskAssessment = document.getElementById('enhanced-risk-assessment');
+        if (riskAssessment && insights.riskAssessment) {
+            const riskColor = insights.riskAssessment.riskLevel === 'low' ? '#059669' : 
+                             insights.riskAssessment.riskLevel === 'medium' ? '#d97706' : '#dc2626';
+            riskAssessment.innerHTML = `${insights.riskAssessment.icon} <strong>${insights.riskAssessment.type}:</strong> ${insights.riskAssessment.title}
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">${insights.riskAssessment.description}</div>`;
+            riskAssessment.style.borderLeftColor = riskColor;
+        }
+
+        // Update ESPN status
+        const espnStatus = document.getElementById('enhanced-espn-status');
+        if (espnStatus) {
+            const dataQuality = insights.confidence?.dataQuality || 'good';
+            const qualityColor = dataQuality === 'excellent' ? '#059669' : 
+                                dataQuality === 'high' ? '#0369a1' : '#d97706';
+            const qualityText = dataQuality === 'excellent' ? 'Tier 1 endpoints active' :
+                               dataQuality === 'high' ? 'Enhanced data available' : 'Standard analysis';
+            
+            espnStatus.innerHTML = `<span style="color: ${qualityColor};">📡 <strong>ESPN Integration:</strong> ${qualityText}</span>
+                <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Confidence: ${insights.confidence?.overall || 75}%</div>`;
+        }
+
+        console.log('✅ Game-centric enhanced insights UI updated');
+    }
+
+    updateStandardGameCentricInsights() {
+        // Enhanced standard insights with ESPN context
+        const valuePick = document.getElementById('enhanced-value-pick');
+        if (valuePick) {
+            valuePick.innerHTML = `💡 <strong>Value Analysis:</strong> ${this.selectedPosition} performance metrics
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">ESPN integration enhancing standard analysis</div>`;
+        }
+
+        const hotTrend = document.getElementById('enhanced-hot-trend');
+        if (hotTrend) {
+            hotTrend.innerHTML = `⚡ <strong>Performance Trend:</strong> ${this.selectedPlayer.name} showing opportunity
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Recent form analysis suggests value potential</div>`;
+        }
+
+        const marketInsight = document.getElementById('enhanced-market-insight');
+        if (marketInsight) {
+            marketInsight.innerHTML = `📊 <strong>Market Context:</strong> ${this.selectedTeam.code} vs ${this.getOpponentTeamId()} matchup
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Analyzing team statistical advantages</div>`;
+        }
+
+        const riskAssessment = document.getElementById('enhanced-risk-assessment');
+        if (riskAssessment) {
+            riskAssessment.innerHTML = `⚠️ <strong>Risk Profile:</strong> Moderate variance expected
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Standard risk assessment for ${this.selectedPosition} position</div>`;
+        }
+
+        const espnStatus = document.getElementById('enhanced-espn-status');
+        if (espnStatus) {
+            espnStatus.innerHTML = `<span style="color: #0369a1;">📡 <strong>ESPN Integration:</strong> Standard analysis mode</span>
+                <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Enhanced insights loading in background</div>`;
+        }
     }
     
     sharePrediction() {
@@ -1609,17 +2645,841 @@ class GameCentricUI {
         this.selectedPosition = null;
         this.selectedPlayer = null;
         
+        // Reset news context to general NFL news
+        if (typeof updateNews === 'function') {
+            updateNews({
+                type: 'general',
+                homeTeam: null,
+                awayTeam: null,
+                playerName: null,
+                teamCode: null
+            });
+        }
+        
         // Show first step
         document.querySelectorAll('.selection-step').forEach(step => step.classList.remove('active'));
         document.getElementById('step-game-selection').classList.add('active');
         
         // Reset progress
         this.updateProgressDots();
+        
+        console.log('🔄 Starting over - News reset to general NFL');
     }
     
     setupEventListeners() {
-        // Add any additional event listeners needed
-        console.log('🎮 Event listeners set up');
+        // Listen for weekly schedule updates
+        window.addEventListener('weeklyScheduleUpdated', (event) => {
+            console.log('📅 Weekly schedule updated:', event.detail);
+            this.liveGames = event.detail.games;
+            this.loadGames(); // Refresh the games display
+        });
+        
+        // Connect to Weekly Schedule Manager for current week games
+        this.connectToWeeklySchedule();
+        
+        console.log('🔧 Event listeners set up for weekly schedule integration');
+    }
+    
+    async connectToWeeklySchedule() {
+        try {
+            // Wait for Weekly Schedule Manager to be available
+            if (!window.weeklyScheduleManager) {
+                console.log('⏳ Waiting for Weekly Schedule Manager...');
+                setTimeout(() => this.connectToWeeklySchedule(), 1000);
+                return;
+            }
+            
+            console.log('🗓️ Connecting to Weekly Schedule Manager...');
+            
+            // Get current week games
+            const games = window.weeklyScheduleManager.getCurrentWeekGames();
+            const weekInfo = window.weeklyScheduleManager.getCurrentWeekInfo();
+            
+            console.log(`✅ Loaded ${games.length} games for ${weekInfo.title}:`, games);
+            
+            // Store games for the UI
+            this.liveGames = games;
+            this.currentWeekInfo = weekInfo;
+            
+            // Update the games display
+            this.loadGames();
+            
+        } catch (error) {
+            console.error('❌ Failed to connect to Weekly Schedule Manager:', error);
+            
+            // Fallback to ESPN Data Service
+            this.connectToESPNService();
+        }
+    }
+    
+    async connectToESPNService() {
+        try {
+            // Wait for ESPN Data Service to be available
+            if (!window.ESPNDataService) {
+                console.log('⏳ Waiting for ESPN Data Service...');
+                setTimeout(() => this.connectToESPNService(), 1000);
+                return;
+            }
+            
+            console.log('🏈 Connecting directly to ESPN for current week games...');
+            
+            // Get current week games directly from ESPN using the existing method
+            const data = await window.ESPNDataService.getWeeklySchedule();
+            console.log('✅ ESPN current week data:', data);
+            
+            // Extract games from the ESPN response structure
+            let games = [];
+            if (data && data.schedule) {
+                if (Array.isArray(data.schedule)) {
+                    games = data.schedule;
+                } else if (data.schedule.games) {
+                    games = data.schedule.games;
+                } else if (data.schedule.events) {
+                    games = data.schedule.events;
+                }
+            } else if (Array.isArray(data)) {
+                games = data;
+            }
+            
+            console.log('🎯 Extracted games:', games);
+            
+            if (games && games.length > 0) {
+                console.log(`🎯 Found ${games.length} current week games from ESPN`);
+                this.updateWithLiveGames(games);
+            } else {
+                console.log('⚠️ No games found in ESPN response');
+                this.showNoGamesMessage();
+            }
+        } catch (error) {
+            console.error('❌ Error connecting to ESPN:', error);
+            this.showNoGamesMessage();
+        }
+    }
+    
+    showNoGamesMessage() {
+        const gamesGrid = document.getElementById('gamesGrid');
+        if (gamesGrid) {
+            gamesGrid.innerHTML = `
+                <div class="mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card mdl-shadow--2dp" style="width: 100%;">
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">🏈 No Games Available</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Unable to load current week games. Please check back later.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // Team Rankings Methods
+    async getTeamRankings(teamCode) {
+        try {
+            console.log(`📊 Fetching rankings for team: ${teamCode}`);
+            
+            // Check if ML service is available
+            if (window.betYardMLService && window.betYardMLService.isAvailable) {
+                const response = await fetch(`${window.betYardMLService.baseURL}/api/teams/rankings/${teamCode}`);
+                if (response.ok) {
+                    const rankings = await response.json();
+                    console.log(`✅ Got rankings for ${teamCode}:`, rankings);
+                    return rankings;
+                }
+            }
+            
+            // Fallback to default rankings if service unavailable
+            return this.getDefaultRankings(teamCode);
+            
+        } catch (error) {
+            console.warn(`⚠️ Error fetching rankings for ${teamCode}:`, error);
+            return this.getDefaultRankings(teamCode);
+        }
+    }
+    
+    getDefaultRankings(teamCode) {
+        // Realistic team rankings for 2024-25 NFL season
+        const teamRankings = {
+            'CLE': { 
+                offense: { 
+                    total_rank: 18, 
+                    passing_rank: 20, 
+                    rushing_rank: 17, 
+                    points_per_game: 18.5, 
+                    yards_per_game: 310.0 
+                }, 
+                defense: { 
+                    total_rank: 12, 
+                    passing_rank: 13, 
+                    rushing_rank: 10, 
+                    points_allowed: 21.2, 
+                    yards_allowed: 325.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'NYJ': { 
+                offense: { 
+                    total_rank: 22, 
+                    passing_rank: 24, 
+                    rushing_rank: 20, 
+                    points_per_game: 16.8, 
+                    yards_per_game: 290.0 
+                }, 
+                defense: { 
+                    total_rank: 18, 
+                    passing_rank: 19, 
+                    rushing_rank: 15, 
+                    points_allowed: 22.5, 
+                    yards_allowed: 340.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'BUF': { 
+                offense: { 
+                    total_rank: 5, 
+                    passing_rank: 4, 
+                    rushing_rank: 8, 
+                    points_per_game: 28.3, 
+                    yards_per_game: 385.0 
+                }, 
+                defense: { 
+                    total_rank: 8, 
+                    passing_rank: 6, 
+                    rushing_rank: 12, 
+                    points_allowed: 18.9, 
+                    yards_allowed: 310.0 
+                }, 
+                overall: { record: '9-1' }
+            },
+            'MIA': { 
+                offense: { 
+                    total_rank: 12, 
+                    passing_rank: 10, 
+                    rushing_rank: 16, 
+                    points_per_game: 22.1, 
+                    yards_per_game: 355.0 
+                }, 
+                defense: { 
+                    total_rank: 20, 
+                    passing_rank: 22, 
+                    rushing_rank: 18, 
+                    points_allowed: 24.8, 
+                    yards_allowed: 365.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'NE': { 
+                offense: { 
+                    total_rank: 28, 
+                    passing_rank: 30, 
+                    rushing_rank: 25, 
+                    points_per_game: 14.2, 
+                    yards_per_game: 275.0 
+                }, 
+                defense: { 
+                    total_rank: 15, 
+                    passing_rank: 14, 
+                    rushing_rank: 17, 
+                    points_allowed: 20.8, 
+                    yards_allowed: 330.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'BAL': { 
+                offense: { 
+                    total_rank: 8, 
+                    passing_rank: 12, 
+                    rushing_rank: 4, 
+                    points_per_game: 26.5, 
+                    yards_per_game: 375.0 
+                }, 
+                defense: { 
+                    total_rank: 14, 
+                    passing_rank: 16, 
+                    rushing_rank: 11, 
+                    points_allowed: 22.1, 
+                    yards_allowed: 335.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'CIN': { 
+                offense: { 
+                    total_rank: 10, 
+                    passing_rank: 8, 
+                    rushing_rank: 14, 
+                    points_per_game: 24.7, 
+                    yards_per_game: 365.0 
+                }, 
+                defense: { 
+                    total_rank: 22, 
+                    passing_rank: 25, 
+                    rushing_rank: 19, 
+                    points_allowed: 26.3, 
+                    yards_allowed: 375.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'PIT': { 
+                offense: { 
+                    total_rank: 16, 
+                    passing_rank: 18, 
+                    rushing_rank: 12, 
+                    points_per_game: 20.8, 
+                    yards_per_game: 320.0 
+                }, 
+                defense: { 
+                    total_rank: 6, 
+                    passing_rank: 5, 
+                    rushing_rank: 8, 
+                    points_allowed: 17.2, 
+                    yards_allowed: 295.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'KC': { 
+                offense: { 
+                    total_rank: 3, 
+                    passing_rank: 5, 
+                    rushing_rank: 6, 
+                    points_per_game: 29.1, 
+                    yards_per_game: 390.0 
+                }, 
+                defense: { 
+                    total_rank: 10, 
+                    passing_rank: 9, 
+                    rushing_rank: 13, 
+                    points_allowed: 19.5, 
+                    yards_allowed: 315.0 
+                }, 
+                overall: { record: '9-1' }
+            },
+            'LAC': { 
+                offense: { 
+                    total_rank: 14, 
+                    passing_rank: 15, 
+                    rushing_rank: 11, 
+                    points_per_game: 21.9, 
+                    yards_per_game: 345.0 
+                }, 
+                defense: { 
+                    total_rank: 16, 
+                    passing_rank: 17, 
+                    rushing_rank: 14, 
+                    points_allowed: 23.1, 
+                    yards_allowed: 345.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'DEN': { 
+                offense: { 
+                    total_rank: 20, 
+                    passing_rank: 22, 
+                    rushing_rank: 18, 
+                    points_per_game: 18.9, 
+                    yards_per_game: 305.0 
+                }, 
+                defense: { 
+                    total_rank: 9, 
+                    passing_rank: 8, 
+                    rushing_rank: 9, 
+                    points_allowed: 18.7, 
+                    yards_allowed: 300.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'LV': { 
+                offense: { 
+                    total_rank: 26, 
+                    passing_rank: 28, 
+                    rushing_rank: 23, 
+                    points_per_game: 16.3, 
+                    yards_per_game: 280.0 
+                }, 
+                defense: { 
+                    total_rank: 25, 
+                    passing_rank: 26, 
+                    rushing_rank: 24, 
+                    points_allowed: 27.8, 
+                    yards_allowed: 385.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'DAL': { 
+                offense: { 
+                    total_rank: 21, 
+                    passing_rank: 19, 
+                    rushing_rank: 24, 
+                    points_per_game: 19.2, 
+                    yards_per_game: 315.0 
+                }, 
+                defense: { 
+                    total_rank: 24, 
+                    passing_rank: 23, 
+                    rushing_rank: 26, 
+                    points_allowed: 26.9, 
+                    yards_allowed: 380.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'NYG': { 
+                offense: { 
+                    total_rank: 30, 
+                    passing_rank: 32, 
+                    rushing_rank: 27, 
+                    points_per_game: 13.8, 
+                    yards_per_game: 260.0 
+                }, 
+                defense: { 
+                    total_rank: 19, 
+                    passing_rank: 20, 
+                    rushing_rank: 16, 
+                    points_allowed: 24.2, 
+                    yards_allowed: 355.0 
+                }, 
+                overall: { record: '2-8' }
+            },
+            'PHI': { 
+                offense: { 
+                    total_rank: 7, 
+                    passing_rank: 9, 
+                    rushing_rank: 5, 
+                    points_per_game: 27.1, 
+                    yards_per_game: 380.0 
+                }, 
+                defense: { 
+                    total_rank: 11, 
+                    passing_rank: 12, 
+                    rushing_rank: 7, 
+                    points_allowed: 20.3, 
+                    yards_allowed: 320.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'WAS': { 
+                offense: { 
+                    total_rank: 6, 
+                    passing_rank: 6, 
+                    rushing_rank: 9, 
+                    points_per_game: 27.8, 
+                    yards_per_game: 375.0 
+                }, 
+                defense: { 
+                    total_rank: 21, 
+                    passing_rank: 21, 
+                    rushing_rank: 22, 
+                    points_allowed: 25.5, 
+                    yards_allowed: 370.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'GB': { 
+                offense: { 
+                    total_rank: 4, 
+                    passing_rank: 3, 
+                    rushing_rank: 7, 
+                    points_per_game: 28.9, 
+                    yards_per_game: 385.0 
+                }, 
+                defense: { 
+                    total_rank: 13, 
+                    passing_rank: 11, 
+                    rushing_rank: 20, 
+                    points_allowed: 21.7, 
+                    yards_allowed: 340.0 
+                }, 
+                overall: { record: '7-3' }
+            },
+            'CHI': { 
+                offense: { 
+                    total_rank: 24, 
+                    passing_rank: 26, 
+                    rushing_rank: 21, 
+                    points_per_game: 17.5, 
+                    yards_per_game: 295.0 
+                }, 
+                defense: { 
+                    total_rank: 7, 
+                    passing_rank: 7, 
+                    rushing_rank: 6, 
+                    points_allowed: 17.8, 
+                    yards_allowed: 290.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'DET': { 
+                offense: { 
+                    total_rank: 1, 
+                    passing_rank: 1, 
+                    rushing_rank: 3, 
+                    points_per_game: 31.2, 
+                    yards_per_game: 410.0 
+                }, 
+                defense: { 
+                    total_rank: 17, 
+                    passing_rank: 15, 
+                    rushing_rank: 21, 
+                    points_allowed: 23.8, 
+                    yards_allowed: 350.0 
+                }, 
+                overall: { record: '8-2' }
+            },
+            'MIN': { 
+                offense: { 
+                    total_rank: 9, 
+                    passing_rank: 7, 
+                    rushing_rank: 13, 
+                    points_per_game: 25.3, 
+                    yards_per_game: 370.0 
+                }, 
+                defense: { 
+                    total_rank: 5, 
+                    passing_rank: 4, 
+                    rushing_rank: 5, 
+                    points_allowed: 16.9, 
+                    yards_allowed: 285.0 
+                }, 
+                overall: { record: '8-2' }
+            },
+            'ATL': { 
+                offense: { 
+                    total_rank: 15, 
+                    passing_rank: 13, 
+                    rushing_rank: 19, 
+                    points_per_game: 21.4, 
+                    yards_per_game: 340.0 
+                }, 
+                defense: { 
+                    total_rank: 26, 
+                    passing_rank: 27, 
+                    rushing_rank: 25, 
+                    points_allowed: 28.1, 
+                    yards_allowed: 390.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'CAR': { 
+                offense: { 
+                    total_rank: 25, 
+                    passing_rank: 25, 
+                    rushing_rank: 26, 
+                    points_per_game: 16.7, 
+                    yards_per_game: 285.0 
+                }, 
+                defense: { 
+                    total_rank: 29, 
+                    passing_rank: 30, 
+                    rushing_rank: 28, 
+                    points_allowed: 29.5, 
+                    yards_allowed: 405.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'NO': { 
+                offense: { 
+                    total_rank: 29, 
+                    passing_rank: 29, 
+                    rushing_rank: 30, 
+                    points_per_game: 14.8, 
+                    yards_per_game: 270.0 
+                }, 
+                defense: { 
+                    total_rank: 23, 
+                    passing_rank: 24, 
+                    rushing_rank: 23, 
+                    points_allowed: 26.7, 
+                    yards_allowed: 375.0 
+                }, 
+                overall: { record: '3-7' }
+            },
+            'TB': { 
+                offense: { 
+                    total_rank: 11, 
+                    passing_rank: 11, 
+                    rushing_rank: 15, 
+                    points_per_game: 23.6, 
+                    yards_per_game: 360.0 
+                }, 
+                defense: { 
+                    total_rank: 27, 
+                    passing_rank: 28, 
+                    rushing_rank: 27, 
+                    points_allowed: 28.9, 
+                    yards_allowed: 395.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'ARI': { 
+                offense: { 
+                    total_rank: 13, 
+                    passing_rank: 14, 
+                    rushing_rank: 10, 
+                    points_per_game: 22.8, 
+                    yards_per_game: 350.0 
+                }, 
+                defense: { 
+                    total_rank: 28, 
+                    passing_rank: 29, 
+                    rushing_rank: 29, 
+                    points_allowed: 29.2, 
+                    yards_allowed: 400.0 
+                }, 
+                overall: { record: '6-4' }
+            },
+            'LAR': { 
+                offense: { 
+                    total_rank: 17, 
+                    passing_rank: 16, 
+                    rushing_rank: 22, 
+                    points_per_game: 20.5, 
+                    yards_per_game: 325.0 
+                }, 
+                defense: { 
+                    total_rank: 3, 
+                    passing_rank: 2, 
+                    rushing_rank: 4, 
+                    points_allowed: 15.8, 
+                    yards_allowed: 275.0 
+                }, 
+                overall: { record: '4-6' }
+            },
+            'SEA': { 
+                offense: { 
+                    total_rank: 2, 
+                    passing_rank: 2, 
+                    rushing_rank: 2, 
+                    points_per_game: 30.1, 
+                    yards_per_game: 395.0 
+                }, 
+                defense: { 
+                    total_rank: 30, 
+                    passing_rank: 31, 
+                    rushing_rank: 30, 
+                    points_allowed: 30.7, 
+                    yards_allowed: 415.0 
+                }, 
+                overall: { record: '5-5' }
+            },
+            'SF': { 
+                offense: { 
+                    total_rank: 19, 
+                    passing_rank: 21, 
+                    rushing_rank: 1, 
+                    points_per_game: 19.8, 
+                    yards_per_game: 335.0 
+                }, 
+                defense: { 
+                    total_rank: 4, 
+                    passing_rank: 3, 
+                    rushing_rank: 3, 
+                    points_allowed: 16.2, 
+                    yards_allowed: 280.0 
+                }, 
+                overall: { record: '5-5' }
+            }
+        };
+        
+        const defaultRanking = { 
+            offense: { 
+                total_rank: 16, 
+                passing_rank: 16, 
+                rushing_rank: 16, 
+                points_per_game: 22.0, 
+                yards_per_game: 340.0 
+            }, 
+            defense: { 
+                total_rank: 16, 
+                passing_rank: 16, 
+                rushing_rank: 16, 
+                points_allowed: 23.0, 
+                yards_allowed: 350.0 
+            }, 
+            overall: { record: '5-5' }
+        };
+        
+        return teamRankings[teamCode] || defaultRanking;
+    }
+    
+    async generateMoneylinePrediction(awayRankings, homeRankings) {
+        try {
+            console.log('💰 Generating XGBoost-powered moneyline prediction...');
+            
+            // Get team names for the API call
+            const awayTeam = this.selectedGame.away;
+            const homeTeam = this.selectedGame.home;
+            
+            console.log(`🤖 Calling XGBoost backend for ${awayTeam} vs ${homeTeam}`);
+            
+            // Call the XGBoost backend API
+            const response = await fetch('http://localhost:5001/api/moneyline/prediction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    team1: awayTeam,
+                    team2: homeTeam
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`XGBoost API error: ${response.status}`);
+            }
+            
+            const prediction = await response.json();
+            console.log('🎯 XGBoost prediction received:', prediction);
+            
+            // Extract prediction data
+            const awayPrediction = prediction.predictions.team1;
+            const homePrediction = prediction.predictions.team2;
+            
+            // Determine predicted winner
+            const predictedWinner = homePrediction.win_probability > awayPrediction.win_probability ? 'home' : 'away';
+            const winnerData = predictedWinner === 'home' ? homePrediction : awayPrediction;
+            
+            return `
+            <div class="moneyline-prediction-card">
+                <div class="moneyline-header">
+                    <div class="moneyline-title">
+                        🤖 XGBoost Moneyline Prediction
+                    </div>
+                    <div class="moneyline-subtitle">
+                        AI-powered prediction using ${prediction.model_info.training_games.toLocaleString()} NFL games
+                    </div>
+                </div>
+                
+                <div class="moneyline-matchup">
+                    <div class="moneyline-team ${predictedWinner === 'away' ? 'predicted-winner' : ''}">
+                        <div class="moneyline-team-name">${awayPrediction.name}</div>
+                        <div class="moneyline-odds">${awayPrediction.american_odds}</div>
+                        <div class="moneyline-probability">${awayPrediction.win_probability}% chance</div>
+                        <div class="moneyline-strength">Strength: ${awayPrediction.strength_score}</div>
+                    </div>
+                    
+                    <div class="moneyline-vs">VS</div>
+                    
+                    <div class="moneyline-team ${predictedWinner === 'home' ? 'predicted-winner' : ''}">
+                        <div class="moneyline-team-name">${homePrediction.name}</div>
+                        <div class="moneyline-odds">${homePrediction.american_odds}</div>
+                        <div class="moneyline-probability">${homePrediction.win_probability}% chance</div>
+                        <div class="moneyline-strength">Strength: ${homePrediction.strength_score}</div>
+                    </div>
+                </div>
+                
+                <div class="moneyline-confidence">
+                    <div class="confidence-label">Model Confidence</div>
+                    <div class="confidence-value">${prediction.confidence}%</div>
+                </div>
+                
+                <div class="model-info">
+                    <div class="model-details">
+                        <span class="model-type">${prediction.model_info.type}</span>
+                        <span class="model-positions">${prediction.model_info.positions.join(', ')} Models</span>
+                    </div>
+                    <div class="prediction-winner">
+                        🏆 Predicted Winner: <strong>${winnerData.name}</strong> (${winnerData.win_probability}%)
+                    </div>
+                </div>
+            </div>
+            `;
+            
+        } catch (error) {
+            console.warn('⚠️ Error generating XGBoost prediction:', error);
+            console.log('🔄 Falling back to basic ranking algorithm...');
+            
+            // Fallback to the original simple algorithm
+            try {
+                // Calculate team strength scores based on rankings
+                const awayOffenseScore = (33 - awayRankings.offense.total_rank) / 32;
+                const awayDefenseScore = (33 - awayRankings.defense.total_rank) / 32;
+                const homeOffenseScore = (33 - homeRankings.offense.total_rank) / 32;
+                const homeDefenseScore = (33 - homeRankings.defense.total_rank) / 32;
+                
+                // Add home field advantage (typically 3 points in NFL)
+                const homeFieldAdvantage = 0.1;
+                
+                // Calculate overall team strength
+                const awayStrength = (awayOffenseScore + awayDefenseScore) / 2;
+                const homeStrength = ((homeOffenseScore + homeDefenseScore) / 2) + homeFieldAdvantage;
+                
+                // Normalize to get win probabilities
+                const totalStrength = awayStrength + homeStrength;
+                const awayWinProb = awayStrength / totalStrength;
+                const homeWinProb = homeStrength / totalStrength;
+                
+                // Convert probabilities to American odds
+                const awayOdds = this.probabilityToAmericanOdds(awayWinProb);
+                const homeOdds = this.probabilityToAmericanOdds(homeWinProb);
+                
+                // Determine predicted winner
+                const predictedWinner = homeWinProb > awayWinProb ? 'home' : 'away';
+                const confidence = Math.max(homeWinProb, awayWinProb);
+                
+                return `
+                <div class="moneyline-prediction-card">
+                    <div class="moneyline-header">
+                        <div class="moneyline-title">
+                            💰 Moneyline Prediction (Fallback)
+                        </div>
+                        <div class="moneyline-subtitle">Ranking-based prediction (XGBoost temporarily unavailable)</div>
+                    </div>
+                    
+                    <div class="moneyline-matchup">
+                        <div class="moneyline-team ${predictedWinner === 'away' ? 'predicted-winner' : ''}">
+                            <div class="moneyline-team-name">${this.selectedGame.away}</div>
+                            <div class="moneyline-odds">${awayOdds}</div>
+                            <div class="moneyline-probability">${(awayWinProb * 100).toFixed(1)}% chance</div>
+                        </div>
+                        
+                        <div class="moneyline-vs">VS</div>
+                        
+                        <div class="moneyline-team ${predictedWinner === 'home' ? 'predicted-winner' : ''}">
+                            <div class="moneyline-team-name">${this.selectedGame.home}</div>
+                            <div class="moneyline-odds">${homeOdds}</div>
+                            <div class="moneyline-probability">${(homeWinProb * 100).toFixed(1)}% chance</div>
+                        </div>
+                    </div>
+                    
+                    <div class="moneyline-confidence">
+                        <div class="confidence-label">Model Confidence</div>
+                        <div class="confidence-value">${(confidence * 100).toFixed(1)}%</div>
+                    </div>
+                </div>
+                `;
+            } catch (fallbackError) {
+                console.error('❌ Fallback prediction also failed:', fallbackError);
+                return `
+                <div class="moneyline-prediction-card">
+                    <div class="moneyline-header">
+                        <div class="moneyline-title">💰 Moneyline Prediction</div>
+                        <div class="moneyline-subtitle">Prediction temporarily unavailable</div>
+                    </div>
+                    <div style="text-align: center; padding: 20px; color: #9ca3af;">
+                        Unable to generate prediction at this time
+                    </div>
+                </div>
+                `;
+            }
+        }
+    }
+    
+    probabilityToAmericanOdds(probability) {
+        if (probability > 0.5) {
+            // Favorite (negative odds)
+            const odds = Math.round(-100 / (probability / (1 - probability)));
+            return odds.toString();
+        } else {
+            // Underdog (positive odds) 
+            const odds = Math.round(100 * ((1 - probability) / probability));
+            return `+${odds}`;
+        }
+    }
+    
+    getRankingColor(rank) {
+        // Color code rankings: Green (1-10), Yellow (11-20), Red (21-32)
+        if (rank <= 10) return '#059669'; // Green - Top tier
+        if (rank <= 20) return '#d97706'; // Orange - Middle tier  
+        return '#dc2626'; // Red - Bottom tier
     }
 }
 

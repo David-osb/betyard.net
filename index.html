@@ -5483,7 +5483,7 @@
         class BetYardMLService {
             constructor() {
                 console.log('🚀 BetYardMLService constructor called');
-                this.baseURL = 'https://betyard-ml-backend.onrender.com';
+                this.baseURL = 'http://localhost:5001';
                 this.isAvailable = false;
                 this.lastHealthCheck = null;
                 this.healthCheckInterval = 300000; // 5 minutes
@@ -6589,21 +6589,21 @@
                 // Determine which ESPN endpoint to call based on context
                 if (currentNewsContext.type === 'player' && currentNewsContext.playerName) {
                     // Player-specific news
-                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
+                    const response = await fetch(`http://localhost:5001/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
                     newsData = await response.json();
                     newsTitle = `${currentNewsContext.playerName} News`;
                     newsIcon = 'person';
                     
                 } else if (currentNewsContext.type === 'matchup' && currentNewsContext.homeTeam && currentNewsContext.awayTeam) {
                     // Matchup-specific news (both teams)
-                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
+                    const response = await fetch(`http://localhost:5001/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
                     newsData = await response.json();
                     newsTitle = `${currentNewsContext.awayTeam} @ ${currentNewsContext.homeTeam} News`;
                     newsIcon = 'sports_football';
                     
                 } else {
                     // General NFL news
-                    const response = await fetch(`https://betyard-ml-backend.onrender.com/api/news/latest?limit=8&transactions=true&injuries=true&fantasy=true`);
+                    const response = await fetch(`http://localhost:5001/api/news/latest?limit=8&transactions=true&injuries=true&fantasy=true`);
                     newsData = await response.json();
                     newsTitle = 'Latest NFL News';
                     newsIcon = 'newspaper';
@@ -7206,7 +7206,7 @@
         
         class AdvancedAnalytics {
             constructor() {
-                this.apiBaseUrl = 'https://betyard-ml-backend.onrender.com/api';
+                this.apiBaseUrl = 'http://localhost:5001/api';
                 this.currentSport = 'nfl';
                 this.refreshInterval = null;
                 this.liveFeedActive = false;
@@ -8068,7 +8068,7 @@
         let bestPropsData = [];
         
         // API configuration
-        const BEST_PROPS_API = 'https://betyard-ml-backend.onrender.com';
+        const BEST_PROPS_API = 'http://localhost:5001';
         
         async function loadBestProps() {
             const loadingElement = document.getElementById('best-props-loading');
