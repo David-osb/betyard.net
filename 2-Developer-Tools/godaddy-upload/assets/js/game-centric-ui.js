@@ -1,8 +1,8 @@
 /**
- * 🏈 GAME-CENTRIC SELECTION SYSTEM
+ * 🏈 GAME-CENTRIC SELECTION SYSTEM - MOBILE OPTIMIZED
  * New paradigm: Games → Team → Position → Player → Prediction
  * Author: GitHub Copilot  
- * Version: 2.0.0
+ * Version: 2.1.0 - Mobile Enhanced
  */
 
 class GameCentricUI {
@@ -11,6 +11,11 @@ class GameCentricUI {
         this.selectedTeam = null;
         this.selectedPosition = null;
         this.selectedPlayer = null;
+        
+        // Mobile detection and responsive settings
+        this.isMobile = this.detectMobile();
+        this.isTablet = this.detectTablet();
+        this.touchEnabled = 'ontouchstart' in window;
         
         // Available prediction types
         this.predictionTypes = {
@@ -43,10 +48,82 @@ class GameCentricUI {
         this.init();
     }
     
+    // Mobile Detection Methods
+    detectMobile() {
+        return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
+    detectTablet() {
+        return window.innerWidth > 768 && window.innerWidth <= 1024;
+    }
+    
+    // Mobile-specific UI adaptations
+    adaptForMobile() {
+        if (!this.isMobile) return;
+        
+        console.log('📱 Adapting UI for mobile device');
+        
+        // Add mobile-specific classes
+        document.body.classList.add('mobile-device');
+        
+        // Adjust container for mobile
+        const container = document.getElementById('game-centric-container');
+        if (container) {
+            container.classList.add('mobile-optimized');
+        }
+        
+        // Enable touch-friendly interactions
+        this.enableTouchInteractions();
+    }
+    
+    enableTouchInteractions() {
+        if (!this.touchEnabled) return;
+        
+        console.log('👆 Enabling touch interactions');
+        
+        // Add touch feedback to all clickable elements
+        document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+        document.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
+        
+        // Prevent double-tap zoom on prediction cards
+        const style = document.createElement('style');
+        style.textContent = `
+            .game-card, .team-card, .player-card, .prediction-card {
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    handleTouchStart(event) {
+        const target = event.target.closest('.game-card, .team-card, .player-card, .btn-mobile');
+        if (target) {
+            target.style.transform = 'scale(0.98)';
+            target.style.transition = 'transform 0.1s ease';
+        }
+    }
+    
+    handleTouchEnd(event) {
+        const target = event.target.closest('.game-card, .team-card, .player-card, .btn-mobile');
+        if (target) {
+            setTimeout(() => {
+                target.style.transform = '';
+                target.style.transition = '';
+            }, 150);
+        }
+    }
+    
     init() {
         console.log('🏈 Game-Centric UI: Initializing...');
+        
+        // Detect and adapt for mobile
+        this.adaptForMobile();
+        
         this.createNewLayout();
         this.setupEventListeners();
+        this.setupMobileEventListeners();
+        
         console.log('✅ Game-Centric UI: Ready!');
     }
     
@@ -1206,29 +1283,54 @@ class GameCentricUI {
         }
         
         return `
-            <div class="game-option" onclick="gameCentricUI.selectGame('${awayTeamCode}', '${homeTeamCode}', '${game.status}')">
+            <div class="game-option ${this.isMobile ? 'mobile-game-card' : ''}" onclick="gameCentricUI.selectGame('${awayTeamCode}', '${homeTeamCode}', '${game.status}')">
                 <div class="game-header">
                     ${statusBadge}
                 </div>
                 
-                <div class="matchup-display">
-                    <div class="team-info">
-                        <div class="team-name">${awayTeamName}</div>
-                        <div class="team-record">${game.awayRecord || ''}</div>
+                <div class="matchup-display ${this.isMobile ? 'mobile-matchup' : ''}">
+                    <div class="team-info ${this.isMobile ? 'mobile-team-info' : ''}">
+                        <div class="team-logo-container ${this.isMobile ? 'mobile-logo' : ''}">
+                            ${this.getTeamLogo(awayTeamCode)}
+                        </div>
+                        <div class="team-details">
+                            <div class="team-name">${awayTeamName}</div>
+                            ${this.isMobile ? '' : `<div class="team-record">${game.awayRecord || ''}</div>`}
+                        </div>
                     </div>
                     
-                    <div class="vs-separator">@</div>
+                    <div class="vs-separator ${this.isMobile ? 'mobile-vs' : ''}">@</div>
                     
-                    <div class="team-info">
-                        <div class="team-name">${homeTeamName}</div>
-                        <div class="team-record">${game.homeRecord || ''}</div>
+                    <div class="team-info ${this.isMobile ? 'mobile-team-info' : ''}">
+                        <div class="team-logo-container ${this.isMobile ? 'mobile-logo' : ''}">
+                            ${this.getTeamLogo(homeTeamCode)}
+                        </div>
+                        <div class="team-details">
+                            <div class="team-name">${homeTeamName}</div>
+                            ${this.isMobile ? '' : `<div class="team-record">${game.homeRecord || ''}</div>`}
+                        </div>
                     </div>
                 </div>
                 
                 ${scoreDisplay}
                 ${gameInfo}
+                
+                ${this.isMobile ? `<div class="mobile-touch-indicator">👆 Tap to select</div>` : ''}
             </div>
         `;
+    }
+    
+    // Mobile helper method for team logos
+    getTeamLogo(teamCode) {
+        if (!teamCode) return '';
+        
+        const logoSize = this.isMobile ? '32' : '40';
+        return `<img src="https://a.espncdn.com/i/teamlogos/nfl/500/${teamCode}.png" 
+                     alt="${teamCode}" 
+                     width="${logoSize}" 
+                     height="${logoSize}" 
+                     class="team-logo ${this.isMobile ? 'mobile-logo' : ''}"
+                     onerror="this.style.display='none'">`;
     }
     
     async selectGame(awayTeam, homeTeam, status) {
@@ -2678,6 +2780,128 @@ class GameCentricUI {
         this.connectToWeeklySchedule();
         
         console.log('🔧 Event listeners set up for weekly schedule integration');
+    }
+    
+    setupMobileEventListeners() {
+        if (!this.isMobile) return;
+        
+        console.log('📱 Setting up mobile-specific event listeners');
+        
+        // Handle orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                this.handleOrientationChange();
+            }, 500); // Wait for orientation to complete
+        });
+        
+        // Handle resize events for mobile
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.handleMobileResize();
+            }, 250);
+        });
+        
+        // Mobile-specific touch handlers for better UX
+        this.setupMobileTouchHandlers();
+        
+        // Swipe gestures for navigation
+        this.setupSwipeGestures();
+        
+        console.log('✅ Mobile event listeners configured');
+    }
+    
+    handleOrientationChange() {
+        console.log('🔄 Orientation changed');
+        
+        // Re-adapt mobile layout
+        this.adaptForMobile();
+        
+        // Refresh game layout if games are loaded
+        if (this.liveGames && this.liveGames.length > 0) {
+            setTimeout(() => {
+                this.loadGames();
+            }, 100);
+        }
+    }
+    
+    handleMobileResize() {
+        // Update mobile detection
+        this.isMobile = this.detectMobile();
+        this.isTablet = this.detectTablet();
+        
+        // Re-adapt layout if needed
+        if (this.isMobile) {
+            this.adaptForMobile();
+        }
+    }
+    
+    setupMobileTouchHandlers() {
+        // Enhanced touch handling for game cards
+        document.addEventListener('touchstart', (e) => {
+            const gameCard = e.target.closest('.game-card, .team-selection, .player-card');
+            if (gameCard) {
+                gameCard.classList.add('touch-active');
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            const gameCard = e.target.closest('.game-card, .team-selection, .player-card');
+            if (gameCard) {
+                setTimeout(() => {
+                    gameCard.classList.remove('touch-active');
+                }, 200);
+            }
+        }, { passive: true });
+    }
+    
+    setupSwipeGestures() {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            this.handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
+        }, { passive: true });
+    }
+    
+    handleSwipeGesture(startX, startY, endX, endY) {
+        const diffX = Math.abs(startX - endX);
+        const diffY = Math.abs(startY - endY);
+        
+        // Minimum swipe distance
+        const minSwipeDistance = 100;
+        
+        if (diffX > minSwipeDistance && diffX > diffY) {
+            if (startX > endX) {
+                // Swipe left - could implement navigation
+                console.log('👈 Swipe left detected');
+            } else {
+                // Swipe right - could implement back navigation
+                console.log('👉 Swipe right detected');
+                this.handleSwipeBack();
+            }
+        }
+    }
+    
+    handleSwipeBack() {
+        // Implement back navigation on swipe right
+        if (this.selectedPlayer) {
+            this.backToPositionSelection();
+        } else if (this.selectedPosition) {
+            this.backToTeamSelection();
+        } else if (this.selectedTeam || this.selectedGame) {
+            this.backToGameSelection();
+        }
     }
     
     async connectToWeeklySchedule() {
