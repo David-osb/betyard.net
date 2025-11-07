@@ -1333,6 +1333,24 @@ class GameCentricUI {
                      onerror="this.style.display='none'">`;
     }
     
+    // Get backend URL based on environment
+    getBackendURL() {
+        // Check if we're in local development
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                          window.location.hostname === '127.0.0.1' || 
+                          window.location.hostname.startsWith('192.168.') ||
+                          window.location.hostname.startsWith('10.') ||
+                          window.location.hostname.includes('local');
+        
+        if (isLocalhost) {
+            console.log('🏠 Game UI: Local development detected - using localhost backend');
+            return 'http://localhost:5001';
+        } else {
+            console.log('🌐 Game UI: Production environment detected - using Render backend');
+            return 'https://betyard-ml-backend.onrender.com';
+        }
+    }
+    
     async selectGame(awayTeam, homeTeam, status) {
         this.selectedGame = { away: awayTeam, home: homeTeam, status: status };
         
@@ -1629,7 +1647,7 @@ class GameCentricUI {
         try {
             console.log(`🔍 Fetching ${position} players for ${teamCode} using ESPN player search API...`);
             
-            const baseURL = 'http://localhost:5001';
+            const baseURL = this.getBackendURL();
             
             // Map team codes to full team names for better search results
             const teamNames = {
@@ -1678,7 +1696,7 @@ class GameCentricUI {
         try {
             console.log(`🏈 Fetching ESPN depth chart for ${teamCode}...`);
             
-            const baseURL = 'http://localhost:5001';
+            const baseURL = this.getBackendURL();
             
             // Use the new ESPN depth chart endpoint
             const url = `${baseURL}/api/espn/depth-chart/${teamCode}`;
@@ -3535,7 +3553,7 @@ class GameCentricUI {
             console.log(`🤖 Calling XGBoost backend for ${awayTeam} vs ${homeTeam}`);
             
             // Call the XGBoost backend API
-            const response = await fetch('http://localhost:5001/api/moneyline/prediction', {
+            const response = await fetch(`${this.getBackendURL()}/api/moneyline/prediction`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
