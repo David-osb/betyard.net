@@ -522,16 +522,9 @@
             }
             
             .panel-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
                 margin-top: 16px;
-            }
-            
-            /* Mobile-optimized game cards */
-            .game-card {
-                margin: 0 auto 12px auto;
-                border-radius: 8px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
             }
             
             /* Touch-friendly buttons */
@@ -544,19 +537,39 @@
             
             /* Prediction cards mobile layout */
             .prediction-card {
-                padding: 16px 12px;
-                margin-bottom: 12px;
+                padding: 12px 8px;
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            
+            /* Game cards mobile optimization for 2-column */
+            .game-card {
+                margin: 0 auto 8px auto;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+                font-size: 13px;
+                padding: 12px 8px;
+            }
+            
+            /* Mobile text adjustments for 2-column layout */
+            .mdl-cell {
+                padding: 8px;
+            }
+            
+            .content-panel {
+                padding: 12px 8px;
+                margin: 0;
             }
             
             /* Stats grid mobile layout */
             .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
             
             .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
             
             /* Mobile navigation */
@@ -3339,9 +3352,9 @@
         @media (min-width: 481px) and (max-width: 768px) {
             #games-container {
                 display: grid;
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 12px;
             }
             
             .game-card {
@@ -3837,8 +3850,8 @@
             
             /* Best Lines Mobile - MUCH MORE USER FRIENDLY */
             .best-lines-container {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
                 padding: 8px 0;
             }
             
@@ -4466,8 +4479,8 @@
 
         @media (max-width: 768px) {
             .panel-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
                 margin-top: 20px;
             }
             
@@ -4639,8 +4652,8 @@
 
         @media (max-width: 320px) {
             .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 6px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
             }
             
             .panel-card, .feature-card {
