@@ -3327,6 +3327,19 @@
                 box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
             }
             
+            /* Mobile News Grid */
+            .mobile-news-grid {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 4px !important;
+                margin-top: 8px !important;
+            }
+            
+            .mobile-news-item:hover {
+                transform: scale(1.02) !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+            }
+            
             .game-card:hover, .game-card:active {
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -7242,15 +7255,35 @@
                 }
                 
                 // Build news HTML
-                let newsHTML = `
-                    <div style="margin-bottom: 16px;">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                            <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
-                            <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
-                            <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                // Check if mobile for different layout
+                const isMobile = window.innerWidth <= 768;
+                
+                let newsHTML = '';
+                
+                if (isMobile) {
+                    // Mobile: Compact grid layout with logos and short headlines
+                    newsHTML = `
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+                                <i class="material-icons" style="color: #3b82f6; font-size: 16px;">${newsIcon}</i>
+                                <h4 style="color: #1e40af; margin: 0; font-size: 14px;">${newsTitle}</h4>
+                                <span style="background: #dbeafe; color: #1d4ed8; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 600;">ESPN</span>
+                            </div>
                         </div>
-                    </div>
-                `;
+                        <div class="mobile-news-grid">
+                    `;
+                } else {
+                    // Desktop: Full layout
+                    newsHTML = `
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                                <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
+                                <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
+                                <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 if (newsData.news && newsData.news.length > 0) {
                     newsData.news.forEach((article, index) => {
@@ -7347,7 +7380,101 @@
                         
                         const cardCloseElement = isClickable ? '</a>' : '</div>';
                         
-                        newsHTML += `
+                        // Extract team code from article for mobile layout
+                        const extractTeamCode = (article) => {
+                            // Try to extract team from various sources
+                            if (article.team_context) return article.team_context;
+                            if (article.team_mentioned && article.team_mentioned.length > 0) return article.team_mentioned[0];
+                            
+                            // Try to extract from headline or description
+                            const text = (article.headline + ' ' + (article.description || '')).toLowerCase();
+                            const nflTeams = {
+                                'chiefs': 'KC', 'bills': 'BUF', 'dolphins': 'MIA', 'patriots': 'NE', 'jets': 'NYJ',
+                                'ravens': 'BAL', 'browns': 'CLE', 'steelers': 'PIT', 'bengals': 'CIN',
+                                'titans': 'TEN', 'colts': 'IND', 'jaguars': 'JAX', 'texans': 'HOU',
+                                'broncos': 'DEN', 'raiders': 'LV', 'chargers': 'LAC',
+                                'cowboys': 'DAL', 'giants': 'NYG', 'eagles': 'PHI', 'commanders': 'WSH',
+                                'packers': 'GB', 'bears': 'CHI', 'vikings': 'MIN', 'lions': 'DET',
+                                'saints': 'NO', 'falcons': 'ATL', 'panthers': 'CAR', 'buccaneers': 'TB',
+                                '49ers': 'SF', 'seahawks': 'SEA', 'rams': 'LAR', 'cardinals': 'ARI'
+                            };
+                            
+                            for (const [teamName, teamCode] of Object.entries(nflTeams)) {
+                                if (text.includes(teamName)) return teamCode;
+                            }
+                            
+                            return null;
+                        };
+                        
+                        const teamCode = extractTeamCode(article);
+                        const shortHeadline = article.headline ? 
+                            (article.headline.length > 45 ? article.headline.substring(0, 45) + '...' : article.headline) : 
+                            'NFL News Update';
+                        
+                        if (isMobile) {
+                            // Mobile: Compact card with team logo
+                            newsHTML += `
+                                ${cardElement}
+                                    <div class="mobile-news-item" style="
+                                        padding: 8px;
+                                        background: ${colors.bg};
+                                        border-radius: 6px;
+                                        border-left: 3px solid ${colors.border};
+                                        margin-bottom: 6px;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 8px;
+                                        ${isClickable ? 'cursor: pointer;' : ''}
+                                        transition: all 0.2s ease;
+                                    " 
+                                    onmouseover="this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.transform='scale(1)'">
+                                        
+                                        ${teamCode ? `
+                                            <img src="https://a.espncdn.com/i/teamlogos/nfl/500/${teamCode}.png" 
+                                                 alt="${teamCode}" 
+                                                 width="20" 
+                                                 height="20" 
+                                                 style="border-radius: 50%; flex-shrink: 0;"
+                                                 onerror="this.style.display='none'">
+                                        ` : `
+                                            <i class="material-icons" style="color: ${colors.border}; font-size: 16px; flex-shrink: 0;">${colors.icon}</i>
+                                        `}
+                                        
+                                        <div style="flex: 1; min-width: 0;">
+                                            <div style="
+                                                color: ${colors.text};
+                                                font-size: 11px;
+                                                font-weight: 600;
+                                                line-height: 1.2;
+                                                margin-bottom: 2px;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                                display: -webkit-box;
+                                                -webkit-line-clamp: 2;
+                                                -webkit-box-orient: vertical;
+                                            ">${shortHeadline}</div>
+                                            
+                                            <div style="
+                                                color: #64748b;
+                                                font-size: 9px;
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 4px;
+                                            ">
+                                                <span>${publishedDate}</span>
+                                                ${article.content_type && article.content_type !== 'general' ? 
+                                                    `<span style="background: ${colors.border}; color: white; padding: 1px 4px; border-radius: 4px; font-size: 8px;">${article.content_type.toUpperCase()}</span>` 
+                                                : ''}
+                                                ${isClickable ? '<i class="material-icons" style="font-size: 10px;">open_in_new</i>' : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ${cardCloseElement}
+                            `;
+                        } else {
+                            // Desktop: Full layout (existing code)
+                            newsHTML += `
                             ${cardElement}
                                 <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''} ${isClickable ? 'cursor: pointer;' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
@@ -7378,9 +7505,35 @@
                                         </div>
                                     ` : ''}
                                 </div>
+                                    
+                                    ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
+                                    
+                                    <div style="color: #475569; font-size: 13px; line-height: 1.4;">
+                                        ${enhancedContent}
+                                        ${isClickable ? `<div style="margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500;"><i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">link</i>Read full article on ESPN.com</div>` : ''}
+                                    </div>
+                                    
+                                    ${article.fantasy_impact && article.fantasy_impact.recommendation ? `
+                                        <div style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; border-left: 3px solid #8b5cf6;">
+                                            <div style="font-size: 12px; color: #7c3aed; font-weight: 600;">Fantasy Impact: ${article.fantasy_impact.recommendation}</div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${relevanceScore ? `
+                                        <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                            Relevance: ${Math.round(relevanceScore)}%
+                                        </div>
+                                    ` : ''}
+                                </div>
                             ${cardCloseElement}
                         `;
+                        }
                     });
+                    
+                    // Close mobile news grid
+                    if (isMobile) {
+                        newsHTML += '</div>'; // Close mobile-news-grid
+                    }
                 } else {
                     // No news found
                     newsHTML += `
