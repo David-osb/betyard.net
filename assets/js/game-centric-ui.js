@@ -1284,47 +1284,80 @@ class GameCentricUI {
         
         return `
             <div class="game-option ${this.isMobile ? 'mobile-game-card' : ''}" onclick="gameCentricUI.selectGame('${awayTeamCode}', '${homeTeamCode}', '${game.status}')">
+                ${this.isMobile ? this.createMobileGameCard(game, awayTeamCode, homeTeamCode, awayScore, homeScore, statusBadge, scoreDisplay, gameInfo) : this.createDesktopGameCard(game, awayTeamName, homeTeamName, awayTeamCode, homeTeamCode, awayScore, homeScore, statusBadge, scoreDisplay, gameInfo)}
+            </div>
+        `;
+    }
+
+    createMobileGameCard(game, awayTeamCode, homeTeamCode, awayScore, homeScore, statusBadge, scoreDisplay, gameInfo) {
+        return `
+            <div class="mobile-game-content">
+                <div class="mobile-teams">
+                    <div class="mobile-team">
+                        ${this.getTeamLogo(awayTeamCode, 24)}
+                        <div class="mobile-team-code">${awayTeamCode}</div>
+                        ${game.status.toLowerCase() === 'live' || game.status.toLowerCase() === 'final' ? `<div class="mobile-score">${awayScore}</div>` : ''}
+                    </div>
+                    
+                    <div class="mobile-vs">
+                        ${game.status.toLowerCase() === 'live' || game.status.toLowerCase() === 'final' ? '-' : 'vs'}
+                    </div>
+                    
+                    <div class="mobile-team">
+                        ${this.getTeamLogo(homeTeamCode, 24)}
+                        <div class="mobile-team-code">${homeTeamCode}</div>
+                        ${game.status.toLowerCase() === 'live' || game.status.toLowerCase() === 'final' ? `<div class="mobile-score">${homeScore}</div>` : ''}
+                    </div>
+                </div>
+                
+                <div class="mobile-game-info">
+                    <div class="mobile-status">${game.status === 'LIVE' ? '🔴' : game.status === 'FINAL' ? '✅' : '📅'} ${game.status}</div>
+                    ${game.status === 'SCHEDULED' ? `<div class="mobile-time">${game.time || game.gameTime || 'TBD'}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    createDesktopGameCard(game, awayTeamName, homeTeamName, awayTeamCode, homeTeamCode, awayScore, homeScore, statusBadge, scoreDisplay, gameInfo) {
+        return `
                 <div class="game-header">
                     ${statusBadge}
                 </div>
                 
-                <div class="matchup-display ${this.isMobile ? 'mobile-matchup' : ''}">
-                    <div class="team-info ${this.isMobile ? 'mobile-team-info' : ''}">
-                        <div class="team-logo-container ${this.isMobile ? 'mobile-logo' : ''}">
+                <div class="matchup-display">
+                    <div class="team-info">
+                        <div class="team-logo-container">
                             ${this.getTeamLogo(awayTeamCode)}
                         </div>
                         <div class="team-details">
                             <div class="team-name">${awayTeamName}</div>
-                            ${this.isMobile ? '' : `<div class="team-record">${game.awayRecord || ''}</div>`}
+                            <div class="team-record">${game.awayRecord || ''}</div>
                         </div>
                     </div>
                     
-                    <div class="vs-separator ${this.isMobile ? 'mobile-vs' : ''}">@</div>
+                    <div class="vs-separator">@</div>
                     
-                    <div class="team-info ${this.isMobile ? 'mobile-team-info' : ''}">
-                        <div class="team-logo-container ${this.isMobile ? 'mobile-logo' : ''}">
+                    <div class="team-info">
+                        <div class="team-logo-container">
                             ${this.getTeamLogo(homeTeamCode)}
                         </div>
                         <div class="team-details">
                             <div class="team-name">${homeTeamName}</div>
-                            ${this.isMobile ? '' : `<div class="team-record">${game.homeRecord || ''}</div>`}
+                            <div class="team-record">${game.homeRecord || ''}</div>
                         </div>
                     </div>
                 </div>
                 
                 ${scoreDisplay}
                 ${gameInfo}
-                
-                ${this.isMobile ? `<div class="mobile-touch-indicator">👆 Tap to select</div>` : ''}
-            </div>
         `;
     }
     
     // Mobile helper method for team logos
-    getTeamLogo(teamCode) {
+    getTeamLogo(teamCode, customSize = null) {
         if (!teamCode) return '';
         
-        const logoSize = this.isMobile ? '32' : '40';
+        const logoSize = customSize || (this.isMobile ? '24' : '40');
         return `<img src="https://a.espncdn.com/i/teamlogos/nfl/500/${teamCode}.png" 
                      alt="${teamCode}" 
                      width="${logoSize}" 

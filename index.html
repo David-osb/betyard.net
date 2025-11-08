@@ -3193,32 +3193,138 @@
         
         /* ===== MOBILE-OPTIMIZED GAME & BETTING INTERFACE ===== */
         
-        /* Mobile Game Cards */
-        @media (max-width: 480px) {
+        /* Mobile Game Cards - Updated for all phone sizes */
+        @media (max-width: 768px) {
             #game-centric-container {
-                padding: 8px;
-                margin: 0;
+                padding: 4px !important;
+                margin: 0 !important;
             }
             
-            #games-container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-                padding: 8px;
+            #games-container, #games-selection-grid, .games-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+                padding: 4px !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
             }
             
             .game-card {
-                padding: 16px 12px;
-                margin: 0;
-                border-radius: 12px;
+                padding: 8px 6px !important;
+                margin: 0 !important;
+                border-radius: 6px;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                min-height: 80px;
-                display: flex;
+                min-height: 85px;
+                max-height: 110px;
+                display: flex !important;
+                flex-direction: column !important;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: center;
+                text-align: center;
+                font-size: 11px !important;
+                line-height: 1.2 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                word-wrap: break-word !important;
+            }
+            
+            /* Mobile text optimization */
+            .game-card * {
+                font-size: 11px !important;
+                line-height: 1.2 !important;
+                margin: 1px 0 !important;
+                padding: 0 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                max-width: 100% !important;
+            }
+            
+            .game-card .team-name,
+            .game-card .team-info {
+                font-size: 10px !important;
+                font-weight: 600 !important;
+                margin: 0 !important;
+                padding: 1px 0 !important;
+            }
+            
+            .game-card .game-time,
+            .game-card .game-status {
+                font-size: 9px !important;
+                opacity: 0.9 !important;
+                margin: 2px 0 0 0 !important;
+            }
+            
+            /* New Mobile Game Card Layout */
+            .mobile-game-content {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 100% !important;
+                padding: 4px !important;
+            }
+            
+            .mobile-teams {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                margin-bottom: 4px !important;
+            }
+            
+            .mobile-team {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                flex: 1 !important;
+            }
+            
+            .mobile-team-code {
+                font-size: 10px !important;
+                font-weight: 700 !important;
+                margin: 2px 0 !important;
+                color: white !important;
+            }
+            
+            .mobile-score {
+                font-size: 12px !important;
+                font-weight: 800 !important;
+                color: #fbbf24 !important;
+                margin: 1px 0 !important;
+            }
+            
+            .mobile-vs {
+                font-size: 8px !important;
+                color: #e5e7eb !important;
+                margin: 0 4px !important;
+                font-weight: 600 !important;
+            }
+            
+            .mobile-game-info {
+                text-align: center !important;
+                width: 100% !important;
+            }
+            
+            .mobile-status {
+                font-size: 8px !important;
+                color: #d1d5db !important;
+                margin: 2px 0 !important;
+            }
+            
+            .mobile-time {
+                font-size: 7px !important;
+                color: #9ca3af !important;
+                margin: 1px 0 !important;
+            }
+            
+            .mobile-logo {
+                border-radius: 50% !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
             }
             
             .game-card:hover, .game-card:active {
@@ -3348,35 +3454,9 @@
             }
         }
         
-        /* Tablet Game Interface */
-        @media (min-width: 481px) and (max-width: 768px) {
-            #games-container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 12px;
-            }
-            
-            .game-card {
-                padding: 20px;
-                min-height: 100px;
-            }
-            
-            .prediction-teams {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-            
-            .team-stats-mobile {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 12px;
-            }
-        }
-        
         /* Desktop Game Interface */
         @media (min-width: 769px) {
-            #games-container {
+            #games-container, #games-selection-grid, .games-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
                 gap: 20px;
@@ -7131,8 +7211,8 @@
                 let newsTitle = '';
                 let newsIcon = 'newspaper';
                 
-                // Get the backend URL from BetYardMLService
-                const backendURL = window.BetYardML ? window.BetYardML.baseURL : 'https://betyard-ml-backend.onrender.com';
+                // Get the backend URL - force production for testing
+                const backendURL = 'https://betyard-ml-backend.onrender.com';
                 
                 // Determine which ESPN endpoint to call based on context
                 if (currentNewsContext.type === 'player' && currentNewsContext.playerName) {
