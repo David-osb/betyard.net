@@ -8076,7 +8076,7 @@
         
         class AdvancedAnalytics {
             constructor() {
-                this.apiBaseUrl = `${BetYardMLService.getBackendURL()}/api`;
+                this.apiBaseUrl = `${window.BetYardML.getBackendURL()}/api`;
                 this.currentSport = 'nfl';
                 this.refreshInterval = null;
                 this.liveFeedActive = false;
@@ -9125,7 +9125,7 @@
         let bestPropsData = [];
         
         // API configuration
-        const BEST_PROPS_API = BetYardMLService.getBackendURL();
+        const BEST_PROPS_API = window.BetYardML.getBackendURL();
         
         async function loadBestProps() {
             const loadingElement = document.getElementById('best-props-loading');
