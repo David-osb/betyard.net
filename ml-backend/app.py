@@ -3586,7 +3586,8 @@ def get_nba_games_today():
         # For now, let's create a reliable NBA games endpoint with current season data
         # This ensures the frontend works while we can later integrate with a proper NBA data source
         
-        today = datetime.datetime.now()
+        # Use current system date for 2025-26 NBA season
+        today = datetime.datetime.now()  # November 12, 2025 - current NBA season date
         formatted_games = []
         
         # Generate realistic NBA games for today
@@ -3666,13 +3667,18 @@ def get_nba_games_today():
         import traceback
         logger.error(f"🏀 Full error: {traceback.format_exc()}")
         
-        return jsonify({
+        response = jsonify({
             'success': False,
             'error': str(e),
             'games': [],
             'total': 0,
             'timestamp': datetime.datetime.now().isoformat()
-        }), 500
+        })
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        
+        return response, 500
 
 @app.route('/api/nba/schedule', methods=['GET'])
 def get_nba_schedule():
