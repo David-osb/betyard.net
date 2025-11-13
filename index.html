@@ -8966,20 +8966,20 @@
                 // Handle different data structures from API vs fallback
                 const gameData = {
                     gameId: game.gameId || `nba_${Date.now()}`,
-                    gameTime: game.gameTime || game.time || new Date().toISOString(),
-                    venue: game.venue || 'TBA',
+                    gameTime: game.gameTime || game.time || game.date || new Date().toISOString(),
+                    venue: this.extractVenueString(game.venue),
                     status: game.status || 'upcoming',
                     awayTeam: {
-                        name: game.awayTeam?.name || game.awayTeamName || game.awayTeam || 'Team',
-                        city: game.awayTeam?.city || game.awayCity || game.awayTeam || 'Away',
-                        logo: game.awayTeam?.logo || game.awayTeamEmoji || '🏀',
+                        name: game.awayTeam?.nickname || game.awayTeam?.name || game.awayTeamName || game.awayTeam || 'Team',
+                        city: game.awayTeam?.location || game.awayTeam?.city || game.awayCity || 'Away',
+                        logo: this.extractTeamLogo(game.awayTeam?.logo) || game.awayTeamEmoji || '🏀',
                         record: game.awayTeam?.record || game.awayRecord || '0-0',
                         score: game.awayTeam?.score || game.awayScore || 0
                     },
                     homeTeam: {
-                        name: game.homeTeam?.name || game.homeTeamName || game.homeTeam || 'Team',
-                        city: game.homeTeam?.city || game.homeCity || game.homeTeam || 'Home',
-                        logo: game.homeTeam?.logo || game.homeTeamEmoji || '🏀',
+                        name: game.homeTeam?.nickname || game.homeTeam?.name || game.homeTeamName || game.homeTeam || 'Team',
+                        city: game.homeTeam?.location || game.homeTeam?.city || game.homeCity || 'Home',
+                        logo: this.extractTeamLogo(game.homeTeam?.logo) || game.homeTeamEmoji || '🏀',
                         record: game.homeTeam?.record || game.homeRecord || '0-0',
                         score: game.homeTeam?.score || game.homeScore || 0
                     },
@@ -9030,7 +9030,7 @@
 
                         <div class="nba-game-teams" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <div class="nba-team away-team" style="text-align: center; flex: 1;">
-                                <div style="font-size: 24px; margin-bottom: 8px;">${gameData.awayTeam.logo}</div>
+                                <div style="margin-bottom: 8px;">${gameData.awayTeam.logo || '🏀'}</div>
                                 <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.awayTeam.city}</div>
                                 <div style="font-size: 14px; color: #64748b;">${gameData.awayTeam.name}</div>
                                 <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.awayTeam.record}</div>
@@ -9043,7 +9043,7 @@
                             </div>
 
                             <div class="nba-team home-team" style="text-align: center; flex: 1;">
-                                <div style="font-size: 24px; margin-bottom: 8px;">${gameData.homeTeam.logo}</div>
+                                <div style="margin-bottom: 8px;">${gameData.homeTeam.logo || '🏀'}</div>
                                 <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.homeTeam.city}</div>
                                 <div style="font-size: 14px; color: #64748b;">${gameData.homeTeam.name}</div>
                                 <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.homeTeam.record}</div>
@@ -9153,6 +9153,22 @@
                     total: processedGames.length,
                     source: 'ESPN'
                 };
+            }
+
+            // Helper methods to extract string values from objects
+            extractVenueString(venue) {
+                if (!venue) return 'TBA';
+                if (typeof venue === 'string') return venue;
+                if (typeof venue === 'object') {
+                    return venue.name || venue.fullName || venue.displayName || 'TBA';
+                }
+                return 'TBA';
+            }
+
+            extractTeamLogo(logo) {
+                if (!logo) return null;
+                if (typeof logo === 'string') return `<img src="${logo}" style="width: 32px; height: 32px;" alt="Team Logo">`;
+                return null;
             }
 
             // Cache management
