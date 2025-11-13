@@ -8925,37 +8925,80 @@
             }
 
             createNBAGameCard(game) {
-                const gameTime = new Date(game.gameTime);
-                const timeString = gameTime.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
+                console.log('🏀 Creating card for game:', game);
+                
+                // Handle different data structures from API vs fallback
+                const gameData = {
+                    gameId: game.gameId || `nba_${Date.now()}`,
+                    gameTime: game.gameTime || game.time || new Date().toISOString(),
+                    venue: game.venue || 'TBA',
+                    status: game.status || 'upcoming',
+                    awayTeam: {
+                        name: game.awayTeam?.name || game.awayTeamName || game.awayTeam || 'Team',
+                        city: game.awayTeam?.city || game.awayCity || game.awayTeam || 'Away',
+                        logo: game.awayTeam?.logo || game.awayTeamEmoji || '🏀',
+                        record: game.awayTeam?.record || game.awayRecord || '0-0',
+                        score: game.awayTeam?.score || game.awayScore || 0
+                    },
+                    homeTeam: {
+                        name: game.homeTeam?.name || game.homeTeamName || game.homeTeam || 'Team',
+                        city: game.homeTeam?.city || game.homeCity || game.homeTeam || 'Home',
+                        logo: game.homeTeam?.logo || game.homeTeamEmoji || '🏀',
+                        record: game.homeTeam?.record || game.homeRecord || '0-0',
+                        score: game.homeTeam?.score || game.homeScore || 0
+                    },
+                    odds: game.odds || {
+                        spread: { home: 0, away: 0 },
+                        moneyline: { home: -110, away: 110 },
+                        total: 210
+                    }
+                };
 
-                const spreadText = game.odds.spread.home > 0 ? 
-                    `+${game.odds.spread.home}` : `${game.odds.spread.home}`;
+                // Format game time
+                let timeString = 'TBA';
+                let dateString = 'TBA';
+                try {
+                    const gameTime = new Date(gameData.gameTime);
+                    if (!isNaN(gameTime.getTime())) {
+                        timeString = gameTime.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit',
+                            hour12: true 
+                        });
+                        dateString = gameTime.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                    }
+                } catch (e) {
+                    console.warn('🏀 Invalid game time:', gameData.gameTime, e);
+                }
+
+                const spreadText = gameData.odds.spread.home > 0 ? 
+                    `+${gameData.odds.spread.home}` : `${gameData.odds.spread.home}`;
 
                 return `
                     <div class="nba-game-card" style="background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s ease; cursor: pointer;" 
-                         onclick="selectNBAGame('${game.gameId}')" 
+                         onclick="selectNBAGame('${gameData.gameId}')" 
                          onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)'" 
                          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'">
                         
                         <div class="nba-game-header" style="text-align: center; margin-bottom: 16px;">
                             <div style="font-size: 14px; color: #6366f1; font-weight: 600; margin-bottom: 4px;">
-                                ${timeString} • ${game.venue}
+                                ${dateString} ${timeString} • ${gameData.venue}
                             </div>
                             <div style="font-size: 12px; color: #64748b;">
-                                Game ID: ${game.gameId}
+                                Game ID: ${gameData.gameId} • Status: ${gameData.status}
                             </div>
                         </div>
 
                         <div class="nba-game-teams" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <div class="nba-team away-team" style="text-align: center; flex: 1;">
-                                <div style="font-size: 24px; margin-bottom: 8px;">${game.awayTeam.logo}</div>
-                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${game.awayTeam.city}</div>
-                                <div style="font-size: 14px; color: #64748b;">${game.awayTeam.name}</div>
-                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${game.awayTeam.record}</div>
+                                <div style="font-size: 24px; margin-bottom: 8px;">${gameData.awayTeam.logo}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.awayTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${gameData.awayTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.awayTeam.record}</div>
+                                ${gameData.awayTeam.score > 0 ? `<div style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 4px;">${gameData.awayTeam.score}</div>` : ''}
                             </div>
 
                             <div style="text-align: center; margin: 0 16px;">
@@ -8964,10 +9007,11 @@
                             </div>
 
                             <div class="nba-team home-team" style="text-align: center; flex: 1;">
-                                <div style="font-size: 24px; margin-bottom: 8px;">${game.homeTeam.logo}</div>
-                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${game.homeTeam.city}</div>
-                                <div style="font-size: 14px; color: #64748b;">${game.homeTeam.name}</div>
-                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${game.homeTeam.record}</div>
+                                <div style="font-size: 24px; margin-bottom: 8px;">${gameData.homeTeam.logo}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.homeTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${gameData.homeTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.homeTeam.record}</div>
+                                ${gameData.homeTeam.score > 0 ? `<div style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 4px;">${gameData.homeTeam.score}</div>` : ''}
                             </div>
                         </div>
 
@@ -8979,11 +9023,11 @@
                                 </div>
                                 <div>
                                     <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">MONEYLINE</div>
-                                    <div style="font-weight: 600; color: #1e293b;">${game.odds.moneyline.home > 0 ? '+' : ''}${game.odds.moneyline.home}</div>
+                                    <div style="font-weight: 600; color: #1e293b;">${gameData.odds.moneyline.home > 0 ? '+' : ''}${gameData.odds.moneyline.home}</div>
                                 </div>
                                 <div>
                                     <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">TOTAL</div>
-                                    <div style="font-weight: 600; color: #1e293b;">O/U ${game.odds.total}</div>
+                                    <div style="font-weight: 600; color: #1e293b;">O/U ${gameData.odds.total}</div>
                                 </div>
                             </div>
                         </div>
@@ -8992,7 +9036,7 @@
                             <button style="background: linear-gradient(145deg, #6366f1, #8b5cf6); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
                                     onmouseover="this.style.transform='scale(1.05)'"
                                     onmouseout="this.style.transform='scale(1)'"
-                                    onclick="event.stopPropagation(); showNBAPrediction('${game.gameId}')">
+                                    onclick="event.stopPropagation(); showNBAPrediction('${gameData.gameId}')">
                                 🎯 Get AI Prediction
                             </button>
                         </div>
