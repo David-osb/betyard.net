@@ -6531,6 +6531,9 @@
                         if (window.GameCentricUI && window.GameCentricUI.loadGames) {
                             window.GameCentricUI.loadGames();
                         }
+
+                        // Load NFL news
+                        updateNewsForSport('football');
                     }, 100);
                 }
             } else if (sport === 'basketball') {
@@ -6551,9 +6554,42 @@
                     if (window.NBAGames) {
                         console.log('🏀 NBA: Initializing NBA games system (daily-based)');
                         window.nbaGames = new window.NBAGames(); // Store globally for refresh access
+                        
+                        // Load NBA games
                         window.nbaGames.fetchNBAGames().then(games => {
                             console.log('🏀 NBA: Successfully loaded games:', games);
                             gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
+                            
+                            // Force news update test
+                            console.log('🏀 NBA: Testing direct news update...');
+                            console.log('🏀 NBA: typeof updateNewsForSport:', typeof updateNewsForSport);
+                            
+                            // Immediate call test
+                            if (typeof updateNewsForSport === 'function') {
+                                console.log('🏀 NBA: Function exists - calling now...');
+                                updateNewsForSport('basketball').then(() => {
+                                    console.log('🏀 NBA: News update completed successfully');
+                                }).catch(error => {
+                                    console.error('🏀 NBA: News update error:', error);
+                                });
+                            } else {
+                                console.error('🏀 NBA: updateNewsForSport function not found!');
+                            }
+                            
+                            // Ensure NBA news is loaded after games are displayed
+                            setTimeout(() => {
+                                console.log('🏀 NBA: Loading NBA news after games display...');
+                                try {
+                                    if (typeof updateNewsForSport === 'function') {
+                                        console.log('🏀 NBA: updateNewsForSport function found - calling...');
+                                        updateNewsForSport('basketball');
+                                    } else {
+                                        console.error('🏀 NBA: updateNewsForSport function not found!');
+                                    }
+                                } catch (error) {
+                                    console.error('🏀 NBA: Error calling updateNewsForSport:', error);
+                                }
+                            }, 200);
                         }).catch(error => {
                             console.error('🏀 NBA: Error loading NBA games:', error);
                             gameContainer.innerHTML = `
@@ -6564,6 +6600,19 @@
                                 </div>
                             `;
                         });
+
+                        // Load NBA news immediately as well
+                        console.log('🏀 NBA: Calling immediate updateNewsForSport...');
+                        try {
+                            if (typeof updateNewsForSport === 'function') {
+                                console.log('🏀 NBA: updateNewsForSport function exists - calling for basketball...');
+                                updateNewsForSport('basketball');
+                            } else {
+                                console.error('🏀 NBA: updateNewsForSport function not available!');
+                            }
+                        } catch (error) {
+                            console.error('🏀 NBA: Error in immediate updateNewsForSport call:', error);
+                        }
                     }
                 }
             } else {
@@ -7207,7 +7256,42 @@
 
         // Initialize news on page load
         document.addEventListener('DOMContentLoaded', function() {
-            updateNews();
+            // Check which sport is currently active and load appropriate news
+            setTimeout(() => {
+                // First check if NBA games are showing (more reliable indicator)
+                const nbaGamesContainer = document.querySelector('.nba-games-container');
+                const activeSportIcon = document.querySelector('.sport-icon.active');
+                const activeSport = activeSportIcon ? activeSportIcon.dataset.sport : 'football';
+                
+                console.log('📰 Initial news loading - Active sport icon:', activeSport);
+                console.log('📰 NBA games container present:', !!nbaGamesContainer);
+                
+                // If NBA games are showing but football is still marked active, update to basketball
+                if (nbaGamesContainer && activeSport === 'football') {
+                    console.log('📰 NBA games detected but football marked active - switching to basketball news');
+                    updateNewsForSport('basketball');
+                } else if (activeSport === 'basketball') {
+                    console.log('📰 Basketball is active - loading NBA news');
+                    updateNewsForSport('basketball');
+                } else {
+                    console.log('📰 Loading default NFL news');
+                    updateNews(); // Default NFL news
+                }
+            }, 1000); // Longer delay to ensure NBA games have loaded if they're going to
+            
+            // Additional check after 3 seconds to ensure news matches displayed games
+            setTimeout(() => {
+                const nbaGamesContainer = document.querySelector('.nba-games-container');
+                const currentNewsHeader = document.querySelector('#qb-news-section h3');
+                
+                if (nbaGamesContainer && currentNewsHeader) {
+                    const headerText = currentNewsHeader.textContent || '';
+                    if (!headerText.includes('NBA') && headerText.includes('NFL')) {
+                        console.log('📰 Mismatch detected: NBA games showing but NFL news loaded - fixing...');
+                        updateNewsForSport('basketball');
+                    }
+                }
+            }, 3000);
         });
 
         // Dynamic news update function based on context
@@ -7598,6 +7682,91 @@
                 teamCode: teamCode
             });
         }        // Custom Recent News Management System
+
+        // Sport-specific news update function
+        async function updateNewsForSport(sport) {
+            console.log(`📰 updateNewsForSport called with sport: ${sport}`);
+            console.log(`📰 window.nbaGames exists: ${!!window.nbaGames}`);
+            
+            const qbNewsContent = document.getElementById('qb-news-content');
+            console.log(`📰 qb-news-content element found: ${!!qbNewsContent}`);
+            
+            if (!qbNewsContent) {
+                console.error('📰 qb-news-content element not found - exiting');
+                return;
+            }
+
+            // Update news section header based on sport
+            const newsSection = document.getElementById('qb-news-section');
+            if (newsSection) {
+                const header = newsSection.querySelector('h3');
+                if (header) {
+                    const sportNames = {
+                        'football': 'NFL',
+                        'basketball': 'NBA'
+                    };
+                    header.innerHTML = `
+                        <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">newspaper</i>
+                        Latest ${sportNames[sport] || 'Sports'} News
+                    `;
+                }
+            }
+
+            // Show loading state
+            qbNewsContent.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 12px; color: #6b7280;">Loading latest ${sport === 'basketball' ? 'NBA' : 'NFL'} news from ESPN...</p>
+                </div>
+            `;
+
+            try {
+                let newsHtml = '';
+
+                if (sport === 'basketball' && window.nbaGames) {
+                    // Load NBA news
+                    console.log('📰 NBA: Fetching NBA news...');
+                    const newsArticles = await window.nbaGames.fetchNBANews();
+                    if (newsArticles && newsArticles.length > 0) {
+                        newsHtml = window.nbaGames.displayNBANews(newsArticles);
+                    } else {
+                        newsHtml = `
+                            <div style="text-align: center; padding: 40px;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">📰</div>
+                                <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA News Available</h3>
+                                <p style="color: #64748b;">Check back later for the latest updates</p>
+                            </div>
+                        `;
+                    }
+                } else if (sport === 'football') {
+                    // Load NFL news (existing system)
+                    console.log('📰 NFL: Loading existing NFL news system...');
+                    await updateNews(); // Call existing NFL news function
+                    return; // Exit here since updateNews handles the display
+                } else {
+                    // Other sports
+                    newsHtml = `
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">News Coming Soon</h3>
+                            <p style="color: #64748b;">News for this sport will be available soon</p>
+                        </div>
+                    `;
+                }
+
+                qbNewsContent.innerHTML = newsHtml;
+
+            } catch (error) {
+                console.error('📰 Error loading news:', error);
+                qbNewsContent.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                        <h3 style="color: #dc2626; margin-bottom: 8px;">Unable to Load News</h3>
+                        <p style="color: #64748b;">Please try again later</p>
+                    </div>
+                `;
+            }
+        }
         const recentNewsItems = [
             {
                 id: 1,
@@ -8996,6 +9165,98 @@
                     this.refreshCheckInterval = null;
                     console.log('🏀 NBA: Daily refresh system stopped');
                 }
+            }
+
+            // NBA News functionality
+            async fetchNBANews() {
+                console.log('🏀 NBA: Fetching latest NBA news from ESPN...');
+                
+                try {
+                    const response = await fetch(this.espnEndpoints.news, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('🏀 NBA: News data received:', data);
+                        
+                        const processedNews = this.processESPNNBANews(data);
+                        console.log('🏀 NBA: Processed news:', processedNews);
+                        return processedNews;
+                    } else {
+                        throw new Error(`ESPN News API returned ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('🏀 NBA: Error fetching news:', error);
+                    return [];
+                }
+            }
+
+            processESPNNBANews(data) {
+                if (!data.articles || !Array.isArray(data.articles)) {
+                    console.warn('🏀 NBA: No articles found in news data');
+                    return [];
+                }
+
+                return data.articles.slice(0, 10).map(article => ({
+                    id: article.id,
+                    headline: article.headline,
+                    description: article.description,
+                    published: article.published,
+                    images: article.images,
+                    links: article.links,
+                    categories: article.categories
+                }));
+            }
+
+            displayNBANews(newsArticles) {
+                if (!newsArticles || newsArticles.length === 0) {
+                    return `
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📰</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA News Available</h3>
+                            <p style="color: #64748b;">Check back later for the latest updates</p>
+                        </div>
+                    `;
+                }
+
+                const newsHtml = newsArticles.map((article, index) => {
+                    const publishedDate = new Date(article.published).toLocaleDateString();
+                    const imageUrl = article.images && article.images[0] ? article.images[0].url : '';
+                    
+                    return `
+                        <div class="nba-news-item" style="display: flex; padding: 16px; border-bottom: 1px solid #e5e7eb; ${index === 0 ? 'border-top: none;' : ''} transition: background-color 0.3s ease;" 
+                             onmouseover="this.style.backgroundColor='#f8fafc'" 
+                             onmouseout="this.style.backgroundColor='transparent'">
+                            ${imageUrl ? `
+                                <div style="flex-shrink: 0; margin-right: 16px;">
+                                    <img src="${imageUrl}" alt="News Image" style="width: 80px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                </div>
+                            ` : ''}
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 8px 0; color: #1e293b; font-size: 16px; font-weight: 600; line-height: 1.4;">
+                                    ${article.headline}
+                                </h4>
+                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+                                    ${article.description || ''}
+                                </p>
+                                <div style="display: flex; justify-content: between; align-items: center; font-size: 12px; color: #9ca3af;">
+                                    <span>🏀 NBA News • ${publishedDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="nba-news-container">
+                        ${newsHtml}
+                    </div>
+                `;
             }
 
             async fetchNBAGames() {
