@@ -6486,6 +6486,13 @@
         async function selectSport(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
             
+            // Cleanup previous sport systems
+            if (window.nbaGames && sport !== 'basketball') {
+                console.log('🏀 NBA: Cleaning up refresh system');
+                window.nbaGames.destroyRefreshSystem();
+                window.nbaGames = null;
+            }
+            
             // Update current sport globally
             currentSport = sport;
             window.selectedSport = sport;
@@ -6543,10 +6550,10 @@
                     // Load NBA games
                     if (window.NBAGames) {
                         console.log('🏀 NBA: Initializing NBA games system (daily-based)');
-                        const nbaGames = new window.NBAGames();
-                        nbaGames.fetchNBAGames().then(games => {
+                        window.nbaGames = new window.NBAGames(); // Store globally for refresh access
+                        window.nbaGames.fetchNBAGames().then(games => {
                             console.log('🏀 NBA: Successfully loaded games:', games);
-                            gameContainer.innerHTML = nbaGames.displayNBAGames(games);
+                            gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
                         }).catch(error => {
                             console.error('🏀 NBA: Error loading NBA games:', error);
                             gameContainer.innerHTML = `
@@ -8855,6 +8862,8 @@
                 this.baseURL = `${window.BetYardML ? window.BetYardML.baseURL : 'https://betyard-ml-backend.onrender.com'}/api`;
                 this.cache = new Map();
                 this.cacheTimeout = 300000; // 5 minutes
+                this.lastRefreshDate = null;
+                this.refreshCheckInterval = null;
                 
                 // ESPN NBA API endpoints
                 this.espnEndpoints = {
@@ -8862,6 +8871,131 @@
                     news: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/news',
                     teams: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams'
                 };
+
+                // Start the daily refresh system
+                this.initializeDailyRefresh();
+            }
+
+            // Daily refresh system for NBA games
+            initializeDailyRefresh() {
+                console.log('🏀 NBA: Initializing daily refresh system (2 AM refresh)');
+                
+                // Set the last refresh date from localStorage or current date
+                const stored = localStorage.getItem('nba_last_refresh_date');
+                this.lastRefreshDate = stored ? new Date(stored) : new Date();
+                
+                // Check if we need an immediate refresh (new day)
+                this.checkForDailyRefresh();
+                
+                // Set up interval to check every 30 minutes
+                this.refreshCheckInterval = setInterval(() => {
+                    this.checkForDailyRefresh();
+                }, 30 * 60 * 1000); // Check every 30 minutes
+                
+                console.log('🏀 NBA: Daily refresh system active - next check in 30 minutes');
+            }
+
+            checkForDailyRefresh() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentDate = now.toDateString();
+                const lastRefreshDateString = this.lastRefreshDate.toDateString();
+                
+                // Check if it's a new day and it's after 2 AM
+                const needsRefresh = (
+                    currentDate !== lastRefreshDateString && 
+                    currentHour >= 2
+                ) || (
+                    // Also check if it's the same day but we haven't refreshed after 2 AM yet
+                    currentDate === lastRefreshDateString &&
+                    currentHour >= 2 &&
+                    this.lastRefreshDate.getHours() < 2
+                );
+
+                if (needsRefresh) {
+                    console.log('🏀 NBA: Daily refresh triggered - fetching new games for', currentDate);
+                    this.performDailyRefresh();
+                } else {
+                    const nextRefresh = this.getNextRefreshTime();
+                    console.log('🏀 NBA: Next refresh scheduled for:', nextRefresh.toLocaleString());
+                }
+            }
+
+            performDailyRefresh() {
+                console.log('🏀 NBA: Performing daily refresh at 2 AM...');
+                
+                // Clear the cache to force fresh data
+                this.cache.clear();
+                
+                // Update last refresh timestamp
+                this.lastRefreshDate = new Date();
+                localStorage.setItem('nba_last_refresh_date', this.lastRefreshDate.toISOString());
+                
+                // If NBA is currently selected, refresh the display
+                if (window.currentSport === 'basketball') {
+                    console.log('🏀 NBA: Refreshing display with new games...');
+                    this.fetchNBAGames().then(games => {
+                        if (games && games.games) {
+                            const content = this.displayNBAGames(games);
+                            document.getElementById('games-container').innerHTML = content;
+                            console.log('🏀 NBA: Display updated with fresh games');
+                        }
+                    });
+                }
+                
+                // Show notification to user if page is visible
+                if (document.visibilityState === 'visible') {
+                    this.showRefreshNotification();
+                }
+            }
+
+            getNextRefreshTime() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(2, 0, 0, 0); // 2 AM tomorrow
+                return tomorrow;
+            }
+
+            showRefreshNotification() {
+                // Create a subtle notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(145deg, #10b981, #059669);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+                    z-index: 10000;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: 14px;
+                    font-weight: 600;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.innerHTML = '🏀 NBA games updated for today!';
+                document.body.appendChild(notification);
+
+                // Slide in
+                setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+                
+                // Slide out and remove after 4 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
+
+            // Cleanup method for the refresh system
+            destroyRefreshSystem() {
+                if (this.refreshCheckInterval) {
+                    clearInterval(this.refreshCheckInterval);
+                    this.refreshCheckInterval = null;
+                    console.log('🏀 NBA: Daily refresh system stopped');
+                }
             }
 
             async fetchNBAGames() {
@@ -8950,10 +9084,19 @@
                 return `
                     <div class="nba-games-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px; padding: 16px;">
                         <div class="nba-header" style="grid-column: 1 / -1; text-align: center; margin-bottom: 16px;">
-                            <h2 style="color: #1e293b; margin: 0; font-size: 24px; font-weight: 600;">
-                                🏀 NBA Games - ${new Date().toLocaleDateString()}
-                            </h2>
-                            <p style="color: #64748b; margin: 8px 0 0 0;">Live odds and game predictions</p>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+                                <h2 style="color: #1e293b; margin: 0; font-size: 24px; font-weight: 600;">
+                                    🏀 NBA Games - ${new Date().toLocaleDateString()}
+                                </h2>
+                                <button onclick="window.nbaGames?.performDailyRefresh()" 
+                                        style="background: linear-gradient(145deg, #6366f1, #8b5cf6); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                        onmouseover="this.style.transform='scale(1.05)'" 
+                                        onmouseout="this.style.transform='scale(1)'"
+                                        title="Refresh NBA games">
+                                    🔄 Refresh
+                                </button>
+                            </div>
+                            <p style="color: #64748b; margin: 8px 0 0 0;">Live odds and game predictions • Auto-refresh at 2 AM daily</p>
                         </div>
                         ${gamesHtml}
                     </div>
@@ -9190,6 +9333,7 @@
 
         // Initialize NBA Games globally
         window.NBAGames = NBAGames;
+        window.nbaGames = null; // Will hold the instance
 
         // Global functions for NBA game interactions
         function selectNBAGame(gameId) {
