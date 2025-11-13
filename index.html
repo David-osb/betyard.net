@@ -8855,11 +8855,18 @@
                 this.baseURL = `${window.BetYardML ? window.BetYardML.baseURL : 'https://betyard-ml-backend.onrender.com'}/api`;
                 this.cache = new Map();
                 this.cacheTimeout = 300000; // 5 minutes
+                
+                // ESPN NBA API endpoints
+                this.espnEndpoints = {
+                    scoreboard: 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard',
+                    news: 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news',
+                    teams: 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams'
+                };
             }
 
             async fetchNBAGames() {
                 console.log('🏀 NBA: Fetching NBA games for today...');
-                console.log('🏀 NBA: Using daily API endpoint (not weekly schedule)');
+                console.log('🏀 NBA: Using ESPN scoreboard endpoint');
                 
                 const cacheKey = 'nba-games-today';
                 const cached = this.getCache(cacheKey);
@@ -8869,25 +8876,54 @@
                 }
 
                 try {
-                    // Try to fetch from your backend first
-                    const response = await fetch(`${this.baseURL}/nba/games/today`, {
+                    // Try ESPN scoreboard endpoint first
+                    console.log('🏀 NBA: Fetching from ESPN scoreboard...');
+                    const response = await fetch(this.espnEndpoints.scoreboard, {
                         method: 'GET',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            'Accept': 'application/json'
                         }
                     });
 
                     if (response.ok) {
-                        const games = await response.json();
-                        this.setCache(cacheKey, games);
-                        console.log('🏀 NBA games fetched successfully:', games);
-                        return games;
+                        const data = await response.json();
+                        console.log('🏀 NBA: ESPN data received:', data);
+                        
+                        // Process ESPN NBA data
+                        const processedGames = this.processESPNNBAData(data);
+                        
+                        this.setCache(cacheKey, processedGames);
+                        console.log('🏀 NBA games fetched successfully:', processedGames);
+                        return processedGames;
                     } else {
-                        throw new Error(`Backend API failed: ${response.status}`);
+                        console.warn('🏀 NBA: ESPN API failed, trying backend fallback...');
+                        throw new Error(`ESPN API returned ${response.status}`);
                     }
                 } catch (error) {
-                    console.error('🏀 Failed to fetch NBA games:', error);
-                    // Return empty array on error - no mock data
+                    console.warn('🏀 NBA: ESPN fetch failed, trying backend fallback:', error);
+                    
+                    // Fallback to backend
+                    try {
+                        const backendResponse = await fetch(`${this.baseURL}/nba/games/today`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        if (backendResponse.ok) {
+                            const games = await backendResponse.json();
+                            this.setCache(cacheKey, games);
+                            console.log('🏀 NBA games from backend:', games);
+                            return games;
+                        }
+                    } catch (backendError) {
+                        console.error('🏀 NBA: Backend also failed:', backendError);
+                    }
+                    
+                    // Return empty result on total failure
+                    console.error('🏀 NBA: All data sources failed');
                     return { success: false, games: [], total: 0, error: error.message };
                 }
             }
@@ -9042,6 +9078,81 @@
                         </div>
                     </div>
                 `;
+            }
+
+            // Process ESPN NBA scoreboard data
+            processESPNNBAData(data) {
+                console.log('🏀 Processing ESPN NBA data:', data);
+                
+                if (!data.events || !Array.isArray(data.events)) {
+                    console.warn('🏀 No events found in ESPN data');
+                    return { success: false, games: [], total: 0 };
+                }
+
+                const processedGames = data.events.map((event, index) => {
+                    const competition = event.competitions[0];
+                    const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+                    const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+                    
+                    return {
+                        gameId: event.id,
+                        date: event.date,
+                        status: competition.status.type.description,
+                        clock: competition.status.displayClock || '',
+                        period: competition.status.period || 0,
+                        
+                        homeTeam: {
+                            id: homeTeam.team.id,
+                            name: homeTeam.team.displayName,
+                            shortName: homeTeam.team.abbreviation,
+                            location: homeTeam.team.location,
+                            nickname: homeTeam.team.name,
+                            logo: homeTeam.team.logo,
+                            color: homeTeam.team.color || '000000',
+                            record: homeTeam.records ? homeTeam.records[0]?.summary || '0-0' : '0-0',
+                            score: parseInt(homeTeam.score) || 0
+                        },
+                        
+                        awayTeam: {
+                            id: awayTeam.team.id,
+                            name: awayTeam.team.displayName,
+                            shortName: awayTeam.team.abbreviation,
+                            location: awayTeam.team.location,
+                            nickname: awayTeam.team.name,
+                            logo: awayTeam.team.logo,
+                            color: awayTeam.team.color || '000000',
+                            record: awayTeam.records ? awayTeam.records[0]?.summary || '0-0' : '0-0',
+                            score: parseInt(awayTeam.score) || 0
+                        },
+                        
+                        venue: {
+                            name: competition.venue?.fullName || 'TBD',
+                            city: competition.venue?.address?.city || '',
+                            state: competition.venue?.address?.state || ''
+                        },
+                        
+                        odds: {
+                            spread: {
+                                home: competition.odds ? (competition.odds[0]?.homeTeamOdds?.spreadOdds || 0) : 0,
+                                away: competition.odds ? (competition.odds[0]?.awayTeamOdds?.spreadOdds || 0) : 0
+                            },
+                            moneyline: {
+                                home: competition.odds ? (competition.odds[0]?.homeTeamOdds?.moneyLine || 100) : 100,
+                                away: competition.odds ? (competition.odds[0]?.awayTeamOdds?.moneyLine || 100) : 100
+                            },
+                            total: competition.odds ? (competition.odds[0]?.overUnder || 220) : 220
+                        }
+                    };
+                });
+
+                console.log('🏀 Processed ESPN games:', processedGames);
+                
+                return {
+                    success: true,
+                    games: processedGames,
+                    total: processedGames.length,
+                    source: 'ESPN'
+                };
             }
 
             // Cache management

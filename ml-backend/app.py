@@ -3577,57 +3577,88 @@ def find_arbitrage_opportunities(sport):
 
 @app.route('/api/nba/games/today', methods=['GET'])
 def get_nba_games_today():
-    """Get today's NBA games using nba_api"""
+    """Get today's NBA games using ESPN API as primary, nba_api as fallback"""
     try:
-        from nba_api.stats.endpoints import scoreboardv2
         import datetime
+        import requests
         
-        logger.info("🏀 Fetching today's NBA games from NBA API...")
+        logger.info("🏀 Fetching today's NBA games from ESPN API...")
         
-        # Get today's games using NBA API
         today = datetime.datetime.now()
-        date_string = today.strftime('%m/%d/%Y')
+        formatted_games = []
         
         try:
-            # Use NBA API to get real games
-            scoreboard = scoreboardv2.ScoreboardV2(game_date=date_string)
-            games_data = scoreboard.get_dict()
+            # Try ESPN API first
+            espn_url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard'
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'application/json'
+            }
             
-            formatted_games = []
+            response = requests.get(espn_url, headers=headers, timeout=10)
             
-            # Process the games data
-            if 'resultSets' in games_data:
-                for result_set in games_data['resultSets']:
-                    if result_set['name'] == 'GameHeader':
-                        games = result_set['rowSet']
-                        
-                        for game in games:
-                            # Extract game data from NBA API response
-                            game_id = game[2] if len(game) > 2 else f"nba_{len(formatted_games)+1}"
-                            game_status = game[3] if len(game) > 3 else "Scheduled"
-                            home_team_id = game[6] if len(game) > 6 else ""
-                            away_team_id = game[7] if len(game) > 7 else ""
-                            
-                            formatted_game = {
-                                'gameId': game_id,
-                                'date': today.strftime('%Y-%m-%d'),
-                                'homeTeamId': home_team_id,
-                                'awayTeamId': away_team_id,
-                                'status': game_status,
-                                'timestamp': today.isoformat()
-                            }
-                            formatted_games.append(formatted_game)
-            
-            if not formatted_games:
-                # Fallback to generated games if no real games available
-                logger.info("🏀 No NBA games from API, using generated games...")
-                formatted_games = generate_nba_games_fallback(today)
+            if response.status_code == 200:
+                data = response.json()
+                logger.info("🏀 ESPN API data received successfully")
                 
-        except Exception as api_error:
-            logger.warning(f"🏀 NBA API error: {api_error}, using fallback games...")
-            formatted_games = generate_nba_games_fallback(today)
+                formatted_games = process_espn_nba_data(data)
+                if formatted_games:
+                    logger.info(f"🏀 ESPN: Successfully processed {len(formatted_games)} NBA games")
+                else:
+                    logger.info("🏀 ESPN: No games processed, trying fallback...")
+                    raise Exception("No games processed from ESPN")
+            else:
+                logger.warning(f"🏀 ESPN API failed with status {response.status_code}")
+                raise Exception(f"ESPN API returned {response.status_code}")
+                
+        except Exception as espn_error:
+            logger.warning(f"🏀 ESPN API error: {espn_error}, trying NBA API fallback...")
+            
+            # Fallback to NBA API
+            try:
+                from nba_api.stats.endpoints import scoreboardv2
+                date_string = today.strftime('%m/%d/%Y')
+                
+                scoreboard = scoreboardv2.ScoreboardV2(game_date=date_string)
+                games_data = scoreboard.get_dict()
+                
+                formatted_games = []
+                if 'resultSets' in games_data:
+                    for result_set in games_data['resultSets']:
+                        if result_set['name'] == 'GameHeader':
+                            games = result_set['rowSet']
+                            
+                            for game in games:
+                                game_id = game[2] if len(game) > 2 else f"nba_{len(formatted_games)+1}"
+                                game_status = game[3] if len(game) > 3 else "Scheduled"
+                                home_team_id = game[6] if len(game) > 6 else ""
+                                away_team_id = game[7] if len(game) > 7 else ""
+                                
+                                formatted_game = {
+                                    'gameId': game_id,
+                                    'date': today.strftime('%Y-%m-%d'),
+                                    'homeTeamId': home_team_id,
+                                    'awayTeamId': away_team_id,
+                                    'status': game_status,
+                                    'timestamp': today.isoformat()
+                                }
+                                formatted_games.append(formatted_game)
+                                
+                if formatted_games:
+                    logger.info(f"🏀 NBA API: Successfully processed {len(formatted_games)} games")
+                else:
+                    logger.info("🏀 NBA API: No games found, using generated fallback...")
+                    formatted_games = generate_nba_games_fallback(today)
+                    
+            except Exception as nba_api_error:
+                logger.warning(f"🏀 NBA API also failed: {nba_api_error}, using generated games...")
+                formatted_games = generate_nba_games_fallback(today)
         
-        logger.info(f"🏀 Successfully generated {len(formatted_games)} NBA games")
+        if not formatted_games:
+            logger.info("🏀 All sources failed, using generated games...")
+            formatted_games = generate_nba_games_fallback(today)
+            
+        logger.info(f"🏀 Successfully returning {len(formatted_games)} NBA games")
         
         response = jsonify({
             'success': True,
@@ -3658,6 +3689,95 @@ def get_nba_games_today():
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
         
         return response, 500
+
+def process_espn_nba_data(data):
+    """Process ESPN NBA scoreboard data into standardized format"""
+    try:
+        logger.info("🏀 Processing ESPN NBA scoreboard data...")
+        
+        if 'events' not in data or not isinstance(data['events'], list):
+            logger.warning("🏀 No events found in ESPN data")
+            return []
+        
+        formatted_games = []
+        for event in data['events']:
+            try:
+                competition = event['competitions'][0]
+                home_team = None
+                away_team = None
+                
+                for competitor in competition['competitors']:
+                    if competitor['homeAway'] == 'home':
+                        home_team = competitor
+                    elif competitor['homeAway'] == 'away':
+                        away_team = competitor
+                
+                if not home_team or not away_team:
+                    continue
+                    
+                # Format game data
+                game_data = {
+                    'gameId': event['id'],
+                    'date': event['date'],
+                    'status': competition['status']['type']['description'],
+                    'clock': competition['status'].get('displayClock', ''),
+                    'period': competition['status'].get('period', 0),
+                    
+                    'homeTeam': {
+                        'id': home_team['team']['id'],
+                        'name': home_team['team']['displayName'],
+                        'shortName': home_team['team']['abbreviation'],
+                        'location': home_team['team']['location'],
+                        'nickname': home_team['team']['name'],
+                        'logo': home_team['team']['logo'],
+                        'color': home_team['team'].get('color', '000000'),
+                        'record': home_team['records'][0]['summary'] if home_team.get('records') else '0-0',
+                        'score': int(home_team.get('score', 0))
+                    },
+                    
+                    'awayTeam': {
+                        'id': away_team['team']['id'],
+                        'name': away_team['team']['displayName'],
+                        'shortName': away_team['team']['abbreviation'],
+                        'location': away_team['team']['location'],
+                        'nickname': away_team['team']['name'],
+                        'logo': away_team['team']['logo'],
+                        'color': away_team['team'].get('color', '000000'),
+                        'record': away_team['records'][0]['summary'] if away_team.get('records') else '0-0',
+                        'score': int(away_team.get('score', 0))
+                    },
+                    
+                    'venue': {
+                        'name': competition['venue']['fullName'] if competition.get('venue') else 'TBD',
+                        'city': competition['venue']['address']['city'] if competition.get('venue', {}).get('address') else '',
+                        'state': competition['venue']['address']['state'] if competition.get('venue', {}).get('address') else ''
+                    },
+                    
+                    'odds': {
+                        'spread': {
+                            'home': competition['odds'][0]['homeTeamOdds']['spreadOdds'] if competition.get('odds') else 0,
+                            'away': competition['odds'][0]['awayTeamOdds']['spreadOdds'] if competition.get('odds') else 0
+                        },
+                        'moneyline': {
+                            'home': competition['odds'][0]['homeTeamOdds']['moneyLine'] if competition.get('odds') else 100,
+                            'away': competition['odds'][0]['awayTeamOdds']['moneyLine'] if competition.get('odds') else 100
+                        },
+                        'total': competition['odds'][0]['overUnder'] if competition.get('odds') else 220
+                    }
+                }
+                
+                formatted_games.append(game_data)
+                
+            except Exception as game_error:
+                logger.warning(f"🏀 Error processing individual game: {game_error}")
+                continue
+        
+        logger.info(f"🏀 Successfully processed {len(formatted_games)} games from ESPN")
+        return formatted_games
+        
+    except Exception as e:
+        logger.error(f"🏀 Error processing ESPN data: {e}")
+        return []
 
 def generate_nba_games_fallback(today):
     """Generate fallback NBA games when API is unavailable"""
