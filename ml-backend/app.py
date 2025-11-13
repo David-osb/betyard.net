@@ -3571,6 +3571,325 @@ def find_arbitrage_opportunities(sport):
 
 # Enhanced ESPN service already initialized above with ml_model
 
+# ===============================================
+# NBA API ENDPOINTS USING NBA_API
+# ===============================================
+
+@app.route('/api/nba/games/today', methods=['GET'])
+def get_nba_games_today():
+    """Get today's NBA games using official NBA.com API endpoints"""
+    try:
+        import datetime
+        import requests
+        
+        logger.info("🏀 Fetching today's NBA games from NBA.com API...")
+        
+        # Use the official NBA.com scoreboard endpoint
+        nba_api_base = "https://stats.nba.com/stats"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Referer': 'https://www.nba.com/',
+            'x-nba-stats-origin': 'stats',
+            'x-nba-stats-token': 'true'
+        }
+        
+        # Get today's date for the API call
+        today = datetime.datetime.now()
+        game_date = today.strftime('%Y-%m-%d')
+        
+        logger.info(f"🏀 Fetching games for date: {game_date}")
+        
+        # Fetch scoreboard data
+        scoreboard_url = f"{nba_api_base}/scoreboardv3"
+        scoreboard_params = {
+            'GameDate': game_date,
+            'LeagueID': '00'  # NBA league ID
+        }
+        
+        logger.info(f"🏀 Making request to: {scoreboard_url}")
+        logger.info(f"🏀 With params: {scoreboard_params}")
+        
+        response = requests.get(scoreboard_url, headers=headers, params=scoreboard_params, timeout=10)
+        
+        logger.info(f"🏀 Response status: {response.status_code}")
+        
+        if response.status_code == 200:
+            scoreboard_data = response.json()
+            logger.info(f"🏀 Response data keys: {list(scoreboard_data.keys())}")
+            
+            formatted_games = []
+            
+            # Parse the scoreboard response - the actual structure might be different
+            # Let's log what we get and adapt accordingly
+            logger.info(f"🏀 Full response structure: {str(scoreboard_data)[:500]}...")
+            
+            # For now, return a successful response with the raw data to see structure
+            response_obj = jsonify({
+                'success': True,
+                'raw_data': scoreboard_data,
+                'games': formatted_games,
+                'total': len(formatted_games),
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+            response_obj.headers['Access-Control-Allow-Origin'] = '*'
+            response_obj.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            response_obj.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            
+            return response_obj
+        else:
+            logger.error(f"🏀 NBA API returned status code: {response.status_code}")
+            logger.error(f"🏀 Response text: {response.text[:500]}...")
+            raise Exception(f"NBA API returned status code: {response.status_code}")
+        
+    except Exception as e:
+        logger.error(f"🏀 Error fetching NBA games: {str(e)}")
+        import traceback
+        logger.error(f"🏀 Full error: {traceback.format_exc()}")
+        
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'games': [],
+            'total': 0,
+            'timestamp': datetime.datetime.now().isoformat()
+        }), 500
+
+@app.route('/api/nba/schedule', methods=['GET'])
+def get_nba_schedule():
+    """Get NBA schedule using scheduleleaguev2 endpoint"""
+    try:
+        import datetime
+        
+        logger.info("🏀 Fetching NBA schedule...")
+        
+        nba_api_base = "https://stats.nba.com/stats"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Referer': 'https://www.nba.com/',
+            'x-nba-stats-origin': 'stats',
+            'x-nba-stats-token': 'true'
+        }
+        
+        # Get current season year
+        today = datetime.datetime.now()
+        season_year = f"{today.year}-{str(today.year + 1)[2:]}"  # e.g., "2024-25"
+        
+        schedule_url = f"{nba_api_base}/scheduleleaguev2"
+        schedule_params = {
+            'LeagueID': '00',
+            'Season': season_year
+        }
+        
+        response = requests.get(schedule_url, headers=headers, params=schedule_params, timeout=10)
+        
+        if response.status_code == 200:
+            schedule_data = response.json()
+            
+            response = jsonify({
+                'success': True,
+                'schedule': schedule_data,
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            
+            return response
+        else:
+            raise Exception(f"NBA Schedule API returned status code: {response.status_code}")
+            
+    except Exception as e:
+        logger.error(f"🏀 Error fetching NBA schedule: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/nba/boxscore/<game_id>', methods=['GET'])
+def get_nba_boxscore(game_id):
+    """Get NBA game boxscore using boxscoretraditionalv3 endpoint"""
+    try:
+        logger.info(f"🏀 Fetching boxscore for game {game_id}...")
+        
+        nba_api_base = "https://stats.nba.com/stats"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Referer': 'https://www.nba.com/',
+            'x-nba-stats-origin': 'stats',
+            'x-nba-stats-token': 'true'
+        }
+        
+        boxscore_url = f"{nba_api_base}/boxscoretraditionalv3"
+        boxscore_params = {
+            'GameID': game_id,
+            'LeagueID': '00'
+        }
+        
+        response = requests.get(boxscore_url, headers=headers, params=boxscore_params, timeout=10)
+        
+        if response.status_code == 200:
+            boxscore_data = response.json()
+            
+            response = jsonify({
+                'success': True,
+                'boxscore': boxscore_data,
+                'game_id': game_id,
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            
+            return response
+        else:
+            raise Exception(f"NBA Boxscore API returned status code: {response.status_code}")
+            
+    except Exception as e:
+        logger.error(f"🏀 Error fetching boxscore: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+def get_team_emoji(team_code):
+    """Get emoji representation for NBA teams"""
+    team_emojis = {
+        'LAL': '🟨🟣', 'GSW': '🔵🟨', 'BOS': '🟢⚪', 'MIA': '🔴⚫',
+        'CHI': '🔴⚫', 'NYK': '🔵🟠', 'LAC': '🔴🔵', 'DEN': '🔵🟨',
+        'PHX': '🟠🟣', 'MIL': '🟢⚪', 'PHI': '🔵🔴', 'BKN': '⚫⚪',
+        'ATL': '🔴⚪', 'CLE': '🔴🟨', 'DAL': '🔵⚪', 'DET': '🔴⚪',
+        'HOU': '🔴⚪', 'IND': '🔵🟨', 'MEM': '🔵⚪', 'MIN': '🔵🟢',
+        'NOP': '🔵🟨', 'OKC': '🔵🟠', 'ORL': '🔵⚪', 'POR': '🔴⚫',
+        'SAC': '🟣⚫', 'SAS': '⚫⚪', 'TOR': '🔴⚪', 'UTA': '🟨🔵',
+        'WAS': '🔴🔵⚪', 'CHA': '🔵⚪'
+    }
+    return team_emojis.get(team_code, '🏀')
+
+@app.route('/api/nba/teams', methods=['GET'])
+def get_nba_teams():
+    """Get all NBA teams using commonallplayers endpoint"""
+    try:
+        logger.info("🏀 Fetching NBA teams...")
+        
+        nba_api_base = "https://stats.nba.com/stats"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Referer': 'https://www.nba.com/',
+            'x-nba-stats-origin': 'stats',
+            'x-nba-stats-token': 'true'
+        }
+        
+        # Use the commonallplayers endpoint to get team info
+        players_url = f"{nba_api_base}/commonallplayers"
+        players_params = {
+            'LeagueID': '00',
+            'Season': '2024-25',
+            'IsOnlyCurrentSeason': '1'
+        }
+        
+        response = requests.get(players_url, headers=headers, params=players_params, timeout=10)
+        
+        if response.status_code == 200:
+            players_data = response.json()
+            
+            # Extract unique teams from player data
+            teams_set = set()
+            formatted_teams = []
+            
+            if 'resultSets' in players_data:
+                for result_set in players_data['resultSets']:
+                    if 'rowSet' in result_set:
+                        for row in result_set['rowSet']:
+                            if len(row) > 7:  # Ensure we have team info
+                                team_id = row[6] if len(row) > 6 else None
+                                team_abbr = row[7] if len(row) > 7 else None
+                                
+                                if team_id and team_abbr and team_abbr not in teams_set:
+                                    teams_set.add(team_abbr)
+                                    formatted_team = {
+                                        'id': team_id,
+                                        'abbreviation': team_abbr,
+                                        'logo': get_team_emoji(team_abbr),
+                                        'name': get_team_full_name(team_abbr)
+                                    }
+                                    formatted_teams.append(formatted_team)
+            
+            response = jsonify({
+                'success': True,
+                'teams': formatted_teams,
+                'total': len(formatted_teams)
+            })
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            
+            return response
+        else:
+            raise Exception(f"NBA Teams API returned status code: {response.status_code}")
+        
+    except Exception as e:
+        logger.error(f"🏀 Error fetching NBA teams: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+def get_team_full_name(team_abbr):
+    """Get full team name from abbreviation"""
+    team_names = {
+        'LAL': 'Los Angeles Lakers', 'GSW': 'Golden State Warriors', 
+        'BOS': 'Boston Celtics', 'MIA': 'Miami Heat',
+        'CHI': 'Chicago Bulls', 'NYK': 'New York Knicks', 
+        'LAC': 'LA Clippers', 'DEN': 'Denver Nuggets',
+        'PHX': 'Phoenix Suns', 'MIL': 'Milwaukee Bucks', 
+        'PHI': 'Philadelphia 76ers', 'BKN': 'Brooklyn Nets',
+        'ATL': 'Atlanta Hawks', 'CLE': 'Cleveland Cavaliers', 
+        'DAL': 'Dallas Mavericks', 'DET': 'Detroit Pistons',
+        'HOU': 'Houston Rockets', 'IND': 'Indiana Pacers', 
+        'MEM': 'Memphis Grizzlies', 'MIN': 'Minnesota Timberwolves',
+        'NOP': 'New Orleans Pelicans', 'OKC': 'Oklahoma City Thunder', 
+        'ORL': 'Orlando Magic', 'POR': 'Portland Trail Blazers',
+        'SAC': 'Sacramento Kings', 'SAS': 'San Antonio Spurs', 
+        'TOR': 'Toronto Raptors', 'UTA': 'Utah Jazz',
+        'WAS': 'Washington Wizards', 'CHA': 'Charlotte Hornets'
+    }
+    return team_names.get(team_abbr, f'{team_abbr} Team')
+
+@app.route('/api/nba/player/<int:player_id>/stats', methods=['GET'])  
+def get_nba_player_stats(player_id):
+    """Get NBA player stats using official NBA.com API"""
+    try:
+        logger.info(f"🏀 Fetching stats for player {player_id}...")
+        
+        nba_api_base = "https://stats.nba.com/stats"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Referer': 'https://www.nba.com/',
+            'x-nba-stats-origin': 'stats',
+            'x-nba-stats-token': 'true'
+        }
+        
+        # Use playerdashboardbygeneralsplits equivalent
+        player_url = f"{nba_api_base}/playerdashboardbygeneralsplits"
+        player_params = {
+            'PlayerID': player_id,
+            'LeagueID': '00',
+            'Season': '2024-25',
+            'SeasonType': 'Regular Season'
+        }
+        
+        response = requests.get(player_url, headers=headers, params=player_params, timeout=10)
+        
+        if response.status_code == 200:
+            player_data = response.json()
+            
+            response = jsonify({
+                'success': True,
+                'player_id': player_id,
+                'stats': player_data,
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            
+            return response
+        else:
+            raise Exception(f"NBA Player API returned status code: {response.status_code}")
+        
+    except Exception as e:
+        logger.error(f"🏀 Error fetching player stats: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 if __name__ == '__main__':
     import os
     
@@ -3579,6 +3898,7 @@ if __name__ == '__main__':
     
     logger.info("🚀 Starting NFL Multi-Position Prediction ML Backend...")
     logger.info("🏈 XGBoost Models: QB, RB, WR, TE")
+    logger.info("🏀 NBA API Integration: Real-time games and stats")
     logger.info("=" * 50)
     logger.info(f"📡 Server running on port {port}")
     logger.info("Available endpoints:")
@@ -3587,6 +3907,11 @@ if __name__ == '__main__':
     logger.info("  GET  /model/info - Model information")
     logger.info("  POST /api/moneyline/prediction - XGBoost moneyline predictions")
     logger.info("  GET  /test/moneyline - Test moneyline endpoint")
+    logger.info("  GET  /api/nba/games/today - Today's NBA games (scoreboardv3)")
+    logger.info("  GET  /api/nba/schedule - NBA schedule (scheduleleaguev2)")
+    logger.info("  GET  /api/nba/teams - All NBA teams (commonallplayers)")
+    logger.info("  GET  /api/nba/boxscore/<id> - Game boxscore (boxscoretraditionalv3)")
+    logger.info("  GET  /api/nba/player/<id>/stats - NBA player stats")
     logger.info("=" * 50)
     
     # Production ready settings for cloud deployment

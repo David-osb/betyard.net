@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>🏈 Betyard - NFL Predictions & Analysis Platform</title>
+    <title>��🏈 Betyard - NFL & NBA Predictions & Analysis Platform</title>
     <meta name="description" content="Professional Sports Analysis & predictions using the power of A.I for the most accurate sports bets on the internet! Betyard.net">
     <meta name="keywords" content="sports betting, AI predictions, artificial intelligence, betting analysis, sports analysis, accurate bets, betyard, machine learning, sports predictions, betting tips">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate, max-age=0">
@@ -5961,7 +5961,6 @@
                             <div class="sport-icon" data-sport="basketball" onclick="selectSport('basketball')" title="Basketball">
                                 <div class="sport-icon-wrapper">🏀</div>
                                 <span class="sport-label">Basketball</span>
-                                <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="hockey" onclick="selectSport('hockey')" title="Hockey">
                                 <div class="sport-icon-wrapper">🏒</div>
@@ -8843,6 +8842,193 @@
                 window.analytics.stopAutoRefresh();
             }
         });
+
+        /* ===============================================
+         * NBA GAMES CLASS - Basketball Integration
+         * =============================================== */
+        
+        class NBAGames {
+            constructor() {
+                console.log('🏀 NBAGames constructor called');
+                this.baseURL = `${window.BetYardML ? window.BetYardML.baseURL : 'https://betyard-ml-backend.onrender.com'}/api`;
+                this.cache = new Map();
+                this.cacheTimeout = 300000; // 5 minutes
+            }
+
+            async fetchNBAGames() {
+                console.log('🏀 Fetching NBA games...');
+                
+                const cacheKey = 'nba-games-today';
+                const cached = this.getCache(cacheKey);
+                if (cached) {
+                    console.log('🏀 Using cached NBA games');
+                    return cached;
+                }
+
+                try {
+                    // Try to fetch from your backend first
+                    const response = await fetch(`${this.baseURL}/nba/games/today`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (response.ok) {
+                        const games = await response.json();
+                        this.setCache(cacheKey, games);
+                        console.log('🏀 NBA games fetched successfully:', games);
+                        return games;
+                    } else {
+                        throw new Error(`Backend API failed: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('🏀 Failed to fetch NBA games:', error);
+                    // Return empty array on error - no mock data
+                    return { success: false, games: [], total: 0, error: error.message };
+                }
+            }
+
+            displayNBAGames(games) {
+                console.log('🏀 Displaying NBA games:', games);
+
+                // Handle API response structure
+                const gamesList = games.games || games;
+                
+                if (!gamesList || gamesList.length === 0) {
+                    return `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
+                            <p style="color: #64748b;">Check back later for upcoming matchups</p>
+                            ${games.error ? `<p style="color: #dc2626; font-size: 14px; margin-top: 12px;">Error: ${games.error}</p>` : ''}
+                        </div>
+                    `;
+                }
+
+                const gamesHtml = gamesList.map(game => this.createNBAGameCard(game)).join('');
+                
+                return `
+                    <div class="nba-games-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px; padding: 16px;">
+                        <div class="nba-header" style="grid-column: 1 / -1; text-align: center; margin-bottom: 16px;">
+                            <h2 style="color: #1e293b; margin: 0; font-size: 24px; font-weight: 600;">
+                                🏀 NBA Games - ${new Date().toLocaleDateString()}
+                            </h2>
+                            <p style="color: #64748b; margin: 8px 0 0 0;">Live odds and game predictions</p>
+                        </div>
+                        ${gamesHtml}
+                    </div>
+                `;
+            }
+
+            createNBAGameCard(game) {
+                const gameTime = new Date(game.gameTime);
+                const timeString = gameTime.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    hour12: true 
+                });
+
+                const spreadText = game.odds.spread.home > 0 ? 
+                    `+${game.odds.spread.home}` : `${game.odds.spread.home}`;
+
+                return `
+                    <div class="nba-game-card" style="background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s ease; cursor: pointer;" 
+                         onclick="selectNBAGame('${game.gameId}')" 
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)'" 
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'">
+                        
+                        <div class="nba-game-header" style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 600; margin-bottom: 4px;">
+                                ${timeString} • ${game.venue}
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">
+                                Game ID: ${game.gameId}
+                            </div>
+                        </div>
+
+                        <div class="nba-game-teams" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div class="nba-team away-team" style="text-align: center; flex: 1;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">${game.awayTeam.logo}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${game.awayTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${game.awayTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${game.awayTeam.record}</div>
+                            </div>
+
+                            <div style="text-align: center; margin: 0 16px;">
+                                <div style="font-size: 20px; font-weight: bold; color: #6366f1;">VS</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">NBA</div>
+                            </div>
+
+                            <div class="nba-team home-team" style="text-align: center; flex: 1;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">${game.homeTeam.logo}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${game.homeTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${game.homeTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${game.homeTeam.record}</div>
+                            </div>
+                        </div>
+
+                        <div class="nba-game-odds" style="background: rgba(99, 102, 241, 0.05); border-radius: 12px; padding: 16px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: center;">
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">SPREAD</div>
+                                    <div style="font-weight: 600; color: #1e293b;">${spreadText}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">MONEYLINE</div>
+                                    <div style="font-weight: 600; color: #1e293b;">${game.odds.moneyline.home > 0 ? '+' : ''}${game.odds.moneyline.home}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">TOTAL</div>
+                                    <div style="font-weight: 600; color: #1e293b;">O/U ${game.odds.total}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 16px;">
+                            <button style="background: linear-gradient(145deg, #6366f1, #8b5cf6); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                    onmouseover="this.style.transform='scale(1.05)'"
+                                    onmouseout="this.style.transform='scale(1)'"
+                                    onclick="event.stopPropagation(); showNBAPrediction('${game.gameId}')">
+                                🎯 Get AI Prediction
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Cache management
+            getCache(key) {
+                const cached = this.cache.get(key);
+                if (cached && (Date.now() - cached.timestamp) < this.cacheTimeout) {
+                    return cached.data;
+                }
+                return null;
+            }
+
+            setCache(key, data) {
+                this.cache.set(key, {
+                    data: data,
+                    timestamp: Date.now()
+                });
+            }
+        }
+
+        // Initialize NBA Games globally
+        window.NBAGames = NBAGames;
+
+        // Global functions for NBA game interactions
+        function selectNBAGame(gameId) {
+            console.log('🏀 NBA Game selected:', gameId);
+            // Add your game selection logic here
+            // This could show detailed analysis, betting options, etc.
+        }
+
+        function showNBAPrediction(gameId) {
+            console.log('🎯 Showing NBA prediction for game:', gameId);
+            // Add your prediction logic here
+            // This could call your ML backend for NBA predictions
+        }
 
     </script>
     <!-- Weekly Schedule Admin Panel (Development Only) -->
