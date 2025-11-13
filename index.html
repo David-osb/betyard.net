@@ -6533,7 +6533,7 @@
                         <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
                             <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
-                            <p style="color: #64748b;">Fetching this week's matchups</p>
+                            <p style="color: #64748b;">Fetching today's NBA matchups and live scores</p>
                             <div style="margin-top: 20px;">
                                 <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
@@ -6542,11 +6542,13 @@
                     
                     // Load NBA games
                     if (window.NBAGames) {
+                        console.log('🏀 NBA: Initializing NBA games system (daily-based)');
                         const nbaGames = new window.NBAGames();
                         nbaGames.fetchNBAGames().then(games => {
+                            console.log('🏀 NBA: Successfully loaded games:', games);
                             gameContainer.innerHTML = nbaGames.displayNBAGames(games);
                         }).catch(error => {
-                            console.error('Error loading NBA games:', error);
+                            console.error('🏀 NBA: Error loading NBA games:', error);
                             gameContainer.innerHTML = `
                                 <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
                                     <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
@@ -8856,12 +8858,13 @@
             }
 
             async fetchNBAGames() {
-                console.log('🏀 Fetching NBA games...');
+                console.log('🏀 NBA: Fetching NBA games for today...');
+                console.log('🏀 NBA: Using daily API endpoint (not weekly schedule)');
                 
                 const cacheKey = 'nba-games-today';
                 const cached = this.getCache(cacheKey);
                 if (cached) {
-                    console.log('🏀 Using cached NBA games');
+                    console.log('🏀 NBA: Using cached NBA games');
                     return cached;
                 }
 

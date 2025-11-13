@@ -342,7 +342,7 @@ class WeeklyScheduleManager {
      */
     getCurrentWeekGames() {
         const games = Array.from(this.gamesCache.values());
-        console.log(`🎯 Returning ${games.length} games for Week ${this.currentWeek}`);
+        console.log(`🎯 NFL: Returning ${games.length} NFL games for Week ${this.currentWeek}`);
         return games;
     }
     
