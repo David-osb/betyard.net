@@ -9000,7 +9000,7 @@
 
             async fetchNBAGames() {
                 console.log('🏀 NBA: Fetching NBA games for today...');
-                console.log('🏀 NBA: Using ESPN scoreboard endpoint');
+                console.log('🏀 NBA: Using ESPN scoreboard endpoint with date parameter');
                 
                 const cacheKey = 'nba-games-today';
                 const cached = this.getCache(cacheKey);
@@ -9010,9 +9010,16 @@
                 }
 
                 try {
-                    // Try ESPN scoreboard endpoint first
-                    console.log('🏀 NBA: Fetching from ESPN scoreboard...');
-                    const response = await fetch(this.espnEndpoints.scoreboard, {
+                    // Get today's date in YYYYMMDD format for ESPN API
+                    const today = new Date();
+                    const dateParam = today.getFullYear().toString() + 
+                                    (today.getMonth() + 1).toString().padStart(2, '0') + 
+                                    today.getDate().toString().padStart(2, '0');
+                    
+                    const espnUrl = `${this.espnEndpoints.scoreboard}?dates=${dateParam}`;
+                    console.log(`🏀 NBA: Fetching from ${espnUrl}`);
+                    
+                    const response = await fetch(espnUrl, {
                         method: 'GET',
                         headers: {
                             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',

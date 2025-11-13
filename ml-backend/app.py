@@ -3589,12 +3589,15 @@ def get_nba_games_today():
         
         try:
             # Try ESPN API first
-            espn_url = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard'
+            today = datetime.datetime.now()
+            date_param = today.strftime('%Y%m%d')  # YYYYMMDD format for ESPN
+            espn_url = f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={date_param}'
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 'Accept': 'application/json'
             }
             
+            logger.info(f"🏀 Fetching from ESPN with date {date_param}: {espn_url}")
             response = requests.get(espn_url, headers=headers, timeout=10)
             
             if response.status_code == 200:
