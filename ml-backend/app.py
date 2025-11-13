@@ -3589,7 +3589,7 @@ def get_nba_games_today():
         
         try:
             # Try ESPN API first
-            espn_url = 'http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard'
+            espn_url = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard'
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 'Accept': 'application/json'
