@@ -127,15 +127,18 @@
                                     window.nbaGames = new NBAGames();
                                     
                                     // Load games
-                                    if (window.nbaGames.loadTodaysGames) {
-                                        window.nbaGames.loadTodaysGames().then(() => {
+                                    if (window.nbaGames.fetchNBAGames) {
+                                        window.nbaGames.fetchNBAGames().then(games => {
                                             console.log('🏀 NBA: Games loaded via NBAGames class');
+                                            const gameContainer = document.getElementById('game-centric-container');
+                                            if (gameContainer && window.nbaGames.displayNBAGames) {
+                                                gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
+                                            }
                                             if (typeof updateNewsForSport === 'function') {
                                                 updateNewsForSport('basketball');
                                             }
                                         }).catch(error => {
-                                            console.error('🏀 NBA: Error loading games:', error);
-                                            console.log('🏀 NBA: loadTodaysGames failed, trying ESPN API...');
+                                            console.error('🏀 NBA: fetchNBAGames failed, trying ESPN API...', error);
                                             
                                             // Fallback to ESPN API
                                             fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
