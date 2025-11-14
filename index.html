@@ -263,31 +263,6 @@
                                             <button onclick="location.reload()" style="margin-top: 16px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
                                                 Refresh Page
                                             </button>
-                                        </div>
-                                    `;
-                                }
-                            });
-            } else {
-                // Other sports - show coming soon
-                const sportEmojis = {
-                    'hockey': '🏒',
-                    'baseball': '⚾',
-                    'soccer': '⚽',
-                    'tennis': '🎾'
-                };
-                
-                if (gameContainer) {
-                    gameContainer.innerHTML = `
-                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px;">
-                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport] || '🏆'}</div>
-                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">Coming Soon!</h2>
-                            <p style="color: #64748b;">This sport will be available soon with ML-powered predictions.</p>
-                        </div>
-                    `;
-                }
-            }
-            }
-        };
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
         
