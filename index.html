@@ -229,18 +229,9 @@
                                                         }),
                                                         status: event.status.type.description,
                                                         date: event.date
-                                                    };
-                                                });
-                                                
-                                                console.log('🏀 NBA: Games loaded from ESPN:', games);
-                                                displayNBAGames(games);
-                                                
-                                                if (typeof updateNewsForSport === 'function') {
-                                                    updateNewsForSport('basketball');
-                                                }
-                                            } else {
 
-                                window.nbaGames.loadTodaysGames();
+                                                
+
                             }
 
                             window.nbaGames.fetchNBAGames().then(games => {
