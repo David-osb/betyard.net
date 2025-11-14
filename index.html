@@ -291,6 +291,72 @@
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
         
+        // EMERGENCY FIX - Override broken selectSport
+        window.selectSportFixed = function(sport) {
+            console.log('🚨 Using emergency fix for:', sport);
+            const gameContainer = document.getElementById('game-centric-container');
+            
+            if (sport === 'basketball') {
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                            <h3 style="color: #1e293b;">Loading NBA Games...</h3>
+                        </div>
+                    `;
+                }
+                
+                setTimeout(() => {
+                    fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.events) {
+                                const games = data.events.map(event => {
+                                    const competition = event.competitions[0];
+                                    const homeTeam = competition.competitors.find(c => c.homeAway === 'home') || {};
+                                    const awayTeam = competition.competitors.find(c => c.homeAway === 'away') || {};
+                                    return {
+                                        id: event.id,
+                                        name: event.name,
+                                        date: event.date,
+                                        homeTeam: {
+                                            name: homeTeam.team?.displayName || 'Home',
+                                            score: homeTeam.score || '0',
+                                            logo: homeTeam.team?.logo || ''
+                                        },
+                                        awayTeam: {
+                                            name: awayTeam.team?.displayName || 'Away',
+                                            score: awayTeam.score || '0',
+                                            logo: awayTeam.team?.logo || ''
+                                        }
+                                    };
+                                });
+                                displayNBAGamesESPN(games);
+                            }
+                        })
+                        .catch(error => console.error('NBA Error:', error));
+                }, 500);
+                
+            } else if (sport === 'football') {
+                location.reload();
+            }
+        };
+        
+        // Override sport buttons to use fixed function
+        setTimeout(() => {
+            const basketballButtons = document.querySelectorAll('[onclick*="selectSport(\'basketball\')"]');
+            basketballButtons.forEach(button => {
+                button.setAttribute('onclick', 'selectSportFixed(\'basketball\')');
+                console.log('🔧 Fixed basketball button');
+            });
+            
+            const footballButtons = document.querySelectorAll('[onclick*="selectSport(\'football\')"]');
+            footballButtons.forEach(button => {
+                button.setAttribute('onclick', 'selectSportFixed(\'football\')');
+                console.log('🔧 Fixed football button');
+            });
+        }, 2000);
+        
         // ESPN NBA Games Display Function
         window.displayNBAGamesESPN = function(games) {
             const gameContainer = document.getElementById('game-centric-container');
