@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>🏈 Betyard - NFL Predictions & Analysis Platform</title>
+    <title>��🏈 Betyard - NFL & NBA Predictions & Analysis Platform</title>
     <meta name="description" content="Professional Sports Analysis & predictions using the power of A.I for the most accurate sports bets on the internet! Betyard.net">
     <meta name="keywords" content="sports betting, AI predictions, artificial intelligence, betting analysis, sports analysis, accurate bets, betyard, machine learning, sports predictions, betting tips">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate, max-age=0">
@@ -18,6 +18,316 @@
     
     <!-- Kill service workers and force reload -->
     <script>
+        // CRITICAL: Define selectSport function FIRST for immediate global access
+        window.selectSport = async function(sport) {
+            console.log(`🏅 Sport selected: ${sport}`);
+            
+            // Update active state on icons
+            document.querySelectorAll('.sport-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            const selectedIcon = document.querySelector(`[data-sport="${sport}"]`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('active');
+            }
+            
+            // Update game container based on sport
+            const gameContainer = document.getElementById('game-centric-container');
+            
+            if (sport === 'football') {
+                console.log('🏈 NFL: Switching to NFL...');
+                
+                // Check if NFL games are already displayed (avoid unnecessary reload)
+                if (gameContainer && gameContainer.innerHTML.includes('🏈') && 
+                    !gameContainer.innerHTML.includes('Loading') && 
+                    (gameContainer.innerHTML.includes('game-card') || gameContainer.innerHTML.includes('NFL'))) {
+                    console.log('🏈 NFL: NFL games already displayed, updating news only...');
+                    
+                    // Just update the news section without reloading games
+                    if (typeof updateNewsForSport === 'function') {
+                        updateNewsForSport('football');
+                    }
+                    return; // Don't reload if already showing NFL games
+                }
+                
+                console.log('🏈 NFL: Loading NFL games from scratch...');
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Fetching ESPN data...</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Load NFL data if not already displayed
+                setTimeout(() => {
+                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
+                        console.log('🏈 NFL: Using existing ESPN function...');
+                        fetchNFLDataWithTank01Enhanced();
+                        // Update news after games load
+                        setTimeout(() => {
+                            if (typeof updateNewsForSport === 'function') {
+                                updateNewsForSport('football');
+                            }
+                        }, 1000);
+                    } else {
+                        console.log('🏈 NFL: Reloading for fresh ESPN data...');
+                        location.reload();
+                    }
+                }, 500);
+                
+            } else if (sport === 'basketball') {
+                console.log('🏀 NBA: Loading NBA games...');
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
+                            <p style="color: #64748b;">Fetching today's NBA matchups and live scores</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Initialize NBA system with full ESPN integration
+                setTimeout(() => {
+                    try {
+                        console.log('🏀 NBA: Starting NBA system initialization...');
+                        
+                        // Clean up previous NFL systems if needed
+                        if (window.nbaGames && sport !== 'basketball') {
+                            console.log('🏀 NBA: Cleaning up previous systems');
+                            if (window.nbaGames.destroyRefreshSystem) {
+                                window.nbaGames.destroyRefreshSystem();
+                            }
+                            window.nbaGames = null;
+                        }
+                        
+                        // Initialize or reuse NBA system
+                        if (!window.nbaGames) {
+                            // Option 1: Wait for NBAGames class to be available
+                            let attempts = 0;
+                            const maxAttempts = 10;
+                            
+                            const tryInitNBA = () => {
+                                attempts++;
+                                console.log(`🏀 NBA: Initialization attempt ${attempts}/${maxAttempts}`);
+                                
+                                if (window.NBAGames) {
+                                    console.log('🏀 NBA: NBAGames class found, creating instance...');
+                                    window.nbaGames = new NBAGames();
+                                    
+                                    // Load games
+                                    if (window.nbaGames.loadTodaysGames) {
+                                        window.nbaGames.loadTodaysGames().then(() => {
+                                            console.log('🏀 NBA: Games loaded via NBAGames class');
+                                            if (typeof updateNewsForSport === 'function') {
+                                                updateNewsForSport('basketball');
+                                            }
+                                        }).catch(error => {
+                                            console.error('🏀 NBA: Error loading games:', error);
+                                        });
+                                    }
+                                } else if (attempts < maxAttempts) {
+                                    // Wait and try again
+                                    setTimeout(tryInitNBA, 500);
+                                } else {
+                                    // Option 2: Call backend API directly
+                                    console.log('🏀 NBA: NBAGames class not available, calling backend API directly...');
+                                    fetch('http://localhost:5001/api/nba/games/today')
+                                        .then(response => response.json())
+                                        .then(games => {
+                                            console.log('🏀 NBA: Games loaded from backend:', games);
+                                            displayNBAGames(games);
+                                            
+                                            if (typeof updateNewsForSport === 'function') {
+                                                updateNewsForSport('basketball');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('🏀 NBA: Backend API error:', error);
+                                            showNBAError('Unable to load NBA games from backend API');
+                                        });
+                                }
+                            };
+                            
+                            tryInitNBA();
+                        } else {
+                            // NBA system already exists
+                            console.log('🏀 NBA: Using existing NBA system...');
+                            if (window.nbaGames.loadTodaysGames) {
+                                window.nbaGames.loadTodaysGames();
+                            }
+                        }
+                        
+                        // Load NBA games
+                        console.log('🏀 NBA: Loading today\'s games...');
+                        if (window.nbaGames && typeof window.nbaGames.loadTodaysGames === 'function') {
+                            window.nbaGames.loadTodaysGames().then(() => {
+                                console.log('🏀 NBA: Games loaded successfully');
+                                
+                                // Update news for basketball
+                                if (typeof updateNewsForSport === 'function') {
+                                    console.log('🏀 NBA: Updating news for basketball...');
+                                    updateNewsForSport('basketball').catch(error => {
+                                        console.error('🏀 NBA: Error updating news:', error);
+                                    });
+                                }
+                            }).catch(error => {
+                                console.error('🏀 NBA: Error loading games:', error);
+                                
+                                // Fallback: Show error message
+                                if (gameContainer) {
+                                    gameContainer.innerHTML = `
+                                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
+                                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                                            <h3 style="color: #dc2626; margin-bottom: 8px;">NBA Loading Error</h3>
+                                            <p style="color: #64748b;">Unable to load NBA games. Please try again later.</p>
+                                            <button onclick="location.reload()" style="margin-top: 16px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                                Refresh Page
+                                            </button>
+                                        </div>
+                                    `;
+                                }
+                            });
+                        } else {
+                            console.error('🏀 NBA: loadTodaysGames method not available');
+                            
+                            // Try alternative initialization
+                            if (window.nbaGames && window.nbaGames.init) {
+                                console.log('🏀 NBA: Trying init() method...');
+                                window.nbaGames.init();
+                            }
+                        }
+                        
+                        // Set global sport state
+                        window.currentSport = 'basketball';
+                        window.selectedSport = 'basketball';
+                        
+                    } catch (error) {
+                        console.error('🏀 NBA: Error in initialization:', error);
+                    }
+                }, 800); // Longer delay to ensure all systems are ready
+                
+            } else {
+                // Other sports - show coming soon
+                const sportEmojis = {
+                    'hockey': '🏒',
+                    'baseball': '⚾',
+                    'soccer': '⚽',
+                    'tennis': '🎾'
+                };
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px;">
+                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport] || '🏆'}</div>
+                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">Coming Soon!</h2>
+                            <p style="color: #64748b;">This sport will be available soon with ML-powered predictions.</p>
+                        </div>
+                    `;
+                }
+            }
+        };
+        
+        console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
+        
+        // Helper functions for NBA display
+        window.displayNBAGames = function(games) {
+            const gameContainer = document.getElementById('game-centric-container');
+            if (!gameContainer) return;
+            
+            // Handle backend API response format
+            let gamesList = games;
+            if (games && typeof games === 'object' && games.games) {
+                gamesList = games.games;
+                console.log('🏀 NBA: Extracted games array from backend response:', gamesList);
+            }
+            
+            if (!gamesList || !Array.isArray(gamesList) || gamesList.length === 0) {
+                gameContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                        <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
+                        <p style="color: #64748b;">Check back tomorrow for upcoming matchups!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let gamesHtml = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="color: #1e293b; margin: 0;">🏀 NBA Games Today</h2>
+                    <p style="color: #64748b; margin: 8px 0;">Live scores and upcoming matchups</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+            `;
+            
+            gamesList.slice(0, 10).forEach(game => {
+                const homeTeam = game.home_team || game.homeTeam || 'Home Team';
+                const awayTeam = game.away_team || game.awayTeam || 'Away Team';
+                const homeScore = game.home_score || game.homeScore || 0;
+                const awayScore = game.away_score || game.awayScore || 0;
+                const gameTime = game.game_time || game.time || 'TBA';
+                const status = game.status || 'Scheduled';
+                
+                gamesHtml += `
+                    <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <div style="font-size: 14px; color: #ff6b35; font-weight: 600;">${gameTime}</div>
+                            <div style="font-size: 12px; color: #64748b;">${status}</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-weight: 600; color: #1e293b;">${awayTeam}</div>
+                            </div>
+                            
+                            <div style="text-align: center; margin: 0 16px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #ff6b35;">VS</div>
+                            </div>
+                            
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-weight: 600; color: #1e293b;">${homeTeam}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; background: #f8fafc; padding: 8px; border-radius: 6px;">
+                            <strong>${awayScore} - ${homeScore}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            gamesHtml += '</div>';
+            gameContainer.innerHTML = gamesHtml;
+        };
+        
+        window.showNBAError = function(message) {
+            const gameContainer = document.getElementById('game-centric-container');
+            if (gameContainer) {
+                gameContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                        <h3 style="color: #dc2626; margin-bottom: 8px;">NBA Loading Error</h3>
+                        <p style="color: #64748b;">${message}</p>
+                        <button onclick="selectSport('basketball')" style="margin-top: 16px; padding: 8px 16px; background: #ff6b35; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        };
+        
         // ULTIMATE CACHE KILLER - Force complete reload with null safety fix  
         const CACHE_BUSTER = Date.now();
         const EXPECTED_VERSION = 'v2025-10-26-mobile-friendly-odds-1729999000000';
@@ -522,16 +832,9 @@
             }
             
             .panel-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
                 margin-top: 16px;
-            }
-            
-            /* Mobile-optimized game cards */
-            .game-card {
-                margin: 0 auto 12px auto;
-                border-radius: 8px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
             }
             
             /* Touch-friendly buttons */
@@ -544,19 +847,39 @@
             
             /* Prediction cards mobile layout */
             .prediction-card {
-                padding: 16px 12px;
-                margin-bottom: 12px;
+                padding: 12px 8px;
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            
+            /* Game cards mobile optimization for 2-column */
+            .game-card {
+                margin: 0 auto 8px auto;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+                font-size: 13px;
+                padding: 12px 8px;
+            }
+            
+            /* Mobile text adjustments for 2-column layout */
+            .mdl-cell {
+                padding: 8px;
+            }
+            
+            .content-panel {
+                padding: 12px 8px;
+                margin: 0;
             }
             
             /* Stats grid mobile layout */
             .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
             
             .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
             
             /* Mobile navigation */
@@ -3180,32 +3503,151 @@
         
         /* ===== MOBILE-OPTIMIZED GAME & BETTING INTERFACE ===== */
         
-        /* Mobile Game Cards */
-        @media (max-width: 480px) {
+        /* Mobile Game Cards - Updated for all phone sizes */
+        @media (max-width: 768px) {
             #game-centric-container {
-                padding: 8px;
-                margin: 0;
+                padding: 4px !important;
+                margin: 0 !important;
             }
             
-            #games-container {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-                padding: 0;
+            #games-container, #games-selection-grid, .games-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+                padding: 4px !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
             }
             
             .game-card {
-                padding: 16px 12px;
-                margin: 0;
-                border-radius: 12px;
+                padding: 8px 6px !important;
+                margin: 0 !important;
+                border-radius: 6px;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                min-height: 80px;
-                display: flex;
+                min-height: 85px;
+                max-height: 110px;
+                display: flex !important;
+                flex-direction: column !important;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: center;
+                text-align: center;
+                font-size: 11px !important;
+                line-height: 1.2 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                word-wrap: break-word !important;
+            }
+            
+            /* Mobile text optimization */
+            .game-card * {
+                font-size: 11px !important;
+                line-height: 1.2 !important;
+                margin: 1px 0 !important;
+                padding: 0 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                max-width: 100% !important;
+            }
+            
+            .game-card .team-name,
+            .game-card .team-info {
+                font-size: 10px !important;
+                font-weight: 600 !important;
+                margin: 0 !important;
+                padding: 1px 0 !important;
+            }
+            
+            .game-card .game-time,
+            .game-card .game-status {
+                font-size: 9px !important;
+                opacity: 0.9 !important;
+                margin: 2px 0 0 0 !important;
+            }
+            
+            /* New Mobile Game Card Layout */
+            .mobile-game-content {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 100% !important;
+                padding: 4px !important;
+            }
+            
+            .mobile-teams {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                margin-bottom: 4px !important;
+            }
+            
+            .mobile-team {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                flex: 1 !important;
+            }
+            
+            .mobile-team-code {
+                font-size: 10px !important;
+                font-weight: 700 !important;
+                margin: 2px 0 !important;
+                color: white !important;
+            }
+            
+            .mobile-score {
+                font-size: 12px !important;
+                font-weight: 800 !important;
+                color: #fbbf24 !important;
+                margin: 1px 0 !important;
+            }
+            
+            .mobile-vs {
+                font-size: 8px !important;
+                color: #e5e7eb !important;
+                margin: 0 4px !important;
+                font-weight: 600 !important;
+            }
+            
+            .mobile-game-info {
+                text-align: center !important;
+                width: 100% !important;
+            }
+            
+            .mobile-status {
+                font-size: 8px !important;
+                color: #d1d5db !important;
+                margin: 2px 0 !important;
+            }
+            
+            .mobile-time {
+                font-size: 7px !important;
+                color: #9ca3af !important;
+                margin: 1px 0 !important;
+            }
+            
+            .mobile-logo {
+                border-radius: 50% !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+            }
+            
+            /* Mobile News Grid */
+            .mobile-news-grid {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 4px !important;
+                margin-top: 8px !important;
+            }
+            
+            .mobile-news-item:hover {
+                transform: scale(1.02) !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
             }
             
             .game-card:hover, .game-card:active {
@@ -3335,35 +3777,9 @@
             }
         }
         
-        /* Tablet Game Interface */
-        @media (min-width: 481px) and (max-width: 768px) {
-            #games-container {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 16px;
-            }
-            
-            .game-card {
-                padding: 20px;
-                min-height: 100px;
-            }
-            
-            .prediction-teams {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-            
-            .team-stats-mobile {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 12px;
-            }
-        }
-        
         /* Desktop Game Interface */
         @media (min-width: 769px) {
-            #games-container {
+            #games-container, #games-selection-grid, .games-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
                 gap: 20px;
@@ -3837,8 +4253,8 @@
             
             /* Best Lines Mobile - MUCH MORE USER FRIENDLY */
             .best-lines-container {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
                 padding: 8px 0;
             }
             
@@ -4466,8 +4882,8 @@
 
         @media (max-width: 768px) {
             .panel-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
                 margin-top: 20px;
             }
             
@@ -4639,8 +5055,8 @@
 
         @media (max-width: 320px) {
             .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 6px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
             }
             
             .panel-card, .feature-card {
@@ -5855,7 +6271,6 @@
                             <div class="sport-icon" data-sport="basketball" onclick="selectSport('basketball')" title="Basketball">
                                 <div class="sport-icon-wrapper">🏀</div>
                                 <span class="sport-label">Basketball</span>
-                                <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="hockey" onclick="selectSport('hockey')" title="Hockey">
                                 <div class="sport-icon-wrapper">🏒</div>
@@ -5991,13 +6406,34 @@
         class BetYardMLService {
             constructor() {
                 console.log('🚀 BetYardMLService constructor called');
-                this.baseURL = 'http://localhost:5001';
+                
+                // Determine backend URL based on environment
+                this.baseURL = this.getBackendURL();
+                console.log('🔧 Using backend URL:', this.baseURL);
+                
                 this.isAvailable = false;
                 this.lastHealthCheck = null;
                 this.healthCheckInterval = 300000; // 5 minutes
                 console.log('🔧 Starting initialization...');
                 this.initPromise = this.init();
                 console.log('🔧 Init promise created:', this.initPromise);
+            }
+            
+            getBackendURL() {
+                // Check if we're in local development
+                const isLocalhost = window.location.hostname === 'localhost' || 
+                                  window.location.hostname === '127.0.0.1' || 
+                                  window.location.hostname.startsWith('192.168.') ||
+                                  window.location.hostname.startsWith('10.') ||
+                                  window.location.hostname.includes('local');
+                
+                if (isLocalhost) {
+                    console.log('🏠 Local development detected - using localhost backend');
+                    return 'http://localhost:5001';
+                } else {
+                    console.log('🌐 Production environment detected - using Render backend');
+                    return 'https://betyard-ml-backend.onrender.com';
+                }
             }
             
             async init() {
@@ -6165,6 +6601,108 @@
     <script src="assets/js/ml-config.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000" defer></script>
     <!-- ml-integration.js DISABLED - using new BetYardMLService instead -->
     <script>
+        // Define selectSport function immediately for global access
+        window.selectSport = async function(sport) {
+            console.log(`🏅 Sport selected: ${sport}`);
+            
+            // Cleanup previous sport systems
+            if (window.nbaGames && sport !== 'basketball') {
+                console.log('🏀 NBA: Cleaning up refresh system');
+                window.nbaGames.destroyRefreshSystem();
+                window.nbaGames = null;
+            }
+            
+            // Update current sport globally
+            window.currentSport = sport;
+            window.selectedSport = sport;
+            
+            // Update active state on icons
+            document.querySelectorAll('.sport-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            const selectedIcon = document.querySelector(`[data-sport="${sport}"]`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('active');
+            }
+            
+            // Update game container based on sport
+            const gameContainer = document.getElementById('game-centric-container');
+            
+            if (sport === 'football') {
+                console.log('🏈 NFL: Loading NFL games via existing ESPN system...');
+                
+                // Load NFL games using the same method as initial page load
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Fetching ESPN data...</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Use the same ESPN loading function that works on initial page load
+                setTimeout(() => {
+                    console.log('🏈 NFL: Calling ESPN data load function...');
+                    
+                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
+                        console.log('🏈 NFL: Using fetchNFLDataWithTank01Enhanced()...');
+                        fetchNFLDataWithTank01Enhanced();
+                    } else {
+                        console.log('🏈 NFL: Function not available, reloading page...');
+                        // Fallback: just reload the page to get fresh ESPN data
+                        location.reload();
+                    }
+                }, 500);
+                
+            } else if (sport === 'basketball') {
+                // Basketball logic here (keeping existing logic)
+                console.log('🏀 NBA: Loading NBA games...');
+                // Add basketball loading logic as needed
+                
+            } else {
+                // Other sports - show coming soon
+                const sportEmojis = {
+                    'basketball': '🏀',
+                    'hockey': '🏒',
+                    'baseball': '⚾',
+                    'soccer': '⚽',
+                    'tennis': '🎾'
+                };
+                
+                const sportNames = {
+                    'basketball': 'NBA',
+                    'hockey': 'NHL', 
+                    'baseball': 'MLB',
+                    'soccer': 'MLS',
+                    'tennis': 'Tennis'
+                };
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 2px dashed rgba(59, 130, 246, 0.3);">
+                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport]}</div>
+                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">${sportNames[sport]} Coming Soon!</h2>
+                            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin: 0 auto;">
+                                We're working hard to bring you ${sportNames[sport]} predictions with the same ML-powered accuracy you love for NFL.
+                            </p>
+                            <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
+                                <p style="color: #2563eb; font-weight: 600; margin: 0;">
+                                    🚀 Stay tuned for updates!
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        };
+        
+        console.log('🔧 selectSport function defined globally:', typeof window.selectSport);
+        
         // Toggle expandable card functionality
         function toggleCard(cardId) {
             const content = document.getElementById(cardId + '-content');
@@ -6354,11 +6892,16 @@
             }
         }
 
-        // Sport Selection Function
-        let currentSport = 'football'; // Default sport
-
-        async function selectSport(sport) {
+        
+        document.addEventListener("DOMContentLoaded", async function() {
             console.log(`🏅 Sport selected: ${sport}`);
+            
+            // Cleanup previous sport systems
+            if (window.nbaGames && sport !== 'basketball') {
+                console.log('🏀 NBA: Cleaning up refresh system');
+                window.nbaGames.destroyRefreshSystem();
+                window.nbaGames = null;
+            }
             
             // Update current sport globally
             currentSport = sport;
@@ -6374,32 +6917,352 @@
             const gameContainer = document.getElementById('game-centric-container');
             
             if (sport === 'football') {
-                // Load NFL games (existing functionality)
+                console.log('🏈 NFL: Loading NFL games via existing ESPN system...');
+                
+                // Load NFL games using the same method as initial page load
                 if (gameContainer) {
                     gameContainer.innerHTML = `
                         <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
                             <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
-                            <p style="color: #64748b;">Fetching live and upcoming matchups from Tank01 API</p>
+                            <p style="color: #64748b;">Fetching ESPN data...</p>
                             <div style="margin-top: 20px;">
                                 <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
                         </div>
                     `;
+                }
+                
+                // Use the same ESPN loading function that works on initial page load
+                setTimeout(() => {
+                    console.log('🏈 NFL: Calling ESPN data load function...');
                     
-                    // Small delay to ensure DOM is ready, then reload games
-                    setTimeout(() => {
+                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
+                        console.log('🏈 NFL: Using fetchNFLDataWithTank01Enhanced()...');
+                        fetchNFLDataWithTank01Enhanced();
+                    } else {
+                        console.log('🏈 NFL: Function not available, reloading page...');
+                        // Fallback: just reload the page to get fresh ESPN data
+                        location.reload();
+                    }
+                }, 500);
+                
+            } else if (sport === 'basketball') {
+                // Load NBA games
+                if (gameContainer) {
+                        console.log('  - window.weeklyScheduleManager:', !!window.weeklyScheduleManager);
+                        
                         // Trigger live scores refresh to force game-centric UI update
                         if (window.liveNFLScores && window.liveNFLScores.fetchLiveScores) {
                             console.log('🔄 Refreshing NFL scores for sport change...');
                             window.liveNFLScores.fetchLiveScores();
+                        } else {
+                            console.log('❌ liveNFLScores not available');
                         }
                         
-                        if (window.GameCentricUI && window.GameCentricUI.loadGames) {
-                            window.GameCentricUI.loadGames();
+                        // Force reload of GameCentricUI
+                        if (window.GameCentricUI) {
+                            console.log('🏈 NFL: GameCentricUI exists, checking available methods...');
+                            console.log('🔍 GameCentricUI methods:', Object.getOwnPropertyNames(window.GameCentricUI));
+                            
+                            if (window.GameCentricUI.loadGames) {
+                                console.log('🏈 NFL: Triggering GameCentricUI.loadGames()...');
+                                window.GameCentricUI.loadGames();
+                            } else if (window.GameCentricUI.displayGames) {
+                                console.log('🏈 NFL: Triggering GameCentricUI.displayGames()...');
+                                window.GameCentricUI.displayGames();
+                            } else if (window.GameCentricUI.refreshGames) {
+                                console.log('🏈 NFL: Triggering GameCentricUI.refreshGames()...');
+                                window.GameCentricUI.refreshGames();
+                            } else if (window.GameCentricUI.init) {
+                                console.log('🏈 NFL: Triggering GameCentricUI.init()...');
+                                window.GameCentricUI.init();
+                            } else {
+                                console.log('❌ GameCentricUI: No recognized methods found');
+                            }
+                        } else {
+                            console.log('❌ GameCentricUI not available');
                         }
-                    }, 100);
-                }
+
+                        // Force the weekly schedule manager to display games immediately
+                        if (window.weeklyScheduleManager) {
+                            console.log('🏈 NFL: Forcing weekly schedule manager to display games...');
+                            console.log('🔍 WeeklyScheduleManager methods:', Object.getOwnPropertyNames(window.weeklyScheduleManager));
+                            
+                            // Try multiple methods to trigger game display
+                            if (window.weeklyScheduleManager.displayGames) {
+                                console.log('🏈 NFL: Calling displayGames()...');
+                                window.weeklyScheduleManager.displayGames();
+                            }
+                            
+                            if (window.weeklyScheduleManager.loadCurrentWeek) {
+                                console.log('🏈 NFL: Calling loadCurrentWeek()...');
+                                window.weeklyScheduleManager.loadCurrentWeek();
+                            }
+                            
+                            if (window.weeklyScheduleManager.init) {
+                                console.log('🏈 NFL: Calling init()...');
+                                window.weeklyScheduleManager.init();
+                            }
+                            
+                            // Force display after a short delay to ensure games are loaded
+                            setTimeout(() => {
+                                console.log('🏈 NFL: === DELAYED FORCE DISPLAY STARTING ===');
+                                if (window.weeklyScheduleManager.displayGames) {
+                                    console.log('🏈 NFL: Delayed displayGames() call...');
+                                    window.weeklyScheduleManager.displayGames();
+                                }
+                                
+                                // Try to directly access and display the games
+                                console.log('🔍 NFL: Checking for currentWeekGames...');
+                                let games = null;
+                                
+                                // Try different ways to access the games
+                                if (window.weeklyScheduleManager.currentWeekGames) {
+                                    console.log('🏈 NFL: Found currentWeekGames');
+                                    games = window.weeklyScheduleManager.currentWeekGames;
+                                } else if (window.weeklyScheduleManager.gamesCache) {
+                                    console.log('🏈 NFL: Found gamesCache, trying to extract games...');
+                                    const cache = window.weeklyScheduleManager.gamesCache;
+                                    console.log('🔍 Cache keys:', Object.keys(cache));
+                                    
+                                    // Try to find games in cache
+                                    const week = window.weeklyScheduleManager.currentWeek;
+                                    const season = window.weeklyScheduleManager.currentSeason;
+                                    const cacheKey = `${season}_week_${week}`;
+                                    
+                                    console.log(`� NFL: Looking for cache key: ${cacheKey}`);
+                                    if (cache[cacheKey]) {
+                                        games = cache[cacheKey];
+                                        console.log('🎯 NFL: Found games in cache!', games.length);
+                                    } else {
+                                        // Try other cache keys
+                                        for (const key of Object.keys(cache)) {
+                                            if (cache[key] && Array.isArray(cache[key])) {
+                                                console.log(`🎯 NFL: Found games in cache key '${key}':`, cache[key].length);
+                                                games = cache[key];
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Try to call a method that returns the games directly
+                                if (!games && window.weeklyScheduleManager.getCurrentWeekGames) {
+                                    console.log('🏈 NFL: Trying getCurrentWeekGames() method...');
+                                    try {
+                                        games = window.weeklyScheduleManager.getCurrentWeekGames();
+                                        console.log('🎯 NFL: Got games from getCurrentWeekGames():', games?.length);
+                                    } catch (e) {
+                                        console.log('❌ NFL: getCurrentWeekGames() failed:', e.message);
+                                    }
+                                }
+                                
+                                // Try to call getGames method
+                                if (!games && window.weeklyScheduleManager.getGames) {
+                                    console.log('🏈 NFL: Trying getGames() method...');
+                                    try {
+                                        games = window.weeklyScheduleManager.getGames();
+                                        console.log('🎯 NFL: Got games from getGames():', games?.length);
+                                    } catch (e) {
+                                        console.log('❌ NFL: getGames() failed:', e.message);
+                                    }
+                                }
+                                
+                                // Check if weeklyScheduleManager has a method that returns processed games
+                                if (!games) {
+                                    console.log('🔍 NFL: Checking all methods for game access...');
+                                    const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(window.weeklyScheduleManager));
+                                    console.log('🔍 All WeeklyScheduleManager methods:', methods);
+                                    
+                                    for (const method of methods) {
+                                        if (typeof window.weeklyScheduleManager[method] === 'function' && method.toLowerCase().includes('game')) {
+                                            console.log(`🔍 Trying method: ${method}()`);
+                                            try {
+                                                const result = window.weeklyScheduleManager[method]();
+                                                if (Array.isArray(result) && result.length > 0) {
+                                                    console.log(`🎯 NFL: Found games using ${method}():`, result.length);
+                                                    games = result;
+                                                    break;
+                                                }
+                                            } catch (e) {
+                                                console.log(`❌ ${method}() failed:`, e.message);
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if (games && games.length > 0) {
+                                    console.log('🏈 NFL: Found games to display!', games.length);
+                                    console.log('🔍 NFL: First game data structure:', games[0]);
+                                    
+                                    // Create a simple game display manually
+                                    const gameContainer = document.getElementById('game-centric-container');
+                                    if (gameContainer) {
+                                        console.log('🏈 NFL: Manually creating NFL game display...');
+                                        
+                                        let gamesHtml = `
+                                            <div style="text-align: center; margin-bottom: 20px;">
+                                                <h2 style="color: #1e293b; margin: 0;">🏈 NFL Week ${window.weeklyScheduleManager.currentWeek} Games</h2>
+                                                <p style="color: #64748b; margin: 8px 0;">Live scores and upcoming matchups</p>
+                                            </div>
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                                        `;
+                                        
+                                        games.slice(0, 10).forEach(game => {
+                                            console.log('🔍 Full game object:', JSON.stringify(game, null, 2));
+                                            console.log('🔍 Game keys:', Object.keys(game));
+                                            
+                                            // Try multiple ways to extract team data
+                                            let awayTeamName = 'Away Team';
+                                            let homeTeamName = 'Home Team';
+                                            
+                                            // Method 1: Check the direct structure we can see in the logs
+                                            if (game.awayTeam && game.homeTeam) {
+                                                awayTeamName = game.awayTeam.name || game.awayTeam.displayName || 'Away Team';
+                                                homeTeamName = game.homeTeam.name || game.homeTeam.displayName || 'Home Team';
+                                                console.log('✅ Found teams via awayTeam/homeTeam.name:', awayTeamName, 'vs', homeTeamName);
+                                            }
+                                            // Method 2: Check if it's directly on the game object
+                                            else if (game.away_team && game.home_team) {
+                                                awayTeamName = game.away_team;
+                                                homeTeamName = game.home_team;
+                                                console.log('✅ Found teams via away_team/home_team:', awayTeamName, 'vs', homeTeamName);
+                                            }
+                                            // Method 3: Check ESPN API structure
+                                            else if (game.competitions?.[0]?.competitors) {
+                                                const competitors = game.competitions[0].competitors;
+                                                console.log('🔍 Competitors:', competitors);
+                                                
+                                                const awayCompetitor = competitors.find(c => c.homeAway === 'away');
+                                                const homeCompetitor = competitors.find(c => c.homeAway === 'home');
+                                                
+                                                if (awayCompetitor?.team?.displayName) awayTeamName = awayCompetitor.team.displayName;
+                                                if (homeCompetitor?.team?.displayName) homeTeamName = homeCompetitor.team.displayName;
+                                                
+                                                console.log('✅ Found teams via ESPN structure:', awayTeamName, 'vs', homeTeamName);
+                                            }
+                                            else {
+                                                console.log('❌ Could not find team names in any expected location');
+                                            }
+                                            
+                                            // Extract other game data
+                                            const awayTeamRecord = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'away')?.records?.[0]?.summary || 
+                                                                 game.awayTeam?.record || '';
+                                            const homeTeamRecord = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'home')?.records?.[0]?.summary || 
+                                                                 game.homeTeam?.record || '';
+                                            
+                                            // Extract scores - try multiple methods
+                                            let awayScore = 0;
+                                            let homeScore = 0;
+                                            
+                                            if (game.competitions?.[0]?.competitors) {
+                                                const competitors = game.competitions[0].competitors;
+                                                const awayComp = competitors.find(c => c.homeAway === 'away');
+                                                const homeComp = competitors.find(c => c.homeAway === 'home');
+                                                awayScore = awayComp?.score || 0;
+                                                homeScore = homeComp?.score || 0;
+                                            } else {
+                                                awayScore = game.awayScore || game.awayTeam?.score || game.away?.score || 0;
+                                                homeScore = game.homeScore || game.homeTeam?.score || game.home?.score || 0;
+                                            }
+                                            
+                                            // Extract game details
+                                            const gameTime = game.date ? new Date(game.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+                                                           game.gameTime || game.time || 'TBA';
+                                            const venue = game.competitions?.[0]?.venue?.fullName || 
+                                                        game.venue?.fullName ||
+                                                        game.venue?.name || 
+                                                        game.venue || 
+                                                        'TBA';
+                                            const gameStatus = game.status?.type?.shortDetail || 
+                                                             game.competitions?.[0]?.status?.type?.shortDetail || 
+                                                             game.status || 
+                                                             'Scheduled';
+                                            
+                                            console.log(`🏈 Final extracted data: ${awayTeamName} @ ${homeTeamName} (${awayScore}-${homeScore}) at ${venue}`);
+                                            console.log(`🏈 Status: ${gameStatus}, Time: ${gameTime}`);
+                                            
+                                            gamesHtml += `
+                                                <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                                    <div style="text-align: center; margin-bottom: 12px;">
+                                                        <div style="font-size: 14px; color: #6366f1; font-weight: 600;">
+                                                            ${gameTime} • ${venue}
+                                                        </div>
+                                                        <div style="font-size: 12px; color: #64748b;">
+                                                            ${gameStatus}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                                        <div style="text-align: center; flex: 1;">
+                                                            <div style="font-weight: 600; color: #1e293b;">${awayTeamName}</div>
+                                                            <div style="font-size: 12px; color: #64748b;">${awayTeamRecord}</div>
+                                                        </div>
+                                                        
+                                                        <div style="text-align: center; margin: 0 16px;">
+                                                            <div style="font-size: 16px; font-weight: bold; color: #6366f1;">VS</div>
+                                                        </div>
+                                                        
+                                                        <div style="text-align: center; flex: 1;">
+                                                            <div style="font-weight: 600; color: #1e293b;">${homeTeamName}</div>
+                                                            <div style="font-size: 12px; color: #64748b;">${homeTeamRecord}</div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    ${awayScore !== undefined && homeScore !== undefined ? `
+                                                        <div style="text-align: center; background: #f8fafc; padding: 8px; border-radius: 6px;">
+                                                            <strong>${awayScore} - ${homeScore}</strong>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            `;
+                                        });
+                                        
+                                        gamesHtml += '</div>';
+                                        gameContainer.innerHTML = gamesHtml;
+                                        console.log('✅ NFL: Games manually displayed successfully!');
+                                    } else {
+                                        console.log('❌ NFL: Game container not found!');
+                                    }
+                                } else {
+                                    console.log('❌ NFL: No games found to display');
+                                    console.log('🔍 WeeklyScheduleManager properties:', Object.getOwnPropertyNames(window.weeklyScheduleManager));
+                                }
+                                console.log('🏈 NFL: === DELAYED FORCE DISPLAY COMPLETED ===');
+                            }, 1500); // Longer delay to ensure all initialization is complete
+                            
+                        } else {
+                            console.log('❌ weeklyScheduleManager not available');
+                        }
+
+                        // Fallback: Force refresh of game container if it's still showing NBA content
+                        setTimeout(() => {
+                            const gameContainer = document.getElementById('game-centric-container');
+                            if (gameContainer) {
+                                console.log('🔍 NFL: Checking game container content...');
+                                const nbaContent = gameContainer.querySelector('.nba-games-container');
+                                if (nbaContent) {
+                                    console.log('🏈 NFL: Found NBA content in container, forcing NFL reload...');
+                                    // Clear NBA content and trigger NFL reload
+                                    gameContainer.innerHTML = `
+                                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                                            <h3 style="color: #1e293b; margin-bottom: 8px;">Reloading NFL Games...</h3>
+                                            <p style="color: #64748b;">Refreshing NFL matchups and live scores</p>
+                                            <div style="margin-top: 20px;">
+                                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    // Force reload after clearing
+                                    if (window.weeklyScheduleManager && window.weeklyScheduleManager.displayGames) {
+                                        setTimeout(() => {
+                                            console.log('🏈 NFL: Final fallback - forcing game display...');
+                                            window.weeklyScheduleManager.displayGames();
+                                        }, 100);
+                
             } else if (sport === 'basketball') {
                 // Load NBA games
                 if (gameContainer) {
@@ -6407,7 +7270,7 @@
                         <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
                             <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
-                            <p style="color: #64748b;">Fetching this week's matchups</p>
+                            <p style="color: #64748b;">Fetching today's NBA matchups and live scores</p>
                             <div style="margin-top: 20px;">
                                 <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
@@ -6416,11 +7279,46 @@
                     
                     // Load NBA games
                     if (window.NBAGames) {
-                        const nbaGames = new window.NBAGames();
-                        nbaGames.fetchNBAGames().then(games => {
-                            gameContainer.innerHTML = nbaGames.displayNBAGames(games);
+                        console.log('🏀 NBA: Initializing NBA games system (daily-based)');
+                        window.nbaGames = new window.NBAGames(); // Store globally for refresh access
+                        
+                        // Load NBA games
+                        window.nbaGames.fetchNBAGames().then(games => {
+                            console.log('🏀 NBA: Successfully loaded games:', games);
+                            gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
+                            
+                            // Force news update test
+                            console.log('🏀 NBA: Testing direct news update...');
+                            console.log('🏀 NBA: typeof updateNewsForSport:', typeof updateNewsForSport);
+                            
+                            // Immediate call test
+                            if (typeof updateNewsForSport === 'function') {
+                                console.log('🏀 NBA: Function exists - calling now...');
+                                updateNewsForSport('basketball').then(() => {
+                                    console.log('🏀 NBA: News update completed successfully');
+                                }).catch(error => {
+                                    console.error('🏀 NBA: News update error:', error);
+                                });
+                            } else {
+                                console.error('🏀 NBA: updateNewsForSport function not found!');
+                            }
+                            
+                            // Ensure NBA news is loaded after games are displayed
+                            setTimeout(() => {
+                                console.log('🏀 NBA: Loading NBA news after games display...');
+                                try {
+                                    if (typeof updateNewsForSport === 'function') {
+                                        console.log('🏀 NBA: updateNewsForSport function found - calling...');
+                                        updateNewsForSport('basketball');
+                                    } else {
+                                        console.error('🏀 NBA: updateNewsForSport function not found!');
+                                    }
+                                } catch (error) {
+                                    console.error('🏀 NBA: Error calling updateNewsForSport:', error);
+                                }
+                            }, 200);
                         }).catch(error => {
-                            console.error('Error loading NBA games:', error);
+                            console.error('🏀 NBA: Error loading NBA games:', error);
                             gameContainer.innerHTML = `
                                 <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
                                     <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
@@ -6429,6 +7327,19 @@
                                 </div>
                             `;
                         });
+
+                        // Load NBA news immediately as well
+                        console.log('🏀 NBA: Calling immediate updateNewsForSport...');
+                        try {
+                            if (typeof updateNewsForSport === 'function') {
+                                console.log('🏀 NBA: updateNewsForSport function exists - calling for basketball...');
+                                updateNewsForSport('basketball');
+                            } else {
+                                console.error('🏀 NBA: updateNewsForSport function not available!');
+                            }
+                        } catch (error) {
+                            console.error('🏀 NBA: Error in immediate updateNewsForSport call:', error);
+                        }
                     }
                 }
             } else {
@@ -6466,8 +7377,7 @@
                     `;
                 }
             }
-        }
-
+        
         document.addEventListener("DOMContentLoaded", async function() {
             console.log("🔥 VERSION 2024-10-18-15:40 - INLINE SOLUTION - Betting recommendations inlined, no function calls!");
             console.log("✅ ALL DOM element access has null safety checks INCLUDING topValueBets, marketTrends, riskAssessment!");
@@ -7072,7 +7982,42 @@
 
         // Initialize news on page load
         document.addEventListener('DOMContentLoaded', function() {
-            updateNews();
+            // Check which sport is currently active and load appropriate news
+            setTimeout(() => {
+                // First check if NBA games are showing (more reliable indicator)
+                const nbaGamesContainer = document.querySelector('.nba-games-container');
+                const activeSportIcon = document.querySelector('.sport-icon.active');
+                const activeSport = activeSportIcon ? activeSportIcon.dataset.sport : 'football';
+                
+                console.log('📰 Initial news loading - Active sport icon:', activeSport);
+                console.log('📰 NBA games container present:', !!nbaGamesContainer);
+                
+                // If NBA games are showing but football is still marked active, update to basketball
+                if (nbaGamesContainer && activeSport === 'football') {
+                    console.log('📰 NBA games detected but football marked active - switching to basketball news');
+                    updateNewsForSport('basketball');
+                } else if (activeSport === 'basketball') {
+                    console.log('📰 Basketball is active - loading NBA news');
+                    updateNewsForSport('basketball');
+                } else {
+                    console.log('📰 Loading default NFL news');
+                    updateNews(); // Default NFL news
+                }
+            }, 1000); // Longer delay to ensure NBA games have loaded if they're going to
+            
+            // Additional check after 3 seconds to ensure news matches displayed games
+            setTimeout(() => {
+                const nbaGamesContainer = document.querySelector('.nba-games-container');
+                const currentNewsHeader = document.querySelector('#qb-news-section h3');
+                
+                if (nbaGamesContainer && currentNewsHeader) {
+                    const headerText = currentNewsHeader.textContent || '';
+                    if (!headerText.includes('NBA') && headerText.includes('NFL')) {
+                        console.log('📰 Mismatch detected: NBA games showing but NFL news loaded - fixing...');
+                        updateNewsForSport('basketball');
+                    }
+                }
+            }, 3000);
         });
 
         // Dynamic news update function based on context
@@ -7097,24 +8042,27 @@
                 let newsTitle = '';
                 let newsIcon = 'newspaper';
                 
+                // Get the backend URL - force production for testing
+                const backendURL = 'https://betyard-ml-backend.onrender.com';
+                
                 // Determine which ESPN endpoint to call based on context
                 if (currentNewsContext.type === 'player' && currentNewsContext.playerName) {
                     // Player-specific news
-                    const response = await fetch(`http://localhost:5001/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
+                    const response = await fetch(`${backendURL}/api/news/player/${encodeURIComponent(currentNewsContext.playerName)}?limit=4`);
                     newsData = await response.json();
                     newsTitle = `${currentNewsContext.playerName} News`;
                     newsIcon = 'person';
                     
                 } else if (currentNewsContext.type === 'matchup' && currentNewsContext.homeTeam && currentNewsContext.awayTeam) {
                     // Matchup-specific news (both teams)
-                    const response = await fetch(`http://localhost:5001/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
+                    const response = await fetch(`${backendURL}/api/news/matchup?home_team=${currentNewsContext.homeTeam}&away_team=${currentNewsContext.awayTeam}&limit=4`);
                     newsData = await response.json();
                     newsTitle = `${currentNewsContext.awayTeam} @ ${currentNewsContext.homeTeam} News`;
                     newsIcon = 'sports_football';
                     
                 } else {
                     // General NFL news
-                    const response = await fetch(`http://localhost:5001/api/news/latest?limit=8&transactions=true&injuries=true&fantasy=true`);
+                    const response = await fetch(`${backendURL}/api/news/latest?limit=8&transactions=true&injuries=true&fantasy=true`);
                     newsData = await response.json();
                     newsTitle = 'Latest NFL News';
                     newsIcon = 'newspaper';
@@ -7125,15 +8073,35 @@
                 }
                 
                 // Build news HTML
-                let newsHTML = `
-                    <div style="margin-bottom: 16px;">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                            <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
-                            <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
-                            <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                // Check if mobile for different layout
+                const isMobile = window.innerWidth <= 768;
+                
+                let newsHTML = '';
+                
+                if (isMobile) {
+                    // Mobile: Compact grid layout with logos and short headlines
+                    newsHTML = `
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+                                <i class="material-icons" style="color: #3b82f6; font-size: 16px;">${newsIcon}</i>
+                                <h4 style="color: #1e40af; margin: 0; font-size: 14px;">${newsTitle}</h4>
+                                <span style="background: #dbeafe; color: #1d4ed8; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 600;">ESPN</span>
+                            </div>
                         </div>
-                    </div>
-                `;
+                        <div class="mobile-news-grid">
+                    `;
+                } else {
+                    // Desktop: Full layout
+                    newsHTML = `
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                                <i class="material-icons" style="color: #3b82f6;">${newsIcon}</i>
+                                <h4 style="color: #1e40af; margin: 0;">${newsTitle}</h4>
+                                <span style="background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">ESPN LIVE</span>
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 if (newsData.news && newsData.news.length > 0) {
                     newsData.news.forEach((article, index) => {
@@ -7230,7 +8198,101 @@
                         
                         const cardCloseElement = isClickable ? '</a>' : '</div>';
                         
-                        newsHTML += `
+                        // Extract team code from article for mobile layout
+                        const extractTeamCode = (article) => {
+                            // Try to extract team from various sources
+                            if (article.team_context) return article.team_context;
+                            if (article.team_mentioned && article.team_mentioned.length > 0) return article.team_mentioned[0];
+                            
+                            // Try to extract from headline or description
+                            const text = (article.headline + ' ' + (article.description || '')).toLowerCase();
+                            const nflTeams = {
+                                'chiefs': 'KC', 'bills': 'BUF', 'dolphins': 'MIA', 'patriots': 'NE', 'jets': 'NYJ',
+                                'ravens': 'BAL', 'browns': 'CLE', 'steelers': 'PIT', 'bengals': 'CIN',
+                                'titans': 'TEN', 'colts': 'IND', 'jaguars': 'JAX', 'texans': 'HOU',
+                                'broncos': 'DEN', 'raiders': 'LV', 'chargers': 'LAC',
+                                'cowboys': 'DAL', 'giants': 'NYG', 'eagles': 'PHI', 'commanders': 'WSH',
+                                'packers': 'GB', 'bears': 'CHI', 'vikings': 'MIN', 'lions': 'DET',
+                                'saints': 'NO', 'falcons': 'ATL', 'panthers': 'CAR', 'buccaneers': 'TB',
+                                '49ers': 'SF', 'seahawks': 'SEA', 'rams': 'LAR', 'cardinals': 'ARI'
+                            };
+                            
+                            for (const [teamName, teamCode] of Object.entries(nflTeams)) {
+                                if (text.includes(teamName)) return teamCode;
+                            }
+                            
+                            return null;
+                        };
+                        
+                        const teamCode = extractTeamCode(article);
+                        const shortHeadline = article.headline ? 
+                            (article.headline.length > 45 ? article.headline.substring(0, 45) + '...' : article.headline) : 
+                            'NFL News Update';
+                        
+                        if (isMobile) {
+                            // Mobile: Compact card with team logo
+                            newsHTML += `
+                                ${cardElement}
+                                    <div class="mobile-news-item" style="
+                                        padding: 8px;
+                                        background: ${colors.bg};
+                                        border-radius: 6px;
+                                        border-left: 3px solid ${colors.border};
+                                        margin-bottom: 6px;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 8px;
+                                        ${isClickable ? 'cursor: pointer;' : ''}
+                                        transition: all 0.2s ease;
+                                    " 
+                                    onmouseover="this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.transform='scale(1)'">
+                                        
+                                        ${teamCode ? `
+                                            <img src="https://a.espncdn.com/i/teamlogos/nfl/500/${teamCode}.png" 
+                                                 alt="${teamCode}" 
+                                                 width="20" 
+                                                 height="20" 
+                                                 style="border-radius: 50%; flex-shrink: 0;"
+                                                 onerror="this.style.display='none'">
+                                        ` : `
+                                            <i class="material-icons" style="color: ${colors.border}; font-size: 16px; flex-shrink: 0;">${colors.icon}</i>
+                                        `}
+                                        
+                                        <div style="flex: 1; min-width: 0;">
+                                            <div style="
+                                                color: ${colors.text};
+                                                font-size: 11px;
+                                                font-weight: 600;
+                                                line-height: 1.2;
+                                                margin-bottom: 2px;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                                display: -webkit-box;
+                                                -webkit-line-clamp: 2;
+                                                -webkit-box-orient: vertical;
+                                            ">${shortHeadline}</div>
+                                            
+                                            <div style="
+                                                color: #64748b;
+                                                font-size: 9px;
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 4px;
+                                            ">
+                                                <span>${publishedDate}</span>
+                                                ${article.content_type && article.content_type !== 'general' ? 
+                                                    `<span style="background: ${colors.border}; color: white; padding: 1px 4px; border-radius: 4px; font-size: 8px;">${article.content_type.toUpperCase()}</span>` 
+                                                : ''}
+                                                ${isClickable ? '<i class="material-icons" style="font-size: 10px;">open_in_new</i>' : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ${cardCloseElement}
+                            `;
+                        } else {
+                            // Desktop: Full layout (existing code)
+                            newsHTML += `
                             ${cardElement}
                                 <div style="padding: 16px; background: ${colors.bg}; border-radius: 8px; border-left: 4px solid ${colors.border}; margin-bottom: 12px; transition: all 0.2s ease; ${isPriority ? 'box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);' : ''} ${isClickable ? 'cursor: pointer;' : ''}" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPriority ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'none'}'">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
@@ -7261,9 +8323,35 @@
                                         </div>
                                     ` : ''}
                                 </div>
+                                    
+                                    ${badges ? `<div style="margin-bottom: 10px;">${badges}</div>` : ''}
+                                    
+                                    <div style="color: #475569; font-size: 13px; line-height: 1.4;">
+                                        ${enhancedContent}
+                                        ${isClickable ? `<div style="margin-top: 8px; font-size: 12px; color: #3b82f6; font-weight: 500;"><i class="material-icons" style="font-size: 12px; vertical-align: middle; margin-right: 4px;">link</i>Read full article on ESPN.com</div>` : ''}
+                                    </div>
+                                    
+                                    ${article.fantasy_impact && article.fantasy_impact.recommendation ? `
+                                        <div style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; border-left: 3px solid #8b5cf6;">
+                                            <div style="font-size: 12px; color: #7c3aed; font-weight: 600;">Fantasy Impact: ${article.fantasy_impact.recommendation}</div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${relevanceScore ? `
+                                        <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                            Relevance: ${Math.round(relevanceScore)}%
+                                        </div>
+                                    ` : ''}
+                                </div>
                             ${cardCloseElement}
                         `;
+                        }
                     });
+                    
+                    // Close mobile news grid
+                    if (isMobile) {
+                        newsHTML += '</div>'; // Close mobile-news-grid
+                    }
                 } else {
                     // No news found
                     newsHTML += `
@@ -7320,6 +8408,91 @@
                 teamCode: teamCode
             });
         }        // Custom Recent News Management System
+
+        // Sport-specific news update function
+        async function updateNewsForSport(sport) {
+            console.log(`📰 updateNewsForSport called with sport: ${sport}`);
+            console.log(`📰 window.nbaGames exists: ${!!window.nbaGames}`);
+            
+            const qbNewsContent = document.getElementById('qb-news-content');
+            console.log(`📰 qb-news-content element found: ${!!qbNewsContent}`);
+            
+            if (!qbNewsContent) {
+                console.error('📰 qb-news-content element not found - exiting');
+                return;
+            }
+
+            // Update news section header based on sport
+            const newsSection = document.getElementById('qb-news-section');
+            if (newsSection) {
+                const header = newsSection.querySelector('h3');
+                if (header) {
+                    const sportNames = {
+                        'football': 'NFL',
+                        'basketball': 'NBA'
+                    };
+                    header.innerHTML = `
+                        <i class="material-icons" style="vertical-align: middle; margin-right: 8px;">newspaper</i>
+                        Latest ${sportNames[sport] || 'Sports'} News
+                    `;
+                }
+            }
+
+            // Show loading state
+            qbNewsContent.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 50%; border-top: 2px solid transparent; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 12px; color: #6b7280;">Loading latest ${sport === 'basketball' ? 'NBA' : 'NFL'} news from ESPN...</p>
+                </div>
+            `;
+
+            try {
+                let newsHtml = '';
+
+                if (sport === 'basketball' && window.nbaGames) {
+                    // Load NBA news
+                    console.log('📰 NBA: Fetching NBA news...');
+                    const newsArticles = await window.nbaGames.fetchNBANews();
+                    if (newsArticles && newsArticles.length > 0) {
+                        newsHtml = window.nbaGames.displayNBANews(newsArticles);
+                    } else {
+                        newsHtml = `
+                            <div style="text-align: center; padding: 40px;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">📰</div>
+                                <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA News Available</h3>
+                                <p style="color: #64748b;">Check back later for the latest updates</p>
+                            </div>
+                        `;
+                    }
+                } else if (sport === 'football') {
+                    // Load NFL news (existing system)
+                    console.log('📰 NFL: Loading existing NFL news system...');
+                    await updateNews(); // Call existing NFL news function
+                    return; // Exit here since updateNews handles the display
+                } else {
+                    // Other sports
+                    newsHtml = `
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">News Coming Soon</h3>
+                            <p style="color: #64748b;">News for this sport will be available soon</p>
+                        </div>
+                    `;
+                }
+
+                qbNewsContent.innerHTML = newsHtml;
+
+            } catch (error) {
+                console.error('📰 Error loading news:', error);
+                qbNewsContent.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                        <h3 style="color: #dc2626; margin-bottom: 8px;">Unable to Load News</h3>
+                        <p style="color: #64748b;">Please try again later</p>
+                    </div>
+                `;
+            }
+        }
         const recentNewsItems = [
             {
                 id: 1,
@@ -7807,7 +8980,7 @@
         
         class AdvancedAnalytics {
             constructor() {
-                this.apiBaseUrl = 'http://localhost:5001/api';
+                this.apiBaseUrl = `${window.BetYardML.getBackendURL()}/api`;
                 this.currentSport = 'nfl';
                 this.refreshInterval = null;
                 this.liveFeedActive = false;
@@ -8574,6 +9747,601 @@
             }
         });
 
+        /* ===============================================
+         * NBA GAMES CLASS - Basketball Integration
+         * =============================================== */
+        
+        class NBAGames {
+            constructor() {
+                console.log('🏀 NBAGames constructor called');
+                this.baseURL = `${window.BetYardML ? window.BetYardML.baseURL : 'https://betyard-ml-backend.onrender.com'}/api`;
+                this.cache = new Map();
+                this.cacheTimeout = 300000; // 5 minutes
+                this.lastRefreshDate = null;
+                this.refreshCheckInterval = null;
+                
+                // ESPN NBA API endpoints
+                this.espnEndpoints = {
+                    scoreboard: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard',
+                    news: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/news',
+                    teams: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams'
+                };
+
+                // Start the daily refresh system
+                this.initializeDailyRefresh();
+            }
+
+            // Daily refresh system for NBA games
+            initializeDailyRefresh() {
+                console.log('🏀 NBA: Initializing daily refresh system (2 AM refresh)');
+                
+                // Set the last refresh date from localStorage or current date
+                const stored = localStorage.getItem('nba_last_refresh_date');
+                this.lastRefreshDate = stored ? new Date(stored) : new Date();
+                
+                // Check if we need an immediate refresh (new day)
+                this.checkForDailyRefresh();
+                
+                // Set up interval to check every 30 minutes
+                this.refreshCheckInterval = setInterval(() => {
+                    this.checkForDailyRefresh();
+                }, 30 * 60 * 1000); // Check every 30 minutes
+                
+                console.log('🏀 NBA: Daily refresh system active - next check in 30 minutes');
+            }
+
+            checkForDailyRefresh() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentDate = now.toDateString();
+                const lastRefreshDateString = this.lastRefreshDate.toDateString();
+                
+                // Check if it's a new day and it's after 2 AM
+                const needsRefresh = (
+                    currentDate !== lastRefreshDateString && 
+                    currentHour >= 2
+                ) || (
+                    // Also check if it's the same day but we haven't refreshed after 2 AM yet
+                    currentDate === lastRefreshDateString &&
+                    currentHour >= 2 &&
+                    this.lastRefreshDate.getHours() < 2
+                );
+
+                if (needsRefresh) {
+                    console.log('🏀 NBA: Daily refresh triggered - fetching new games for', currentDate);
+                    this.performDailyRefresh();
+                } else {
+                    const nextRefresh = this.getNextRefreshTime();
+                    console.log('🏀 NBA: Next refresh scheduled for:', nextRefresh.toLocaleString());
+                }
+            }
+
+            performDailyRefresh() {
+                console.log('🏀 NBA: Performing daily refresh at 2 AM...');
+                
+                // Clear the cache to force fresh data
+                this.cache.clear();
+                
+                // Update last refresh timestamp
+                this.lastRefreshDate = new Date();
+                localStorage.setItem('nba_last_refresh_date', this.lastRefreshDate.toISOString());
+                
+                // If NBA is currently selected, refresh the display
+                if (window.currentSport === 'basketball') {
+                    console.log('🏀 NBA: Refreshing display with new games...');
+                    this.fetchNBAGames().then(games => {
+                        if (games && games.games) {
+                            const content = this.displayNBAGames(games);
+                            document.getElementById('games-container').innerHTML = content;
+                            console.log('🏀 NBA: Display updated with fresh games');
+                        }
+                    });
+                }
+                
+                // Show notification to user if page is visible
+                if (document.visibilityState === 'visible') {
+                    this.showRefreshNotification();
+                }
+            }
+
+            getNextRefreshTime() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(2, 0, 0, 0); // 2 AM tomorrow
+                return tomorrow;
+            }
+
+            showRefreshNotification() {
+                // Create a subtle notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(145deg, #10b981, #059669);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+                    z-index: 10000;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: 14px;
+                    font-weight: 600;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.innerHTML = '🏀 NBA games updated for today!';
+                document.body.appendChild(notification);
+
+                // Slide in
+                setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+                
+                // Slide out and remove after 4 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
+
+            // Cleanup method for the refresh system
+            destroyRefreshSystem() {
+                if (this.refreshCheckInterval) {
+                    clearInterval(this.refreshCheckInterval);
+                    this.refreshCheckInterval = null;
+                    console.log('🏀 NBA: Daily refresh system stopped');
+                }
+            }
+
+            // NBA News functionality
+            async fetchNBANews() {
+                console.log('🏀 NBA: Fetching latest NBA news from ESPN...');
+                
+                try {
+                    const response = await fetch(this.espnEndpoints.news, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('🏀 NBA: News data received:', data);
+                        
+                        const processedNews = this.processESPNNBANews(data);
+                        console.log('🏀 NBA: Processed news:', processedNews);
+                        return processedNews;
+                    } else {
+                        throw new Error(`ESPN News API returned ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('🏀 NBA: Error fetching news:', error);
+                    return [];
+                }
+            }
+
+            processESPNNBANews(data) {
+                if (!data.articles || !Array.isArray(data.articles)) {
+                    console.warn('🏀 NBA: No articles found in news data');
+                    return [];
+                }
+
+                return data.articles.slice(0, 10).map(article => ({
+                    id: article.id,
+                    headline: article.headline,
+                    description: article.description,
+                    published: article.published,
+                    images: article.images,
+                    links: article.links,
+                    categories: article.categories
+                }));
+            }
+
+            displayNBANews(newsArticles) {
+                if (!newsArticles || newsArticles.length === 0) {
+                    return `
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📰</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA News Available</h3>
+                            <p style="color: #64748b;">Check back later for the latest updates</p>
+                        </div>
+                    `;
+                }
+
+                const newsHtml = newsArticles.map((article, index) => {
+                    const publishedDate = new Date(article.published).toLocaleDateString();
+                    const imageUrl = article.images && article.images[0] ? article.images[0].url : '';
+                    
+                    return `
+                        <div class="nba-news-item" style="display: flex; padding: 16px; border-bottom: 1px solid #e5e7eb; ${index === 0 ? 'border-top: none;' : ''} transition: background-color 0.3s ease;" 
+                             onmouseover="this.style.backgroundColor='#f8fafc'" 
+                             onmouseout="this.style.backgroundColor='transparent'">
+                            ${imageUrl ? `
+                                <div style="flex-shrink: 0; margin-right: 16px;">
+                                    <img src="${imageUrl}" alt="News Image" style="width: 80px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                </div>
+                            ` : ''}
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 8px 0; color: #1e293b; font-size: 16px; font-weight: 600; line-height: 1.4;">
+                                    ${article.headline}
+                                </h4>
+                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+                                    ${article.description || ''}
+                                </p>
+                                <div style="display: flex; justify-content: between; align-items: center; font-size: 12px; color: #9ca3af;">
+                                    <span>🏀 NBA News • ${publishedDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="nba-news-container">
+                        ${newsHtml}
+                    </div>
+                `;
+            }
+
+            async fetchNBAGames() {
+                console.log('🏀 NBA: Fetching NBA games for today...');
+                console.log('🏀 NBA: Using ESPN scoreboard endpoint with date parameter');
+                
+                const cacheKey = 'nba-games-today';
+                const cached = this.getCache(cacheKey);
+                if (cached) {
+                    console.log('🏀 NBA: Using cached NBA games');
+                    return cached;
+                }
+
+                try {
+                    // Get today's date in YYYYMMDD format for ESPN API
+                    const today = new Date();
+                    const dateParam = today.getFullYear().toString() + 
+                                    (today.getMonth() + 1).toString().padStart(2, '0') + 
+                                    today.getDate().toString().padStart(2, '0');
+                    
+                    const espnUrl = `${this.espnEndpoints.scoreboard}?dates=${dateParam}`;
+                    console.log(`🏀 NBA: Fetching from ${espnUrl}`);
+                    
+                    const response = await fetch(espnUrl, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('🏀 NBA: ESPN data received:', data);
+                        
+                        // Process ESPN NBA data
+                        const processedGames = this.processESPNNBAData(data);
+                        
+                        this.setCache(cacheKey, processedGames);
+                        console.log('🏀 NBA games fetched successfully:', processedGames);
+                        return processedGames;
+                    } else {
+                        console.warn('🏀 NBA: ESPN API failed, trying backend fallback...');
+                        throw new Error(`ESPN API returned ${response.status}`);
+                    }
+                } catch (error) {
+                    console.warn('🏀 NBA: ESPN fetch failed, trying backend fallback:', error);
+                    
+                    // Fallback to backend
+                    try {
+                        const backendResponse = await fetch(`${this.baseURL}/nba/games/today`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        if (backendResponse.ok) {
+                            const games = await backendResponse.json();
+                            this.setCache(cacheKey, games);
+                            console.log('🏀 NBA games from backend:', games);
+                            return games;
+                        }
+                    } catch (backendError) {
+                        console.error('🏀 NBA: Backend also failed:', backendError);
+                    }
+                    
+                    // Return empty result on total failure
+                    console.error('🏀 NBA: All data sources failed');
+                    return { success: false, games: [], total: 0, error: error.message };
+                }
+            }
+
+            displayNBAGames(games) {
+                console.log('🏀 Displaying NBA games:', games);
+
+                // Handle API response structure
+                const gamesList = games.games || games;
+                
+                if (!gamesList || gamesList.length === 0) {
+                    return `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
+                            <p style="color: #64748b;">Check back later for upcoming matchups</p>
+                            ${games.error ? `<p style="color: #dc2626; font-size: 14px; margin-top: 12px;">Error: ${games.error}</p>` : ''}
+                        </div>
+                    `;
+                }
+
+                const gamesHtml = gamesList.map(game => this.createNBAGameCard(game)).join('');
+                
+                return `
+                    <div class="nba-games-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px; padding: 16px;">
+                        <div class="nba-header" style="grid-column: 1 / -1; text-align: center; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+                                <h2 style="color: #1e293b; margin: 0; font-size: 24px; font-weight: 600;">
+                                    🏀 NBA Games - ${new Date().toLocaleDateString()}
+                                </h2>
+                                <button onclick="window.nbaGames?.performDailyRefresh()" 
+                                        style="background: linear-gradient(145deg, #6366f1, #8b5cf6); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                        onmouseover="this.style.transform='scale(1.05)'" 
+                                        onmouseout="this.style.transform='scale(1)'"
+                                        title="Refresh NBA games">
+                                    🔄 Refresh
+                                </button>
+                            </div>
+                            <p style="color: #64748b; margin: 8px 0 0 0;">Live odds and game predictions • Auto-refresh at 2 AM daily</p>
+                        </div>
+                        ${gamesHtml}
+                    </div>
+                `;
+            }
+
+            createNBAGameCard(game) {
+                console.log('🏀 Creating card for game:', game);
+                
+                // Handle different data structures from API vs fallback
+                const gameData = {
+                    gameId: game.gameId || `nba_${Date.now()}`,
+                    gameTime: game.gameTime || game.time || game.date || new Date().toISOString(),
+                    venue: this.extractVenueString(game.venue),
+                    status: game.status || 'upcoming',
+                    awayTeam: {
+                        name: game.awayTeam?.nickname || game.awayTeam?.name || game.awayTeamName || game.awayTeam || 'Team',
+                        city: game.awayTeam?.location || game.awayTeam?.city || game.awayCity || 'Away',
+                        logo: this.extractTeamLogo(game.awayTeam?.logo) || game.awayTeamEmoji || '🏀',
+                        record: game.awayTeam?.record || game.awayRecord || '0-0',
+                        score: game.awayTeam?.score || game.awayScore || 0
+                    },
+                    homeTeam: {
+                        name: game.homeTeam?.nickname || game.homeTeam?.name || game.homeTeamName || game.homeTeam || 'Team',
+                        city: game.homeTeam?.location || game.homeTeam?.city || game.homeCity || 'Home',
+                        logo: this.extractTeamLogo(game.homeTeam?.logo) || game.homeTeamEmoji || '🏀',
+                        record: game.homeTeam?.record || game.homeRecord || '0-0',
+                        score: game.homeTeam?.score || game.homeScore || 0
+                    },
+                    odds: game.odds || {
+                        spread: { home: 0, away: 0 },
+                        moneyline: { home: -110, away: 110 },
+                        total: 210
+                    }
+                };
+
+                // Format game time
+                let timeString = 'TBA';
+                let dateString = 'TBA';
+                try {
+                    const gameTime = new Date(gameData.gameTime);
+                    if (!isNaN(gameTime.getTime())) {
+                        timeString = gameTime.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit',
+                            hour12: true 
+                        });
+                        dateString = gameTime.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                    }
+                } catch (e) {
+                    console.warn('🏀 Invalid game time:', gameData.gameTime, e);
+                }
+
+                const spreadText = gameData.odds.spread.home > 0 ? 
+                    `+${gameData.odds.spread.home}` : `${gameData.odds.spread.home}`;
+
+                return `
+                    <div class="nba-game-card" style="background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s ease; cursor: pointer;" 
+                         onclick="selectNBAGame('${gameData.gameId}')" 
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)'" 
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'">
+                        
+                        <div class="nba-game-header" style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 600; margin-bottom: 4px;">
+                                ${dateString} ${timeString} • ${gameData.venue}
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">
+                                Game ID: ${gameData.gameId} • Status: ${gameData.status}
+                            </div>
+                        </div>
+
+                        <div class="nba-game-teams" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div class="nba-team away-team" style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">${gameData.awayTeam.logo || '🏀'}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.awayTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${gameData.awayTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.awayTeam.record}</div>
+                                ${gameData.awayTeam.score > 0 ? `<div style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 4px;">${gameData.awayTeam.score}</div>` : ''}
+                            </div>
+
+                            <div style="text-align: center; margin: 0 16px;">
+                                <div style="font-size: 20px; font-weight: bold; color: #6366f1;">VS</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">NBA</div>
+                            </div>
+
+                            <div class="nba-team home-team" style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">${gameData.homeTeam.logo || '🏀'}</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${gameData.homeTeam.city}</div>
+                                <div style="font-size: 14px; color: #64748b;">${gameData.homeTeam.name}</div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${gameData.homeTeam.record}</div>
+                                ${gameData.homeTeam.score > 0 ? `<div style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 4px;">${gameData.homeTeam.score}</div>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="nba-game-odds" style="background: rgba(99, 102, 241, 0.05); border-radius: 12px; padding: 16px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: center;">
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">SPREAD</div>
+                                    <div style="font-weight: 600; color: #1e293b;">${spreadText}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">MONEYLINE</div>
+                                    <div style="font-weight: 600; color: #1e293b;">${gameData.odds.moneyline.home > 0 ? '+' : ''}${gameData.odds.moneyline.home}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">TOTAL</div>
+                                    <div style="font-weight: 600; color: #1e293b;">O/U ${gameData.odds.total}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 16px;">
+                            <button style="background: linear-gradient(145deg, #6366f1, #8b5cf6); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                    onmouseover="this.style.transform='scale(1.05)'"
+                                    onmouseout="this.style.transform='scale(1)'"
+                                    onclick="event.stopPropagation(); showNBAPrediction('${gameData.gameId}')">
+                                🎯 Get AI Prediction
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Process ESPN NBA scoreboard data
+            processESPNNBAData(data) {
+                console.log('🏀 Processing ESPN NBA data:', data);
+                
+                if (!data.events || !Array.isArray(data.events)) {
+                    console.warn('🏀 No events found in ESPN data');
+                    return { success: false, games: [], total: 0 };
+                }
+
+                const processedGames = data.events.map((event, index) => {
+                    const competition = event.competitions[0];
+                    const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+                    const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+                    
+                    return {
+                        gameId: event.id,
+                        date: event.date,
+                        status: competition.status.type.description,
+                        clock: competition.status.displayClock || '',
+                        period: competition.status.period || 0,
+                        
+                        homeTeam: {
+                            id: homeTeam.team.id,
+                            name: homeTeam.team.displayName,
+                            shortName: homeTeam.team.abbreviation,
+                            location: homeTeam.team.location,
+                            nickname: homeTeam.team.name,
+                            logo: homeTeam.team.logo,
+                            color: homeTeam.team.color || '000000',
+                            record: homeTeam.records ? homeTeam.records[0]?.summary || '0-0' : '0-0',
+                            score: parseInt(homeTeam.score) || 0
+                        },
+                        
+                        awayTeam: {
+                            id: awayTeam.team.id,
+                            name: awayTeam.team.displayName,
+                            shortName: awayTeam.team.abbreviation,
+                            location: awayTeam.team.location,
+                            nickname: awayTeam.team.name,
+                            logo: awayTeam.team.logo,
+                            color: awayTeam.team.color || '000000',
+                            record: awayTeam.records ? awayTeam.records[0]?.summary || '0-0' : '0-0',
+                            score: parseInt(awayTeam.score) || 0
+                        },
+                        
+                        venue: {
+                            name: competition.venue?.fullName || 'TBD',
+                            city: competition.venue?.address?.city || '',
+                            state: competition.venue?.address?.state || ''
+                        },
+                        
+                        odds: {
+                            spread: {
+                                home: competition.odds ? (competition.odds[0]?.homeTeamOdds?.spreadOdds || 0) : 0,
+                                away: competition.odds ? (competition.odds[0]?.awayTeamOdds?.spreadOdds || 0) : 0
+                            },
+                            moneyline: {
+                                home: competition.odds ? (competition.odds[0]?.homeTeamOdds?.moneyLine || 100) : 100,
+                                away: competition.odds ? (competition.odds[0]?.awayTeamOdds?.moneyLine || 100) : 100
+                            },
+                            total: competition.odds ? (competition.odds[0]?.overUnder || 220) : 220
+                        }
+                    };
+                });
+
+                console.log('🏀 Processed ESPN games:', processedGames);
+                
+                return {
+                    success: true,
+                    games: processedGames,
+                    total: processedGames.length,
+                    source: 'ESPN'
+                };
+            }
+
+            // Helper methods to extract string values from objects
+            extractVenueString(venue) {
+                if (!venue) return 'TBA';
+                if (typeof venue === 'string') return venue;
+                if (typeof venue === 'object') {
+                    return venue.name || venue.fullName || venue.displayName || 'TBA';
+                }
+                return 'TBA';
+            }
+
+            extractTeamLogo(logo) {
+                if (!logo) return null;
+                if (typeof logo === 'string') return `<img src="${logo}" style="width: 32px; height: 32px;" alt="Team Logo">`;
+                return null;
+            }
+
+            // Cache management
+            getCache(key) {
+                const cached = this.cache.get(key);
+                if (cached && (Date.now() - cached.timestamp) < this.cacheTimeout) {
+                    return cached.data;
+                }
+                return null;
+            }
+
+            setCache(key, data) {
+                this.cache.set(key, {
+                    data: data,
+                    timestamp: Date.now()
+                });
+            }
+        }
+
+        // Initialize NBA Games globally
+        window.NBAGames = NBAGames;
+        window.nbaGames = null; // Will hold the instance
+
+        // Global functions for NBA game interactions
+        function selectNBAGame(gameId) {
+            console.log('🏀 NBA Game selected:', gameId);
+            // Add your game selection logic here
+            // This could show detailed analysis, betting options, etc.
+        }
+
+        function showNBAPrediction(gameId) {
+            console.log('🎯 Showing NBA prediction for game:', gameId);
+            // Add your prediction logic here
+            // This could call your ML backend for NBA predictions
+        }
+
     </script>
     <!-- Weekly Schedule Admin Panel (Development Only) -->
     <div id="weekly-schedule-admin" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.9); color: white; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; z-index: 10000; max-width: 300px;">
@@ -8669,7 +10437,7 @@
         let bestPropsData = [];
         
         // API configuration
-        const BEST_PROPS_API = 'http://localhost:5001';
+        const BEST_PROPS_API = window.BetYardML.getBackendURL();
         
         async function loadBestProps() {
             const loadingElement = document.getElementById('best-props-loading');
