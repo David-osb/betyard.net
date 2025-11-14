@@ -215,16 +215,10 @@
         };
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
-                                    // Wait and try again
-                                    setTimeout(tryInitNBA, 500);
-                                } else {
-                                    // Option 2: Call ESPN NBA API directly (works on live site)
-                                    console.log('🏀 NBA: NBAGames class not available, using ESPN NBA API...');
-                                    
-                                    fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            console.log('🏀 NBA: ESPN API response:', data);
+        
+        // ESPN NBA Games Display Function
+
+
                                             
                                             if (data && data.events) {
                                                 const games = data.events.map(event => {
