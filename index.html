@@ -6799,9 +6799,20 @@
     <script src="assets/js/ml-config.js?v=2025-10-25-REAL-XGBOOST&t=1729876000000" defer></script>
     <!-- ml-integration.js DISABLED - using new BetYardMLService instead -->
     <script>
-        // Define selectSport function immediately for global access
-        window.selectSport = async function(sport) {
-            console.log(`🏅 Sport selected: ${sport}`);
+        // DUPLICATE selectSport function REMOVED - using the working selectSportFixed function from HEAD section
+        // This duplicate was causing "Illegal return statement" syntax errors
+        
+        console.log('🔧 Duplicate selectSport section cleaned up');
+    </script>
+    
+    <script>
+        // Clean script section replacing broken duplicate selectSport function
+        console.log('🔧 Fixed: Removed broken duplicate selectSport function that was causing syntax errors');
+        
+        // NBA prediction function
+        function showNBAPrediction(gameId) {
+            console.log('🎯 Showing NBA prediction for game:', gameId);
+        }
             
             // Cleanup previous sport systems
             if (window.nbaGames && sport !== 'basketball') {
@@ -6897,9 +6908,102 @@
                     `;
                 }
             }
-        };
-        
-        console.log('🔧 selectSport function defined globally:', typeof window.selectSport);
+            
+            // Cleanup previous sport systems
+            if (window.nbaGames && sport !== 'basketball') {
+                console.log('🏀 NBA: Cleaning up refresh system');
+                window.nbaGames.destroyRefreshSystem();
+                window.nbaGames = null;
+            }
+            
+            // Update current sport globally
+            window.currentSport = sport;
+            window.selectedSport = sport;
+            
+            // Update active state on icons
+            document.querySelectorAll('.sport-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            const selectedIcon = document.querySelector(`[data-sport="${sport}"]`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('active');
+            }
+            
+            // Update game container based on sport
+            const gameContainer = document.getElementById('game-centric-container');
+            
+            if (sport === 'football') {
+                console.log('🏈 NFL: Loading NFL games via existing ESPN system...');
+                
+                // Load NFL games using the same method as initial page load
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Fetching ESPN data...</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Use the same ESPN loading function that works on initial page load
+                setTimeout(() => {
+                    console.log('🏈 NFL: Calling ESPN data load function...');
+                    
+                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
+                        console.log('🏈 NFL: Using fetchNFLDataWithTank01Enhanced()...');
+                        fetchNFLDataWithTank01Enhanced();
+                    } else {
+                        console.log('🏈 NFL: Function not available, reloading page...');
+                        // Fallback: just reload the page to get fresh ESPN data
+                        location.reload();
+                    }
+                }, 500);
+                
+            } else if (sport === 'basketball') {
+                // Basketball logic here (keeping existing logic)
+                console.log('🏀 NBA: Loading NBA games...');
+                // Add basketball loading logic as needed
+                
+            } else {
+                // Other sports - show coming soon
+                const sportEmojis = {
+                    'basketball': '🏀',
+                    'hockey': '🏒',
+                    'baseball': '⚾',
+                    'soccer': '⚽',
+                    'tennis': '🎾'
+                };
+                
+                const sportNames = {
+                    'basketball': 'NBA',
+                    'hockey': 'NHL', 
+                    'baseball': 'MLB',
+                    'soccer': 'MLS',
+                    'tennis': 'Tennis'
+                };
+                
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 2px dashed rgba(59, 130, 246, 0.3);">
+                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport]}</div>
+                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">${sportNames[sport]} Coming Soon!</h2>
+                            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin: 0 auto;">
+                                We're working hard to bring you ${sportNames[sport]} predictions with the same ML-powered accuracy you love for NFL.
+                            </p>
+                            <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
+                                <p style="color: #2563eb; font-weight: 600; margin: 0;">
+                                    🚀 Stay tuned for updates!
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
         
         // Toggle expandable card functionality
         function toggleCard(cardId) {
