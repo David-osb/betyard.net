@@ -126,21 +126,24 @@
                                     console.log('🏀 NBA: NBAGames class found, creating instance...');
                                     window.nbaGames = new NBAGames();
                                     
-                                    // Load games
+                                    // Load games using the proper NBAGames class method
                                     if (window.nbaGames.fetchNBAGames) {
                                         window.nbaGames.fetchNBAGames().then(games => {
-                                            console.log('🏀 NBA: Games loaded via NBAGames class');
+                                            console.log('🏀 NBA: Games fetched via NBAGames class:', games);
                                             const gameContainer = document.getElementById('game-centric-container');
                                             if (gameContainer && window.nbaGames.displayNBAGames) {
+                                                // Use the class's own display method with professional styling
                                                 gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
                                             }
+                                            
+                                            // Load NBA news automatically
                                             if (typeof updateNewsForSport === 'function') {
                                                 updateNewsForSport('basketball');
                                             }
                                         }).catch(error => {
                                             console.error('🏀 NBA: fetchNBAGames failed, trying ESPN API...', error);
                                             
-                                            // Fallback to ESPN API
+                                            // Fallback to ESPN API with proper styling
                                             fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
                                                 .then(response => response.json())
                                                 .then(data => {
