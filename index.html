@@ -83,14 +83,14 @@
                 }, 500);
                 
             } else if (sport === 'basketball') {
-                console.log('🏀 NBA: Loading NBA games...');
+                console.log('🏀 NBA: Loading NBA games from ESPN...');
                 
                 if (gameContainer) {
                     gameContainer.innerHTML = `
                         <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
                             <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
                             <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NBA Games...</h3>
-                            <p style="color: #64748b;">Fetching today's NBA matchups and live scores</p>
+                            <p style="color: #64748b;">Fetching live scores, logos, and stadium info from ESPN...</p>
                             <div style="margin-top: 20px;">
                                 <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;"></div>
                             </div>
@@ -98,89 +98,101 @@
                     `;
                 }
                 
-                // Initialize NBA system with full ESPN integration
-                setTimeout(() => {
+                // Load NBA games directly from ESPN API
+                setTimeout(async () => {
                     try {
-                        console.log('🏀 NBA: Starting NBA system initialization...');
+                        console.log('🏀 NBA: Fetching from ESPN NBA scoreboard API...');
+                        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard');
+                        const data = await response.json();
                         
-                        // Clean up previous NFL systems if needed
-                        if (window.nbaGames && sport !== 'basketball') {
-                            console.log('🏀 NBA: Cleaning up previous systems');
-                            if (window.nbaGames.destroyRefreshSystem) {
-                                window.nbaGames.destroyRefreshSystem();
+                        console.log('🏀 NBA: ESPN API response:', data);
+                        
+                        if (data && data.events) {
+                            // Process ESPN NBA data with full details
+                            const games = data.events.map(event => {
+                                const competition = event.competitions[0];
+                                const venue = competition.venue || {};
+                                const homeTeam = competition.competitors.find(c => c.homeAway === 'home') || {};
+                                const awayTeam = competition.competitors.find(c => c.homeAway === 'away') || {};
+                                const status = event.status || {};
+                                
+                                return {
+                                    id: event.id,
+                                    name: event.name,
+                                    shortName: event.shortName,
+                                    date: event.date,
+                                    status: {
+                                        type: status.type?.name || 'STATUS_SCHEDULED',
+                                        detail: status.type?.detail || 'Scheduled',
+                                        state: status.type?.state || 'pre',
+                                        clock: status.displayClock || '',
+                                        period: status.period || 0
+                                    },
+                                    venue: {
+                                        name: venue.fullName || venue.name || 'TBD',
+                                        city: venue.address?.city || '',
+                                        state: venue.address?.state || ''
+                                    },
+                                    homeTeam: {
+                                        id: homeTeam.id,
+                                        name: homeTeam.team?.displayName || 'Home',
+                                        abbreviation: homeTeam.team?.abbreviation || 'HOME',
+                                        location: homeTeam.team?.location || '',
+                                        nickname: homeTeam.team?.name || '',
+                                        color: homeTeam.team?.color || '000000',
+                                        logo: homeTeam.team?.logo || '',
+                                        score: homeTeam.score || '0',
+                                        record: homeTeam.records?.[0]?.summary || '0-0',
+                                        winner: homeTeam.winner || false
+                                    },
+                                    awayTeam: {
+                                        id: awayTeam.id,
+                                        name: awayTeam.team?.displayName || 'Away',
+                                        abbreviation: awayTeam.team?.abbreviation || 'AWAY',
+                                        location: awayTeam.team?.location || '',
+                                        nickname: awayTeam.team?.name || '',
+                                        color: awayTeam.team?.color || '000000',
+                                        logo: awayTeam.team?.logo || '',
+                                        score: awayTeam.score || '0',
+                                        record: awayTeam.records?.[0]?.summary || '0-0',
+                                        winner: awayTeam.winner || false
+                                    }
+                                };
+                            });
+                            
+                            console.log('🏀 NBA: Processed games with full ESPN data:', games);
+                            displayNBAGamesESPN(games);
+                            
+                            // Load NBA news from ESPN
+                            if (typeof updateNewsForSport === 'function') {
+                                updateNewsForSport('basketball');
                             }
-                            window.nbaGames = null;
+                            
+                        } else {
+                            throw new Error('No games data from ESPN NBA API');
                         }
                         
-                        // Initialize or reuse NBA system
-                        if (!window.nbaGames) {
-                            // Option 1: Wait for NBAGames class to be available
-                            let attempts = 0;
-                            const maxAttempts = 10;
-                            
-                            const tryInitNBA = () => {
-                                attempts++;
-                                console.log(`🏀 NBA: Initialization attempt ${attempts}/${maxAttempts}`);
-                                
-                                if (window.NBAGames) {
-                                    console.log('🏀 NBA: NBAGames class found, creating instance...');
-                                    window.nbaGames = new NBAGames();
-                                    
-                                    // Load games using the proper NBAGames class method
-                                    if (window.nbaGames.fetchNBAGames) {
-                                        window.nbaGames.fetchNBAGames().then(games => {
-                                            console.log('🏀 NBA: Games fetched via NBAGames class:', games);
-                                            const gameContainer = document.getElementById('game-centric-container');
-                                            if (gameContainer && window.nbaGames.displayNBAGames) {
-                                                // Use the class's own display method with professional styling
-                                                gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
-                                            }
-                                            
-                                            // Load NBA news automatically
-                                            if (typeof updateNewsForSport === 'function') {
-                                                updateNewsForSport('basketball');
-                                            }
-                                        }).catch(error => {
-                                            console.error('🏀 NBA: fetchNBAGames failed, trying ESPN API...', error);
-                                            
-                                            // Fallback to ESPN API with proper styling
-                                            fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    if (data && data.events) {
-                                                        const games = data.events.map(event => {
-                                                            const competition = event.competitions[0];
-                                                            const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
-                                                            const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
-                                                            
-                                                            return {
-                                                                home_team: homeTeam.team.displayName,
-                                                                away_team: awayTeam.team.displayName,
-                                                                home_score: homeTeam.score,
-                                                                away_score: awayTeam.score,
-                                                                game_time: new Date(event.date).toLocaleTimeString('en-US', {
-                                                                    hour: 'numeric',
-                                                                    minute: '2-digit'
-                                                                }),
-                                                                status: event.status.type.description,
-                                                                date: event.date
-                                                            };
-                                                        });
-                                                        
-                                                        displayNBAGames(games);
-                                                        if (typeof updateNewsForSport === 'function') {
-                                                            updateNewsForSport('basketball');
-                                                        }
-                                                    } else {
-                                                        showNBAError('No NBA games found for today');
-                                                    }
-                                                })
-                                                .catch(fallbackError => {
-                                                    console.error('🏀 NBA: ESPN fallback failed:', fallbackError);
-                                                    showNBAError('Unable to load NBA games');
+                    } catch (error) {
+                        console.error('🏀 NBA: ESPN API error:', error);
+                        showNBAError('Unable to load NBA games from ESPN. Please try again later.');
+                    }
+                }, 500);
                                                 });
                                         });
+                                    } else {
+                                        console.error('🏀 NBA: fetchNBAGames method not found on instance');
+                                        showNBAError('NBA class missing required methods');
                                     }
+                                    
+                                } catch (classError) {
+                                    console.error('🏀 NBA: Error creating NBAGames instance:', classError);
+                                    if (attempts < maxAttempts) {
+                                        setTimeout(tryInitNBA, 500);
+                                    } else {
+                                        console.log('🏀 NBA: Falling back to ESPN API after class error...');
+                                        // Fall through to ESPN API below
+                                    }
+                                }
                                 } else if (attempts < maxAttempts) {
                                     // Wait and try again
                                     setTimeout(tryInitNBA, 500);
@@ -239,11 +251,17 @@
                             }
                         }
                         
-                        // Load NBA games
+                        // Load NBA games using the correct method
                         console.log('🏀 NBA: Loading today\'s games...');
-                        if (window.nbaGames && typeof window.nbaGames.loadTodaysGames === 'function') {
-                            window.nbaGames.loadTodaysGames().then(() => {
-                                console.log('🏀 NBA: Games loaded successfully');
+                        if (window.nbaGames && typeof window.nbaGames.fetchNBAGames === 'function') {
+                            window.nbaGames.fetchNBAGames().then(games => {
+                                console.log('🏀 NBA: Games fetched successfully:', games);
+                                
+                                // Display games using the class method
+                                const gameContainer = document.getElementById('game-centric-container');
+                                if (gameContainer && window.nbaGames.displayNBAGames) {
+                                    gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
+                                }
                                 
                                 // Update news for basketball
                                 if (typeof updateNewsForSport === 'function') {
@@ -253,7 +271,7 @@
                                     });
                                 }
                             }).catch(error => {
-                                console.error('🏀 NBA: Error loading games:', error);
+                                console.error('🏀 NBA: Error fetching games:', error);
                                 
                                 // Fallback: Show error message
                                 if (gameContainer) {
@@ -270,7 +288,7 @@
                                 }
                             });
                         } else {
-                            console.error('🏀 NBA: loadTodaysGames method not available');
+                            console.error('🏀 NBA: fetchNBAGames method not available - NBAGames class not properly initialized');
                             
                             // Try alternative initialization
                             if (window.nbaGames && window.nbaGames.init) {
@@ -310,6 +328,97 @@
         };
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
+        
+        // ESPN NBA Games Display Function
+        window.displayNBAGamesESPN = function(games) {
+            const gameContainer = document.getElementById('game-centric-container');
+            if (!gameContainer) return;
+            
+            if (!games || games.length === 0) {
+                gameContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
+                        <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
+                        <p style="color: #64748b;">Check back tomorrow for upcoming matchups!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let gamesHtml = `
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h2 style="color: #1e293b; margin: 0; font-size: 28px; font-weight: 700;">🏀 NBA Games</h2>
+                    <p style="color: #64748b; margin: 8px 0; font-size: 16px;">Live scores • Stadium info • ESPN data</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+            `;
+            
+            games.slice(0, 8).forEach(game => {
+                const gameTime = new Date(game.date).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+                const gameDate = new Date(game.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                const statusText = game.status.state === 'in' ? `🔴 Live • ${game.status.clock}` : 
+                                  game.status.state === 'post' ? '✅ Final' : 
+                                  `📅 ${gameTime}`;
+                
+                gamesHtml += `
+                    <div class="nba-game-card" style="background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s ease; cursor: pointer;" 
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)'" 
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'">
+                        
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 600; margin-bottom: 4px;">
+                                ${gameDate} • ${statusText}
+                            </div>
+                            <div style="font-size: 12px; color: #64748b;">
+                                🏟️ ${game.venue.name}${game.venue.city ? `, ${game.venue.city}` : ''}
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">
+                                    ${game.awayTeam.logo ? `<img src="${game.awayTeam.logo}" alt="${game.awayTeam.name}" style="width: 40px; height: 40px; object-fit: contain;">` : '🏀'}
+                                </div>
+                                <div style="font-weight: 600; color: #1e293b; font-size: 14px;">${game.awayTeam.location}</div>
+                                <div style="font-size: 12px; color: #64748b;">${game.awayTeam.nickname}</div>
+                                <div style="font-size: 11px; color: #9ca3af;">${game.awayTeam.record}</div>
+                                ${game.awayTeam.score > 0 ? `<div style="font-size: 20px; font-weight: bold; color: ${game.awayTeam.winner ? '#059669' : '#374151'}; margin-top: 8px;">${game.awayTeam.score}</div>` : ''}
+                            </div>
+
+                            <div style="text-align: center; margin: 0 16px;">
+                                <div style="font-size: 16px; font-weight: bold; color: #6366f1; background: rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: 8px;">VS</div>
+                            </div>
+
+                            <div style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">
+                                    ${game.homeTeam.logo ? `<img src="${game.homeTeam.logo}" alt="${game.homeTeam.name}" style="width: 40px; height: 40px; object-fit: contain;">` : '🏀'}
+                                </div>
+                                <div style="font-weight: 600; color: #1e293b; font-size: 14px;">${game.homeTeam.location}</div>
+                                <div style="font-size: 12px; color: #64748b;">${game.homeTeam.nickname}</div>
+                                <div style="font-size: 11px; color: #9ca3af;">${game.homeTeam.record}</div>
+                                ${game.homeTeam.score > 0 ? `<div style="font-size: 20px; font-weight: bold; color: ${game.homeTeam.winner ? '#059669' : '#374151'}; margin-top: 8px;">${game.homeTeam.score}</div>` : ''}
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; padding: 12px; background: rgba(99, 102, 241, 0.05); border-radius: 8px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 500;">
+                                ${game.status.detail}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            gamesHtml += '</div>';
+            gameContainer.innerHTML = gamesHtml;
+        };
         
         // Helper functions for NBA display
         window.displayNBAGames = function(games) {
