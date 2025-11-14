@@ -211,20 +211,12 @@
                     `;
                 }
             }
-                                    console.error('🏀 NBA: Error creating NBAGames instance:', classError);
         };
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
         
         // ESPN NBA Games Display Function
 
-
-                                            
-                                            if (data && data.events) {
-                                                const games = data.events.map(event => {
-                                                    const competition = event.competitions[0];
-                                                    const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
-                                                    const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
                                                     
                                                     return {
                                                         home_team: homeTeam.team.displayName,
@@ -282,7 +274,8 @@
                                             </button>
                                         </div>
                                     `;
-                }
+                                }
+                            });
             } else {
                 // Other sports - show coming soon
                 const sportEmojis = {
