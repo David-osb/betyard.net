@@ -247,28 +247,10 @@
                                                     updateNewsForSport('basketball');
                                                 }
                                             } else {
-                                                showNBAError('No NBA games found for today');
-                                            }
-                                        })
-                                        .catch(error => {
-                                            console.error('🏀 NBA: ESPN API error:', error);
-                                            showNBAError('Unable to load NBA games from ESPN API');
-                                        });
-                                }
-                            };
-                            
-                            tryInitNBA();
-                        } else {
-                            // NBA system already exists
-                            console.log('🏀 NBA: Using existing NBA system...');
-                            if (window.nbaGames.loadTodaysGames) {
+
                                 window.nbaGames.loadTodaysGames();
                             }
-                        }
-                        
-                        // Load NBA games using the correct method
-                        console.log('🏀 NBA: Loading today\'s games...');
-                        if (window.nbaGames && typeof window.nbaGames.fetchNBAGames === 'function') {
+
                             window.nbaGames.fetchNBAGames().then(games => {
                                 console.log('🏀 NBA: Games fetched successfully:', games);
                                 
@@ -300,27 +282,7 @@
                                             </button>
                                         </div>
                                     `;
-                                }
-                            });
-                        } else {
-                            console.error('🏀 NBA: fetchNBAGames method not available - NBAGames class not properly initialized');
-                            
-                            // Try alternative initialization
-                            if (window.nbaGames && window.nbaGames.init) {
-                                console.log('🏀 NBA: Trying init() method...');
-                                window.nbaGames.init();
-                            }
-                        }
-                        
-                        // Set global sport state
-                        window.currentSport = 'basketball';
-                        window.selectedSport = 'basketball';
-                        
-                    } catch (error) {
-                        console.error('🏀 NBA: Error in initialization:', error);
-                    }
-                }, 800); // Longer delay to ensure all systems are ready
-                
+                }
             } else {
                 // Other sports - show coming soon
                 const sportEmojis = {
@@ -339,6 +301,7 @@
                         </div>
                     `;
                 }
+            }
             }
         };
         
