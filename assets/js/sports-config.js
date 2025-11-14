@@ -269,26 +269,121 @@ class SportDataFetcher {
     }
 
     /**
-     * Fetch games/scores for the sport
+     * Get today's date in YYYYMMDD format for ESPN APIs
+     */
+    getTodaysDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
+    }
+
+    /**
+     * Get date range for current week/season context
+     */
+    getDateRange() {
+        const today = new Date();
+        const todayStr = this.getTodaysDate();
+        
+        // Calculate week start (Monday) and end (Sunday) for broader context
+        const dayOfWeek = today.getDay();
+        const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+        
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - daysToMonday);
+        
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        
+        return {
+            today: todayStr,
+            weekStart: this.formatDate(weekStart),
+            weekEnd: this.formatDate(weekEnd)
+        };
+    }
+
+    /**
+     * Format date for ESPN API
+     */
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
+    }
+
+    /**
+     * Fetch games/scores for the sport with current date
      */
     async fetchGames() {
-        console.log(`🎮 Fetching ${this.sport.name} games...`);
+        const dateInfo = this.getDateRange();
+        console.log(`🎮 Fetching ${this.sport.name} games for ${dateInfo.today}...`);
         
         try {
-            // Primary ESPN API call
-            const response = await fetch(this.sport.apis.espn.scoreboard);
+            // Build date-aware ESPN API URL
+            let apiUrl = this.sport.apis.espn.scoreboard;
+            
+            // For most sports, add date parameter to get today's games
+            if (apiUrl.includes('?')) {
+                apiUrl += `&dates=${dateInfo.today}`;
+            } else {
+                apiUrl += `?dates=${dateInfo.today}`;
+            }
+            
+            console.log(`📅 ${this.sport.name}: Fetching games for ${dateInfo.today} from:`, apiUrl);
+            
+            // Primary ESPN API call with today's date
+            const response = await fetch(apiUrl);
             
             if (!response.ok) {
                 throw new Error(`ESPN API error: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log(`✅ ${this.sport.name}: Successfully fetched ${data.events?.length || 0} games`);
+            const gamesCount = data.events?.length || 0;
+            console.log(`✅ ${this.sport.name}: Found ${gamesCount} games for today (${dateInfo.today})`);
+            
+            // If no games today, try the week range for context
+            if (gamesCount === 0) {
+                console.log(`📅 ${this.sport.name}: No games today, checking week range...`);
+                return this.fetchWeekGames(dateInfo);
+            }
             
             return this.parseGames(data.events || []);
             
         } catch (error) {
             console.error(`❌ ${this.sport.name}: Primary API failed:`, error);
+            return this.fetchFallbackGames();
+        }
+    }
+
+    /**
+     * Fetch games for the current week when no games today
+     */
+    async fetchWeekGames(dateInfo) {
+        try {
+            let apiUrl = this.sport.apis.espn.scoreboard;
+            
+            // Remove any existing date params and add week range
+            apiUrl = apiUrl.split('?')[0];
+            apiUrl += `?limit=50&dates=${dateInfo.weekStart}-${dateInfo.weekEnd}`;
+            
+            console.log(`🗓️ ${this.sport.name}: Fetching week games from:`, apiUrl);
+            
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`ESPN Week API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const weekGames = data.events || [];
+            console.log(`✅ ${this.sport.name}: Found ${weekGames.length} games this week`);
+            
+            return this.parseGames(weekGames);
+            
+        } catch (error) {
+            console.error(`❌ ${this.sport.name}: Week API failed:`, error);
             return this.fetchFallbackGames();
         }
     }
@@ -510,7 +605,7 @@ class UniversalSportsManager {
     }
 
     /**
-     * Display games in UI
+     * Display games in UI with date awareness
      */
     displayGames(games) {
         const container = document.getElementById('game-centric-container');
@@ -522,15 +617,66 @@ class UniversalSportsManager {
             container.innerHTML = this.getNoGamesHTML(config);
             return;
         }
-        
-        let html = this.getGamesHeaderHTML(config, games.length);
-        html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 20px;">';
-        
-        games.slice(0, config.displaySettings.maxGamesPerPage).forEach(game => {
-            html += this.getGameCardHTML(game, config);
+
+        // Get today's date information
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
         });
+
+        // Separate today's games from other games
+        const todaysGames = [];
+        const otherGames = [];
+        const todayDate = today.toDateString();
+
+        games.forEach(game => {
+            const gameDate = new Date(game.date).toDateString();
+            if (gameDate === todayDate) {
+                todaysGames.push(game);
+            } else {
+                otherGames.push(game);
+            }
+        });
+
+        // Enhanced header with date context
+        let html = this.getGamesHeaderHTML(config, games.length, todayStr, todaysGames.length);
         
-        html += '</div>';
+        // Display today's games first
+        if (todaysGames.length > 0) {
+            html += `
+                <h3 style="color: #1e293b; margin: 24px 0 16px 0; font-weight: 600; display: flex; align-items: center;">
+                    <span style="background: ${config.color}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-right: 8px;">TODAY</span>
+                    ${todaysGames.length} game${todaysGames.length !== 1 ? 's' : ''} for ${todayStr}
+                </h3>
+            `;
+            html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px;">';
+            todaysGames.forEach(game => {
+                html += this.getGameCardHTML(game, config);
+            });
+            html += '</div>';
+        }
+
+        // Display other games if any
+        if (otherGames.length > 0) {
+            const sectionTitle = todaysGames.length > 0 ? 'Recent & Upcoming Games' : 'Games This Week';
+            html += `
+                <h3 style="color: #64748b; margin: 24px 0 16px 0; font-weight: 600; display: flex; align-items: center;">
+                    <span style="background: #64748b; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-right: 8px;">
+                        ${todaysGames.length > 0 ? 'OTHER' : 'WEEK'}
+                    </span>
+                    ${sectionTitle}
+                </h3>
+            `;
+            html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">';
+            otherGames.slice(0, 6).forEach(game => {
+                html += this.getGameCardHTML(game, config);
+            });
+            html += '</div>';
+        }
+
         container.innerHTML = html;
     }
 
@@ -588,11 +734,21 @@ class UniversalSportsManager {
         const statusBadge = this.getStatusBadge(game.status, gameTime, config.color);
         
         return `
-            <div style="
+            <div class="game-card" data-game-id="${game.id}" data-home-team="${game.homeTeam.name}" data-away-team="${game.awayTeam.name}" style="
                 background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
                 border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-                border: 1px solid #e2e8f0; transition: all 0.3s ease;
-            " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                border: 1px solid #e2e8f0; transition: all 0.3s ease; cursor: pointer;
+                position: relative; overflow: hidden;
+            " onclick="universalSportsManager.selectGame('${game.id}', '${game.homeTeam.name}', '${game.awayTeam.name}')"
+               onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.15)'; this.style.borderColor='${config.color}'"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'; this.style.borderColor='#e2e8f0'">
+                
+                <!-- Selection indicator -->
+                <div class="selection-indicator" style="
+                    position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+                    background: ${config.color}; transform: scaleY(0); transition: all 0.3s ease;
+                    transform-origin: top;
+                "></div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <div style="font-size: 12px; color: #64748b;">${new Date(game.date).toLocaleDateString()}</div>
@@ -621,14 +777,15 @@ class UniversalSportsManager {
                     </div>
                 ` : ''}
                 
-                ${config.features.hasMLPredictions ? `
-                    <div style="text-align: center; margin-top: 12px;">
-                        <button onclick="showPrediction('${game.id}')" style="
-                            background: ${config.color}; color: white; border: none; 
-                            padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;
-                        ">🎯 ML Prediction</button>
-                    </div>
-                ` : ''}
+                <!-- Click hint -->
+                <div style="
+                    position: absolute; bottom: 8px; right: 12px; 
+                    background: rgba(0,0,0,0.05); color: #64748b; 
+                    padding: 4px 8px; border-radius: 8px; font-size: 11px;
+                    opacity: 0.7; transition: all 0.3s ease;
+                ">
+                    Click for team news
+                </div>
             </div>
         `;
     }
@@ -647,12 +804,20 @@ class UniversalSportsManager {
     }
 
     /**
-     * Generate header HTML for games section
+     * Generate header HTML for games section with date awareness
      */
-    getGamesHeaderHTML(config, gameCount) {
-        const today = new Date().toLocaleDateString('en-US', {
+    getGamesHeaderHTML(config, gameCount, todayStr, todaysGameCount) {
+        const today = todayStr || new Date().toLocaleDateString('en-US', {
             weekday: 'long', month: 'long', day: 'numeric'
         });
+
+        // Create status message based on today's games
+        let statusMessage;
+        if (todaysGameCount > 0) {
+            statusMessage = `${today} • ${todaysGameCount} game${todaysGameCount !== 1 ? 's' : ''} today • ${gameCount} total`;
+        } else {
+            statusMessage = `${today} • No games today • ${gameCount} recent/upcoming`;
+        }
 
         return `
             <div style="text-align: center; margin-bottom: 24px; background: linear-gradient(135deg, ${config.color} 0%, ${config.secondaryColor} 100%); padding: 24px; border-radius: 16px; color: white; position: relative; overflow: hidden;">
@@ -664,15 +829,34 @@ class UniversalSportsManager {
                     <span style="display: none; font-size: 32px; margin-right: 12px;">${config.icon}</span>
                     <h2 style="color: white; margin: 0; font-size: 28px; font-weight: 700;">${config.fullName}</h2>
                 </div>
-                <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 16px; position: relative; z-index: 2;">${today} • ${gameCount} Games • Live ESPN Data</p>
+                <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 16px; position: relative; z-index: 2;">${statusMessage}</p>
+                ${todaysGameCount > 0 ? 
+                    `<div style="margin-top: 12px; position: relative; z-index: 2;">
+                        <span style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                            🔴 LIVE • Updated from ESPN
+                        </span>
+                    </div>` : 
+                    `<div style="margin-top: 12px; position: relative; z-index: 2;">
+                        <span style="background: rgba(255,255,255,0.15); color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                            📅 Recent & Upcoming Games
+                        </span>
+                    </div>`
+                }
             </div>
         `;
     }
 
     /**
-     * Generate no games HTML
+     * Generate no games HTML with current date
      */
     getNoGamesHTML(config) {
+        const today = new Date().toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
         return `
             <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px;">
                 <div style="margin-bottom: 24px;">
@@ -680,13 +864,17 @@ class UniversalSportsManager {
                     <div style="font-size: 80px; display: none;">${config.icon}</div>
                 </div>
                 <h3 style="color: #1e293b; margin-bottom: 12px;">No ${config.name} Games Today</h3>
-                <p style="color: #64748b;">Check back tomorrow for exciting matchups!</p>
+                <p style="color: #64748b; margin-bottom: 8px;">${today}</p>
+                <p style="color: #64748b;">Check back later for upcoming games!</p>
+                <div style="margin-top: 20px; padding: 12px 20px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
+                    <span style="color: #2563eb; font-weight: 500;">📅 Games refresh automatically throughout the day</span>
+                </div>
             </div>
         `;
     }
 
     /**
-     * Setup auto-refresh for live data
+     * Setup auto-refresh for live data with date awareness
      */
     setupAutoRefresh() {
         if (this.refreshInterval) {
@@ -694,10 +882,216 @@ class UniversalSportsManager {
         }
         
         const config = this.activeFetcher.getConfig();
+        
+        // Refresh every 15 minutes to check for new games
         this.refreshInterval = setInterval(() => {
-            console.log(`🔄 Auto-refreshing ${config.name} data...`);
+            console.log(`🔄 Auto-refreshing ${config.name} data for current date...`);
             this.loadSportData();
-        }, config.displaySettings.refreshInterval);
+            this.showRefreshIndicator();
+        }, 15 * 60 * 1000); // 15 minutes for live updates
+        
+        console.log(`⏰ Auto-refresh configured for ${config.name}: Every 15 minutes`);
+    }
+
+    /**
+     * Show brief refresh indicator
+     */
+    showRefreshIndicator() {
+        const indicator = document.createElement('div');
+        indicator.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        `;
+        indicator.innerHTML = '✅ Games Updated';
+        
+        document.body.appendChild(indicator);
+        
+        // Animate in
+        setTimeout(() => {
+            indicator.style.transform = 'translateY(0)';
+        }, 100);
+        
+        // Remove after 2 seconds
+        setTimeout(() => {
+            indicator.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+            }, 300);
+        }, 2000);
+    }
+
+    /**
+     * Select a specific game and load team news
+     */
+    async selectGame(gameId, homeTeam, awayTeam) {
+        console.log('Game selected:', gameId, homeTeam, 'vs', awayTeam);
+        
+        // Update visual selection
+        this.updateGameSelection(gameId);
+        
+        // Load team-specific news
+        await this.loadTeamNews([homeTeam, awayTeam]);
+        
+        // Scroll to news section
+        const newsSection = document.getElementById('news-container') || document.getElementById('qb-news-section');
+        if (newsSection) {
+            newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    /**
+     * Update visual selection of game cards
+     */
+    updateGameSelection(gameId) {
+        // Remove previous selections
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.style.borderColor = '#e2e8f0';
+            const indicator = card.querySelector('.selection-indicator');
+            if (indicator) {
+                indicator.style.transform = 'scaleY(0)';
+            }
+        });
+        
+        // Highlight selected card
+        const selectedCard = document.querySelector(`[data-game-id="${gameId}"]`);
+        if (selectedCard) {
+            const config = this.activeFetcher.getConfig();
+            selectedCard.style.borderColor = config.color;
+            selectedCard.style.borderWidth = '2px';
+            
+            const indicator = selectedCard.querySelector('.selection-indicator');
+            if (indicator) {
+                indicator.style.transform = 'scaleY(1)';
+            }
+        }
+    }
+
+    /**
+     * Load news for specific teams
+     */
+    async loadTeamNews(teams) {
+        if (!this.activeFetcher) return;
+        
+        console.log('Loading news for teams:', teams);
+        
+        try {
+            // For now, we'll show sport news filtered for the teams
+            // In the future, this could be enhanced with team-specific API calls
+            const allNews = await this.activeFetcher.fetchNews();
+            const config = this.activeFetcher.getConfig();
+            
+            // Filter news that mentions the team names
+            const teamNews = allNews.filter(article => {
+                const content = `${article.headline} ${article.description}`.toLowerCase();
+                return teams.some(team => content.includes(team.toLowerCase()));
+            });
+            
+            this.displayTeamNews(teamNews.length > 0 ? teamNews : allNews.slice(0, 3), teams, config);
+            
+        } catch (error) {
+            console.error('Error loading team news:', error);
+            this.showNewsError(teams);
+        }
+    }
+
+    /**
+     * Display team-specific news
+     */
+    displayTeamNews(articles, teams, config) {
+        const newsContainer = document.getElementById('news-container') || document.getElementById('qb-news-section');
+        
+        if (!newsContainer) return;
+        
+        let html = `
+            <div style="text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, ${config.color}20, ${config.secondaryColor}20); padding: 20px; border-radius: 12px; border: 2px solid ${config.color}40;">
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                    <img src="${config.logo}" alt="${config.name}" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span style="display: none; margin-right: 8px;">${config.icon}</span>
+                    <h3 style="color: #1e293b; margin: 0; font-size: 20px; font-weight: 600;">Team News: ${teams.join(' vs ')}</h3>
+                </div>
+                <p style="color: #64748b; margin: 4px 0; font-size: 14px;">Latest news and updates for your selected matchup</p>
+            </div>
+        `;
+        
+        if (articles.length === 0) {
+            html += `
+                <div style="text-align: center; padding: 30px; background: #f8fafc; border-radius: 12px; border: 2px dashed #d1d5db;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">📰</div>
+                    <h4 style="color: #374151; margin-bottom: 8px;">No Specific Team News Found</h4>
+                    <p style="color: #6b7280; font-size: 14px;">Check back later for updates on ${teams.join(' and ')}</p>
+                </div>
+            `;
+        } else {
+            articles.forEach((article, index) => {
+                const publishedDate = new Date(article.published).toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+                });
+                
+                // Highlight team names in headlines
+                let highlightedHeadline = article.headline;
+                teams.forEach(team => {
+                    const regex = new RegExp(`\\b${team}\\b`, 'gi');
+                    highlightedHeadline = highlightedHeadline.replace(regex, `<span style="background: ${config.color}20; padding: 2px 4px; border-radius: 4px; font-weight: 700;">$&</span>`);
+                });
+                
+                html += `
+                    <div style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'">
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span style="background: ${config.color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; margin-right: 8px;">${config.name}</span>
+                            ${index === 0 ? '<span style="background: #ef4444; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600;">FEATURED</span>' : ''}
+                        </div>
+                        <h4 style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600; color: #1e293b; line-height: 1.4;">
+                            <a href="${article.link || '#'}" target="_blank" style="text-decoration: none; color: inherit;" onmouseover="this.style.color='${config.color}'" onmouseout="this.style.color='#1e293b'">
+                                ${highlightedHeadline}
+                            </a>
+                        </h4>
+                        <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+                            ${article.description || 'No description available'}
+                        </p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <small style="color: #94a3b8; font-weight: 500;">📅 ${publishedDate}</small>
+                            <div style="display: flex; gap: 8px;">
+                                ${teams.map(team => {
+                                    const isRelevant = (article.headline + article.description).toLowerCase().includes(team.toLowerCase());
+                                    return `<span style="background: ${isRelevant ? config.color : '#f3f4f6'}; color: ${isRelevant ? 'white' : '#6b7280'}; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 500;">${team}</span>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        newsContainer.innerHTML = html;
+    }
+
+    /**
+     * Show news error
+     */
+    showNewsError(teams) {
+        const newsContainer = document.getElementById('news-container') || document.getElementById('qb-news-section');
+        if (newsContainer) {
+            newsContainer.innerHTML = `
+                <div style="text-align: center; padding: 30px; background: #fef2f2; border-radius: 12px; border: 1px solid #fecaca;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">⚠️</div>
+                    <h4 style="color: #dc2626; margin-bottom: 8px;">Unable to load team news</h4>
+                    <p style="color: #991b1b; font-size: 14px;">Please try again later for ${teams.join(' vs ')} updates</p>
+                </div>
+            `;
+        }
     }
 
     /**

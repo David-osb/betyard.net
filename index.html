@@ -215,57 +215,6 @@
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
         
-        // ESPN NBA Games Display Function
-
-                                                    
-                                                    return {
-                                                        home_team: homeTeam.team.displayName,
-                                                        away_team: awayTeam.team.displayName,
-                                                        home_score: homeTeam.score,
-                                                        away_score: awayTeam.score,
-                                                        game_time: new Date(event.date).toLocaleTimeString('en-US', {
-                                                            hour: 'numeric',
-                                                            minute: '2-digit'
-                                                        }),
-                                                        status: event.status.type.description,
-                                                        date: event.date
-
-                                                
-
-                            }
-
-                            window.nbaGames.fetchNBAGames().then(games => {
-                                console.log('🏀 NBA: Games fetched successfully:', games);
-                                
-                                // Display games using the class method
-                                const gameContainer = document.getElementById('game-centric-container');
-                                if (gameContainer && window.nbaGames.displayNBAGames) {
-                                    gameContainer.innerHTML = window.nbaGames.displayNBAGames(games);
-                                }
-                                
-                                // Update news for basketball
-                                if (typeof updateNewsForSport === 'function') {
-                                    console.log('🏀 NBA: Updating news for basketball...');
-                                    updateNewsForSport('basketball').catch(error => {
-                                        console.error('🏀 NBA: Error updating news:', error);
-                                    });
-                                }
-                            }).catch(error => {
-                                console.error('🏀 NBA: Error fetching games:', error);
-                                
-                                // Fallback: Show error message
-                                if (gameContainer) {
-                                    gameContainer.innerHTML = `
-                                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
-                                            <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
-                                            <h3 style="color: #dc2626; margin-bottom: 8px;">NBA Loading Error</h3>
-                                            <p style="color: #64748b;">Unable to load NBA games. Please try again later.</p>
-                                            <button onclick="location.reload()" style="margin-top: 16px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                                                Refresh Page
-                                            </button>
-        
-        console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
-        
         // Universal Sports Manager Integration
         window.selectSportUniversal = async function(sport) {
             console.log('UNIVERSAL SPORTS: Switching to', sport);
@@ -370,15 +319,35 @@
                 }
             });
 
-            // Initialize with default sport (NFL)
+            // Initialize with default sport (NFL) - PRIORITY OVERRIDE
             setTimeout(() => {
                 if (window.universalSportsManager) {
-                    console.log('Initializing Universal Sports Manager with NFL...');
+                    console.log('🚀 PRIORITY: Initializing Universal Sports Manager with NFL...');
+                    // Clear any existing content first
+                    const gameContainer = document.getElementById('game-centric-container');
+                    if (gameContainer) {
+                        gameContainer.innerHTML = `
+                            <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                                <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                                <h3 style="color: #1e293b; margin-bottom: 8px;">Loading Interactive NFL Games...</h3>
+                                <p style="color: #64748b;">Setting up Universal Sports Manager...</p>
+                            </div>
+                        `;
+                    }
+                    
+                    // Force Universal Sports Manager to take control
                     window.universalSportsManager.switchSport('football');
                 } else {
-                    console.log('Universal Sports Manager not ready, using fallback...');
+                    console.log('⚠️ Universal Sports Manager not ready, retrying...');
+                    // Retry if not ready
+                    setTimeout(() => {
+                        if (window.universalSportsManager) {
+                            console.log('🔄 Retry: Universal Sports Manager now ready');
+                            window.universalSportsManager.switchSport('football');
+                        }
+                    }, 1000);
                 }
-            }, 1000);
+            }, 500); // Reduced delay to 500ms for faster takeover
             
         }, 2000);
 
@@ -5873,6 +5842,65 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        
+        /* Game Card Selection Styles */
+        .game-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+        
+        .selection-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+        
+        .game-card.selected .selection-indicator {
+            transform: scaleY(1);
+        }
+        
+        .click-hint {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+        
+        .game-card:hover .click-hint {
+            opacity: 1;
+        }
+        
+        /* Team selection visual feedback */
+        .team-pill {
+            transition: all 0.2s ease;
+        }
+        
+        .team-pill:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100">
@@ -6923,200 +6951,7 @@
         function showNBAPrediction(gameId) {
             console.log('🎯 Showing NBA prediction for game:', gameId);
         }
-            
-            // Cleanup previous sport systems
-            if (window.nbaGames && sport !== 'basketball') {
-                console.log('🏀 NBA: Cleaning up refresh system');
-                window.nbaGames.destroyRefreshSystem();
-                window.nbaGames = null;
-            }
-            
-            // Update current sport globally
-            window.currentSport = sport;
-            window.selectedSport = sport;
-            
-            // Update active state on icons
-            document.querySelectorAll('.sport-icon').forEach(icon => {
-                icon.classList.remove('active');
-            });
-            const selectedIcon = document.querySelector(`[data-sport="${sport}"]`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('active');
-            }
-            
-            // Update game container based on sport
-            const gameContainer = document.getElementById('game-centric-container');
-            
-            if (sport === 'football') {
-                console.log('🏈 NFL: Loading NFL games via existing ESPN system...');
-                
-                // Load NFL games using the same method as initial page load
-                if (gameContainer) {
-                    gameContainer.innerHTML = `
-                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
-                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
-                            <p style="color: #64748b;">Fetching ESPN data...</p>
-                            <div style="margin-top: 20px;">
-                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Use the same ESPN loading function that works on initial page load
-                setTimeout(() => {
-                    console.log('🏈 NFL: Calling ESPN data load function...');
-                    
-                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
-                        console.log('🏈 NFL: Using fetchNFLDataWithTank01Enhanced()...');
-                        fetchNFLDataWithTank01Enhanced();
-                    } else {
-                        console.log('🏈 NFL: Function not available, reloading page...');
-                        // Fallback: just reload the page to get fresh ESPN data
-                        location.reload();
-                    }
-                }, 500);
-                
-            } else if (sport === 'basketball') {
-                // Basketball logic here (keeping existing logic)
-                console.log('🏀 NBA: Loading NBA games...');
-                // Add basketball loading logic as needed
-                
-            } else {
-                // Other sports - show coming soon
-                const sportEmojis = {
-                    'basketball': '🏀',
-                    'hockey': '🏒',
-                    'baseball': '⚾',
-                    'soccer': '⚽',
-                    'tennis': '🎾'
-                };
-                
-                const sportNames = {
-                    'basketball': 'NBA',
-                    'hockey': 'NHL', 
-                    'baseball': 'MLB',
-                    'soccer': 'MLS',
-                    'tennis': 'Tennis'
-                };
-                
-                if (gameContainer) {
-                    gameContainer.innerHTML = `
-                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 2px dashed rgba(59, 130, 246, 0.3);">
-                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport]}</div>
-                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">${sportNames[sport]} Coming Soon!</h2>
-                            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin: 0 auto;">
-                                We're working hard to bring you ${sportNames[sport]} predictions with the same ML-powered accuracy you love for NFL.
-                            </p>
-                            <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
-                                <p style="color: #2563eb; font-weight: 600; margin: 0;">
-                                    🚀 Stay tuned for updates!
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            // Cleanup previous sport systems
-            if (window.nbaGames && sport !== 'basketball') {
-                console.log('🏀 NBA: Cleaning up refresh system');
-                window.nbaGames.destroyRefreshSystem();
-                window.nbaGames = null;
-            }
-            
-            // Update current sport globally
-            window.currentSport = sport;
-            window.selectedSport = sport;
-            
-            // Update active state on icons
-            document.querySelectorAll('.sport-icon').forEach(icon => {
-                icon.classList.remove('active');
-            });
-            const selectedIcon = document.querySelector(`[data-sport="${sport}"]`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('active');
-            }
-            
-            // Update game container based on sport
-            const gameContainer = document.getElementById('game-centric-container');
-            
-            if (sport === 'football') {
-                console.log('🏈 NFL: Loading NFL games via existing ESPN system...');
-                
-                // Load NFL games using the same method as initial page load
-                if (gameContainer) {
-                    gameContainer.innerHTML = `
-                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
-                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
-                            <p style="color: #64748b;">Fetching ESPN data...</p>
-                            <div style="margin-top: 20px;">
-                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Use the same ESPN loading function that works on initial page load
-                setTimeout(() => {
-                    console.log('🏈 NFL: Calling ESPN data load function...');
-                    
-                    if (typeof fetchNFLDataWithTank01Enhanced === "function") {
-                        console.log('🏈 NFL: Using fetchNFLDataWithTank01Enhanced()...');
-                        fetchNFLDataWithTank01Enhanced();
-                    } else {
-                        console.log('🏈 NFL: Function not available, reloading page...');
-                        // Fallback: just reload the page to get fresh ESPN data
-                        location.reload();
-                    }
-                }, 500);
-                
-            } else if (sport === 'basketball') {
-                // Basketball logic here (keeping existing logic)
-                console.log('🏀 NBA: Loading NBA games...');
-                // Add basketball loading logic as needed
-                
-            } else {
-                // Other sports - show coming soon
-                const sportEmojis = {
-                    'basketball': '🏀',
-                    'hockey': '🏒',
-                    'baseball': '⚾',
-                    'soccer': '⚽',
-                    'tennis': '🎾'
-                };
-                
-                const sportNames = {
-                    'basketball': 'NBA',
-                    'hockey': 'NHL', 
-                    'baseball': 'MLB',
-                    'soccer': 'MLS',
-                    'tennis': 'Tennis'
-                };
-                
-                if (gameContainer) {
-                    gameContainer.innerHTML = `
-                        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 2px dashed rgba(59, 130, 246, 0.3);">
-                            <div style="font-size: 64px; margin-bottom: 20px;">${sportEmojis[sport]}</div>
-                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">${sportNames[sport]} Coming Soon!</h2>
-                            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin: 0 auto;">
-                                We're working hard to bring you ${sportNames[sport]} predictions with the same ML-powered accuracy you love for NFL.
-                            </p>
-                            <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: inline-block;">
-                                <p style="color: #2563eb; font-weight: 600; margin: 0;">
-                                    🚀 Stay tuned for updates!
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-        }
-        
-        // Toggle expandable card functionality
-        function toggleCard(cardId) {
+    </script>
             const content = document.getElementById(cardId + '-content');
             const icon = document.getElementById(cardId + '-icon');
             
@@ -7844,30 +7679,33 @@
                 }
             }
             
-            updateStatus('🔄 Loading ESPN API...', 'info');
+            updateStatus('🔄 Loading Universal Sports Manager...', 'info');
             
-            // Load ESPN API data
-            if (typeof fetchNFLDataWithTank01Enhanced === "function") {
-                updateStatus('✅ ESPN API functions loaded', 'success');
-                try {
-                    const success = await fetchNFLDataWithTank01Enhanced();
-                    if (success) {
-                        updateStatus('✅ Live NFL data loaded successfully!', 'success');
-                        // Enable dropdowns after successful load
-                        if (typeof enableDropdownsAfterTank01 === "function") {
-                            enableDropdownsAfterTank01();
-                        }
-                    } else {
-                        updateStatus('⚠️ Using backup data', 'warning');
-                        enableDropdownsAfterTank01(false);
-                    }
-                } catch (error) {
-                    updateStatus('❌ ESPN API error, using backup', 'error');
-                    enableDropdownsAfterTank01(false);
+            // DISABLE OLD SYSTEM - Let Universal Sports Manager handle all data loading
+            // Universal Sports Manager will handle ESPN API loading
+            console.log('🚀 UNIVERSAL SPORTS MANAGER: Taking over data loading responsibilities');
+            
+            // Wait for Universal Sports Manager to be ready
+            function waitForUniversalSportsManager() {
+                if (window.universalSportsManager) {
+                    console.log('✅ Universal Sports Manager ready - initializing...');
+                    updateStatus('✅ Universal Sports Manager initialized!', 'success');
+                    
+                    // Let Universal Sports Manager handle the initial NFL load
+                    window.universalSportsManager.switchSport('football').then(() => {
+                        updateStatus('✅ Interactive NFL games loaded!', 'success');
+                    }).catch(error => {
+                        console.error('❌ Universal Sports Manager error:', error);
+                        updateStatus('⚠️ Loading fallback data...', 'warning');
+                    });
+                } else {
+                    console.log('⏳ Waiting for Universal Sports Manager...');
+                    setTimeout(waitForUniversalSportsManager, 100);
                 }
-            } else {
-                updateStatus('❌ ESPN functions not found', 'error');
             }
+            
+            // Start waiting for Universal Sports Manager
+            setTimeout(waitForUniversalSportsManager, 500);
             
             // Initialize Enhanced Betting Insights
             if (typeof EnhancedBettingInsights !== 'undefined' && !window.enhancedBettingInsights) {
