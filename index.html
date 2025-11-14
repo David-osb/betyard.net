@@ -689,8 +689,26 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 100px;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            min-width: 80px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .sport-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sport-icon-wrapper img {
+            transition: all 0.3s ease;
+            filter: grayscale(100%) opacity(0.7);
+        }
+
+        .sport-icon.active .sport-icon-wrapper img {
+            filter: grayscale(0%) opacity(1);
+            transform: scale(1.1);
         }
 
         .sport-icon:hover {
@@ -6528,25 +6546,40 @@
                         </div>
                         <div class="sport-icons-container">
                             <div class="sport-icon active" data-sport="football" onclick="universalSportsManager.switchSport('football')" title="NFL Football">
-                                <div class="sport-icon-wrapper">🏈</div>
+                                <div class="sport-icon-wrapper">
+                                    <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nfl.png&h=40&w=40" alt="NFL" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <span style="display: none;">🏈</span>
+                                </div>
                                 <span class="sport-label">NFL</span>
                             </div>
                             <div class="sport-icon" data-sport="basketball" onclick="universalSportsManager.switchSport('basketball')" title="NBA Basketball">
-                                <div class="sport-icon-wrapper">🏀</div>
+                                <div class="sport-icon-wrapper">
+                                    <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png&h=40&w=40" alt="NBA" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <span style="display: none;">🏀</span>
+                                </div>
                                 <span class="sport-label">NBA</span>
                             </div>
                             <div class="sport-icon" data-sport="hockey" onclick="universalSportsManager.switchSport('hockey')" title="NHL Hockey">
-                                <div class="sport-icon-wrapper">🏒</div>
+                                <div class="sport-icon-wrapper">
+                                    <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nhl.png&h=40&w=40" alt="NHL" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <span style="display: none;">🏒</span>
+                                </div>
                                 <span class="sport-label">NHL</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="baseball" onclick="universalSportsManager.switchSport('baseball')" title="MLB Baseball">
-                                <div class="sport-icon-wrapper">⚾</div>
+                                <div class="sport-icon-wrapper">
+                                    <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/mlb.png&h=40&w=40" alt="MLB" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <span style="display: none;">⚾</span>
+                                </div>
                                 <span class="sport-label">MLB</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="soccer" onclick="universalSportsManager.switchSport('soccer')" title="MLS Soccer">
-                                <div class="sport-icon-wrapper">⚽</div>
+                                <div class="sport-icon-wrapper">
+                                    <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/mls.png&h=40&w=40" alt="MLS" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <span style="display: none;">⚽</span>
+                                </div>
                                 <span class="sport-label">MLS</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>

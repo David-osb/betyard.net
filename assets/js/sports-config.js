@@ -10,6 +10,7 @@ const SportsConfig = {
         name: 'NFL',
         fullName: 'National Football League',
         icon: '🏈',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nfl.png&h=200&w=200',
         color: '#013369', // NFL Blue
         secondaryColor: '#D50A0A', // NFL Red
         
@@ -52,6 +53,7 @@ const SportsConfig = {
         name: 'NBA',
         fullName: 'National Basketball Association',
         icon: '🏀',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png&h=200&w=200',
         color: '#C8102E', // NBA Red
         secondaryColor: '#1D428A', // NBA Blue
         
@@ -92,6 +94,7 @@ const SportsConfig = {
         name: 'MLB',
         fullName: 'Major League Baseball',
         icon: '⚾',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/mlb.png&h=200&w=200',
         color: '#041E42', // MLB Navy
         secondaryColor: '#BD3039', // MLB Red
         
@@ -132,6 +135,7 @@ const SportsConfig = {
         name: 'NHL',
         fullName: 'National Hockey League',
         icon: '🏒',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nhl.png&h=200&w=200',
         color: '#000000', // NHL Black
         secondaryColor: '#C8102E', // NHL Red
         
@@ -172,6 +176,7 @@ const SportsConfig = {
         name: 'MLS',
         fullName: 'Major League Soccer',
         icon: '⚽',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/mls.png&h=200&w=200',
         color: '#004F9F', // MLS Blue
         secondaryColor: '#8DC63F', // MLS Green
         
@@ -212,6 +217,7 @@ const SportsConfig = {
         name: 'Tennis',
         fullName: 'Professional Tennis',
         icon: '🎾',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/atp.png&h=200&w=200',
         color: '#228B22', // Forest Green
         secondaryColor: '#FFD700', // Gold
         
@@ -459,12 +465,15 @@ class UniversalSportsManager {
             activeIcon.classList.add('active');
         }
         
-        // Show loading state
+        // Show loading state with logo
         const container = document.getElementById('game-centric-container');
         if (container) {
             container.innerHTML = `
                 <div style="text-align: center; padding: 40px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                    <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 1s infinite;">${config.icon}</div>
+                    <div style="margin-bottom: 20px;">
+                        <img src="${config.logo}" alt="${config.name}" style="width: 80px; height: 80px; object-fit: contain; animation: bounce 1s infinite;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="font-size: 64px; display: none; animation: bounce 1s infinite;">${config.icon}</div>
+                    </div>
                     <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">Loading ${config.fullName}...</h2>
                     <p style="color: #64748b; margin-bottom: 20px;">Getting live scores, stats, and news from ESPN</p>
                     <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid ${config.color}; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -536,7 +545,11 @@ class UniversalSportsManager {
         
         let html = `
             <div style="text-align: center; margin-bottom: 16px;">
-                <h3 style="color: #1e293b; margin: 0; font-size: 20px; font-weight: 600;">${config.icon} Latest ${config.name} News</h3>
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                    <img src="${config.logo}" alt="${config.name}" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span style="display: none; margin-right: 8px;">${config.icon}</span>
+                    <h3 style="color: #1e293b; margin: 0; font-size: 20px; font-weight: 600;">Latest ${config.name} News</h3>
+                </div>
                 <p style="color: #64748b; margin: 4px 0; font-size: 14px;">Breaking news and updates from ESPN</p>
             </div>
         `;
@@ -642,9 +655,16 @@ class UniversalSportsManager {
         });
 
         return `
-            <div style="text-align: center; margin-bottom: 24px; background: linear-gradient(135deg, ${config.color} 0%, ${config.secondaryColor} 100%); padding: 24px; border-radius: 16px; color: white;">
-                <h2 style="color: white; margin: 0 0 8px 0; font-size: 28px; font-weight: 700;">${config.icon} ${config.fullName}</h2>
-                <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 16px;">${today} • ${gameCount} Games • Live ESPN Data</p>
+            <div style="text-align: center; margin-bottom: 24px; background: linear-gradient(135deg, ${config.color} 0%, ${config.secondaryColor} 100%); padding: 24px; border-radius: 16px; color: white; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 16px; right: 16px; opacity: 0.2;">
+                    <img src="${config.logo}" alt="${config.name}" style="width: 60px; height: 60px; object-fit: contain;" onerror="this.style.display='none';">
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative; z-index: 2;">
+                    <img src="${config.logo}" alt="${config.name}" style="width: 48px; height: 48px; object-fit: contain; margin-right: 12px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span style="display: none; font-size: 32px; margin-right: 12px;">${config.icon}</span>
+                    <h2 style="color: white; margin: 0; font-size: 28px; font-weight: 700;">${config.fullName}</h2>
+                </div>
+                <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 16px; position: relative; z-index: 2;">${today} • ${gameCount} Games • Live ESPN Data</p>
             </div>
         `;
     }
@@ -655,7 +675,10 @@ class UniversalSportsManager {
     getNoGamesHTML(config) {
         return `
             <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px;">
-                <div style="font-size: 80px; margin-bottom: 24px;">${config.icon}</div>
+                <div style="margin-bottom: 24px;">
+                    <img src="${config.logo}" alt="${config.name}" style="width: 120px; height: 120px; object-fit: contain; opacity: 0.8;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="font-size: 80px; display: none;">${config.icon}</div>
+                </div>
                 <h3 style="color: #1e293b; margin-bottom: 12px;">No ${config.name} Games Today</h3>
                 <p style="color: #64748b;">Check back tomorrow for exciting matchups!</p>
             </div>
@@ -699,7 +722,10 @@ class UniversalSportsManager {
         if (container && config) {
             container.innerHTML = `
                 <div style="text-align: center; padding: 40px; background: #fef2f2; border-radius: 16px; border: 1px solid #fecaca;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                    <div style="margin-bottom: 16px;">
+                        <img src="${config.logo}" alt="${config.name}" style="width: 64px; height: 64px; object-fit: contain; opacity: 0.6;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="font-size: 48px; display: none;">⚠️</div>
+                    </div>
                     <h3 style="color: #dc2626; margin-bottom: 12px;">Unable to load ${config.name} data</h3>
                     <p style="color: #991b1b; margin-bottom: 16px;">Please try again later</p>
                     <button onclick="universalSportsManager.loadSportData()" style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">
