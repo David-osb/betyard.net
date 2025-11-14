@@ -319,7 +319,7 @@
             
             if (!gamesList || !Array.isArray(gamesList) || gamesList.length === 0) {
                 gameContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px;">
+                    <div style="text-align: center; padding: 40px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
                         <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
                         <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
                         <p style="color: #64748b;">Check back tomorrow for upcoming matchups!</p>
@@ -329,44 +329,60 @@
             }
             
             let gamesHtml = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: #1e293b; margin: 0;">🏀 NBA Games Today</h2>
-                    <p style="color: #64748b; margin: 8px 0;">Live scores and upcoming matchups</p>
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h2 style="color: #1e293b; margin: 0; font-size: 28px; font-weight: 700;">🏀 NBA Games Today</h2>
+                    <p style="color: #64748b; margin: 8px 0; font-size: 16px;">Live scores and upcoming matchups</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
             `;
             
-            gamesList.slice(0, 10).forEach(game => {
+            gamesList.slice(0, 8).forEach(game => {
                 const homeTeam = game.home_team || game.homeTeam || 'Home Team';
                 const awayTeam = game.away_team || game.awayTeam || 'Away Team';
-                const homeScore = game.home_score || game.homeScore || 0;
-                const awayScore = game.away_score || game.awayScore || 0;
+                const homeScore = game.home_score || game.homeScore || '';
+                const awayScore = game.away_score || game.awayScore || '';
                 const gameTime = game.game_time || game.time || 'TBA';
                 const status = game.status || 'Scheduled';
                 
                 gamesHtml += `
-                    <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
-                        <div style="text-align: center; margin-bottom: 12px;">
-                            <div style="font-size: 14px; color: #ff6b35; font-weight: 600;">${gameTime}</div>
-                            <div style="font-size: 12px; color: #64748b;">${status}</div>
-                        </div>
+                    <div class="nba-game-card" style="background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(99, 102, 241, 0.1); transition: all 0.3s ease; cursor: pointer;" 
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)'" 
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'">
                         
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                            <div style="text-align: center; flex: 1;">
-                                <div style="font-weight: 600; color: #1e293b;">${awayTeam}</div>
+                        <div class="nba-game-header" style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 600; margin-bottom: 4px;">
+                                ${gameTime} • ${status}
                             </div>
-                            
-                            <div style="text-align: center; margin: 0 16px;">
-                                <div style="font-size: 16px; font-weight: bold; color: #ff6b35;">VS</div>
-                            </div>
-                            
-                            <div style="text-align: center; flex: 1;">
-                                <div style="font-weight: 600; color: #1e293b;">${homeTeam}</div>
+                            <div style="font-size: 12px; color: #64748b;">
+                                NBA Basketball
                             </div>
                         </div>
-                        
-                        <div style="text-align: center; background: #f8fafc; padding: 8px; border-radius: 6px;">
-                            <strong>${awayScore} - ${homeScore}</strong>
+
+                        <div class="nba-game-teams" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div class="nba-team away-team" style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">🏀</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${awayTeam}</div>
+                                <div style="font-size: 14px; color: #64748b;">Away</div>
+                                ${awayScore ? `<div style="font-size: 20px; font-weight: bold; color: #059669; margin-top: 8px;">${awayScore}</div>` : ''}
+                            </div>
+
+                            <div class="vs-divider" style="text-align: center; margin: 0 16px;">
+                                <div style="font-size: 18px; font-weight: bold; color: #6366f1; background: rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: 8px;">VS</div>
+                            </div>
+
+                            <div class="nba-team home-team" style="text-align: center; flex: 1;">
+                                <div style="margin-bottom: 8px;">🏀</div>
+                                <div class="nba-team-name" style="font-weight: 600; color: #1e293b; font-size: 16px;">${homeTeam}</div>
+                                <div style="font-size: 14px; color: #64748b;">Home</div>
+                                ${homeScore ? `<div style="font-size: 20px; font-weight: bold; color: #059669; margin-top: 8px;">${homeScore}</div>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="nba-game-footer" style="text-align: center; padding: 12px; background: rgba(99, 102, 241, 0.05); border-radius: 8px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 500;">
+                                ${status === 'Scheduled' ? '📅 Upcoming' : status.includes('Final') ? '✅ Final' : '🔴 Live'}
+                                ${status}
+                            </div>
                         </div>
                     </div>
                 `;
