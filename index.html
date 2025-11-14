@@ -135,27 +135,91 @@
                                             }
                                         }).catch(error => {
                                             console.error('🏀 NBA: Error loading games:', error);
+                                            console.log('🏀 NBA: loadTodaysGames failed, trying ESPN API...');
+                                            
+                                            // Fallback to ESPN API
+                                            fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data && data.events) {
+                                                        const games = data.events.map(event => {
+                                                            const competition = event.competitions[0];
+                                                            const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+                                                            const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+                                                            
+                                                            return {
+                                                                home_team: homeTeam.team.displayName,
+                                                                away_team: awayTeam.team.displayName,
+                                                                home_score: homeTeam.score,
+                                                                away_score: awayTeam.score,
+                                                                game_time: new Date(event.date).toLocaleTimeString('en-US', {
+                                                                    hour: 'numeric',
+                                                                    minute: '2-digit'
+                                                                }),
+                                                                status: event.status.type.description,
+                                                                date: event.date
+                                                            };
+                                                        });
+                                                        
+                                                        displayNBAGames(games);
+                                                        if (typeof updateNewsForSport === 'function') {
+                                                            updateNewsForSport('basketball');
+                                                        }
+                                                    } else {
+                                                        showNBAError('No NBA games found for today');
+                                                    }
+                                                })
+                                                .catch(fallbackError => {
+                                                    console.error('🏀 NBA: ESPN fallback failed:', fallbackError);
+                                                    showNBAError('Unable to load NBA games');
+                                                });
                                         });
                                     }
                                 } else if (attempts < maxAttempts) {
                                     // Wait and try again
                                     setTimeout(tryInitNBA, 500);
                                 } else {
-                                    // Option 2: Call backend API directly
-                                    console.log('🏀 NBA: NBAGames class not available, calling backend API directly...');
-                                    fetch('http://localhost:5001/api/nba/games/today')
+                                    // Option 2: Call ESPN NBA API directly (works on live site)
+                                    console.log('🏀 NBA: NBAGames class not available, using ESPN NBA API...');
+                                    
+                                    fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard')
                                         .then(response => response.json())
-                                        .then(games => {
-                                            console.log('🏀 NBA: Games loaded from backend:', games);
-                                            displayNBAGames(games);
+                                        .then(data => {
+                                            console.log('🏀 NBA: ESPN API response:', data);
                                             
-                                            if (typeof updateNewsForSport === 'function') {
-                                                updateNewsForSport('basketball');
+                                            if (data && data.events) {
+                                                const games = data.events.map(event => {
+                                                    const competition = event.competitions[0];
+                                                    const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+                                                    const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+                                                    
+                                                    return {
+                                                        home_team: homeTeam.team.displayName,
+                                                        away_team: awayTeam.team.displayName,
+                                                        home_score: homeTeam.score,
+                                                        away_score: awayTeam.score,
+                                                        game_time: new Date(event.date).toLocaleTimeString('en-US', {
+                                                            hour: 'numeric',
+                                                            minute: '2-digit'
+                                                        }),
+                                                        status: event.status.type.description,
+                                                        date: event.date
+                                                    };
+                                                });
+                                                
+                                                console.log('🏀 NBA: Games loaded from ESPN:', games);
+                                                displayNBAGames(games);
+                                                
+                                                if (typeof updateNewsForSport === 'function') {
+                                                    updateNewsForSport('basketball');
+                                                }
+                                            } else {
+                                                showNBAError('No NBA games found for today');
                                             }
                                         })
                                         .catch(error => {
-                                            console.error('🏀 NBA: Backend API error:', error);
-                                            showNBAError('Unable to load NBA games from backend API');
+                                            console.error('🏀 NBA: ESPN API error:', error);
+                                            showNBAError('Unable to load NBA games from ESPN API');
                                         });
                                 }
                             };
