@@ -177,23 +177,44 @@
                         showNBAError('Unable to load NBA games from ESPN. Please try again later.');
                     }
                 }, 500);
-                                                });
-                                        });
-                                    } else {
-                                        console.error('🏀 NBA: fetchNBAGames method not found on instance');
-                                        showNBAError('NBA class missing required methods');
-                                    }
-                                    
-                                } catch (classError) {
+            } else if (sport === 'football') {
+                console.log('🏈 NFL: Loading NFL games...');
+                
+                // Load NFL data if not already displayed
+                if (gameContainer && !gameContainer.innerHTML.includes('🏈')) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">�</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NFL Games...</h3>
+                            <p style="color: #64748b;">Loading schedule, scores, and predictions...</p>
+                        </div>
+                    `;
+                }
+                
+                // Reload the page to show NFL (existing system)
+                if (typeof loadWeeklyGames === 'function') {
+                    loadWeeklyGames();
+                } else {
+                    console.log('🏈 NFL: Reloading to show default NFL content...');
+                    setTimeout(() => location.reload(), 500);
+                }
+            } else {
+                // Other sports
+                console.log('🎯 Other sport selected:', sport);
+                if (gameContainer) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏈</div>
+                            <h2 style="color: #1e293b; margin-bottom: 12px; font-weight: 600;">Coming Soon!</h2>
+                            <p style="color: #64748b;">This sport will be available soon with ML-powered predictions.</p>
+                        </div>
+                    `;
+                }
+            }
                                     console.error('🏀 NBA: Error creating NBAGames instance:', classError);
-                                    if (attempts < maxAttempts) {
-                                        setTimeout(tryInitNBA, 500);
-                                    } else {
-                                        console.log('🏀 NBA: Falling back to ESPN API after class error...');
-                                        // Fall through to ESPN API below
-                                    }
-                                }
-                                } else if (attempts < maxAttempts) {
+        };
+        
+        console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
                                     // Wait and try again
                                     setTimeout(tryInitNBA, 500);
                                 } else {
