@@ -266,9 +266,36 @@
         
         console.log('🔧 selectSport function defined in HEAD:', typeof window.selectSport);
         
-        // EMERGENCY FIX - Override broken selectSport
+        // Universal Sports Manager Integration
+        window.selectSportUniversal = async function(sport) {
+            console.log('UNIVERSAL SPORTS: Switching to', sport);
+            
+            // Wait for sports config to load
+            if (!window.universalSportsManager) {
+                console.log('Waiting for Universal Sports Manager...');
+                setTimeout(() => selectSportUniversal(sport), 500);
+                return;
+            }
+            
+            try {
+                const success = await window.universalSportsManager.switchSport(sport);
+                if (success) {
+                    console.log('Successfully switched to', sport);
+                } else {
+                    console.error('Failed to switch to', sport);
+                }
+            } catch (error) {
+                console.error('Error switching to', sport, error);
+                // Fallback to old system
+                if (typeof selectSportFixed === 'function') {
+                    selectSportFixed(sport);
+                }
+            }
+        };
+
+        // EMERGENCY FIX - Override broken selectSport (FALLBACK ONLY)
         window.selectSportFixed = function(sport) {
-            console.log('🚨 Using emergency fix for:', sport);
+            console.log('EMERGENCY: Using fallback for:', sport);
             const gameContainer = document.getElementById('game-centric-container');
             
             if (sport === 'basketball') {
@@ -317,7 +344,45 @@
             }
         };
         
-        // Override sport buttons to use fixed function
+        // Override sport buttons to use new universal system
+        setTimeout(() => {
+            console.log('Setting up Universal Sports Manager integration...');
+            
+            // Update all sport selector buttons
+            const allSportButtons = document.querySelectorAll('[data-sport]');
+            allSportButtons.forEach(button => {
+                const sport = button.dataset.sport;
+                if (sport) {
+                    // Try universal system first, fallback to old system
+                    button.onclick = function() {
+                        if (window.universalSportsManager) {
+                            window.universalSportsManager.switchSport(sport);
+                        } else {
+                            // Fallback to old emergency system
+                            if (sport === 'basketball' || sport === 'football') {
+                                selectSportFixed(sport);
+                            } else {
+                                console.log('Sport not yet supported:', sport);
+                            }
+                        }
+                    };
+                    console.log('Updated button for sport:', sport);
+                }
+            });
+
+            // Initialize with default sport (NFL)
+            setTimeout(() => {
+                if (window.universalSportsManager) {
+                    console.log('Initializing Universal Sports Manager with NFL...');
+                    window.universalSportsManager.switchSport('football');
+                } else {
+                    console.log('Universal Sports Manager not ready, using fallback...');
+                }
+            }, 1000);
+            
+        }, 2000);
+
+        // Override old sport button handlers
         setTimeout(() => {
             const basketballButtons = document.querySelectorAll('[onclick*="selectSport(\'basketball\')"]');
             basketballButtons.forEach(button => {
@@ -6462,27 +6527,27 @@
                             <span style="font-size: 12px; color: #64748b; margin-left: 12px;">Choose a sport to view games and make predictions</span>
                         </div>
                         <div class="sport-icons-container">
-                            <div class="sport-icon active" data-sport="football" onclick="selectSport('football')" title="Football">
+                            <div class="sport-icon active" data-sport="football" onclick="universalSportsManager.switchSport('football')" title="NFL Football">
                                 <div class="sport-icon-wrapper">🏈</div>
-                                <span class="sport-label">Football</span>
+                                <span class="sport-label">NFL</span>
                             </div>
-                            <div class="sport-icon" data-sport="basketball" onclick="selectSport('basketball')" title="Basketball">
+                            <div class="sport-icon" data-sport="basketball" onclick="universalSportsManager.switchSport('basketball')" title="NBA Basketball">
                                 <div class="sport-icon-wrapper">🏀</div>
-                                <span class="sport-label">Basketball</span>
+                                <span class="sport-label">NBA</span>
                             </div>
-                            <div class="sport-icon" data-sport="hockey" onclick="selectSport('hockey')" title="Hockey">
+                            <div class="sport-icon" data-sport="hockey" onclick="universalSportsManager.switchSport('hockey')" title="NHL Hockey">
                                 <div class="sport-icon-wrapper">🏒</div>
-                                <span class="sport-label">Hockey</span>
+                                <span class="sport-label">NHL</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>
-                            <div class="sport-icon" data-sport="baseball" onclick="selectSport('baseball')" title="Baseball">
+                            <div class="sport-icon" data-sport="baseball" onclick="universalSportsManager.switchSport('baseball')" title="MLB Baseball">
                                 <div class="sport-icon-wrapper">⚾</div>
-                                <span class="sport-label">Baseball</span>
+                                <span class="sport-label">MLB</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>
-                            <div class="sport-icon" data-sport="soccer" onclick="selectSport('soccer')" title="Soccer">
+                            <div class="sport-icon" data-sport="soccer" onclick="universalSportsManager.switchSport('soccer')" title="MLS Soccer">
                                 <div class="sport-icon-wrapper">⚽</div>
-                                <span class="sport-label">Soccer</span>
+                                <span class="sport-label">MLS</span>
                                 <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="tennis" onclick="selectSport('tennis')" title="Tennis">
@@ -6793,6 +6858,9 @@
     <script src="assets/js/weekly-schedule-manager.js?v=2025-11-04-WEEKLY-UPDATES&t=1730764800000" async></script>
     <script src="assets/js/game-centric-ui.js?v=2025-11-04-WEEKLY-UPDATES&t=1730764800000" async></script>
     <script src="assets/js/enhanced-betting-insights.js?v=2025-11-03-PLAYER-ID-FIX&t=1730661500000" async></script>
+    
+    <!-- Universal Sports Configuration System -->
+    <script src="assets/js/sports-config.js?v=2025-11-13-SPORTS-CONFIG&t=1731520000000" defer></script>
     
     <!-- SECONDARY: Static Data & Configuration - Load After -->
     <script src="assets/js/nfl-schedule-2025-correct.js" defer></script>
