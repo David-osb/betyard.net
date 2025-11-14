@@ -404,22 +404,31 @@
             
             if (!games || games.length === 0) {
                 gameContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                        <div style="font-size: 48px; margin-bottom: 16px;">🏀</div>
-                        <h3 style="color: #1e293b; margin-bottom: 8px;">No NBA Games Today</h3>
-                        <p style="color: #64748b;">Check back tomorrow for upcoming matchups!</p>
+                    <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px;">
+                        <div style="margin-bottom: 24px;">
+                            <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png&h=120&w=120" alt="NBA" style="width: 120px; height: 120px; object-fit: contain; opacity: 0.8;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div style="font-size: 80px; display: none;">🏀</div>
+                        </div>
+                        <h3 style="color: #1e293b; margin-bottom: 12px;">No NBA Games Today</h3>
+                        <p style="color: #64748b;">Check back tomorrow for exciting matchups!</p>
                     </div>
                 `;
                 return;
             }
             
             let gamesHtml = `
-                <div style="text-align: center; margin-bottom: 24px;">
-                    <h2 style="color: #1e293b; margin: 0; font-size: 28px; font-weight: 700;">🏀 NBA Games</h2>
-                    <p style="color: #64748b; margin: 8px 0; font-size: 16px;">Live scores • Stadium info • ESPN data</p>
+                <div style="text-align: center; margin-bottom: 24px; background: linear-gradient(135deg, #C8102E 0%, #1D428A 100%); padding: 24px; border-radius: 16px; color: white; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 16px; right: 16px; opacity: 0.2;">
+                        <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png&h=60&w=60" alt="NBA" style="width: 60px; height: 60px; object-fit: contain;" onerror="this.style.display='none';">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative; z-index: 2;">
+                        <img src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png&h=48&w=48" alt="NBA" style="width: 48px; height: 48px; object-fit: contain; margin-right: 12px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                        <span style="display: none; font-size: 32px; margin-right: 12px;">🏀</span>
+                        <h2 style="color: white; margin: 0; font-size: 28px; font-weight: 700;">National Basketball Association</h2>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 16px; position: relative; z-index: 2;">${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} • Live scores • Stadium info • ESPN data</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
-            `;
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">`;
             
             games.slice(0, 8).forEach(game => {
                 const gameTime = new Date(game.date).toLocaleTimeString('en-US', {
