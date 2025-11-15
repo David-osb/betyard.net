@@ -18,6 +18,51 @@
     
     <!-- Kill service workers and force reload -->
     <script>
+        // CRITICAL: Define toggleSidebar function FIRST for immediate global access
+        window.toggleSidebar = function() {
+            console.log('🔧 toggleSidebar called from mobile menu button');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (!sidebar || !overlay) {
+                console.error('❌ Sidebar or overlay not found!');
+                return;
+            }
+            
+            // Check if sidebar is currently open (either mobile or desktop)
+            const isOpen = sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open');
+            console.log('🔍 Sidebar current state:', isOpen ? 'OPEN' : 'CLOSED');
+            
+            if (isOpen) {
+                // Close sidebar
+                sidebar.classList.remove('open', 'mobile-open');
+                overlay.classList.remove('show', 'active');
+                document.body.style.overflow = '';
+                
+                // Reset mobile menu button if it exists
+                if (menuBtn) {
+                    menuBtn.classList.remove('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'menu';
+                }
+                console.log('✅ Sidebar closed');
+            } else {
+                // Open sidebar - use mobile-open for better mobile experience
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Update mobile menu button if it exists
+                if (menuBtn) {
+                    menuBtn.classList.add('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'close';
+                }
+                console.log('✅ Sidebar opened');
+            }
+        };
+
         // CRITICAL: Define selectSport function FIRST for immediate global access
         window.selectSport = async function(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
