@@ -735,54 +735,55 @@ class UniversalSportsManager {
         
         return `
             <div class="game-card" data-game-id="${game.id}" data-home-team="${game.homeTeam.name}" data-away-team="${game.awayTeam.name}" style="
-                background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-                border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-                border: 1px solid #e2e8f0; transition: all 0.3s ease; cursor: pointer;
-                position: relative; overflow: hidden;
+                background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+                border-radius: 16px !important; padding: 20px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+                border: 1px solid #e2e8f0 !important; transition: all 0.3s ease !important; cursor: pointer !important;
+                position: relative !important; overflow: hidden !important; margin: 8px 0 !important;
+                display: block !important; width: auto !important; min-height: auto !important; max-height: none !important;
             " onclick="universalSportsManager.selectGame('${game.id}', '${game.homeTeam.name}', '${game.awayTeam.name}')"
                onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.15)'; this.style.borderColor='${config.color}'"
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.1)'; this.style.borderColor='#e2e8f0'">
                 
                 <!-- Selection indicator -->
                 <div class="selection-indicator" style="
-                    position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-                    background: ${config.color}; transform: scaleY(0); transition: all 0.3s ease;
-                    transform-origin: top;
+                    position: absolute !important; top: 0 !important; left: 0 !important; width: 4px !important; height: 100% !important;
+                    background: ${config.color} !important; transform: scaleY(0) !important; transition: all 0.3s ease !important;
+                    transform-origin: top !important;
                 "></div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <div style="font-size: 12px; color: #64748b;">${new Date(game.date).toLocaleDateString()}</div>
+                <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 16px !important;">
+                    <div style="font-size: 12px !important; color: #64748b !important;">${new Date(game.date).toLocaleDateString()}</div>
                     ${statusBadge}
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="display: flex; align-items: center; flex: 1;">
-                        <img src="${game.awayTeam.logo}" alt="${game.awayTeam.name}" style="width: 32px; height: 32px; margin-right: 12px;" onerror="this.style.display='none'">
-                        <div style="font-weight: 700; color: #1e293b;">${game.awayTeam.name}</div>
+                <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 12px !important;">
+                    <div style="display: flex !important; align-items: center !important; flex: 1 !important;">
+                        <img src="${game.awayTeam.logo}" alt="${game.awayTeam.name}" style="width: 32px !important; height: 32px !important; margin-right: 12px !important;" onerror="this.style.display='none'">
+                        <div style="font-weight: 700 !important; color: #1e293b !important; font-size: 16px !important;">${game.awayTeam.name}</div>
                     </div>
-                    <div style="font-size: 24px; font-weight: 800; color: #1e293b;">${game.awayTeam.score}</div>
+                    <div style="font-size: 24px !important; font-weight: 800 !important; color: #1e293b !important;">${game.awayTeam.score}</div>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <div style="display: flex; align-items: center; flex: 1;">
-                        <img src="${game.homeTeam.logo}" alt="${game.homeTeam.name}" style="width: 32px; height: 32px; margin-right: 12px;" onerror="this.style.display='none'">
-                        <div style="font-weight: 700; color: #1e293b;">${game.homeTeam.name}</div>
+                <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 16px !important;">
+                    <div style="display: flex !important; align-items: center !important; flex: 1 !important;">
+                        <img src="${game.homeTeam.logo}" alt="${game.homeTeam.name}" style="width: 32px !important; height: 32px !important; margin-right: 12px !important;" onerror="this.style.display='none'">
+                        <div style="font-weight: 700 !important; color: #1e293b !important; font-size: 16px !important;">${game.homeTeam.name}</div>
                     </div>
-                    <div style="font-size: 24px; font-weight: 800; color: #1e293b;">${game.homeTeam.score}</div>
+                    <div style="font-size: 24px !important; font-weight: 800 !important; color: #1e293b !important;">${game.homeTeam.score}</div>
                 </div>
                 
                 ${config.displaySettings.showVenue ? `
-                    <div style="text-align: center; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                    <div style="text-align: center !important; padding-top: 12px !important; border-top: 1px solid #e2e8f0 !important; font-size: 12px !important; color: #64748b !important;">
                         📍 ${game.venue.name}
                     </div>
                 ` : ''}
                 
                 <!-- Click hint -->
                 <div style="
-                    position: absolute; bottom: 8px; right: 12px; 
-                    background: rgba(0,0,0,0.05); color: #64748b; 
-                    padding: 4px 8px; border-radius: 8px; font-size: 11px;
-                    opacity: 0.7; transition: all 0.3s ease;
+                    position: absolute !important; bottom: 8px !important; right: 12px !important; 
+                    background: rgba(0,0,0,0.05) !important; color: #64748b !important; 
+                    padding: 4px 8px !important; border-radius: 8px !important; font-size: 11px !important;
+                    opacity: 0.7 !important; transition: all 0.3s ease !important;
                 ">
                     Click for team news
                 </div>
