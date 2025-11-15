@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Card Clickability Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f8fafc; }
+        .test-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status { padding: 10px; border-radius: 8px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Game Card Clickability Diagnostic</h1>
+    
+    <div class="test-section">
+        <h2>1. Universal Sports Manager Status</h2>
+        <div id="manager-status" class="status info">Checking...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Game Card Detection</h2>
+        <div id="card-detection" class="status info">Scanning for game cards...</div>
+        <div id="card-details"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Click Handler Analysis</h2>
+        <div id="click-analysis" class="status info">Analyzing click handlers...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Sports Configuration</h2>
+        <div id="config-status" class="status info">Checking sports config...</div>
+    </div>
+
+    <script>
+        function checkManagerStatus() {
+            const statusDiv = document.getElementById('manager-status');
+            
+            if (window.universalSportsManager) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ Universal Sports Manager is available and ready';
+                
+                // Check if it has the selectGame method
+                if (typeof window.universalSportsManager.selectGame === 'function') {
+                    statusDiv.innerHTML += '<br>✅ selectGame method is available';
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML += '<br>❌ selectGame method is missing';
+                }
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ Universal Sports Manager not found';
+            }
+        }
+        
+        function checkGameCards() {
+            const detectionDiv = document.getElementById('card-detection');
+            const detailsDiv = document.getElementById('card-details');
+            
+            // Check parent window for game cards
+            try {
+                const parentCards = window.parent.document.querySelectorAll('.game-card');
+                if (parentCards.length > 0) {
+                    detectionDiv.className = 'status success';
+                    detectionDiv.innerHTML = `✅ Found ${parentCards.length} game cards in main window`;
+                    
+                    let details = '<h4>Game Card Details:</h4><ul>';
+                    parentCards.forEach((card, index) => {
+                        const gameId = card.getAttribute('data-game-id');
+                        const onClick = card.getAttribute('onclick');
+                        details += `<li>Card ${index + 1}: Game ID = ${gameId}, OnClick = ${onClick ? 'Yes' : 'No'}</li>`;
+                    });
+                    details += '</ul>';
+                    detailsDiv.innerHTML = details;
+                } else {
+                    detectionDiv.className = 'status error';
+                    detectionDiv.innerHTML = '❌ No game cards found in main window';
+                }
+            } catch (error) {
+                detectionDiv.className = 'status error';
+                detectionDiv.innerHTML = '❌ Cannot access parent window: ' + error.message;
+            }
+        }
+        
+        function checkClickHandlers() {
+            const analysisDiv = document.getElementById('click-analysis');
+            
+            try {
+                const parentCards = window.parent.document.querySelectorAll('.game-card');
+                let clickableCards = 0;
+                let totalCards = parentCards.length;
+                
+                parentCards.forEach(card => {
+                    if (card.getAttribute('onclick') || card.style.cursor === 'pointer') {
+                        clickableCards++;
+                    }
+                });
+                
+                if (clickableCards === totalCards && totalCards > 0) {
+                    analysisDiv.className = 'status success';
+                    analysisDiv.innerHTML = `✅ All ${totalCards} cards have click handlers`;
+                } else if (clickableCards > 0) {
+                    analysisDiv.className = 'status error';
+                    analysisDiv.innerHTML = `⚠️ Only ${clickableCards} of ${totalCards} cards are clickable`;
+                } else {
+                    analysisDiv.className = 'status error';
+                    analysisDiv.innerHTML = '❌ No clickable cards detected';
+                }
+            } catch (error) {
+                analysisDiv.className = 'status error';
+                analysisDiv.innerHTML = '❌ Error checking click handlers: ' + error.message;
+            }
+        }
+        
+        function checkSportsConfig() {
+            const configDiv = document.getElementById('config-status');
+            
+            try {
+                if (window.parent.window.SportsConfig) {
+                    configDiv.className = 'status success';
+                    configDiv.innerHTML = '✅ SportsConfig is available<br>';
+                    
+                    const sports = Object.keys(window.parent.window.SportsConfig);
+                    configDiv.innerHTML += `✅ Available sports: ${sports.join(', ')}`;
+                } else {
+                    configDiv.className = 'status error';
+                    configDiv.innerHTML = '❌ SportsConfig not found';
+                }
+            } catch (error) {
+                configDiv.className = 'status error';
+                configDiv.innerHTML = '❌ Error checking sports config: ' + error.message;
+            }
+        }
+        
+        // Run all checks
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial checks
+            checkManagerStatus();
+            
+            // Wait a moment for the main page to load, then check cards
+            setTimeout(() => {
+                checkGameCards();
+                checkClickHandlers();
+                checkSportsConfig();
+            }, 2000);
+            
+            // Refresh checks every 5 seconds
+            setInterval(() => {
+                checkGameCards();
+                checkClickHandlers();
+            }, 5000);
+        });
+        
+        // Also check when parent loads
+        window.addEventListener('message', (event) => {
+            if (event.data === 'page-loaded') {
+                setTimeout(() => {
+                    checkGameCards();
+                    checkClickHandlers();
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
