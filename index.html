@@ -875,7 +875,8 @@
             z-index: 1050;
         }
 
-        .sidebar-overlay.show {
+        .sidebar-overlay.show,
+        .sidebar-overlay.active {
             opacity: 1;
             visibility: visible;
         }
@@ -5860,7 +5861,7 @@
 </head>
 <body class="mdl-demo mdl-color--grey-100">
     <!-- Mobile Menu Button -->
-    <button class="mobile-menu-button" id="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu">
+    <button class="mobile-menu-button" id="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle navigation menu">
         <i class="material-icons">menu</i>
     </button>
     
@@ -8950,6 +8951,7 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
+            const menuBtn = document.getElementById('mobile-menu-btn');
             
             // Check if sidebar is currently open (either mobile or desktop)
             const isOpen = sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open');
@@ -8961,17 +8963,23 @@
                 document.body.style.overflow = '';
                 
                 // Reset mobile menu button if it exists
-                const menuBtn = document.getElementById('mobile-menu-btn');
                 if (menuBtn) {
                     menuBtn.classList.remove('active');
                     const icon = menuBtn.querySelector('.material-icons');
                     if (icon) icon.textContent = 'menu';
                 }
             } else {
-                // Open sidebar
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
+                // Open sidebar - use mobile-open for better mobile experience
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                
+                // Update mobile menu button if it exists
+                if (menuBtn) {
+                    menuBtn.classList.add('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'close';
+                }
             }
         }
 
