@@ -48,8 +48,14 @@
                 }
                 console.log('✅ Sidebar closed');
             } else {
-                // Open sidebar - use mobile-open for better mobile experience
-                sidebar.classList.add('mobile-open');
+                // Open sidebar - use appropriate class based on screen size
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    sidebar.classList.add('mobile-open');
+                } else {
+                    // For desktop, use both classes to ensure it works
+                    sidebar.classList.add('open', 'mobile-open');
+                }
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 
@@ -968,6 +974,12 @@
 
         .sidebar.open {
             left: 0;
+        }
+
+        /* Enhanced sidebar - works on ALL screen sizes */
+        .sidebar.mobile-open {
+            left: 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.3);
         }
 
         .sidebar-overlay {
@@ -4194,12 +4206,6 @@
         
         /* Mobile responsive styles */
         @media (max-width: 768px) {
-            /* Enhanced mobile sidebar */
-            .sidebar.mobile-open {
-                left: 0;
-                box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-            }
-            
             /* Touch-friendly navigation items */
             .mdl-navigation__link {
                 padding: 16px 20px;
