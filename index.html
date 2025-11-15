@@ -63,6 +63,69 @@
             }
         };
 
+        // CRITICAL: Define closeSidebar function for overlay and close button
+        window.closeSidebar = function() {
+            console.log('🔧 closeSidebar called');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (!sidebar || !overlay) {
+                console.error('❌ Sidebar or overlay not found in closeSidebar!');
+                return;
+            }
+            
+            // Remove all open classes
+            sidebar.classList.remove('open', 'mobile-open');
+            overlay.classList.remove('show', 'active');
+            document.body.style.overflow = '';
+            
+            // Reset mobile menu button
+            if (menuBtn) {
+                menuBtn.classList.remove('active');
+                const icon = menuBtn.querySelector('.material-icons');
+                if (icon) icon.textContent = 'menu';
+            }
+            
+            console.log('✅ Sidebar closed via closeSidebar function');
+        };
+
+        // CRITICAL: Initialize sidebar functionality when DOM is ready
+        window.initializeSidebar = function() {
+            console.log('🔧 Initializing sidebar functionality...');
+            
+            // Add event listener for overlay clicks
+            const overlay = document.querySelector('.sidebar-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', function(e) {
+                    // Only close if clicking the overlay itself, not its children
+                    if (e.target === overlay) {
+                        console.log('🔧 Overlay clicked - closing sidebar');
+                        window.closeSidebar();
+                    }
+                });
+                console.log('✅ Overlay click handler added');
+            }
+            
+            // Add escape key handler
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar && (sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open'))) {
+                        console.log('🔧 Escape key pressed - closing sidebar');
+                        window.closeSidebar();
+                    }
+                }
+            });
+            
+            console.log('✅ Sidebar initialization complete');
+        };
+
+        // Initialize when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.initializeSidebar();
+        });
+
         // CRITICAL: Define selectSport function FIRST for immediate global access
         window.selectSport = async function(sport) {
             console.log(`🏅 Sport selected: ${sport}`);
