@@ -8999,64 +8999,90 @@
             }, 100);
         }
 
-        // Sidebar Functions
+        // Unified Sidebar Functions
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
             
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('show');
+            // Check if sidebar is currently open (either mobile or desktop)
+            const isOpen = sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open');
             
-            // Prevent body scroll when sidebar is open
-            if (sidebar.classList.contains('open')) {
-                document.body.style.overflow = 'hidden';
-            } else {
+            if (isOpen) {
+                // Close sidebar
+                sidebar.classList.remove('open', 'mobile-open');
+                overlay.classList.remove('show', 'active');
                 document.body.style.overflow = '';
+                
+                // Reset mobile menu button if it exists
+                const menuBtn = document.getElementById('mobile-menu-btn');
+                if (menuBtn) {
+                    menuBtn.classList.remove('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'menu';
+                }
+            } else {
+                // Open sidebar
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Mobile Sidebar Functions - now uses unified approach
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            
+            // Check if sidebar is currently open
+            const isOpen = sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open');
+            
+            if (isOpen) {
+                // Close sidebar
+                sidebar.classList.remove('open', 'mobile-open');
+                overlay.classList.remove('show', 'active');
+                document.body.style.overflow = '';
+                
+                if (menuBtn) {
+                    menuBtn.classList.remove('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'menu';
+                }
+            } else {
+                // Open sidebar with mobile classes
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                if (menuBtn) {
+                    menuBtn.classList.add('active');
+                    const icon = menuBtn.querySelector('.material-icons');
+                    if (icon) icon.textContent = 'close';
+                }
             }
         }
 
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
-            
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-
-        // Mobile Sidebar Functions
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
             const menuBtn = document.getElementById('mobile-menu-btn');
             
-            if (sidebar.classList.contains('mobile-open')) {
-                // Close sidebar
-                sidebar.classList.remove('mobile-open');
-                overlay.classList.remove('active');
+            // Remove all open classes
+            sidebar.classList.remove('open', 'mobile-open');
+            overlay.classList.remove('show', 'active');
+            document.body.style.overflow = '';
+            
+            // Reset mobile menu button
+            if (menuBtn) {
                 menuBtn.classList.remove('active');
-                menuBtn.querySelector('.material-icons').textContent = 'menu';
-                document.body.style.overflow = '';
-            } else {
-                // Open sidebar
-                sidebar.classList.add('mobile-open');
-                overlay.classList.add('active');
-                menuBtn.classList.add('active');
-                menuBtn.querySelector('.material-icons').textContent = 'close';
-                document.body.style.overflow = 'hidden';
+                const icon = menuBtn.querySelector('.material-icons');
+                if (icon) icon.textContent = 'menu';
             }
         }
-        
+
         function closeMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            
-            sidebar.classList.remove('mobile-open');
-            overlay.classList.remove('active');
-            menuBtn.classList.remove('active');
-            menuBtn.querySelector('.material-icons').textContent = 'menu';
-            document.body.style.overflow = '';
+            // Use the unified close function
+            closeSidebar();
         }
         
         // Enhanced Mobile Touch Handlers
