@@ -1111,8 +1111,8 @@
                 font-size: 14px;
             }
             
-            /* Game cards mobile optimization for 2-column */
-            .game-card {
+            /* Game cards mobile optimization for 2-column - simple cards only */
+            .game-card.simple-card {
                 margin: 0 auto 8px auto;
                 border-radius: 8px;
                 box-shadow: 0 1px 4px rgba(0,0,0,0.1);
@@ -3779,53 +3779,57 @@
             }
             
             .game-card {
-                padding: 8px 6px !important;
-                margin: 0 !important;
+                /* Base mobile styles - allow inline styles to override for detailed cards */
                 border-radius: 6px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
                 cursor: pointer;
                 transition: all 0.3s ease;
+                box-sizing: border-box;
+                margin: 4px 0;
+            }
+            
+            /* Fallback styling for simple game cards only */
+            .game-card.simple-card {
+                padding: 8px 6px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
                 min-height: 85px;
                 max-height: 110px;
-                display: flex !important;
-                flex-direction: column !important;
+                display: flex;
+                flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                font-size: 11px !important;
-                line-height: 1.2 !important;
-                width: 100% !important;
-                box-sizing: border-box !important;
-                overflow: hidden !important;
-                word-wrap: break-word !important;
+                font-size: 11px;
+                line-height: 1.2;
+                overflow: hidden;
+                word-wrap: break-word;
             }
             
-            /* Mobile text optimization */
-            .game-card * {
-                font-size: 11px !important;
-                line-height: 1.2 !important;
-                margin: 1px 0 !important;
-                padding: 0 !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                max-width: 100% !important;
+            /* Mobile text optimization for simple cards only */
+            .game-card.simple-card * {
+                font-size: 11px;
+                line-height: 1.2;
+                margin: 1px 0;
+                padding: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
             }
             
-            .game-card .team-name,
-            .game-card .team-info {
-                font-size: 10px !important;
-                font-weight: 600 !important;
-                margin: 0 !important;
-                padding: 1px 0 !important;
+            .game-card.simple-card .team-name,
+            .game-card.simple-card .team-info {
+                font-size: 10px;
+                font-weight: 600;
+                margin: 0;
+                padding: 1px 0;
             }
             
-            .game-card .game-time,
-            .game-card .game-status {
-                font-size: 9px !important;
-                opacity: 0.9 !important;
-                margin: 2px 0 0 0 !important;
+            .game-card.simple-card .game-time,
+            .game-card.simple-card .game-status {
+                font-size: 9px;
+                opacity: 0.9;
+                margin: 2px 0 0 0;
             }
             
             /* New Mobile Game Card Layout */
