@@ -17,7 +17,7 @@ MODELS = {}
 MODEL_DIR = os.path.dirname(__file__)
 
 def load_models():
-    """Load all position models"""
+    """Load all position models - 10-feature enhanced version"""
     positions = ['qb', 'rb', 'wr', 'te']
     for pos in positions:
         model_path = os.path.join(MODEL_DIR, f'{pos}_model.pkl')
@@ -25,7 +25,8 @@ def load_models():
             try:
                 MODELS[pos] = xgb.Booster()
                 MODELS[pos].load_model(model_path)
-                print(f"✅ Loaded {pos.upper()} model")
+                file_size = os.path.getsize(model_path) / 1024  # KB
+                print(f"✅ Loaded {pos.upper()} model ({file_size:.1f} KB) - 10 features")
             except Exception as e:
                 print(f"❌ Failed to load {pos.upper()} model: {e}")
 
