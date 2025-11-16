@@ -1100,6 +1100,11 @@ class UniversalSportsManager {
                     </div>
                 </div>
                 
+                <!-- Comprehensive Props Betting Panel -->
+                <div id="game-props-container" style="margin-top: 24px; display: none;">
+                    <!-- Props will be injected here by PropsBetting service -->
+                </div>
+                
                 <style>
                     @keyframes spin {
                         0% { transform: rotate(0deg); }
@@ -1503,6 +1508,102 @@ function displayPrediction(game, mlPrediction) {
                     <div style="font-weight: 600; color: #d97706; margin-bottom: 4px;">Model Status</div>
                     <div style="font-size: 13px; color: #b45309;">${mlPrediction ? '✅ XGBoost ML Model Active' : '📊 Using ESPN Data'}</div>
                 </div>
+            </div>
+        `;
+    }
+    
+    // FETCH AND DISPLAY COMPREHENSIVE PROPS
+    fetchAndDisplayGameProps(game, homeTeam, awayTeam);
+}
+
+/**
+ * Fetch and display comprehensive props betting panel for game
+ */
+async function fetchAndDisplayGameProps(game, homeTeam, awayTeam) {
+    const propsContainer = document.getElementById('game-props-container');
+    if (!propsContainer || !window.PropsBetting) {
+        console.warn('Props container or PropsBetting service not available');
+        return;
+    }
+    
+    console.log('🎯 Fetching comprehensive props for game:', game.id);
+    
+    try {
+        // Show loading state
+        propsContainer.style.display = 'block';
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p style="margin-top: 16px; color: #64748b; font-size: 14px;">Loading comprehensive props betting markets...</p>
+            </div>
+        `;
+        
+        // Get props for both teams (focusing on QB, RB, WR)
+        const homeProps = await window.PropsBetting.getPlayerProps('Team QB', homeTeam, 'QB');
+        const awayProps = await window.PropsBetting.getPlayerProps('Team QB', awayTeam, 'QB');
+        
+        // Combine and display all props
+        const allProps = [...(homeProps || []), ...(awayProps || [])];
+        
+        if (allProps.length > 0) {
+            displayGamePropsPanel(allProps, homeTeam, awayTeam);
+        } else {
+            propsContainer.innerHTML = `
+                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                    <p style="color: #64748b; font-size: 14px;">No props available for this game yet. Check back closer to game time!</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error fetching props:', error);
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                <p style="color: #ef4444; font-size: 14px;">Error loading props. Please try again later.</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Display props betting panel (uses existing displayPropsPanel from index.html)
+ */
+function displayGamePropsPanel(props, homeTeam, awayTeam) {
+    const propsContainer = document.getElementById('game-props-container');
+    if (!propsContainer) return;
+    
+    // Call the existing displayPropsPanel function if available
+    if (typeof displayPropsPanel === 'function') {
+        // Temporarily swap containers
+        const originalContainer = document.getElementById('props-betting-container');
+        if (originalContainer) {
+            const originalParent = originalContainer.parentElement;
+            const originalNextSibling = originalContainer.nextSibling;
+            
+            // Move to game props container
+            propsContainer.innerHTML = '';
+            propsContainer.appendChild(originalContainer);
+            originalContainer.style.display = 'block';
+            
+            // Display props
+            displayPropsPanel(props);
+            
+            // Move back
+            setTimeout(() => {
+                if (originalParent) {
+                    originalParent.insertBefore(originalContainer, originalNextSibling);
+                }
+            }, 100);
+        }
+    } else {
+        // Fallback: simple display
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">
+                    🎯 Betting Props Available
+                </h3>
+                <p style="color: #64748b; font-size: 14px;">
+                    ${props.length} prop markets available for ${homeTeam} vs ${awayTeam}
+                </p>
             </div>
         `;
     }
