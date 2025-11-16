@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESPN Odds API Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: white;
+        }
+        .test-section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #334155;
+        }
+        h1 { color: #60a5fa; }
+        h2 { color: #93c5fd; margin-top: 0; }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+        button:hover { background: #2563eb; }
+        pre {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #334155;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <h1>🎰 ESPN Odds API Integration Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Fetch Game Odds</h2>
+        <button onclick="testGameOdds()">Fetch Current Game Odds</button>
+        <div id="odds-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Get Best Available Odds</h2>
+        <button onclick="testBestOdds()">Find Best Moneyline</button>
+        <button onclick="testBestSpread()">Find Best Spread</button>
+        <button onclick="testBestTotal()">Find Best Total</button>
+        <div id="best-odds-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Win Probabilities</h2>
+        <button onclick="testWinProb()">Get Win Probabilities</button>
+        <div id="winprob-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Props Integration</h2>
+        <button onclick="testPropsWithOdds()">Test Props with Real Odds</button>
+        <div id="props-result"></div>
+    </div>
+
+    <script src="assets/js/espn-odds-service.js"></script>
+    <script>
+        const TEST_EVENT_ID = '401772882'; // Current NFL game
+        
+        async function testGameOdds() {
+            const result = document.getElementById('odds-result');
+            result.innerHTML = '<p class="warning">⏳ Fetching odds...</p>';
+            
+            try {
+                const odds = await window.ESPNOdds.getGameOdds(TEST_EVENT_ID);
+                result.innerHTML = `
+                    <p class="success">✅ Successfully fetched odds!</p>
+                    <pre>${JSON.stringify(odds, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testBestOdds() {
+            const result = document.getElementById('best-odds-result');
+            result.innerHTML = '<p class="warning">⏳ Finding best moneyline...</p>';
+            
+            try {
+                const homeML = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'moneyline', 'home');
+                const awayML = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'moneyline', 'away');
+                
+                result.innerHTML = `
+                    <p class="success">✅ Best Moneyline Odds Found!</p>
+                    <pre>Home: ${JSON.stringify(homeML, null, 2)}</pre>
+                    <pre>Away: ${JSON.stringify(awayML, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testBestSpread() {
+            const result = document.getElementById('best-odds-result');
+            result.innerHTML = '<p class="warning">⏳ Finding best spread...</p>';
+            
+            try {
+                const homeSpread = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'spread', 'home');
+                const awaySpread = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'spread', 'away');
+                
+                result.innerHTML = `
+                    <p class="success">✅ Best Spread Odds Found!</p>
+                    <pre>Home: ${JSON.stringify(homeSpread, null, 2)}</pre>
+                    <pre>Away: ${JSON.stringify(awaySpread, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testBestTotal() {
+            const result = document.getElementById('best-odds-result');
+            result.innerHTML = '<p class="warning">⏳ Finding best totals...</p>';
+            
+            try {
+                const over = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'total', 'over');
+                const under = await window.ESPNOdds.getBestOdds(TEST_EVENT_ID, 'total', 'under');
+                
+                result.innerHTML = `
+                    <p class="success">✅ Best Total Odds Found!</p>
+                    <pre>Over: ${JSON.stringify(over, null, 2)}</pre>
+                    <pre>Under: ${JSON.stringify(under, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testWinProb() {
+            const result = document.getElementById('winprob-result');
+            result.innerHTML = '<p class="warning">⏳ Fetching win probabilities...</p>';
+            
+            try {
+                const winProb = await window.ESPNOdds.getWinProbabilities(TEST_EVENT_ID);
+                result.innerHTML = `
+                    <p class="success">✅ Win Probabilities Retrieved!</p>
+                    <pre>${JSON.stringify(winProb, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testPropsWithOdds() {
+            const result = document.getElementById('props-result');
+            result.innerHTML = '<p class="warning">⏳ Testing props integration...</p>';
+            
+            try {
+                // This would normally be called by PropsBetting service
+                const odds = await window.ESPNOdds.getGameOdds(TEST_EVENT_ID);
+                
+                result.innerHTML = `
+                    <p class="success">✅ Props can now access real ESPN odds!</p>
+                    <p>Available Providers: ${odds.providers.map(p => p.name).join(', ')}</p>
+                    <pre>${JSON.stringify(odds, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

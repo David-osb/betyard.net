@@ -1535,12 +1535,17 @@ async function fetchAndDisplayGameProps(game, homeTeam, awayTeam) {
             <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
                 <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
                 <p style="margin-top: 16px; color: #64748b; font-size: 14px;">Loading comprehensive props betting markets...</p>
+                <p style="margin-top: 8px; color: #94a3b8; font-size: 12px;">Fetching real ESPN odds...</p>
             </div>
         `;
         
-        // Get props for both teams (focusing on QB, RB, WR)
-        const homeProps = await window.PropsBetting.getPlayerProps('Team QB', homeTeam, 'QB');
-        const awayProps = await window.PropsBetting.getPlayerProps('Team QB', awayTeam, 'QB');
+        // Extract ESPN event ID from game object
+        const eventId = game.id || game.eventId || null;
+        console.log('📡 Using ESPN Event ID:', eventId);
+        
+        // Get props for both teams with ESPN odds (focusing on QB, RB, WR)
+        const homeProps = await window.PropsBetting.getPlayerProps('Team QB', homeTeam, 'QB', eventId);
+        const awayProps = await window.PropsBetting.getPlayerProps('Team QB', awayTeam, 'QB', eventId);
         
         // Combine and display all props
         const allProps = [...(homeProps || []), ...(awayProps || [])];

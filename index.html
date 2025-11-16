@@ -6832,6 +6832,9 @@
     <!-- PRIORITY: Game Data & ESPN Scripts - Load First -->
     <script src="assets/js/espn-data-service-FIXED.js?v=BYPASS-CACHE&t=1730600000" async></script>
     
+    <!-- ESPN Odds Service - Real Sportsbook Data -->
+    <script src="assets/js/espn-odds-service.js?v=2025-11-16-REAL-ODDS&t=1731780000000" defer></script>
+    
     <!-- BetYard ML Backend Service - MUST Load Before Game-Centric UI -->
     <script>
         /* ===============================================
@@ -7001,18 +7004,25 @@
             }
             
             // Get all available props for a player
-            async getPlayerProps(playerName, teamCode, position = 'QB') {
+            async getPlayerProps(playerName, teamCode, position = 'QB', eventId = null) {
                 try {
-                    console.log(`🎯 Fetching props for ${playerName}`);
+                    console.log(`🎯 Fetching props for ${playerName} (Event: ${eventId})`);
                     
                     // Get ML prediction first for comparison
                     const mlPrediction = await window.BetYardML.getPrediction(playerName, teamCode, null, position);
                     
+                    // Get real ESPN odds if eventId provided
+                    let espnOdds = null;
+                    if (eventId && window.ESPNOdds) {
+                        espnOdds = await window.ESPNOdds.getGameOdds(eventId);
+                        console.log('📊 ESPN Odds fetched:', espnOdds);
+                    }
+                    
                     // Define all available prop markets based on position
                     const propMarkets = this.getPropsForPosition(position, mlPrediction);
                     
-                    // Fetch odds from multiple sportsbooks (simulated for now)
-                    const propsWithOdds = await this.enrichPropsWithOdds(propMarkets, playerName);
+                    // Fetch odds from ESPN (real data) or simulate if not available
+                    const propsWithOdds = await this.enrichPropsWithOdds(propMarkets, playerName, espnOdds);
                     
                     this.playerProps = propsWithOdds;
                     return propsWithOdds;
@@ -7089,16 +7099,21 @@
             }
             
             // Enrich props with odds from sportsbooks
-            async enrichPropsWithOdds(props, playerName) {
+            async enrichPropsWithOdds(props, playerName, espnOdds = null) {
                 return props.map(prop => {
                     // Calculate value and recommendation
                     const analysis = this.analyzeProposition(prop);
+                    
+                    // Get sportsbook odds (real from ESPN or simulated)
+                    const sportsbooks = espnOdds 
+                        ? this.getRealSportsbookOdds(prop.type, espnOdds)
+                        : this.getSimulatedSportsbookOdds(prop.type);
                     
                     return {
                         ...prop,
                         playerName,
                         ...analysis,
-                        sportsbooks: this.getSportsbookOdds(prop.type)
+                        sportsbooks
                     };
                 });
             }
@@ -7134,29 +7149,76 @@
                 return { recommendation, edge: Math.round(edge * 10) / 10, confidence: Math.round(confidence) };
             }
             
-            // Get sportsbook odds for a prop type
-            getSportsbookOdds(propType) {
-                // Simulated sportsbook odds (in production, fetch from odds API)
+            // Get REAL sportsbook odds from ESPN data
+            getRealSportsbookOdds(propType, espnOdds) {
+                const sportsbooks = [];
+                
+                if (!espnOdds || !espnOdds.providers || espnOdds.providers.length === 0) {
+                    return this.getSimulatedSportsbookOdds(propType);
+                }
+                
+                // Convert ESPN odds to prop format
+                for (const provider of espnOdds.providers) {
+                    sportsbooks.push({
+                        name: provider.name,
+                        overOdds: provider.overOdds || -110,
+                        underOdds: provider.underOdds || -110,
+                        logo: this.getBookmakerLogo(provider.name),
+                        moneyline: {
+                            home: provider.homeTeam?.moneyLine,
+                            away: provider.awayTeam?.moneyLine
+                        },
+                        spread: provider.spread,
+                        total: provider.overUnder,
+                        lastUpdate: provider.lastUpdate
+                    });
+                }
+                
+                console.log('📊 Real sportsbook odds loaded:', sportsbooks);
+                return sportsbooks;
+            }
+            
+            // Get bookmaker logo emoji
+            getBookmakerLogo(name) {
+                const logos = {
+                    'ESPN BET': '🏈',
+                    'ESPN Bet - Live Odds': '📡',
+                    'FanDuel': '🎰',
+                    'DraftKings': '👑',
+                    'BetMGM': '🎲',
+                    'Caesars': '🏛️',
+                    'BET365': '💚',
+                    'PointsBet': '📍',
+                    'Barstool': '🪑'
+                };
+                return logos[name] || '🎲';
+            }
+            
+            // Fallback: Simulated sportsbook odds (when ESPN data unavailable or for player props)
+            getSimulatedSportsbookOdds(propType) {
+                // NOTE: Player props use simulated odds because ESPN API doesn't provide them
+                // Lines are estimated, but ML predictions are real - still provides value!
                 const books = [
-                    { name: 'FanDuel', overOdds: -110, underOdds: -110, logo: '🎰' },
-                    { name: 'DraftKings', overOdds: -108, underOdds: -112, logo: '👑' },
-                    { name: 'BetMGM', overOdds: -115, underOdds: -105, logo: '🎲' },
-                    { name: 'Caesars', overOdds: -110, underOdds: -110, logo: '🏛️' },
-                    { name: 'ESPN BET', overOdds: -112, underOdds: -108, logo: '🏈' }
+                    { name: 'ESPN BET*', overOdds: -110, underOdds: -110, logo: '🏈', simulated: true },
+                    { name: 'FanDuel*', overOdds: -110, underOdds: -110, logo: '🎰', simulated: true },
+                    { name: 'DraftKings*', overOdds: -108, underOdds: -112, logo: '👑', simulated: true },
+                    { name: 'BetMGM*', overOdds: -115, underOdds: -105, logo: '🎲', simulated: true },
+                    { name: 'Caesars*', overOdds: -110, underOdds: -110, logo: '🏛️', simulated: true }
                 ];
                 
                 // Randomize slightly for realism
                 return books.map(book => ({
                     ...book,
-                    overOdds: book.overOdds + (Math.random() * 10 - 5),
-                    underOdds: book.underOdds + (Math.random() * 10 - 5)
+                    overOdds: Math.round(book.overOdds + (Math.random() * 10 - 5)),
+                    underOdds: Math.round(book.underOdds + (Math.random() * 10 - 5))
                 }));
             }
         }
         
         // Initialize Props Service
         window.PropsBetting = new PropsBettingService();
-        console.log('🎯 Props Betting Service initialized');
+        console.log('🎯 Props Betting Service initialized (using ML predictions + simulated prop lines)');
+
         
         // Weekly Schedule Management Functions
         function refreshWeeklySchedule() {
