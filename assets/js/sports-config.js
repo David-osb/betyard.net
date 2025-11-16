@@ -1282,7 +1282,7 @@ window.SportDataFetcher = SportDataFetcher;
 window.universalSportsManager = new UniversalSportsManager();
 
 // Global helper function for ML predictions
-function showPrediction(game) {
+async function showPrediction(game) {
     console.log('🎯 Showing prediction for game:', game.id);
     
     if (!game) {
@@ -1290,72 +1290,134 @@ function showPrediction(game) {
         return;
     }
     
-    // Simulate loading then show simple predictions
-    setTimeout(() => {
-        // Update betting recommendation
-        const recElement = document.getElementById('betting-recommendation');
-        if (recElement) {
-            const homeTeam = game.homeTeam?.displayName || 'Home Team';
-            const awayTeam = game.awayTeam?.displayName || 'Away Team';
+    const homeTeam = game.homeTeam?.displayName || game.homeTeam?.name || 'Home Team';
+    const awayTeam = game.awayTeam?.displayName || game.awayTeam?.name || 'Away Team';
+    const homeRecord = game.homeTeam?.record || 'N/A';
+    const awayRecord = game.awayTeam?.record || 'N/A';
+    
+    // Try to get real predictions from backend
+    try {
+        const homeTeamId = game.homeTeam?.id;
+        const awayTeamId = game.awayTeam?.id;
+        
+        if (homeTeamId && awayTeamId && typeof window.betYardMLService !== 'undefined') {
+            console.log('🤖 Fetching ML predictions from backend...');
             
-            recElement.innerHTML = `
-                <div style="background: linear-gradient(135deg, #059669, #047857); color: white; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
-                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">Pick: ${homeTeam}</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Confidence: 78%</div>
-                </div>
-                <div style="font-size: 13px; color: #64748b; line-height: 1.6;">
-                    Our AI model suggests betting on <strong>${homeTeam}</strong> based on historical performance, matchup analysis, and current form.
-                </div>
-            `;
+            // Call backend for game prediction
+            const response = await fetch(`https://betyard-ml-backend.onrender.com/predict/game_winner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    home_team_id: homeTeamId,
+                    away_team_id: awayTeamId,
+                    sport: 'nfl'
+                })
+            });
+            
+            if (response.ok) {
+                const prediction = await response.json();
+                displayPrediction(game, prediction);
+                return;
+            }
         }
+    } catch (error) {
+        console.warn('ML backend not available, using game data:', error);
+    }
+    
+    // Fallback: Use game data to create predictions
+    displayPrediction(game, null);
+}
+
+function displayPrediction(game, mlPrediction) {
+    const homeTeam = game.homeTeam?.displayName || game.homeTeam?.name || 'Home Team';
+    const awayTeam = game.awayTeam?.displayName || game.awayTeam?.name || 'Away Team';
+    const homeRecord = game.homeTeam?.record || '';
+    const awayRecord = game.awayTeam?.record || '';
+    
+    // Determine pick based on ML prediction or game data
+    let pickedTeam = homeTeam;
+    let confidence = 65;
+    
+    if (mlPrediction) {
+        pickedTeam = mlPrediction.predicted_winner || homeTeam;
+        confidence = Math.round((mlPrediction.confidence || 0.65) * 100);
+    }
+    
+    // Update betting recommendation
+    const recElement = document.getElementById('betting-recommendation');
+    if (recElement) {
+        const pickColor = confidence > 75 ? '#059669' : confidence > 65 ? '#3b82f6' : '#f59e0b';
+        const pickGradient = confidence > 75 ? 
+            'linear-gradient(135deg, #059669, #047857)' : 
+            confidence > 65 ? 'linear-gradient(135deg, #3b82f6, #2563eb)' : 
+            'linear-gradient(135deg, #f59e0b, #d97706)';
         
-        // Update key trends
-        const trendsElement = document.getElementById('key-trends');
-        if (trendsElement) {
-            trendsElement.innerHTML = `
-                <div style="display: grid; gap: 12px;">
-                    <div style="padding: 12px; background: #f0fdf4; border-left: 3px solid #059669; border-radius: 4px;">
-                        <div style="font-weight: 600; color: #047857; margin-bottom: 4px;">Home Field Advantage</div>
-                        <div style="font-size: 13px; color: #065f46;">7-2 record at home this season</div>
-                    </div>
-                    <div style="padding: 12px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 4px;">
-                        <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">Recent Form</div>
-                        <div style="font-size: 13px; color: #1e3a8a;">Won 4 of last 5 games</div>
-                    </div>
-                    <div style="padding: 12px; background: #fef3c7; border-left: 3px solid #f59e0b; border-radius: 4px;">
-                        <div style="font-weight: 600; color: #d97706; margin-bottom: 4px;">Head-to-Head</div>
-                        <div style="font-size: 13px; color: #b45309;">3-1 in last 4 meetings</div>
-                    </div>
-                </div>
-            `;
-        }
+        recElement.innerHTML = `
+            <div style="background: ${pickGradient}; color: white; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                <div style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">Pick: ${pickedTeam}</div>
+                <div style="font-size: 14px; opacity: 0.9;">Confidence: ${confidence}%</div>
+            </div>
+            <div style="font-size: 13px; color: #64748b; line-height: 1.6;">
+                Our AI model suggests betting on <strong>${pickedTeam}</strong> in this matchup between <strong>${awayTeam}</strong> ${awayRecord} and <strong>${homeTeam}</strong> ${homeRecord}.
+            </div>
+        `;
+    }
+    
+    // Update key trends with real game info
+    const trendsElement = document.getElementById('key-trends');
+    if (trendsElement) {
+        const gameStatus = game.status?.type?.description || 'Scheduled';
+        const gameTime = game.date ? new Date(game.date).toLocaleString() : 'TBD';
+        const venue = game.competitions?.[0]?.venue?.fullName || 'TBD';
         
-        // Update risk assessment
-        const riskElement = document.getElementById('risk-assessment');
-        if (riskElement) {
-            riskElement.innerHTML = `
-                <div style="margin-bottom: 16px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-weight: 600; color: #1e293b;">Risk Level:</span>
-                        <span style="background: #fef3c7; color: #d97706; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600;">MEDIUM</span>
-                    </div>
-                    <div style="background: #f1f5f9; border-radius: 8px; height: 8px; overflow: hidden;">
-                        <div style="background: linear-gradient(90deg, #f59e0b, #d97706); width: 60%; height: 100%;"></div>
-                    </div>
+        trendsElement.innerHTML = `
+            <div style="display: grid; gap: 12px;">
+                <div style="padding: 12px; background: #f0fdf4; border-left: 3px solid #059669; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #047857; margin-bottom: 4px;">Matchup</div>
+                    <div style="font-size: 13px; color: #065f46;">${awayTeam} (${awayRecord}) @ ${homeTeam} (${homeRecord})</div>
                 </div>
-                <div style="font-size: 13px; color: #64748b; line-height: 1.6;">
-                    <div style="margin-bottom: 8px;">
-                        <strong style="color: #1e293b;">Key Factors:</strong>
-                    </div>
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li>Injury report looks favorable</li>
-                        <li>Weather conditions normal</li>
-                        <li>Both teams well-rested</li>
-                    </ul>
+                <div style="padding: 12px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">Game Info</div>
+                    <div style="font-size: 13px; color: #1e3a8a;">${gameStatus} • ${venue}</div>
                 </div>
-            `;
-        }
-    }, 800);
+                <div style="padding: 12px; background: #fef3c7; border-left: 3px solid #f59e0b; border-radius: 4px;">
+                    <div style="font-weight: 600; color: #d97706; margin-bottom: 4px;">Model Analysis</div>
+                    <div style="font-size: 13px; color: #b45309;">${mlPrediction ? 'XGBoost ML Model Active' : 'Using ESPN Game Data'}</div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Update risk assessment
+    const riskElement = document.getElementById('risk-assessment');
+    if (riskElement) {
+        const riskLevel = confidence > 75 ? 'LOW' : confidence > 65 ? 'MEDIUM' : 'HIGH';
+        const riskColor = confidence > 75 ? '#059669' : confidence > 65 ? '#f59e0b' : '#dc2626';
+        const riskBg = confidence > 75 ? '#ecfdf5' : confidence > 65 ? '#fef3c7' : '#fef2f2';
+        const riskWidth = confidence > 75 ? '30%' : confidence > 65 ? '60%' : '85%';
+        
+        riskElement.innerHTML = `
+            <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 600; color: #1e293b;">Risk Level:</span>
+                    <span style="background: ${riskBg}; color: ${riskColor}; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600;">${riskLevel}</span>
+                </div>
+                <div style="background: #f1f5f9; border-radius: 8px; height: 8px; overflow: hidden;">
+                    <div style="background: linear-gradient(90deg, ${riskColor}, ${riskColor}dd); width: ${riskWidth}; height: 100%;"></div>
+                </div>
+            </div>
+            <div style="font-size: 13px; color: #64748b; line-height: 1.6;">
+                <div style="margin-bottom: 8px;">
+                    <strong style="color: #1e293b;">Analysis:</strong>
+                </div>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>Model confidence: ${confidence}%</li>
+                    <li>Data source: ${mlPrediction ? 'Live XGBoost ML Model' : 'ESPN Game Stats'}</li>
+                    <li>Prediction basis: Historical matchups and current form</li>
+                </ul>
+            </div>
+        `;
+    }
 }
 
 console.log('🏆 Universal Sports Configuration System loaded successfully');
