@@ -80,47 +80,35 @@ def get_player_baseline(position):
 
 def extract_features(player_name, team_code, opponent_code, position):
     """
-    Extract 10 features from player/team/opponent data
+    Extract 3 features to match the existing trained models
     
-    CRITICAL: Must return exactly 10 features in this order!
+    Models were trained with only 3 features:
+    1. Team offensive rating
+    2. Team defensive rating  
+    3. Opponent defensive rating
     """
     # Get team stats
     team_stats = get_team_stats(team_code)
     opponent_stats = get_team_stats(opponent_code) if opponent_code else {'defense': 75}
     
-    # Get player baseline stats
-    player_baseline = get_player_baseline(position)
-    
-    # Calculate matchup difficulty
-    matchup_difficulty = max(0, min(100, 
-        opponent_stats['defense'] - team_stats['offense'] + 50
-    ))
-    
-    # Build feature vector (EXACTLY 10 features)
+    # Build feature vector (EXACTLY 3 features to match trained model)
     features = np.array([
         team_stats['offense'],              # 1. Team offensive rating
         team_stats['defense'],              # 2. Team defensive rating  
-        opponent_stats['defense'],          # 3. Opponent defensive rating
-        1.0,                                # 4. Is home game (default 1)
-        player_baseline['avg_yards'],       # 5. Player season avg yards
-        player_baseline['avg_tds'],         # 6. Player season avg TDs
-        player_baseline['recent_avg'],      # 7. Player recent 3-game avg
-        75.0,                               # 8. Weather score (default 75)
-        matchup_difficulty,                 # 9. Matchup difficulty
-        100.0                               # 10. Player health (default 100)
+        opponent_stats['defense']           # 3. Opponent defensive rating
     ]).reshape(1, -1)
     
     return features
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Health check endpoint - Fixed 10-feature version"""
+    """Health check endpoint - Matches existing 3-feature models"""
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v2025-11-16-feature-fix',
-        'features_count': 10,
-        'fix_applied': True
+        'version': 'v2025-11-16-model-compatible',
+        'features_count': 3,
+        'note': 'Using 3 features to match existing trained models'
     })
 
 @app.route('/predict', methods=['POST'])
@@ -155,10 +143,10 @@ def predict():
         # Extract 10 features
         features = extract_features(player_name, team_code, opponent_code, position)
         
-        # CRITICAL: Verify feature count
-        if features.shape[1] != 10:
+        # CRITICAL: Verify feature count matches model expectations
+        if features.shape[1] != 3:
             return jsonify({
-                'error': f'Feature shape mismatch, expected: 10, got {features.shape[1]}'
+                'error': f'Feature shape mismatch, expected: 3, got {features.shape[1]}'
             }), 500
         
         # Make prediction
@@ -206,7 +194,7 @@ def predict():
         prediction['team_code'] = team_code
         prediction['opponent_code'] = opponent_code
         prediction['position'] = position.upper()
-        prediction['model_version'] = 'v2025-11-16-feature-fix'
+        prediction['model_version'] = 'v2025-11-16-model-compatible'
         
         return jsonify(prediction)
         
