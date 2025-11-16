@@ -951,7 +951,12 @@ class UniversalSportsManager {
         // Load team-specific news
         await this.loadTeamNews([homeTeam, awayTeam]);
         
-        // Show predictions panel if it exists
+        // Hide game container and show predictions panel
+        const gameContainer = document.getElementById('game-centric-container');
+        if (gameContainer) {
+            gameContainer.style.display = 'none'; // Hide the game cards
+        }
+        
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
             predictionsPanel.style.display = 'block';
@@ -967,6 +972,9 @@ class UniversalSportsManager {
                 navHint.className = 'matchup-nav-hint';
                 navHint.style.cssText = 'background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);';
                 navHint.innerHTML = `
+                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">
+                        <i class="material-icons" style="font-size: 18px;">arrow_back</i> Back to Games
+                    </button>
                     <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
                         📊 ${homeTeam} vs ${awayTeam} - Model Projections
                     </div>
@@ -974,6 +982,7 @@ class UniversalSportsManager {
                         View AI predictions below, then <a href="#news-container" style="color: #fbbf24; text-decoration: underline; cursor: pointer;" onclick="document.getElementById('news-container').scrollIntoView({behavior: 'smooth'})">scroll down for news</a>
                     </div>
                 `;
+                navHint.style.position = 'relative'; // For absolute positioning of back button
                 predictionsPanel.insertBefore(navHint, predictionsPanel.firstChild);
             }
         }
@@ -1014,6 +1023,36 @@ class UniversalSportsManager {
                 indicator.style.transform = 'scaleY(1)';
             }
         }
+    }
+
+    /**
+     * Return to games view from prediction panel
+     */
+    backToGames() {
+        // Hide predictions panel
+        const predictionsPanel = document.getElementById('predictions-panel');
+        if (predictionsPanel) {
+            predictionsPanel.style.display = 'none';
+            predictionsPanel.classList.remove('active');
+            
+            // Remove the navigation hint
+            const navHint = predictionsPanel.querySelector('.matchup-nav-hint');
+            if (navHint) {
+                navHint.remove();
+            }
+        }
+        
+        // Show game container
+        const gameContainer = document.getElementById('game-centric-container');
+        if (gameContainer) {
+            gameContainer.style.display = 'block';
+            
+            // Scroll to game container
+            gameContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Clear selection
+        this.updateGameSelection(null);
     }
 
     /**
