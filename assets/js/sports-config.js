@@ -951,7 +951,7 @@ class UniversalSportsManager {
         // Load team-specific news
         await this.loadTeamNews([homeTeam, awayTeam]);
         
-        // Hide game container and show predictions panel
+        // Hide game container, news section, and sport selector
         const gameContainer = document.getElementById('game-centric-container');
         if (gameContainer) {
             gameContainer.style.display = 'none';
@@ -963,11 +963,23 @@ class UniversalSportsManager {
             qbNewsSection.parentElement.style.display = 'none';
         }
         
+        // Hide sport selector
+        const sportSelector = document.querySelector('.sport-selector-header');
+        if (sportSelector && sportSelector.parentElement) {
+            sportSelector.parentElement.style.display = 'none';
+        }
+        
+        // Hide ML banner too
+        const mlBanner = document.querySelector('.ml-active-banner');
+        if (mlBanner && mlBanner.parentElement) {
+            mlBanner.parentElement.style.display = 'none';
+        }
+        
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
             // Clear existing content and create fresh matchup view
             predictionsPanel.innerHTML = `
-                <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px; position: relative;">
+                <div style="background: linear-gradient(135deg, #002d84, #003da5, #0047ab); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px; position: relative;">
                     <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                         ← Back to Games
                     </button>
@@ -1052,6 +1064,18 @@ class UniversalSportsManager {
         const qbNewsSection = document.getElementById('qb-news-section');
         if (qbNewsSection && qbNewsSection.parentElement) {
             qbNewsSection.parentElement.style.display = 'block';
+        }
+        
+        // Show sport selector
+        const sportSelector = document.querySelector('.sport-selector-header');
+        if (sportSelector && sportSelector.parentElement) {
+            sportSelector.parentElement.style.display = 'block';
+        }
+        
+        // Show ML banner
+        const mlBanner = document.querySelector('.ml-active-banner');
+        if (mlBanner && mlBanner.parentElement) {
+            mlBanner.parentElement.style.display = 'block';
         }
         
         // Scroll to top
