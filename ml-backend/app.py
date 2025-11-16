@@ -130,9 +130,9 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v2025-11-16-enhanced-10-features',
+        'version': 'v2025-11-16-FRESH-MODELS',
         'features_count': 10,
-        'note': 'Enhanced predictions with 10 features including weather, health, and matchup analysis'
+        'note': 'REDEPLOYED: Fresh 10-feature models loaded - fixed negative predictions'
     })
 
 @app.route('/predict', methods=['POST'])
