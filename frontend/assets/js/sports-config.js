@@ -946,40 +946,11 @@ class UniversalSportsManager {
         // Load team-specific news
         await this.loadTeamNews([homeTeam, awayTeam]);
         
-        // Show predictions panel if it exists
-        const predictionsPanel = document.getElementById('predictions-panel');
-        if (predictionsPanel) {
-            predictionsPanel.style.display = 'block';
-            predictionsPanel.classList.add('active'); // Add active class to make it visible
-            
-            // Scroll to predictions panel smoothly
-            predictionsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Add a navigation hint at the top of predictions panel
-            const existingHint = predictionsPanel.querySelector('.matchup-nav-hint');
-            if (!existingHint) {
-                const navHint = document.createElement('div');
-                navHint.className = 'matchup-nav-hint';
-                navHint.style.cssText = 'background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);';
-                navHint.innerHTML = `
-                    <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
-                        📊 ${homeTeam} vs ${awayTeam} - Model Projections
-                    </div>
-                    <div style="font-size: 14px; opacity: 0.9;">
-                        View AI predictions below, then <a href="#news-container" style="color: #fbbf24; text-decoration: underline; cursor: pointer;" onclick="document.getElementById('news-container').scrollIntoView({behavior: 'smooth'})">scroll down for news</a>
-                    </div>
-                `;
-                predictionsPanel.insertBefore(navHint, predictionsPanel.firstChild);
-            }
+        // Scroll to news section
+        const newsSection = document.getElementById('news-container') || document.getElementById('qb-news-section');
+        if (newsSection) {
+            newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        
-        // Also trigger model projections/betting insights update
-        if (typeof updateBettingInsights === 'function') {
-            updateBettingInsights();
-        }
-        
-        // Show prediction for this specific game
-        showPrediction(gameId);
     }
 
     /**
@@ -1169,38 +1140,7 @@ window.universalSportsManager = new UniversalSportsManager();
 // Global helper function for ML predictions
 function showPrediction(gameId) {
     console.log('🎯 Showing prediction for game:', gameId);
-    
-    // Get predictions panel
-    const predictionsPanel = document.getElementById('predictions-panel');
-    if (!predictionsPanel) {
-        console.warn('Predictions panel not found');
-        return;
-    }
-    
-    // Make sure the panel is visible
-    predictionsPanel.style.display = 'block';
-    
-    // Trigger ESPN model data fetch if available
-    if (typeof enhancedBettingInsights !== 'undefined' && enhancedBettingInsights.updateBettingInsightsUI) {
-        console.log('🤖 Loading ESPN model projections...');
-        
-        // Fetch and display predictions
-        enhancedBettingInsights.getBettingInsights(
-            'NFL', // sport
-            gameId, // game ID
-            null,  // team (optional)
-            null   // position (optional)
-        ).then(insights => {
-            if (insights) {
-                enhancedBettingInsights.updateBettingInsightsUI(insights);
-                console.log('✅ ESPN model projections loaded');
-            }
-        }).catch(error => {
-            console.error('Error loading ESPN projections:', error);
-        });
-    } else {
-        console.log('ℹ️ Enhanced betting insights not available, showing static predictions');
-    }
+    // This will connect to your ML backend
 }
 
 console.log('🏆 Universal Sports Configuration System loaded successfully');
