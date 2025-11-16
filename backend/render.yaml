@@ -3,6 +3,7 @@ services:
     name: betyard-ml-backend
     runtime: python
     env: python
+    rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
