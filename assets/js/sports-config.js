@@ -1357,6 +1357,5 @@ function showPrediction(game) {
         }
     }, 800);
 }
-}
 
 console.log('🏆 Universal Sports Configuration System loaded successfully');
