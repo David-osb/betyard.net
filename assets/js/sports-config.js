@@ -965,31 +965,32 @@ class UniversalSportsManager {
         
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
+            // Clear existing content and create fresh matchup view
+            predictionsPanel.innerHTML = `
+                <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px; position: relative;">
+                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                        ← Back to Games
+                    </button>
+                    <div style="text-align: center; padding-top: 30px;">
+                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 8px; color: white;">
+                            📊 ${homeTeam} vs ${awayTeam}
+                        </h2>
+                        <p style="font-size: 14px; opacity: 0.9; margin: 0;">AI-Powered Matchup Analysis</p>
+                    </div>
+                </div>
+                
+                <div id="enhanced-value-pick" style="margin-bottom: 20px;"></div>
+                <div id="enhanced-hot-trend" style="margin-bottom: 20px;"></div>
+                <div id="enhanced-market-insight" style="margin-bottom: 20px;"></div>
+                <div id="enhanced-risk-assessment" style="margin-bottom: 20px;"></div>
+                <div id="enhanced-espn-status" style="margin-bottom: 20px;"></div>
+            `;
+            
             predictionsPanel.style.display = 'block';
             predictionsPanel.classList.add('active');
             
             // Scroll to top of page smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Add a navigation hint at the top of predictions panel
-            const existingHint = predictionsPanel.querySelector('.matchup-nav-hint');
-            if (!existingHint) {
-                const navHint = document.createElement('div');
-                navHint.className = 'matchup-nav-hint';
-                navHint.style.cssText = 'position: relative; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 50px 16px 16px 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);';
-                navHint.innerHTML = `
-                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                        ← Back to Games
-                    </button>
-                    <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
-                        📊 ${homeTeam} vs ${awayTeam} - Model Projections
-                    </div>
-                    <div style="font-size: 14px; opacity: 0.9;">
-                        View AI predictions below, then <a href="#news-container" style="color: #fbbf24; text-decoration: underline; cursor: pointer;" onclick="document.getElementById('news-container').scrollIntoView({behavior: 'smooth'})">scroll down for news</a>
-                    </div>
-                `;
-                predictionsPanel.insertBefore(navHint, predictionsPanel.firstChild);
-            }
         }
         
         // Also trigger model projections/betting insights update
@@ -1039,12 +1040,6 @@ class UniversalSportsManager {
         if (predictionsPanel) {
             predictionsPanel.style.display = 'none';
             predictionsPanel.classList.remove('active');
-            
-            // Remove the navigation hint
-            const navHint = predictionsPanel.querySelector('.matchup-nav-hint');
-            if (navHint) {
-                navHint.remove();
-            }
         }
         
         // Show game container
