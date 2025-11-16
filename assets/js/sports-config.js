@@ -1541,21 +1541,30 @@ async function fetchAndDisplayGameProps(game, homeTeam, awayTeam) {
         
         // Extract ESPN event ID from game object
         const eventId = game.id || game.eventId || null;
-        console.log('📡 Using ESPN Event ID:', eventId);
+        console.log('📡 Using ESPN Event ID:', eventId, 'Home:', homeTeam, 'Away:', awayTeam);
         
-        // Get props for both teams with ESPN odds (focusing on QB, RB, WR)
-        const homeProps = await window.PropsBetting.getPlayerProps('Team QB', homeTeam, 'QB', eventId);
-        const awayProps = await window.PropsBetting.getPlayerProps('Team QB', awayTeam, 'QB', eventId);
+        // Get sample QB names for each team (in production, fetch from roster API)
+        const homeQB = getTeamQB(homeTeam);
+        const awayQB = getTeamQB(awayTeam);
+        
+        console.log('🏈 Fetching props for:', homeQB, '(', homeTeam, ') vs', awayQB, '(', awayTeam, ')');
+        
+        // Get props for both QBs with ESPN odds
+        const homeProps = await window.PropsBetting.getPlayerProps(homeQB, homeTeam, 'QB', eventId);
+        const awayProps = await window.PropsBetting.getPlayerProps(awayQB, awayTeam, 'QB', eventId);
         
         // Combine and display all props
         const allProps = [...(homeProps || []), ...(awayProps || [])];
+        
+        console.log('📊 Total props fetched:', allProps.length);
         
         if (allProps.length > 0) {
             displayGamePropsPanel(allProps, homeTeam, awayTeam);
         } else {
             propsContainer.innerHTML = `
                 <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
-                    <p style="color: #64748b; font-size: 14px;">No props available for this game yet. Check back closer to game time!</p>
+                    <p style="color: #64748b; font-size: 14px;">⚠️ Props system ready but ML backend may be unavailable.</p>
+                    <p style="color: #94a3b8; font-size: 12px; margin-top: 8px;">Tried to fetch props for ${homeQB} and ${awayQB}</p>
                 </div>
             `;
         }
@@ -1612,6 +1621,56 @@ function displayGamePropsPanel(props, homeTeam, awayTeam) {
             </div>
         `;
     }
+}
+
+/**
+ * Get starting QB name for a team (fallback mapping)
+ */
+function getTeamQB(teamCode) {
+    const qbMap = {
+        // AFC East
+        'BUF': 'Josh Allen',
+        'MIA': 'Tua Tagovailoa',
+        'NE': 'Mac Jones',
+        'NYJ': 'Aaron Rodgers',
+        // AFC North
+        'BAL': 'Lamar Jackson',
+        'CIN': 'Joe Burrow',
+        'CLE': 'Deshaun Watson',
+        'PIT': 'Russell Wilson',
+        // AFC South
+        'HOU': 'C.J. Stroud',
+        'IND': 'Anthony Richardson',
+        'JAX': 'Trevor Lawrence',
+        'TEN': 'Will Levis',
+        // AFC West
+        'DEN': 'Bo Nix',
+        'KC': 'Patrick Mahomes',
+        'LV': 'Aidan O\'Connell',
+        'LAC': 'Justin Herbert',
+        // NFC East
+        'DAL': 'Dak Prescott',
+        'NYG': 'Daniel Jones',
+        'PHI': 'Jalen Hurts',
+        'WAS': 'Jayden Daniels',
+        // NFC North
+        'CHI': 'Caleb Williams',
+        'DET': 'Jared Goff',
+        'GB': 'Jordan Love',
+        'MIN': 'Sam Darnold',
+        // NFC South
+        'ATL': 'Kirk Cousins',
+        'CAR': 'Bryce Young',
+        'NO': 'Derek Carr',
+        'TB': 'Baker Mayfield',
+        // NFC West
+        'ARI': 'Kyler Murray',
+        'LAR': 'Matthew Stafford',
+        'SF': 'Brock Purdy',
+        'SEA': 'Geno Smith'
+    };
+    
+    return qbMap[teamCode] || `${teamCode} QB`;
 }
 
 console.log('🏆 Universal Sports Configuration System loaded successfully');
