@@ -940,6 +940,11 @@ class UniversalSportsManager {
     async selectGame(gameId, homeTeam, awayTeam) {
         console.log('Game selected:', gameId, homeTeam, 'vs', awayTeam);
         
+        // Find and store the selected game data
+        const gameData = await this.activeFetcher.fetchGames();
+        const selectedGame = gameData.find(g => g.id === gameId);
+        this.selectedGame = selectedGame; // Store for later use
+        
         // Update visual selection
         this.updateGameSelection(gameId);
         
@@ -979,7 +984,9 @@ class UniversalSportsManager {
         }
         
         // Show prediction for this specific game
-        showPrediction(gameId);
+        if (selectedGame) {
+            showPrediction(selectedGame);
+        }
     }
 
     /**
@@ -1167,8 +1174,8 @@ window.SportDataFetcher = SportDataFetcher;
 window.universalSportsManager = new UniversalSportsManager();
 
 // Global helper function for ML predictions
-function showPrediction(gameId) {
-    console.log('🎯 Showing prediction for game:', gameId);
+function showPrediction(game) {
+    console.log('🎯 Showing prediction for game:', game.id);
     
     // Get predictions panel
     const predictionsPanel = document.getElementById('predictions-panel');
@@ -1180,10 +1187,8 @@ function showPrediction(gameId) {
     // Make sure the panel is visible
     predictionsPanel.style.display = 'block';
     
-    // Find the game data to get team IDs
-    const game = currentSportData?.games?.find(g => g.id === gameId);
     if (!game) {
-        console.warn('Game data not found for ID:', gameId);
+        console.warn('Game data not provided');
         return;
     }
     
@@ -1192,11 +1197,12 @@ function showPrediction(gameId) {
         console.log('🤖 Loading ESPN model projections...');
         
         // Extract team IDs from game data
-        const homeTeamId = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'home')?.team?.id;
-        const awayTeamId = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'away')?.team?.id;
+        const homeTeamId = game.homeTeam?.id;
+        const awayTeamId = game.awayTeam?.id;
         
         if (!homeTeamId || !awayTeamId) {
             console.warn('Could not extract team IDs from game data');
+            console.log('Game structure:', game);
             return;
         }
         
