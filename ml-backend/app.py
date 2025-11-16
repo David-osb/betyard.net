@@ -1,3 +1,4 @@
+from datetime import datetime
 """
 BetYard ML Backend - Fixed Version
 Resolves the "Feature shape mismatch: expected 10, got 8" error
@@ -212,14 +213,22 @@ def predict():
         else:
             prediction = {'prediction': raw_prediction, 'confidence': 50}
         
-        # Add metadata
+        # Add metadata to prediction
         prediction['player_name'] = player_name
         prediction['team_code'] = team_code
         prediction['opponent_code'] = opponent_code
         prediction['position'] = position.upper()
         prediction['model_version'] = 'v2025-11-16-enhanced-10-features'
         
-        return jsonify(prediction)
+        # Return in expected nested format for frontend
+        return jsonify({
+            'prediction': prediction,
+            'metadata': {
+                'timestamp': datetime.now().isoformat(),
+                'model_version': 'v2025-11-16-enhanced-10-features',
+                'features_used': 10
+            }
+        })
         
     except Exception as e:
         return jsonify({
