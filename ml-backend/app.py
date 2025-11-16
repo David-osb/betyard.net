@@ -114,12 +114,13 @@ def extract_features(player_name, team_code, opponent_code, position):
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
+    """Health check endpoint - Fixed 10-feature version"""
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
         'version': 'v2025-11-16-feature-fix',
-        'features_count': 10
+        'features_count': 10,
+        'fix_applied': True
     })
 
 @app.route('/predict', methods=['POST'])
