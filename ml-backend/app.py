@@ -18,16 +18,16 @@ MODELS = {}
 MODEL_DIR = os.path.dirname(__file__)
 
 def load_models():
-    """Load all position models - 10-feature enhanced version"""
+    """Load all position models - v2 10-feature enhanced version"""
     positions = ['qb', 'rb', 'wr', 'te']
     for pos in positions:
-        model_path = os.path.join(MODEL_DIR, f'{pos}_model.pkl')
+        model_path = os.path.join(MODEL_DIR, f'{pos}_model_v2.pkl')
         if os.path.exists(model_path):
             try:
                 MODELS[pos] = xgb.Booster()
                 MODELS[pos].load_model(model_path)
                 file_size = os.path.getsize(model_path) / 1024  # KB
-                print(f"✅ Loaded {pos.upper()} model ({file_size:.1f} KB) - 10 features")
+                print(f"✅ Loaded {pos.upper()} model v2 ({file_size:.1f} KB) - 10 features FRESH")
             except Exception as e:
                 print(f"❌ Failed to load {pos.upper()} model: {e}")
 
@@ -130,9 +130,9 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v2025-11-16-FRESH-MODELS',
+        'version': 'v2-RENAMED-MODELS-CACHE-BYPASS',
         'features_count': 10,
-        'note': 'REDEPLOYED: Fresh 10-feature models loaded - fixed negative predictions'
+        'note': 'V2 MODELS: Renamed files to bypass Render cache - should show positive predictions now'
     })
 
 @app.route('/predict', methods=['POST'])
