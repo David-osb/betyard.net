@@ -7008,8 +7008,15 @@
                 try {
                     console.log(`🎯 Fetching props for ${playerName} (Event: ${eventId})`);
                     
-                    // Get ML prediction first for comparison
-                    const mlPrediction = await window.BetYardML.getPrediction(playerName, teamCode, null, position);
+                    // Try to get ML prediction, but don't fail if backend is down
+                    let mlPrediction = null;
+                    try {
+                        mlPrediction = await window.BetYardML.getPrediction(playerName, teamCode, null, position);
+                    } catch (mlError) {
+                        console.warn('⚠️ ML Backend unavailable, using fallback predictions:', mlError.message);
+                        // Use fallback predictions when ML backend is down
+                        mlPrediction = this.getFallbackPrediction(playerName, teamCode, position);
+                    }
                     
                     // Get real ESPN odds if eventId provided
                     let espnOdds = null;
@@ -7031,6 +7038,50 @@
                     console.error('❌ Error fetching props:', error);
                     return [];
                 }
+            }
+            
+            // Fallback predictions when ML backend is unavailable
+            getFallbackPrediction(playerName, teamCode, position) {
+                console.log('📊 Using fallback predictions for', playerName);
+                
+                // Average NFL QB stats as fallback
+                if (position === 'QB') {
+                    return {
+                        passing_yards: 250,
+                        completions: 22,
+                        attempts: 35,
+                        touchdowns: 2,
+                        interceptions: 1,
+                        completion_percentage: 62.9,
+                        yards_per_attempt: 7.1,
+                        passer_rating: 88.5,
+                        confidence: 50,
+                        note: 'Fallback prediction - ML backend unavailable'
+                    };
+                } else if (position === 'RB') {
+                    return {
+                        rushing_yards: 75,
+                        rushing_attempts: 18,
+                        rushing_touchdowns: 0.5,
+                        receiving_yards: 25,
+                        receptions: 3,
+                        total_touchdowns: 0.7,
+                        confidence: 50,
+                        note: 'Fallback prediction - ML backend unavailable'
+                    };
+                } else if (position === 'WR' || position === 'TE') {
+                    return {
+                        receiving_yards: 60,
+                        receptions: 5,
+                        receiving_touchdowns: 0.5,
+                        targets: 8,
+                        yards_per_reception: 12,
+                        confidence: 50,
+                        note: 'Fallback prediction - ML backend unavailable'
+                    };
+                }
+                
+                return {};
             }
             
             // Define all prop markets based on position
