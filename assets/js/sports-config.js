@@ -1180,16 +1180,34 @@ function showPrediction(gameId) {
     // Make sure the panel is visible
     predictionsPanel.style.display = 'block';
     
+    // Find the game data to get team IDs
+    const game = currentSportData?.games?.find(g => g.id === gameId);
+    if (!game) {
+        console.warn('Game data not found for ID:', gameId);
+        return;
+    }
+    
     // Trigger ESPN model data fetch if available
     if (typeof enhancedBettingInsights !== 'undefined' && enhancedBettingInsights.updateBettingInsightsUI) {
         console.log('🤖 Loading ESPN model projections...');
         
-        // Fetch and display predictions
+        // Extract team IDs from game data
+        const homeTeamId = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'home')?.team?.id;
+        const awayTeamId = game.competitions?.[0]?.competitors?.find(c => c.homeAway === 'away')?.team?.id;
+        
+        if (!homeTeamId || !awayTeamId) {
+            console.warn('Could not extract team IDs from game data');
+            return;
+        }
+        
+        // Fetch and display predictions for the matchup
+        // Using homeTeamId as primary team, awayTeamId as opponent
         enhancedBettingInsights.getBettingInsights(
-            'NFL', // sport
-            gameId, // game ID
-            null,  // team (optional)
-            null   // position (optional)
+            homeTeamId,     // teamId (home team)
+            'TEAM',         // position (team-level prediction)
+            'game_winner',  // predictionType
+            homeTeamId,     // teamId again
+            awayTeamId      // opponentId
         ).then(insights => {
             if (insights) {
                 enhancedBettingInsights.updateBettingInsightsUI(insights);
