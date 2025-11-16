@@ -954,26 +954,32 @@ class UniversalSportsManager {
         // Hide game container and show predictions panel
         const gameContainer = document.getElementById('game-centric-container');
         if (gameContainer) {
-            gameContainer.style.display = 'none'; // Hide the game cards
+            gameContainer.style.display = 'none';
+        }
+        
+        // Hide the news sections too
+        const qbNewsSection = document.getElementById('qb-news-section');
+        if (qbNewsSection && qbNewsSection.parentElement) {
+            qbNewsSection.parentElement.style.display = 'none';
         }
         
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
             predictionsPanel.style.display = 'block';
-            predictionsPanel.classList.add('active'); // Add active class to make it visible
+            predictionsPanel.classList.add('active');
             
-            // Scroll to predictions panel smoothly
-            predictionsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scroll to top of page smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
             // Add a navigation hint at the top of predictions panel
             const existingHint = predictionsPanel.querySelector('.matchup-nav-hint');
             if (!existingHint) {
                 const navHint = document.createElement('div');
                 navHint.className = 'matchup-nav-hint';
-                navHint.style.cssText = 'background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);';
+                navHint.style.cssText = 'position: relative; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 50px 16px 16px 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);';
                 navHint.innerHTML = `
-                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">
-                        <i class="material-icons" style="font-size: 18px;">arrow_back</i> Back to Games
+                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                        ← Back to Games
                     </button>
                     <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
                         📊 ${homeTeam} vs ${awayTeam} - Model Projections
@@ -982,7 +988,6 @@ class UniversalSportsManager {
                         View AI predictions below, then <a href="#news-container" style="color: #fbbf24; text-decoration: underline; cursor: pointer;" onclick="document.getElementById('news-container').scrollIntoView({behavior: 'smooth'})">scroll down for news</a>
                     </div>
                 `;
-                navHint.style.position = 'relative'; // For absolute positioning of back button
                 predictionsPanel.insertBefore(navHint, predictionsPanel.firstChild);
             }
         }
@@ -1046,10 +1051,16 @@ class UniversalSportsManager {
         const gameContainer = document.getElementById('game-centric-container');
         if (gameContainer) {
             gameContainer.style.display = 'block';
-            
-            // Scroll to game container
-            gameContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        
+        // Show news section
+        const qbNewsSection = document.getElementById('qb-news-section');
+        if (qbNewsSection && qbNewsSection.parentElement) {
+            qbNewsSection.parentElement.style.display = 'block';
+        }
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         
         // Clear selection
         this.updateGameSelection(null);
