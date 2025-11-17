@@ -130,9 +130,9 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v4-JSON-FORMAT-CACHE-PROOF',
+        'version': 'v5-FIXED-TRAINING-FORMULA-POSITIVE-PREDICTIONS',
         'features_count': 10,
-        'note': 'V4 MODELS: JSON format prevents binary caching issues on Render'
+        'note': 'V5 MODELS: Fixed performance calculation (±25% offense, ±20% defense) - POSITIVE predictions'
     })
 
 @app.route('/predict', methods=['POST'])
