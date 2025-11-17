@@ -9,6 +9,7 @@ from flask_cors import CORS
 import xgboost as xgb
 import numpy as np
 import os
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +17,83 @@ CORS(app)
 # Load models
 MODELS = {}
 MODEL_DIR = os.path.dirname(__file__)
+
+# Load ESPN TD probability data
+TD_PROBABILITY_DATA = {}
+
+def load_td_probabilities():
+    """Load real TD probabilities from ESPN game log data (2025 season, weeks 1-11)"""
+    global TD_PROBABILITY_DATA
+    data_file = os.path.join(MODEL_DIR, 'espn_player_data.json')
+    
+    if not os.path.exists(data_file):
+        print("⚠️ ESPN player data not found - using position averages")
+        return
+    
+    try:
+        with open(data_file, 'r') as f:
+            player_data = json.load(f)
+        
+        # Index by player name for quick lookup
+        for player in player_data:
+            name = player.get('name', '').lower()
+            TD_PROBABILITY_DATA[name] = {
+                'position': player.get('position'),
+                'team': player.get('team'),
+                'td_probability': player.get('td_stats', {}).get('td_probability', 0),
+                'avg_tds_per_game': player.get('td_stats', {}).get('avg_tds_per_game', 0),
+                'games_played': player.get('td_stats', {}).get('games_played', 0)
+            }
+        
+        print(f"✅ Loaded {len(TD_PROBABILITY_DATA)} players with real 2025 TD probabilities")
+        
+        # Calculate position averages as fallback
+        position_stats = {}
+        for pos in ['QB', 'RB', 'WR', 'TE']:
+            players_in_pos = [p for p in player_data if p.get('position') == pos]
+            if players_in_pos:
+                avg_prob = sum(p.get('td_stats', {}).get('td_probability', 0) for p in players_in_pos) / len(players_in_pos)
+                position_stats[pos] = avg_prob
+                print(f"  {pos}: {avg_prob:.1%} average (n={len(players_in_pos)})")
+        
+        TD_PROBABILITY_DATA['_position_averages'] = position_stats
+        
+    except Exception as e:
+        print(f"❌ Failed to load TD probabilities: {e}")
+        return
+    
+    try:
+        with open(data_file, 'r') as f:
+            players = json.load(f)
+        
+        # Calculate position averages from real data
+        position_probs = {'QB': [], 'RB': [], 'WR': [], 'TE': []}
+        
+        for player in players:
+            pos = player.get('position')
+            td_stats = player.get('td_stats', {})
+            td_prob = td_stats.get('td_probability', 0)
+            
+            if pos in position_probs and td_prob > 0:  # Only include players with TD data
+                position_probs[pos].append(td_prob)
+        
+        # Calculate averages
+        for pos, probs in position_probs.items():
+            if probs:
+                avg = sum(probs) / len(probs)
+                TD_PROBABILITY_DATA[pos] = {
+                    'avg_probability': round(avg, 3),
+                    'sample_size': len(probs),
+                    'min': round(min(probs), 3),
+                    'max': round(max(probs), 3)
+                }
+        
+        print("✅ Loaded real TD probabilities from ESPN data:")
+        for pos, data in TD_PROBABILITY_DATA.items():
+            print(f"   {pos}: {data['avg_probability']:.1%} (n={data['sample_size']}, range={data['min']:.1%}-{data['max']:.1%})")
+    
+    except Exception as e:
+        print(f"❌ Failed to load TD probabilities: {e}")
 
 def load_models():
     """Load all position models - v5 JSON format with FIXED training formula"""
@@ -80,6 +158,48 @@ def get_player_baseline(position):
     }
     return baselines.get(position, {'avg_yards': 0, 'avg_tds': 0, 'recent_avg': 0})
 
+def get_td_probability(player_name, position):
+    """
+    Get real TD probability for player from 2025 ESPN game log data
+    
+    Returns: {
+        'anytime_td': probability of scoring any TD (0-1),
+        'first_td': estimated probability of first TD (anytime / 8),
+        'multi_td': estimated probability of 2+ TDs (based on avg TDs/game)
+    }
+    """
+    # Try exact player name match
+    name_lower = player_name.lower()
+    player_data = TD_PROBABILITY_DATA.get(name_lower)
+    
+    # If not found, use position average
+    if not player_data:
+        position_averages = TD_PROBABILITY_DATA.get('_position_averages', {})
+        avg_prob = position_averages.get(position.upper(), 0.15)  # Default 15%
+        
+        return {
+            'anytime_td': avg_prob,
+            'first_td': avg_prob / 8,  # ~12.5% of anytime probability
+            'multi_td': avg_prob * 0.25,  # ~25% of players with 1 TD get 2+
+            'source': 'position_average'
+        }
+    
+    # Use player-specific data
+    td_prob = player_data.get('td_probability', 0)
+    avg_tds = player_data.get('avg_tds_per_game', 0)
+    
+    # Estimate multi-TD probability based on average TDs per game
+    # If avg > 1.0 TDs/game, higher chance of multi-TD
+    multi_td_prob = min(0.4, avg_tds * 0.3) if avg_tds > 0.5 else td_prob * 0.2
+    
+    return {
+        'anytime_td': td_prob,
+        'first_td': td_prob / 8,  # First TD scorer is roughly 12.5% of anytime
+        'multi_td': multi_td_prob,
+        'source': 'player_gamelog',
+        'games_played': player_data.get('games_played', 0)
+    }
+
 def extract_features(player_name, team_code, opponent_code, position):
     """
     Extract 10 features for enhanced ML predictions
@@ -130,9 +250,10 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v5-FIXED-TRAINING-FORMULA-POSITIVE-PREDICTIONS',
+        'version': 'v5-REAL-TD-PROBABILITIES-FROM-ESPN',
         'features_count': 10,
-        'note': 'V5 MODELS: Fixed performance calculation (±25% offense, ±20% defense) - POSITIVE predictions'
+        'td_probabilities': TD_PROBABILITY_DATA,
+        'note': 'QB TDs = rushing only (anytime TD scorer), RB/WR/TE = all TDs'
     })
 
 @app.route('/predict', methods=['POST'])
@@ -214,6 +335,9 @@ def predict():
                 raw_prediction = baseline + (offense_factor * 15) - (defense_factor * 10)
                 raw_prediction = max(25, min(130, raw_prediction))
         
+        # Get real TD probabilities from ESPN data
+        td_probs = get_td_probability(player_name, position)
+        
         # Format response based on position
         if position == 'qb':
             prediction = {
@@ -225,7 +349,12 @@ def predict():
                 'completion_percentage': 62.9,
                 'yards_per_attempt': 7.1,
                 'passer_rating': 88.5,
-                'confidence': 75
+                'confidence': 75,
+                # Real TD probabilities (rushing TDs only for QBs)
+                'anytime_td_probability': td_probs['anytime_td'],
+                'first_td_probability': td_probs['first_td'],
+                'multi_td_probability': td_probs['multi_td'],
+                'td_data_source': td_probs['source']
             }
         elif position == 'rb':
             prediction = {
@@ -235,7 +364,12 @@ def predict():
                 'receiving_yards': round(raw_prediction * 0.33, 1),   # ~25 if 75
                 'receptions': round(raw_prediction * 0.04, 1),        # ~3 if 75
                 'total_touchdowns': round(raw_prediction / 100, 1),
-                'confidence': 70
+                'confidence': 70,
+                # Real TD probabilities
+                'anytime_td_probability': td_probs['anytime_td'],
+                'first_td_probability': td_probs['first_td'],
+                'multi_td_probability': td_probs['multi_td'],
+                'td_data_source': td_probs['source']
             }
         elif position in ['wr', 'te']:
             prediction = {
@@ -244,7 +378,12 @@ def predict():
                 'receiving_touchdowns': round(raw_prediction / 120, 1), # ~0.5 if 60
                 'targets': round(raw_prediction * 0.133, 1),          # ~8 if 60
                 'yards_per_reception': round(raw_prediction / 5, 1),
-                'confidence': 68
+                'confidence': 68,
+                # Real TD probabilities
+                'anytime_td_probability': td_probs['anytime_td'],
+                'first_td_probability': td_probs['first_td'],
+                'multi_td_probability': td_probs['multi_td'],
+                'td_data_source': td_probs['source']
             }
         else:
             prediction = {'prediction': raw_prediction, 'confidence': 50}
@@ -274,8 +413,9 @@ def predict():
         }), 500
 
 if __name__ == '__main__':
-    # Load models on startup
+    # Load models and TD probabilities on startup
     load_models()
+    load_td_probabilities()
     
     # Start server
     port = int(os.environ.get('PORT', 10000))

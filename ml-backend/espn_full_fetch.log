@@ -1,0 +1,379 @@
+
+================================================================================
+🏈 FETCHING 2025 NFL DATA FROM ESPN API (ALL QB/RB/WR/TE PLAYERS)
+================================================================================
+
+
+📋 ARI
+  Found 24 offensive players
+  ✅ Jacoby Brissett (QB): 1 TDs in 7 games
+  ✅ Michael Carter (RB): 1 TDs in 5 games
+  ✅ Emari Demercado (RB): 1 TDs in 9 games
+  ✅ Greg Dortch (RB): 3 TDs in 10 games
+  ✅ Marvin Harrison Jr. (RB): 4 TDs in 9 games
+  ✅ Bam Knight (RB): 3 TDs in 8 games
+  ✅ Trey McBride (RB): 6 TDs in 10 games
+  ✅ Michael Wilson (RB): 1 TDs in 10 games
+
+📋 ATL
+  Found 24 offensive players
+  ✅ Tyler Allgeier (RB): 6 TDs in 10 games
+  ✅ Drake London (RB): 4 TDs in 9 games
+  ✅ Michael Penix Jr. (QB): 1 TDs in 9 games
+  ✅ Kyle Pitts Sr. (RB): 1 TDs in 10 games
+  ✅ Bijan Robinson (RB): 5 TDs in 10 games
+
+📋 BAL
+  Found 27 offensive players
+  ✅ Mark Andrews (RB): 4 TDs in 10 games
+  ✅ Rashod Bateman (RB): 2 TDs in 9 games
+  ✅ Zay Flowers (RB): 1 TDs in 10 games
+  ✅ Derrick Henry (RB): 5 TDs in 10 games
+  ✅ Justice Hill (RB): 2 TDs in 9 games
+  ✅ DeAndre Hopkins (RB): 2 TDs in 10 games
+  ✅ Lamar Jackson (QB): 1 TDs in 7 games
+  ✅ Charlie Kolar (RB): 2 TDs in 9 games
+  ✅ Devontez Walker (RB): 1 TDs in 5 games
+  ✅ Tylan Wallace (RB): 1 TDs in 9 games
+
+📋 BUF
+  Found 27 offensive players
+  ✅ Josh Allen (QB): 5 TDs in 10 games
+  ✅ Keon Coleman (RB): 3 TDs in 9 games
+  ✅ James Cook III (RB): 6 TDs in 10 games
+  ✅ Ray Davis (RB): 1 TDs in 9 games
+  ✅ Jackson Hawes (RB): 2 TDs in 9 games
+  ✅ Ty Johnson (RB): 2 TDs in 10 games
+  ✅ Dalton Kincaid (RB): 4 TDs in 8 games
+  ✅ Dawson Knox (RB): 1 TDs in 10 games
+  ✅ Elijah Moore (RB): 1 TDs in 8 games
+  ✅ Curtis Samuel (RB): 1 TDs in 6 games
+  ✅ Khalil Shakir (RB): 3 TDs in 10 games
+  ✅ Tyrell Shavers (RB): 1 TDs in 10 games
+
+📋 CAR
+  Found 24 offensive players
+  ✅ Rico Dowdle (RB): 5 TDs in 11 games
+  ✅ Mitchell Evans (RB): 2 TDs in 11 games
+  ✅ Chuba Hubbard (RB): 3 TDs in 9 games
+  ✅ Xavier Legette (RB): 3 TDs in 9 games
+  ✅ Tetairoa McMillan (RB): 2 TDs in 11 games
+  ✅ Hunter Renfrow (RB): 1 TDs in 6 games
+  ✅ Tommy Tremble (RB): 1 TDs in 11 games
+  ✅ Bryce Young (QB): 1 TDs in 10 games
+
+📋 CHI
+  Found 24 offensive players
+  ✅ Luther Burden III (RB): 1 TDs in 9 games
+  ✅ Cole Kmet (RB): 1 TDs in 9 games
+  ✅ Colston Loveland (RB): 1 TDs in 9 games
+  ✅ Kyle Monangai (RB): 3 TDs in 10 games
+  ✅ DJ Moore (RB): 2 TDs in 10 games
+  ✅ Rome Odunze (RB): 5 TDs in 10 games
+  ✅ D'Andre Swift (RB): 5 TDs in 9 games
+  ✅ Caleb Williams (QB): 3 TDs in 10 games
+  ✅ Olamide Zaccheaus (RB): 1 TDs in 10 games
+
+📋 CIN
+  Found 25 offensive players
+  ✅ Chase Brown (RB): 2 TDs in 10 games
+  ✅ Jake Browning (QB): 1 TDs in 4 games
+  ✅ Ja'Marr Chase (RB): 4 TDs in 10 games
+  ✅ Noah Fant (RB): 3 TDs in 9 games
+  ✅ Joe Flacco (QB): 1 TDs in 9 games
+  ✅ Tee Higgins (RB): 6 TDs in 10 games
+  ✅ Tanner Hudson (RB): 1 TDs in 7 games
+  ✅ Andrei Iosivas (RB): 1 TDs in 10 games
+  ✅ Samaje Perine (RB): 1 TDs in 9 games
+  ✅ Drew Sample (RB): 1 TDs in 9 games
+  ✅ Mitchell Tinsley (RB): 1 TDs in 9 games
+
+📋 CLE
+  Found 27 offensive players
+  ✅ Harold Fannin Jr. (RB): 2 TDs in 9 games
+  ✅ Jerry Jeudy (RB): 1 TDs in 10 games
+  ✅ Quinshon Judkins (RB): 3 TDs in 9 games
+  ✅ David Njoku (RB): 3 TDs in 9 games
+  ✅ Dylan Sampson (RB): 1 TDs in 10 games
+  ✅ Raheim Sanders (RB): 1 TDs in 1 games
+  ✅ Cedric Tillman (RB): 2 TDs in 6 games
+
+📋 DAL
+  Found 24 offensive players
+  ✅ Jake Ferguson (RB): 4 TDs in 9 games
+  ✅ Ryan Flournoy (RB): 1 TDs in 9 games
+  ✅ CeeDee Lamb (RB): 1 TDs in 6 games
+  ✅ Hunter Luepke (RB): 1 TDs in 9 games
+  ✅ George Pickens (RB): 5 TDs in 9 games
+  ✅ Dak Prescott (QB): 1 TDs in 9 games
+  ✅ Jalen Tolbert (RB): 1 TDs in 9 games
+  ✅ KaVontae Turpin (RB): 1 TDs in 7 games
+  ✅ Javonte Williams (RB): 6 TDs in 9 games
+
+📋 DEN
+  Found 24 offensive players
+  ✅ Nate Adkins (RB): 1 TDs in 6 games
+  ✅ Pat Bryant (RB): 1 TDs in 10 games
+  ✅ Evan Engram (RB): 1 TDs in 10 games
+  ✅ Troy Franklin (RB): 4 TDs in 11 games
+  ✅ RJ Harvey (RB): 4 TDs in 11 games
+  ✅ Marvin Mims Jr. (RB): 2 TDs in 9 games
+  ✅ Bo Nix (QB): 2 TDs in 11 games
+  ✅ Courtland Sutton (RB): 4 TDs in 11 games
+  ✅ Adam Trautman (RB): 1 TDs in 10 games
+
+📋 DET
+  Found 25 offensive players
+  ✅ Jahmyr Gibbs (RB): 6 TDs in 9 games
+  ✅ David Montgomery (RB): 4 TDs in 9 games
+  ✅ Amon-Ra St. Brown (RB): 5 TDs in 9 games
+  ✅ Isaac TeSlaa (RB): 2 TDs in 9 games
+  ✅ Jameson Williams (RB): 4 TDs in 9 games
+  ✅ Brock Wright (RB): 2 TDs in 9 games
+
+📋 GB
+  Found 23 offensive players
+  ✅ Romeo Doubs (RB): 2 TDs in 10 games
+  ✅ John FitzPatrick (RB): 1 TDs in 10 games
+  ✅ Josh Jacobs (RB): 8 TDs in 10 games
+  ✅ Christian Watson (RB): 1 TDs in 4 games
+  ✅ Josh Whyle (RB): 1 TDs in 2 games
+  ✅ Savion Williams (RB): 1 TDs in 10 games
+  ✅ Emanuel Wilson (RB): 1 TDs in 10 games
+
+📋 HOU
+  Found 27 offensive players
+  ✅ Nick Chubb (RB): 2 TDs in 10 games
+  ✅ Nico Collins (RB): 4 TDs in 9 games
+  ✅ Jayden Higgins (RB): 3 TDs in 10 games
+  ✅ Xavier Hutchinson (RB): 2 TDs in 10 games
+  ✅ Woody Marks (RB): 3 TDs in 10 games
+  ✅ Davis Mills (QB): 1 TDs in 4 games
+  ✅ Jaylin Noel (RB): 1 TDs in 10 games
+  ✅ Dalton Schultz (RB): 1 TDs in 10 games
+
+📋 IND
+  Found 25 offensive players
+  ✅ Ameer Abdullah (RB): 1 TDs in 6 games
+  ✅ Josh Downs (RB): 3 TDs in 9 games
+  ✅ Daniel Jones (QB): 4 TDs in 10 games
+  ✅ Alec Pierce (RB): 1 TDs in 8 games
+  ✅ Michael Pittman Jr. (RB): 6 TDs in 10 games
+  ✅ Jonathan Taylor (RB): 7 TDs in 10 games
+  ✅ Tyler Warren (RB): 4 TDs in 10 games
+
+📋 JAX
+  Found 24 offensive players
+  ✅ Dyami Brown (RB): 1 TDs in 9 games
+  ✅ Travis Etienne Jr. (RB): 5 TDs in 10 games
+  ✅ Trevor Lawrence (QB): 3 TDs in 10 games
+  ✅ Hunter Long (RB): 2 TDs in 8 games
+  ✅ Tim Patrick (RB): 2 TDs in 9 games
+  ✅ Brian Thomas Jr. (RB): 2 TDs in 8 games
+  ✅ Bhayshul Tuten (RB): 4 TDs in 10 games
+  ✅ Parker Washington (RB): 2 TDs in 10 games
+
+📋 KC
+  Found 26 offensive players
+  ✅ Hollywood Brown (RB): 3 TDs in 10 games
+  ✅ Kareem Hunt (RB): 5 TDs in 10 games
+  ✅ Travis Kelce (RB): 4 TDs in 10 games
+  ✅ Patrick Mahomes (QB): 4 TDs in 10 games
+  ✅ Isiah Pacheco (RB): 2 TDs in 8 games
+  ✅ Rashee Rice (RB): 3 TDs in 4 games
+  ✅ JuJu Smith-Schuster (RB): 1 TDs in 9 games
+  ✅ Tyquan Thornton (RB): 3 TDs in 9 games
+  ✅ Xavier Worthy (RB): 1 TDs in 8 games
+
+📋 LAC
+  Found 26 offensive players
+  ✅ Keenan Allen (RB): 4 TDs in 11 games
+  ✅ Oronde Gadsden II (RB): 2 TDs in 9 games
+  ✅ Tre' Harris (RB): 1 TDs in 11 games
+  ✅ Justin Herbert (QB): 1 TDs in 11 games
+  ✅ Quentin Johnston (RB): 5 TDs in 10 games
+  ✅ Scott Matlock (RB): 1 TDs in 9 games
+  ✅ Ladd McConkey (RB): 4 TDs in 11 games
+  ✅ Kimani Vidal (RB): 3 TDs in 8 games
+
+📋 LAR
+  Found 26 offensive players
+  ✅ Davante Adams (RB): 7 TDs in 10 games
+  ✅ Davis Allen (RB): 3 TDs in 9 games
+  ✅ Blake Corum (RB): 1 TDs in 10 games
+  ✅ Terrance Ferguson (RB): 1 TDs in 7 games
+  ✅ Tyler Higbee (RB): 2 TDs in 9 games
+  ✅ Konata Mumpfield (RB): 1 TDs in 9 games
+  ✅ Puka Nacua (RB): 5 TDs in 9 games
+  ✅ Colby Parkinson (RB): 1 TDs in 7 games
+  ✅ Kyren Williams (RB): 7 TDs in 10 games
+
+📋 LV
+  Found 23 offensive players
+  ✅ Brock Bowers (RB): 1 TDs in 6 games
+  ✅ Ashton Jeanty (RB): 5 TDs in 9 games
+  ✅ Michael Mayer (RB): 1 TDs in 7 games
+  ✅ Tre Tucker (RB): 2 TDs in 9 games
+
+📋 MIA
+  Found 24 offensive players
+  ✅ De'Von Achane (RB): 7 TDs in 11 games
+  ✅ Ollie Gordon II (RB): 3 TDs in 11 games
+  ✅ Jaylen Waddle (RB): 5 TDs in 11 games
+  ✅ Malik Washington (RB): 2 TDs in 11 games
+
+📋 MIN
+  Found 25 offensive players
+  ✅ Jordan Addison (RB): 3 TDs in 7 games
+  ✅ T.J. Hockenson (RB): 2 TDs in 10 games
+  ✅ Justin Jefferson (RB): 2 TDs in 10 games
+  ✅ Aaron Jones Sr. (RB): 2 TDs in 6 games
+  ✅ Jordan Mason (RB): 4 TDs in 10 games
+  ✅ J.J. McCarthy (QB): 2 TDs in 5 games
+  ✅ Jalen Nailor (RB): 2 TDs in 10 games
+  ✅ Josh Oliver (RB): 2 TDs in 7 games
+  ✅ Zavier Scott (RB): 1 TDs in 8 games
+
+📋 NE
+  Found 25 offensive players
+  ✅ Kayshon Boutte (RB): 4 TDs in 9 games
+  ✅ Stefon Diggs (RB): 3 TDs in 11 games
+  ✅ DeMario Douglas (RB): 3 TDs in 11 games
+  ✅ TreVeyon Henderson (RB): 3 TDs in 11 games
+  ✅ Hunter Henry (RB): 3 TDs in 11 games
+  ✅ Mack Hollins (RB): 2 TDs in 11 games
+  ✅ Austin Hooper (RB): 1 TDs in 10 games
+  ✅ Terrell Jennings (RB): 1 TDs in 5 games
+  ✅ Drake Maye (QB): 2 TDs in 11 games
+  ✅ Rhamondre Stevenson (RB): 2 TDs in 8 games
+  ✅ Kyle Williams (RB): 1 TDs in 11 games
+
+📋 NO
+  Found 22 offensive players
+  ✅ Taysom Hill (QB): 1 TDs in 6 games
+  ✅ Juwan Johnson (RB): 3 TDs in 10 games
+  ✅ Alvin Kamara (RB): 1 TDs in 10 games
+  ✅ Chris Olave (RB): 3 TDs in 10 games
+  ✅ Jack Stoll (RB): 1 TDs in 9 games
+  ✅ Devaughn Vele (RB): 1 TDs in 9 games
+
+📋 NYG
+  Found 24 offensive players
+  ✅ Daniel Bellinger (RB): 1 TDs in 10 games
+  ✅ Jaxson Dart (QB): 6 TDs in 9 games
+  ✅ Theo Johnson (RB): 4 TDs in 11 games
+  ✅ Gunner Olszewski (RB): 1 TDs in 9 games
+  ✅ Wan'Dale Robinson (RB): 2 TDs in 11 games
+  ✅ Devin Singletary (RB): 1 TDs in 11 games
+  ✅ Tyrone Tracy Jr. (RB): 1 TDs in 9 games
+  ✅ Jameis Winston (QB): 1 TDs in 1 games
+
+📋 NYJ
+  Found 26 offensive players
+  ✅ Andrew Beck (RB): 1 TDs in 10 games
+  ✅ Justin Fields (QB): 3 TDs in 9 games
+  ✅ Breece Hall (RB): 2 TDs in 10 games
+  ✅ Tyler Johnson (RB): 1 TDs in 9 games
+  ✅ Allen Lazard (RB): 1 TDs in 6 games
+  ✅ John Metchie III (RB): 1 TDs in 9 games
+  ✅ Jeremy Ruckert (RB): 1 TDs in 10 games
+  ✅ Mason Taylor (RB): 1 TDs in 10 games
+
+📋 PHI
+  Found 25 offensive players
+  ✅ Saquon Barkley (RB): 5 TDs in 9 games
+  ✅ A.J. Brown (RB): 2 TDs in 8 games
+  ✅ Jahan Dotson (RB): 1 TDs in 9 games
+  ✅ Dallas Goedert (RB): 5 TDs in 8 games
+  ✅ Jalen Hurts (QB): 4 TDs in 9 games
+  ✅ DeVonta Smith (RB): 3 TDs in 9 games
+
+📋 PIT
+  Found 25 offensive players
+  ✅ Calvin Austin III (RB): 2 TDs in 8 games
+  ✅ Pat Freiermuth (RB): 2 TDs in 10 games
+  ✅ Kenneth Gainwell (RB): 3 TDs in 10 games
+  ✅ Connor Heyward (RB): 1 TDs in 9 games
+  ✅ DK Metcalf (RB): 5 TDs in 10 games
+  ✅ Ben Skowronek (RB): 1 TDs in 9 games
+  ✅ Jonnu Smith (RB): 2 TDs in 10 games
+  ✅ Jaylen Warren (RB): 2 TDs in 9 games
+  ✅ Darnell Washington (RB): 1 TDs in 10 games
+  ✅ Roman Wilson (RB): 2 TDs in 10 games
+
+📋 SEA
+  Found 26 offensive players
+  ✅ Elijah Arroyo (RB): 1 TDs in 9 games
+  ✅ AJ Barner (RB): 4 TDs in 10 games
+  ✅ Zach Charbonnet (RB): 5 TDs in 9 games
+  ✅ George Holani (RB): 1 TDs in 9 games
+  ✅ Tory Horton (RB): 4 TDs in 8 games
+  ✅ Cooper Kupp (RB): 1 TDs in 9 games
+  ✅ Rashid Shaheed (RB): 2 TDs in 11 games
+  ✅ Jaxon Smith-Njigba (RB): 5 TDs in 10 games
+  ✅ Kenneth Walker III (RB): 3 TDs in 10 games
+  ✅ Cody White (RB): 1 TDs in 3 games
+
+📋 SF
+  Found 25 offensive players
+  ✅ Luke Farrell (RB): 2 TDs in 10 games
+  ✅ Jauan Jennings (RB): 3 TDs in 9 games
+  ✅ Kyle Juszczyk (RB): 1 TDs in 10 games
+  ✅ George Kittle (RB): 4 TDs in 6 games
+  ✅ Christian McCaffrey (RB): 7 TDs in 11 games
+  ✅ Brian Robinson Jr. (RB): 2 TDs in 11 games
+  ✅ Jake Tonges (RB): 4 TDs in 10 games
+
+📋 TB
+  Found 26 offensive players
+  ✅ Emeka Egbuka (RB): 5 TDs in 10 games
+  ✅ Bucky Irving (RB): 2 TDs in 4 games
+  ✅ Kameron Johnson (RB): 1 TDs in 9 games
+  ✅ Tez Johnson (RB): 3 TDs in 9 games
+  ✅ Baker Mayfield (QB): 1 TDs in 10 games
+  ✅ Ryan Miller (RB): 1 TDs in 9 games
+  ✅ Sterling Shepard (RB): 1 TDs in 10 games
+  ✅ Sean Tucker (RB): 3 TDs in 10 games
+  ✅ Rachaad White (RB): 3 TDs in 10 games
+
+📋 TEN
+  Found 23 offensive players
+  ✅ Elic Ayomanor (RB): 2 TDs in 10 games
+  ✅ Chimere Dike (RB): 1 TDs in 10 games
+  ✅ Gunnar Helm (RB): 1 TDs in 9 games
+  ✅ Van Jefferson (RB): 1 TDs in 10 games
+  ✅ David Martin-Robinson (RB): 1 TDs in 9 games
+  ✅ Tony Pollard (RB): 2 TDs in 10 games
+  ✅ Tyjae Spears (RB): 1 TDs in 6 games
+
+📋 WAS
+  Found 28 offensive players
+  ✅ Jacory Croskey-Merritt (RB): 3 TDs in 11 games
+  ✅ Jayden Daniels (QB): 2 TDs in 6 games
+  ✅ Zach Ertz (RB): 4 TDs in 11 games
+  ✅ Marcus Mariota (QB): 1 TDs in 7 games
+  ✅ Terry McLaurin (RB): 1 TDs in 4 games
+  ✅ Jeremy McNichols (RB): 1 TDs in 11 games
+  ✅ Chris Moore (RB): 1 TDs in 10 games
+  ✅ Chris Rodriguez Jr. (RB): 3 TDs in 9 games
+  ✅ Deebo Samuel (RB): 6 TDs in 10 games
+  ✅ Ben Sinnott (RB): 1 TDs in 10 games
+
+================================================================================
+✅ Saved 485 players to espn_player_data.json
+⏭️  Skipped 314 players (no stats or non-skill positions)
+================================================================================
+
+📊 Summary by Position:
+  QB: 69 players
+  RB: 416 players
+  WR: 0 players
+  TE: 0 players
+
+📈 Average TD Probabilities (2025 Season, Weeks 1-11):
+  QB: 10.4% (n=69)
+  RB: 15.5% (n=416)
+
+⚠️  NOTE: QB probabilities are RUSHING TDs only (anytime TD scorer bets)
+
+🎯 Dataset ready: 485 players with 2025 season stats

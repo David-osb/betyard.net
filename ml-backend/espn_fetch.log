@@ -1,0 +1,230 @@
+
+================================================================================
+🏈 FETCHING REAL NFL DATA FROM ESPN API (QB/RB/WR/TE ONLY)
+================================================================================
+
+
+============================================================
+📊 QB Players
+============================================================
+
+🔍 Patrick Mahomes (KC QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Lamar Jackson (BAL QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Josh Allen (BUF QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Jayden Daniels (WAS QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Jalen Hurts (PHI QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Joe Burrow (CIN QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Jared Goff (DET QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Justin Herbert (LAC QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 CJ Stroud (HOU QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Tua Tagovailoa (MIA QB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+============================================================
+📊 RB Players
+============================================================
+
+🔍 Saquon Barkley (PHI RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Derrick Henry (BAL RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Jordan Mason (SF RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 James Cook (BUF RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Josh Jacobs (GB RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Kyren Williams (LAR RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Joe Mixon (HOU RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Jahmyr Gibbs (DET RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Alvin Kamara (NO RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Bijan Robinson (ATL RB)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+============================================================
+📊 WR Players
+============================================================
+
+🔍 Amon-Ra St. Brown (DET WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 CeeDee Lamb (DAL WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 AJ Brown (PHI WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Ja'Marr Chase (CIN WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Tyreek Hill (MIA WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Justin Jefferson (MIN WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Garrett Wilson (NYJ WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Terry McLaurin (WAS WR)
+  ⚠️ No season stats available
+  ⚠️ No game log available
+
+🔍 Nico Collins (HOU WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 DK Metcalf (SEA WR)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+============================================================
+📊 TE Players
+============================================================
+
+🔍 George Kittle (SF TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Brock Bowers (LV TE)
+  ⚠️ No season stats available
+  ⚠️ No game log available
+
+🔍 Mark Andrews (BAL TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Trey McBride (ARI TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Sam LaPorta (DET TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Kyle Pitts (ATL TE)
+  ⚠️ No season stats available
+  ⚠️ No game log available
+
+🔍 Travis Kelce (KC TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 Dalton Kincaid (BUF TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 TJ Hockenson (MIN TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+🔍 David Njoku (CLE TE)
+  ⚠️ No season stats available
+  ⚠️ Failed to parse game log: 'str' object has no attribute 'get'
+  ⚠️ No game log available
+
+================================================================================
+✅ Saved 40 players to espn_player_data.json
+================================================================================
+
+📊 Summary:
+  QB: 10 players
+  RB: 10 players
+  TE: 10 players
+  WR: 10 players
+
+🎯 Dataset ready: 40 players with real ESPN stats
