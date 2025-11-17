@@ -7089,53 +7089,69 @@
                 const props = [];
                 
                 if (position === 'QB') {
+                    // Calculate realistic betting lines (typically set 5-10 yards BELOW prediction)
+                    const passYardsLine = Math.round((mlPrediction.passing_yards - 5) / 5) * 5 - 0.5;  // Round to nearest 5, add .5
+                    const completionsLine = Math.round(mlPrediction.completions - 0.5) - 0.5;
+                    const attemptsLine = Math.round(mlPrediction.attempts - 1) - 0.5;
+                    const tdsLine = Math.max(0.5, Math.round((mlPrediction.touchdowns - 0.2) * 2) / 2);  // Round to .5
+                    
                     // Passing Props
                     props.push(
-                        { category: 'Passing', type: 'Passing Yards', line: Math.round(mlPrediction.passing_yards), prediction: mlPrediction.passing_yards },
-                        { category: 'Passing', type: 'Pass Completions', line: Math.round(mlPrediction.completions), prediction: mlPrediction.completions },
-                        { category: 'Passing', type: 'Pass Attempts', line: Math.round(mlPrediction.attempts), prediction: mlPrediction.attempts },
-                        { category: 'Passing', type: 'Passing TDs', line: Math.round(mlPrediction.touchdowns), prediction: mlPrediction.touchdowns },
-                        { category: 'Passing', type: 'Interceptions', line: Math.round(mlPrediction.interceptions || 0.5), prediction: mlPrediction.interceptions || 0 },
-                        { category: 'Passing', type: 'Longest Completion', line: 35.5, prediction: 38.5 },
+                        { category: 'Passing', type: 'Passing Yards', line: passYardsLine, prediction: mlPrediction.passing_yards },
+                        { category: 'Passing', type: 'Pass Completions', line: completionsLine, prediction: mlPrediction.completions },
+                        { category: 'Passing', type: 'Pass Attempts', line: attemptsLine, prediction: mlPrediction.attempts },
+                        { category: 'Passing', type: 'Passing TDs', line: tdsLine, prediction: mlPrediction.touchdowns },
+                        { category: 'Passing', type: 'Interceptions', line: 0.5, prediction: mlPrediction.interceptions || 0.8 },
+                        { category: 'Passing', type: 'Longest Completion', line: 35.5, prediction: mlPrediction.passing_yards / 8 },  // Estimate
                         { category: 'Passing', type: 'Completion %', line: 65.5, prediction: (mlPrediction.completions / mlPrediction.attempts * 100) }
                     );
                     
-                    // Rushing Props (for mobile QBs)
+                    // Rushing Props (for mobile QBs) - realistic lines
+                    const qbRushLine = mlPrediction.rushing_yards ? Math.round(mlPrediction.rushing_yards - 3) - 0.5 : 15.5;
                     props.push(
-                        { category: 'Rushing', type: 'Rushing Yards', line: 15.5, prediction: 22.5 },
-                        { category: 'Rushing', type: 'Rushing Attempts', line: 3.5, prediction: 4.5 },
+                        { category: 'Rushing', type: 'Rushing Yards', line: qbRushLine, prediction: mlPrediction.rushing_yards || 20 },
+                        { category: 'Rushing', type: 'Rushing Attempts', line: 3.5, prediction: 4.2 },
                         { category: 'Rushing', type: 'Longest Rush', line: 12.5, prediction: 15.5 }
                     );
                     
                     // Combined Props
+                    const totalYardsLine = Math.round((mlPrediction.passing_yards + 18) / 5) * 5 - 0.5;
                     props.push(
-                        { category: 'Combined', type: 'Pass + Rush Yards', line: Math.round(mlPrediction.passing_yards + 20), prediction: mlPrediction.passing_yards + 22.5 },
-                        { category: 'Combined', type: 'Total TDs', line: Math.round(mlPrediction.touchdowns), prediction: mlPrediction.touchdowns }
+                        { category: 'Combined', type: 'Pass + Rush Yards', line: totalYardsLine, prediction: mlPrediction.passing_yards + 20 },
+                        { category: 'Combined', type: 'Total TDs', line: tdsLine, prediction: mlPrediction.touchdowns }
                     );
                     
                 } else if (position === 'RB') {
+                    // Calculate realistic RB lines
+                    const rushYardsLine = mlPrediction.rushing_yards ? Math.round((mlPrediction.rushing_yards - 8) / 5) * 5 - 0.5 : 65.5;
+                    const recYardsLine = mlPrediction.receiving_yards ? Math.round((mlPrediction.receiving_yards - 3) / 5) * 5 - 0.5 : 25.5;
+                    
                     // Rushing Props
                     props.push(
-                        { category: 'Rushing', type: 'Rushing Yards', line: 65.5, prediction: 72.5 },
-                        { category: 'Rushing', type: 'Rushing Attempts', line: 15.5, prediction: 17.5 },
-                        { category: 'Rushing', type: 'Rushing TDs', line: 0.5, prediction: 0.8 },
-                        { category: 'Rushing', type: 'Longest Rush', line: 18.5, prediction: 22.5 }
+                        { category: 'Rushing', type: 'Rushing Yards', line: rushYardsLine, prediction: mlPrediction.rushing_yards || 72 },
+                        { category: 'Rushing', type: 'Rushing Attempts', line: 15.5, prediction: mlPrediction.attempts || 17.5 },
+                        { category: 'Rushing', type: 'Rushing TDs', line: 0.5, prediction: mlPrediction.rushing_tds || 0.8 },
+                        { category: 'Rushing', type: 'Longest Rush', line: 18.5, prediction: mlPrediction.rushing_yards ? mlPrediction.rushing_yards / 4 : 22 }
                     );
                     
                     // Receiving Props
                     props.push(
-                        { category: 'Receiving', type: 'Receiving Yards', line: 25.5, prediction: 28.5 },
-                        { category: 'Receiving', type: 'Receptions', line: 3.5, prediction: 4.2 },
-                        { category: 'Receiving', type: 'Receiving TDs', line: 0.5, prediction: 0.3 }
+                        { category: 'Receiving', type: 'Receiving Yards', line: recYardsLine, prediction: mlPrediction.receiving_yards || 28 },
+                        { category: 'Receiving', type: 'Receptions', line: 3.5, prediction: mlPrediction.receptions || 4.2 },
+                        { category: 'Receiving', type: 'Receiving TDs', line: 0.5, prediction: mlPrediction.receiving_tds || 0.3 }
                     );
                     
                 } else if (position === 'WR' || position === 'TE') {
+                    // Calculate realistic WR/TE lines
+                    const recYardsLine = mlPrediction.receiving_yards ? Math.round((mlPrediction.receiving_yards - 5) / 5) * 5 - 0.5 : 55.5;
+                    const receptionsLine = mlPrediction.receptions ? Math.round(mlPrediction.receptions - 0.5) - 0.5 : 5.5;
+                    
                     // Receiving Props
                     props.push(
-                        { category: 'Receiving', type: 'Receiving Yards', line: 55.5, prediction: 62.5 },
-                        { category: 'Receiving', type: 'Receptions', line: 5.5, prediction: 6.2 },
-                        { category: 'Receiving', type: 'Receiving TDs', line: 0.5, prediction: 0.7 },
-                        { category: 'Receiving', type: 'Longest Reception', line: 25.5, prediction: 32.5 }
+                        { category: 'Receiving', type: 'Receiving Yards', line: recYardsLine, prediction: mlPrediction.receiving_yards || 62 },
+                        { category: 'Receiving', type: 'Receptions', line: receptionsLine, prediction: mlPrediction.receptions || 6.2 },
+                        { category: 'Receiving', type: 'Receiving TDs', line: 0.5, prediction: mlPrediction.receiving_tds || 0.7 },
+                        { category: 'Receiving', type: 'Longest Reception', line: 25.5, prediction: mlPrediction.receiving_yards ? mlPrediction.receiving_yards / 2.5 : 32 }
                     );
                 }
                 

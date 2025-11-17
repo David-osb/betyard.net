@@ -135,33 +135,39 @@ def generate_training_data(position, n_samples=5000):
         # Base performance from player talent
         performance = base_yards * player_talent
         
-        # Adjust for team offense quality
-        performance *= (team_off / 80)  # 80 is average
+        # Adjust for team offense quality (±25% swing)
+        team_off_factor = 0.75 + (team_off - 50) / 100  # 50=0.75x, 80=1.05x, 100=1.25x
+        performance *= team_off_factor
         
-        # Adjust for opponent defense
-        performance *= (100 - opp_def) / 50  # Harder defense = less yards
+        # Adjust for opponent defense (±20% swing, NOT ±75%)
+        opp_def_factor = 1.2 - (opp_def - 50) / 250  # 50=1.2x, 80=1.08x, 100=1.0x
+        performance *= opp_def_factor
         
-        # Recent form matters
-        performance *= recent_form
+        # Recent form matters (±15%)
+        performance *= (0.85 + recent_form * 0.15)
         
-        # Home field advantage
-        performance *= (1 + home_bonus / 100)
+        # Home field advantage (+5%)
+        if f4_is_home:
+            performance *= 1.05
         
-        # Weather impact (mostly affects passing)
+        # Weather impact (±10% for passing only)
         if position == 'qb':
-            performance *= (1 + weather_impact * 0.15)
+            weather_factor = 0.9 + (f8_weather / 1000)  # 0=0.9x, 100=1.0x
+            performance *= weather_factor
         
-        # Matchup difficulty
-        performance *= (1 + matchup_impact * 0.1)
+        # Matchup difficulty (±5%)
+        matchup_factor = 1.05 - (f9_matchup / 2000)  # 0=1.05x, 100=1.0x
+        performance *= matchup_factor
         
-        # Health impact
-        performance *= (1 + health_impact * 0.1)
+        # Health impact (±10%)
+        health_factor = 0.9 + (f10_health / 1000)  # 0=0.9x, 100=1.0x
+        performance *= health_factor
         
         # Add realistic noise
         performance += np.random.normal(0, yards_std * 0.3)
         
-        # Ensure positive
-        performance = max(10, performance)
+        # Ensure positive and realistic
+        performance = max(base_yards * 0.3, performance)  # At worst 30% of average
         
         features.append([
             f1_team_off,
