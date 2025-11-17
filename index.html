@@ -8465,8 +8465,9 @@
                 const opponentTeam = getOpponentTeam(selectedTeam);
                 console.log(`🔍 Selected team: ${selectedTeam}, Opponent: ${opponentTeam || 'NOT FOUND'}`);
                 
-                // Show TD scorers for the matchup (or just selected team if no opponent found)
+                // Show TD scorers in PREDICTIONS PANEL
                 if (opponentTeam) {
+                    await displayTDScorersInPredictionsPanel(selectedTeam, opponentTeam);
                     await displayTDScorerProbabilities(selectedTeam, opponentTeam, {});
                 } else {
                     // Show TD scorers for just the selected team
