@@ -1579,35 +1579,42 @@ async function fetchAndDisplayGameProps(game, homeTeam, awayTeam) {
 }
 
 /**
- * Display props betting panel (uses existing displayPropsPanel from index.html)
+ * Display props betting panel
  */
 function displayGamePropsPanel(props, homeTeam, awayTeam) {
     const propsContainer = document.getElementById('game-props-container');
-    if (!propsContainer) return;
+    if (!propsContainer) {
+        console.warn('⚠️ Props container not found');
+        return;
+    }
+    
+    console.log('📊 Displaying props panel with', props.length, 'props');
     
     // Call the existing displayPropsPanel function if available
     if (typeof displayPropsPanel === 'function') {
-        // Temporarily swap containers
-        const originalContainer = document.getElementById('props-betting-container');
-        if (originalContainer) {
-            const originalParent = originalContainer.parentElement;
-            const originalNextSibling = originalContainer.nextSibling;
-            
-            // Move to game props container
-            propsContainer.innerHTML = '';
-            propsContainer.appendChild(originalContainer);
-            originalContainer.style.display = 'block';
-            
-            // Display props
-            displayPropsPanel(props);
-            
-            // Move back
-            setTimeout(() => {
-                if (originalParent) {
-                    originalParent.insertBefore(originalContainer, originalNextSibling);
-                }
-            }, 100);
-        }
+        displayPropsPanel(props);
+    } else {
+        // Fallback: Display props directly in container
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600;">📊 Betting Props (${props.length})</h3>
+                <div style="display: grid; gap: 12px;">
+                    ${props.map(prop => `
+                        <div style="padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid #6366f1;">
+                            <div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">${prop.type}</div>
+                            <div style="font-size: 14px; color: #64748b;">
+                                Line: ${prop.line} | Prediction: ${Math.round(prop.prediction * 10) / 10}
+                            </div>
+                            <div style="font-size: 13px; color: #6366f1; font-weight: 600; margin-top: 4px;">
+                                ${prop.recommendation} (${prop.confidence}% confidence)
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+}
     } else {
         // Fallback: simple display
         propsContainer.innerHTML = `
