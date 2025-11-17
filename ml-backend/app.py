@@ -18,16 +18,16 @@ MODELS = {}
 MODEL_DIR = os.path.dirname(__file__)
 
 def load_models():
-    """Load all position models - v4 JSON format (cache-proof)"""
+    """Load all position models - v5 JSON format with FIXED training formula"""
     positions = ['qb', 'rb', 'wr', 'te']
     for pos in positions:
-        model_path = os.path.join(MODEL_DIR, f'{pos}_model_v4.json')
+        model_path = os.path.join(MODEL_DIR, f'{pos}_model_v5.json')
         if os.path.exists(model_path):
             try:
                 MODELS[pos] = xgb.Booster()
                 MODELS[pos].load_model(model_path)
                 file_size = os.path.getsize(model_path) / 1024  # KB
-                print(f"✅ Loaded {pos.upper()} model v4 ({file_size:.1f} KB) - JSON FORMAT")
+                print(f"✅ Loaded {pos.upper()} model v5 ({file_size:.1f} KB) - FIXED FORMULA")
             except Exception as e:
                 print(f"❌ Failed to load {pos.upper()} model: {e}")
 
