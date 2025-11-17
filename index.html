@@ -9909,7 +9909,17 @@
          * =============================================== */
         
         function getOpponentTeam(selectedTeam) {
-            // Try to get opponent from current game card if available
+            // First try to get from NFL schedule
+            if (window.NFLSchedule && window.NFLSchedule.findTeamGame) {
+                const currentWeek = window.NFLSchedule.getCurrentNFLWeek();
+                const game = window.NFLSchedule.findTeamGame(selectedTeam, currentWeek?.week, currentWeek?.season);
+                if (game) {
+                    // Return the opponent (if selected team is away, return home, else return away)
+                    return game.away === selectedTeam ? game.home : game.away;
+                }
+            }
+            
+            // Fallback: Try to get opponent from current game card if available
             const gameCards = document.querySelectorAll('.game-card');
             for (const card of gameCards) {
                 const teamCodes = card.getAttribute('data-teams');
@@ -9919,7 +9929,8 @@
                 }
             }
             
-            // Fallback: Common matchups or return null
+            // No opponent found
+            console.warn(`Could not find opponent for ${selectedTeam}`);
             return null;
         }
         
@@ -9948,7 +9959,9 @@
                                 anytimeTD: prediction.anytime_td_probability,
                                 firstTD: prediction.first_td_probability,
                                 multiTD: prediction.multi_td_probability,
-                                dataSource: prediction.td_data_source
+                                dataSource: prediction.td_data_source,
+                                opponentDefense: prediction.opponent_defense_rating,
+                                defenseAdjustment: prediction.defense_adjustment
                             });
                         }
                     } catch (error) {
@@ -10027,6 +10040,16 @@
                         ${player.dataSource === 'player_gamelog' ? 
                             '<div style="margin-top: 8px; font-size: 10px; color: #10b981; text-align: center;">✓ Real 2025 Stats</div>' :
                             '<div style="margin-top: 8px; font-size: 10px; color: #f59e0b; text-align: center;">⚠ Position Average</div>'
+                        }
+                        
+                        ${player.opponentDefense ? 
+                            `<div style="margin-top: 4px; font-size: 10px; color: #64748b; text-align: center;">
+                                vs DEF: ${player.opponentDefense.toFixed(0)} 
+                                ${player.defenseAdjustment !== 1.0 ? 
+                                    `(${player.defenseAdjustment > 1.0 ? '+' : ''}${((player.defenseAdjustment - 1.0) * 100).toFixed(0)}%)` : 
+                                    ''}
+                            </div>` :
+                            ''
                         }
                     </div>
                 `;

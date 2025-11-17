@@ -158,9 +158,10 @@ def get_player_baseline(position):
     }
     return baselines.get(position, {'avg_yards': 0, 'avg_tds': 0, 'recent_avg': 0})
 
-def get_td_probability(player_name, position):
+def get_td_probability(player_name, position, opponent_code=None):
     """
     Get real TD probability for player from 2025 ESPN game log data
+    Adjusted for opponent defensive strength
     
     Returns: {
         'anytime_td': probability of scoring any TD (0-1),
@@ -176,29 +177,60 @@ def get_td_probability(player_name, position):
     if not player_data:
         position_averages = TD_PROBABILITY_DATA.get('_position_averages', {})
         avg_prob = position_averages.get(position.upper(), 0.15)  # Default 15%
-        
-        return {
-            'anytime_td': avg_prob,
-            'first_td': avg_prob / 8,  # ~12.5% of anytime probability
-            'multi_td': avg_prob * 0.25,  # ~25% of players with 1 TD get 2+
-            'source': 'position_average'
-        }
+        base_td_prob = avg_prob
+    else:
+        # Use player-specific data
+        base_td_prob = player_data.get('td_probability', 0)
     
-    # Use player-specific data
-    td_prob = player_data.get('td_probability', 0)
-    avg_tds = player_data.get('avg_tds_per_game', 0)
+    # ADJUST FOR OPPONENT DEFENSE
+    # Get opponent defensive rating (higher = better defense = harder to score)
+    if opponent_code:
+        opponent_stats = get_team_stats(opponent_code)
+        opponent_defense = opponent_stats.get('defense', 75)  # 0-100 scale
+        
+        # Calculate adjustment multiplier
+        # Elite defense (90+): 0.7x TDs (30% harder)
+        # Good defense (80-89): 0.85x TDs (15% harder)
+        # Average defense (70-79): 1.0x TDs (no change)
+        # Weak defense (60-69): 1.15x TDs (15% easier)
+        # Poor defense (<60): 1.3x TDs (30% easier)
+        if opponent_defense >= 90:
+            defense_multiplier = 0.70
+        elif opponent_defense >= 80:
+            defense_multiplier = 0.85
+        elif opponent_defense >= 70:
+            defense_multiplier = 1.0
+        elif opponent_defense >= 60:
+            defense_multiplier = 1.15
+        else:
+            defense_multiplier = 1.30
+    else:
+        defense_multiplier = 1.0  # No adjustment if no opponent
+    
+    # Apply defensive adjustment
+    adjusted_td_prob = base_td_prob * defense_multiplier
+    adjusted_td_prob = min(1.0, adjusted_td_prob)  # Cap at 100%
+    
+    # Get average TDs per game for multi-TD calculation
+    avg_tds = player_data.get('avg_tds_per_game', 0) if player_data else 0.5
     
     # Estimate multi-TD probability based on average TDs per game
     # If avg > 1.0 TDs/game, higher chance of multi-TD
-    multi_td_prob = min(0.4, avg_tds * 0.3) if avg_tds > 0.5 else td_prob * 0.2
+    multi_td_prob = min(0.4, avg_tds * 0.3 * defense_multiplier) if avg_tds > 0.5 else adjusted_td_prob * 0.2
     
-    return {
-        'anytime_td': td_prob,
-        'first_td': td_prob / 8,  # First TD scorer is roughly 12.5% of anytime
+    result = {
+        'anytime_td': adjusted_td_prob,
+        'first_td': adjusted_td_prob / 8,  # First TD scorer is roughly 12.5% of anytime
         'multi_td': multi_td_prob,
-        'source': 'player_gamelog',
-        'games_played': player_data.get('games_played', 0)
+        'source': 'player_gamelog' if player_data else 'position_average',
+        'opponent_defense': get_team_stats(opponent_code).get('defense', None) if opponent_code else None,
+        'defense_adjustment': defense_multiplier
     }
+    
+    if player_data:
+        result['games_played'] = player_data.get('games_played', 0)
+    
+    return result
 
 def extract_features(player_name, team_code, opponent_code, position):
     """
@@ -335,8 +367,8 @@ def predict():
                 raw_prediction = baseline + (offense_factor * 15) - (defense_factor * 10)
                 raw_prediction = max(25, min(130, raw_prediction))
         
-        # Get real TD probabilities from ESPN data
-        td_probs = get_td_probability(player_name, position)
+        # Get real TD probabilities from ESPN data (ADJUSTED FOR OPPONENT DEFENSE)
+        td_probs = get_td_probability(player_name, position.upper(), opponent_code)
         
         # Format response based on position
         if position == 'qb':
@@ -350,11 +382,13 @@ def predict():
                 'yards_per_attempt': 7.1,
                 'passer_rating': 88.5,
                 'confidence': 75,
-                # Real TD probabilities (rushing TDs only for QBs)
+                # Real TD probabilities (rushing TDs only for QBs) - adjusted for opponent
                 'anytime_td_probability': td_probs['anytime_td'],
                 'first_td_probability': td_probs['first_td'],
                 'multi_td_probability': td_probs['multi_td'],
-                'td_data_source': td_probs['source']
+                'td_data_source': td_probs['source'],
+                'opponent_defense_rating': td_probs.get('opponent_defense'),
+                'defense_adjustment': td_probs.get('defense_adjustment')
             }
         elif position == 'rb':
             prediction = {
@@ -365,11 +399,13 @@ def predict():
                 'receptions': round(raw_prediction * 0.04, 1),        # ~3 if 75
                 'total_touchdowns': round(raw_prediction / 100, 1),
                 'confidence': 70,
-                # Real TD probabilities
+                # Real TD probabilities - adjusted for opponent
                 'anytime_td_probability': td_probs['anytime_td'],
                 'first_td_probability': td_probs['first_td'],
                 'multi_td_probability': td_probs['multi_td'],
-                'td_data_source': td_probs['source']
+                'td_data_source': td_probs['source'],
+                'opponent_defense_rating': td_probs.get('opponent_defense'),
+                'defense_adjustment': td_probs.get('defense_adjustment')
             }
         elif position in ['wr', 'te']:
             prediction = {
@@ -379,11 +415,13 @@ def predict():
                 'targets': round(raw_prediction * 0.133, 1),          # ~8 if 60
                 'yards_per_reception': round(raw_prediction / 5, 1),
                 'confidence': 68,
-                # Real TD probabilities
+                # Real TD probabilities - adjusted for opponent
                 'anytime_td_probability': td_probs['anytime_td'],
                 'first_td_probability': td_probs['first_td'],
                 'multi_td_probability': td_probs['multi_td'],
-                'td_data_source': td_probs['source']
+                'td_data_source': td_probs['source'],
+                'opponent_defense_rating': td_probs.get('opponent_defense'),
+                'defense_adjustment': td_probs.get('defense_adjustment')
             }
         else:
             prediction = {'prediction': raw_prediction, 'confidence': 50}
