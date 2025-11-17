@@ -8459,9 +8459,16 @@
                 // FETCH AND DISPLAY TD SCORER PROBABILITIES
                 // Get opponent team from schedule/game data
                 const selectedTeam = teamSelect.value;
-                const opponentTeam = getOpponentTeam(selectedTeam); // Will implement this
+                const opponentTeam = getOpponentTeam(selectedTeam);
+                console.log(`🔍 Selected team: ${selectedTeam}, Opponent: ${opponentTeam || 'NOT FOUND'}`);
+                
+                // Show TD scorers for the matchup (or just selected team if no opponent found)
                 if (opponentTeam) {
-                    displayTDScorerProbabilities(selectedTeam, opponentTeam, {});
+                    await displayTDScorerProbabilities(selectedTeam, opponentTeam, {});
+                } else {
+                    // Show TD scorers for just the selected team
+                    console.warn('⚠️ No opponent found, showing TD scorers for selected team only');
+                    await displayTDScorerProbabilities(selectedTeam, null, {});
                 }
 
                 // Update the detailed content in expandable sections
@@ -9934,22 +9941,27 @@
             return null;
         }
         
-        async function displayTDScorerProbabilities(homeTeam, awayTeam, gameData) {
+        async function displayTDScorerProbabilities(selectedTeam, opponentTeam, gameData) {
             const tdScorersContainer = document.getElementById('td-scorers-container');
             if (!tdScorersContainer) {
-                console.warn('TD scorers container not found');
+                console.error('❌ TD scorers container not found in DOM!');
                 return;
             }
             
-            console.log(`🏈 Fetching TD scorer probabilities for ${awayTeam} @ ${homeTeam}...`);
+            console.log(`🏈 Fetching TD scorer probabilities for ${selectedTeam}${opponentTeam ? ' vs ' + opponentTeam : ' (no opponent)'}...`);
             
-            // Fetch all skill players from both teams
+            // Determine which teams to fetch
+            const teamsToFetch = opponentTeam ? [selectedTeam, opponentTeam] : [selectedTeam];
+            
+            // Fetch all skill players from teams
             const allPlayers = [];
             
-            for (const team of [homeTeam, awayTeam]) {
+            for (const team of teamsToFetch) {
+                const opponent = opponentTeam ? (team === selectedTeam ? opponentTeam : selectedTeam) : null;
+                
                 for (const position of ['QB', 'RB', 'WR', 'TE']) {
                     try {
-                        const prediction = await window.BetYardML.getPrediction('Top Player', team, team === homeTeam ? awayTeam : homeTeam, position);
+                        const prediction = await window.BetYardML.getPrediction('Top Player', team, opponent, position);
                         
                         if (prediction && prediction.anytime_td_probability !== undefined) {
                             allPlayers.push({
@@ -9970,8 +9982,11 @@
                 }
             }
             
+            console.log(`✅ Loaded ${allPlayers.length} players with TD probabilities`);
+            
             if (allPlayers.length === 0) {
-                tdScorersContainer.innerHTML = '<p>No TD scorer data available</p>';
+                tdScorersContainer.innerHTML = '<div style="padding: 20px; background: #fee; border-radius: 8px; color: #c33;">⚠️ No TD scorer data available</div>';
+                tdScorersContainer.style.display = 'block';
                 return;
             }
             
@@ -9979,10 +9994,11 @@
             allPlayers.sort((a, b) => b.anytimeTD - a.anytimeTD);
             
             // Generate HTML
+            const matchupText = opponentTeam ? `${selectedTeam} vs ${opponentTeam}` : selectedTeam;
             let html = `
                 <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; color: white;">
                     <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">🏈 TD Scorer Probabilities</h3>
-                    <p style="margin: 0; font-size: 14px; opacity: 0.9;">${awayTeam} @ ${homeTeam} - Based on 2025 Season Stats</p>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.9;">${matchupText} - Based on 2025 Season Stats</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
