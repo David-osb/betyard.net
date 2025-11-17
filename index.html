@@ -7155,11 +7155,15 @@
                     );
                 }
                 
-                // Game Props (available for all positions)
+                // Game Props (available for all positions) - Calculate TD probabilities
+                const tdProbability = position === 'QB' ? 0.65 : position === 'RB' ? 0.55 : position === 'WR' ? 0.45 : 0.35;
+                const firstTdProbability = position === 'RB' ? 0.12 : position === 'WR' ? 0.08 : position === 'TE' ? 0.05 : 0.10;
+                const multiTdProbability = position === 'RB' ? 0.25 : position === 'QB' ? 0.20 : 0.15;
+                
                 props.push(
-                    { category: 'Game', type: 'Anytime TD Scorer', line: null, prediction: null, odds: '+150' },
-                    { category: 'Game', type: 'First TD Scorer', line: null, prediction: null, odds: '+800' },
-                    { category: 'Game', type: '2+ TDs', line: null, prediction: null, odds: '+250' }
+                    { category: 'Game', type: 'Anytime TD Scorer', line: tdProbability, prediction: tdProbability, odds: '+150', probability: tdProbability },
+                    { category: 'Game', type: 'First TD Scorer', line: firstTdProbability, prediction: firstTdProbability, odds: '+800', probability: firstTdProbability },
+                    { category: 'Game', type: '2+ TDs', line: multiTdProbability, prediction: multiTdProbability, odds: '+250', probability: multiTdProbability }
                 );
                 
                 return props;
@@ -9686,9 +9690,22 @@
                 return;
             }
             
+            // DEDUPLICATE props by type (in case of duplicate data)
+            const seen = new Set();
+            const uniqueProps = props.filter(prop => {
+                const key = `${prop.category}-${prop.type}`;
+                if (seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+            
+            console.log(`📊 Displaying ${uniqueProps.length} unique props (filtered from ${props.length} total)`);
+            
             // Group props by category
             const grouped = {};
-            props.forEach(prop => {
+            uniqueProps.forEach(prop => {
                 if (!grouped[prop.category]) {
                     grouped[prop.category] = [];
                 }
