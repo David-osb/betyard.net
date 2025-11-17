@@ -275,8 +275,8 @@ def main():
         # Train model
         model = train_xgboost_model(X, y, position)
         
-        # Save model
-        model_path = f'{position}_model.pkl'
+        # Save model in native XGBoost format
+        model_path = f'{position}_model_v4.json'
         model.save_model(model_path)
         print(f"\n✅ Saved model to {model_path}")
     
@@ -285,7 +285,7 @@ def main():
     print("="*60)
     print("\nTrained models:")
     for pos in positions:
-        print(f"  ✅ {pos}_model.pkl")
+        print(f"  ✅ {pos}_model_v4.json")
     
     print("\n📊 Model Statistics:")
     print("  - 10 features per prediction")
@@ -294,10 +294,10 @@ def main():
     print("  - Based on NFL team stats and player patterns")
     
     print("\n🚀 Next steps:")
-    print("  1. Models are ready for deployment")
-    print("  2. Upload .pkl files to Render ml-backend directory")
+    print("  1. Models are ready for deployment (v4 .json format)")
+    print("  2. Upload .json files to Render ml-backend directory")
     print("  3. Backend will use 10-feature predictions")
-    print("  4. Props will get more accurate ML predictions!")
+    print("  4. JSON format ensures Render can't cache binary data!")
 
 if __name__ == '__main__':
     main()

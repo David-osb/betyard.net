@@ -18,16 +18,16 @@ MODELS = {}
 MODEL_DIR = os.path.dirname(__file__)
 
 def load_models():
-    """Load all position models - v3 FRESHLY RETRAINED with positive predictions"""
+    """Load all position models - v4 JSON format (cache-proof)"""
     positions = ['qb', 'rb', 'wr', 'te']
     for pos in positions:
-        model_path = os.path.join(MODEL_DIR, f'{pos}_model_v3.pkl')
+        model_path = os.path.join(MODEL_DIR, f'{pos}_model_v4.json')
         if os.path.exists(model_path):
             try:
                 MODELS[pos] = xgb.Booster()
                 MODELS[pos].load_model(model_path)
                 file_size = os.path.getsize(model_path) / 1024  # KB
-                print(f"✅ Loaded {pos.upper()} model v3 ({file_size:.1f} KB) - RETRAINED POSITIVE")
+                print(f"✅ Loaded {pos.upper()} model v4 ({file_size:.1f} KB) - JSON FORMAT")
             except Exception as e:
                 print(f"❌ Failed to load {pos.upper()} model: {e}")
 
@@ -130,9 +130,9 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'models_loaded': {pos: pos in MODELS for pos in ['qb', 'rb', 'wr', 'te']},
-        'version': 'v3-FRESH-RETRAINED-POSITIVE',
+        'version': 'v4-JSON-FORMAT-CACHE-PROOF',
         'features_count': 10,
-        'note': 'V3 MODELS: Freshly retrained to ensure POSITIVE predictions - cache bypass v3'
+        'note': 'V4 MODELS: JSON format prevents binary caching issues on Render'
     })
 
 @app.route('/predict', methods=['POST'])
