@@ -84,8 +84,9 @@ class ESPNOddsService {
      */
     async parseProviderOdds(providerData) {
         try {
-            // Fetch full provider details
-            const response = await fetch(providerData.$ref);
+            // Fetch full provider details (force HTTPS to avoid mixed content)
+            const url = providerData.$ref.replace('http://', 'https://');
+            const response = await fetch(url);
             const data = await response.json();
 
             return {
