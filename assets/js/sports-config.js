@@ -1615,20 +1615,6 @@ function displayGamePropsPanel(props, homeTeam, awayTeam) {
         `;
     }
 }
-    } else {
-        // Fallback: simple display
-        propsContainer.innerHTML = `
-            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">
-                    🎯 Betting Props Available
-                </h3>
-                <p style="color: #64748b; font-size: 14px;">
-                    ${props.length} prop markets available for ${homeTeam} vs ${awayTeam}
-                </p>
-            </div>
-        `;
-    }
-}
 
 /**
  * Get starting QB name for a team (fallback mapping)
