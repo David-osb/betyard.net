@@ -9696,8 +9696,113 @@
             });
         });
 
+        // Generate TD Scorers Section for Props Panel
+        async function generateTDScorersSection() {
+            const teamSelect = document.getElementById('team-select');
+            if (!teamSelect || !teamSelect.value) {
+                return '';
+            }
+            
+            const selectedTeam = teamSelect.value;
+            const opponentTeam = getOpponentTeam(selectedTeam);
+            
+            if (!opponentTeam) {
+                console.warn('No opponent found for TD scorers');
+                return '';
+            }
+            
+            console.log(`🏈 Fetching TD scorer probabilities for ${selectedTeam} vs ${opponentTeam}...`);
+            
+            // Fetch all skill players from both teams
+            const allPlayers = [];
+            
+            for (const team of [selectedTeam, opponentTeam]) {
+                const opponent = team === selectedTeam ? opponentTeam : selectedTeam;
+                
+                for (const position of ['QB', 'RB', 'WR', 'TE']) {
+                    try {
+                        const prediction = await window.BetYardML.getPrediction('Top Player', team, opponent, position);
+                        
+                        if (prediction && prediction.anytime_td_probability !== undefined) {
+                            allPlayers.push({
+                                name: prediction.player_name || `${team} ${position}`,
+                                team: team,
+                                position: position,
+                                anytimeTD: prediction.anytime_td_probability,
+                                firstTD: prediction.first_td_probability,
+                                multiTD: prediction.multi_td_probability,
+                                dataSource: prediction.td_data_source,
+                                opponentDefense: prediction.opponent_defense_rating,
+                                defenseAdjustment: prediction.defense_adjustment
+                            });
+                        }
+                    } catch (error) {
+                        console.warn(`Failed to fetch ${position} for ${team}:`, error);
+                    }
+                }
+            }
+            
+            if (allPlayers.length === 0) {
+                return '';
+            }
+            
+            // Sort by anytime TD probability
+            allPlayers.sort((a, b) => b.anytimeTD - a.anytimeTD);
+            
+            // Take top 10 players
+            const topPlayers = allPlayers.slice(0, 10);
+            
+            // Generate HTML
+            const playersHtml = topPlayers.map((player, index) => {
+                const probabilityColor = player.anytimeTD > 0.4 ? '#10b981' : player.anytimeTD > 0.2 ? '#3b82f6' : player.anytimeTD > 0.1 ? '#f59e0b' : '#6b7280';
+                const impliedOdds = player.anytimeTD > 0 ? Math.round((1 / player.anytimeTD - 1) * 100) : 999;
+                const oddsDisplay = impliedOdds > 0 ? `+${impliedOdds}` : impliedOdds;
+                
+                return `
+                    <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid ${probabilityColor};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; font-weight: 600; color: #374151;">${index + 1}. ${player.name}</div>
+                                <div style="font-size: 12px; color: #6b7280;">${player.team} ${player.position}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 16px; font-weight: 700; color: ${probabilityColor};">${(player.anytimeTD * 100).toFixed(1)}%</div>
+                                <div style="font-size: 11px; color: #6b7280; font-weight: 600;">${oddsDisplay}</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: #64748b;">
+                            <span>🥇 First: ${(player.firstTD * 100).toFixed(1)}%</span>
+                            <span>🔥 2+: ${(player.multiTD * 100).toFixed(1)}%</span>
+                            ${player.defenseAdjustment !== 1.0 ? 
+                                `<span style="color: ${player.defenseAdjustment > 1.0 ? '#10b981' : '#dc2626'}; font-weight: 600;">
+                                    ${player.defenseAdjustment > 1.0 ? '+' : ''}${((player.defenseAdjustment - 1.0) * 100).toFixed(0)}% vs DEF
+                                </span>` : 
+                                ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 4px solid #ef4444;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h4 style="margin: 0; color: #ef4444; font-size: 20px; font-weight: 600;">🏈 Touchdown Scorers</h4>
+                        <span style="font-size: 12px; padding: 4px 8px; background: #dcfce7; color: #166534; border-radius: 6px; font-weight: 600;">
+                            Real 2025 Stats
+                        </span>
+                    </div>
+                    <div style="font-size: 13px; color: #6b7280; margin-bottom: 16px;">
+                        ${selectedTeam} vs ${opponentTeam} - Adjusted for defensive matchup
+                    </div>
+                    <div style="display: grid; gap: 10px;">
+                        ${playersHtml}
+                    </div>
+                </div>
+            `;
+        }
+
         // Display comprehensive props betting panel
-        function displayPropsPanel(props) {
+        async function displayPropsPanel(props) {
             const propsContainer = document.getElementById('props-betting-container');
             if (!propsContainer) {
                 console.warn('Props container not found');
@@ -9717,6 +9822,9 @@
             
             console.log(`📊 Displaying ${uniqueProps.length} unique props (filtered from ${props.length} total)`);
             
+            // Get TD scorers data for the matchup
+            const tdScorersHtml = await generateTDScorersSection();
+            
             // Group props by category
             const grouped = {};
             uniqueProps.forEach(prop => {
@@ -9732,6 +9840,8 @@
                     <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">📊 All Betting Props</h3>
                     <p style="margin: 0; font-size: 14px; opacity: 0.9;">Powered by ML predictions vs live sportsbook odds</p>
                 </div>
+                
+                ${tdScorersHtml}
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
             `;
