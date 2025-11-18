@@ -1032,16 +1032,12 @@ class UniversalSportsManager {
         
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
-            // Wait for displayMatchupPredictions to be available and then call it
-            const waitForFunction = () => {
-                if (typeof window.displayMatchupPredictions === 'function') {
-                    window.displayMatchupPredictions(awayTeam, homeTeam);
-                } else {
-                    console.warn('displayMatchupPredictions not ready yet, retrying...');
-                    setTimeout(waitForFunction, 100); // Retry after 100ms
-                }
-            };
-            waitForFunction();
+            // Call displayMatchupPredictions (loaded from matchup-predictions.js)
+            if (typeof window.displayMatchupPredictions === 'function') {
+                window.displayMatchupPredictions(awayTeam, homeTeam);
+            } else {
+                console.error('❌ displayMatchupPredictions not found! Script may not be loaded.');
+            }
             
             predictionsPanel.style.display = 'block';
             predictionsPanel.classList.add('active');
