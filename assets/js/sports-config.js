@@ -1032,86 +1032,12 @@ class UniversalSportsManager {
         
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
-            // Clear existing content and create fresh matchup view
-            predictionsPanel.innerHTML = `
-                <div style="background: linear-gradient(135deg, #002d84, #003da5, #0047ab); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px; position: relative;">
-                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                        ← Back to Games
-                    </button>
-                    <div style="text-align: center; padding-top: 30px;">
-                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 8px; color: white;">
-                            📊 ${homeTeam} vs ${awayTeam}
-                        </h2>
-                        <p style="font-size: 14px; opacity: 0.9; margin: 0;">AI-Powered Betting Predictions</p>
-                    </div>
-                </div>
-                
-                <div style="display: grid; gap: 20px; margin-bottom: 24px;">
-                    <!-- Moneyline Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>💰</span> Moneyline Pick
-                        </h3>
-                        <div id="moneyline-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing moneyline...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Spread Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>📏</span> Point Spread Pick
-                        </h3>
-                        <div id="spread-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing spread...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Over/Under Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>🎯</span> Over/Under Pick
-                        </h3>
-                        <div id="total-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing total...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Game Info -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>📈</span> Matchup Info
-                        </h3>
-                        <div id="matchup-info" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Loading matchup data...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Comprehensive Props Betting Panel -->
-                <div id="game-props-container" style="margin-top: 24px; display: none;">
-                    <!-- Props will be injected here by PropsBetting service -->
-                </div>
-                
-                <style>
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                </style>
-            `;
+            // Call the two-team card layout function
+            if (typeof window.displayMatchupPredictions === 'function') {
+                window.displayMatchupPredictions(awayTeam, homeTeam);
+            } else {
+                console.error('displayMatchupPredictions function not found');
+            }
             
             predictionsPanel.style.display = 'block';
             predictionsPanel.classList.add('active');
