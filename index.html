@@ -10116,7 +10116,7 @@
             }
             
             // Calculate game-level predictions from player data
-            const calculateGamePredictions = (awayData, homeData) => {
+            const calculateGamePredictions = (awayData, homeData, awayTeamName, homeTeamName) => {
                 // Sum up predicted touchdowns from all players
                 const awayTotalTDs = awayData.reduce((sum, p) => sum + (p.touchdowns || p.passing_touchdowns || p.anytime_td_probability || 0), 0);
                 const homeTotalTDs = homeData.reduce((sum, p) => sum + (p.touchdowns || p.passing_touchdowns || p.anytime_td_probability || 0), 0);
@@ -10127,12 +10127,12 @@
                 
                 // Moneyline prediction
                 const pointDiff = homePoints - awayPoints;
-                const moneylineTeam = pointDiff > 0 ? homeTeam : awayTeam;
+                const moneylineTeam = pointDiff > 0 ? homeTeamName : awayTeamName;
                 const moneylineConfidence = Math.min(55 + Math.abs(pointDiff) * 2, 85); // 55-85% range
                 
                 // Spread prediction
                 const spreadLine = pointDiff;
-                const spreadTeam = spreadLine > 0 ? `${homeTeam} -${Math.abs(spreadLine)}` : `${awayTeam} -${Math.abs(spreadLine)}`;
+                const spreadTeam = spreadLine > 0 ? `${homeTeamName} -${Math.abs(spreadLine)}` : `${awayTeamName} -${Math.abs(spreadLine)}`;
                 const spreadConfidence = Math.min(60 + Math.abs(pointDiff), 80);
                 
                 // Total prediction
@@ -10148,7 +10148,7 @@
                 };
             };
             
-            const gamePreds = calculateGamePredictions(awayPlayers, homePlayers);
+            const gamePreds = calculateGamePredictions(awayPlayers, homePlayers, awayTeam, homeTeam);
             
             // Update game-level predictions
             document.getElementById('ml-prediction').innerHTML = `<span style="color: #10b981;">${gamePreds.moneyline.team}</span>`;
@@ -10217,13 +10217,13 @@
                                     <div style="font-size: 20px; font-weight: 700; color: #f59e0b;">${multiTD}%</div>
                                 </div>
                             </div>
-                            ${player.defense_adjustment !== 1.0 ? `
-                                <div style="margin-top: 8px; padding: 6px; background: ${player.defense_adjustment > 1.0 ? '#d1fae5' : '#fee2e2'}; border-radius: 4px; text-align: center;">
+                            ${player.defense_adjustment && player.defense_adjustment !== 1.0 ? 
+                                `<div style="margin-top: 8px; padding: 6px; background: ${player.defense_adjustment > 1.0 ? '#d1fae5' : '#fee2e2'}; border-radius: 4px; text-align: center;">
                                     <span style="font-size: 11px; color: ${player.defense_adjustment > 1.0 ? '#059669' : '#dc2626'}; font-weight: 600;">
                                         ${player.defense_adjustment > 1.0 ? '↗' : '↘'} ${player.defense_adjustment > 1.0 ? '+' : ''}${((player.defense_adjustment - 1.0) * 100).toFixed(0)}% vs Defense
                                     </span>
-                                </div>
-                            ` : ''}
+                                </div>` 
+                                : ''}
                         </div>
                     </div>
                 `;
