@@ -288,6 +288,55 @@ def health_check():
         'note': 'QB TDs = rushing only (anytime TD scorer), RB/WR/TE = all TDs'
     })
 
+@app.route('/players/team/<team_code>', methods=['GET'])
+def get_team_players(team_code):
+    """
+    Get top players by position for a team
+    
+    Returns the top player (by TD probability) for each position on the team
+    """
+    try:
+        team_code_upper = team_code.upper()
+        
+        # Find all players for this team, grouped by position
+        team_players = {'QB': [], 'RB': [], 'WR': [], 'TE': []}
+        
+        for player_name, player_data in TD_PROBABILITY_DATA.items():
+            if player_data['team'] == team_code_upper:
+                position = player_data['position']
+                if position in team_players:
+                    team_players[position].append({
+                        'name': player_name.title(),  # Capitalize properly
+                        'position': position,
+                        'team': team_code_upper,
+                        'td_probability': player_data['td_probability'],
+                        'avg_tds_per_game': player_data['avg_tds_per_game'],
+                        'games_played': player_data['games_played']
+                    })
+        
+        # Sort each position by TD probability and take top player
+        top_players = {}
+        for position, players in team_players.items():
+            if players:
+                # Sort by TD probability (highest first)
+                sorted_players = sorted(players, key=lambda p: p['td_probability'], reverse=True)
+                top_players[position] = sorted_players[0]  # Take the top player
+            else:
+                top_players[position] = None
+        
+        return jsonify({
+            'success': True,
+            'team': team_code_upper,
+            'players': top_players,
+            'count': sum(1 for p in top_players.values() if p is not None)
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.route('/predict', methods=['POST'])
 def predict():
     """

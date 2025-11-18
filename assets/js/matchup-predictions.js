@@ -26,24 +26,80 @@ async function displayMatchupPredictions(awayTeam, homeTeam) {
     const awayPlayers = [];
     const homePlayers = [];
     
-    for (const position of ['QB', 'RB', 'WR', 'TE']) {
-        try {
-            const awayPrediction = await window.BetYardML.getPrediction('Top Player', awayTeam, homeTeam, position);
-            if (awayPrediction) {
-                awayPlayers.push({ position, ...awayPrediction });
-            }
-        } catch (error) {
-            console.warn(`Failed to fetch ${position} for ${awayTeam}:`, error);
-        }
+    // Get team codes from team names
+    const getTeamCode = (teamName) => {
+        const teamMap = {
+            'Arizona Cardinals': 'ARI', 'Atlanta Falcons': 'ATL', 'Baltimore Ravens': 'BAL',
+            'Buffalo Bills': 'BUF', 'Carolina Panthers': 'CAR', 'Chicago Bears': 'CHI',
+            'Cincinnati Bengals': 'CIN', 'Cleveland Browns': 'CLE', 'Dallas Cowboys': 'DAL',
+            'Denver Broncos': 'DEN', 'Detroit Lions': 'DET', 'Green Bay Packers': 'GB',
+            'Houston Texans': 'HOU', 'Indianapolis Colts': 'IND', 'Jacksonville Jaguars': 'JAX',
+            'Kansas City Chiefs': 'KC', 'Las Vegas Raiders': 'LV', 'Los Angeles Chargers': 'LAC',
+            'Los Angeles Rams': 'LAR', 'Miami Dolphins': 'MIA', 'Minnesota Vikings': 'MIN',
+            'New England Patriots': 'NE', 'New Orleans Saints': 'NO', 'New York Giants': 'NYG',
+            'New York Jets': 'NYJ', 'Philadelphia Eagles': 'PHI', 'Pittsburgh Steelers': 'PIT',
+            'San Francisco 49ers': 'SF', 'Seattle Seahawks': 'SEA', 'Tampa Bay Buccaneers': 'TB',
+            'Tennessee Titans': 'TEN', 'Washington Commanders': 'WAS'
+        };
+        return teamMap[teamName] || teamName;
+    };
+    
+    const awayCode = getTeamCode(awayTeam);
+    const homeCode = getTeamCode(homeTeam);
+    
+    // Fetch top players from backend for each team
+    try {
+        const [awayResponse, homeResponse] = await Promise.all([
+            fetch(`https://betyard-ml-backend.onrender.com/players/team/${awayCode}`),
+            fetch(`https://betyard-ml-backend.onrender.com/players/team/${homeCode}`)
+        ]);
         
-        try {
-            const homePrediction = await window.BetYardML.getPrediction('Top Player', homeTeam, awayTeam, position);
-            if (homePrediction) {
-                homePlayers.push({ position, ...homePrediction });
+        const awayData = await awayResponse.json();
+        const homeData = await homeResponse.json();
+        
+        if (awayData.success && homeData.success) {
+            // Fetch predictions for each player we found
+            for (const position of ['QB', 'RB', 'WR', 'TE']) {
+                const awayPlayer = awayData.players[position];
+                const homePlayer = homeData.players[position];
+                
+                if (awayPlayer) {
+                    try {
+                        const prediction = await window.BetYardML.getPrediction(
+                            awayPlayer.name,
+                            awayCode,
+                            homeCode,
+                            position
+                        );
+                        if (prediction) {
+                            awayPlayers.push({ position, ...prediction });
+                        }
+                    } catch (error) {
+                        console.warn(`Failed to fetch ${position} prediction for ${awayPlayer.name}:`, error);
+                    }
+                }
+                
+                if (homePlayer) {
+                    try {
+                        const prediction = await window.BetYardML.getPrediction(
+                            homePlayer.name,
+                            homeCode,
+                            awayCode,
+                            position
+                        );
+                        if (prediction) {
+                            homePlayers.push({ position, ...prediction });
+                        }
+                    } catch (error) {
+                        console.warn(`Failed to fetch ${position} prediction for ${homePlayer.name}:`, error);
+                    }
+                }
             }
-        } catch (error) {
-            console.warn(`Failed to fetch ${position} for ${homeTeam}:`, error);
+        } else {
+            console.error('Failed to fetch team rosters:', awayData, homeData);
         }
+    } catch (error) {
+        console.error('Error fetching team players:', error);
     }
     
     // Calculate game-level predictions from player data
