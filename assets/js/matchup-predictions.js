@@ -176,11 +176,11 @@ async function displayMatchupPredictions(awayTeam, homeTeam) {
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
                     <div style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                            <i class="material-icons" style="color: ${positionColors[player.position]}; font-size: 20px;">${positionIcons[player.position]}</i>
-                            <span style="font-size: 18px; font-weight: 700; color: #1e293b;">${player.player_name || 'Unknown'}</span>
-                            <span style="background: ${positionColors[player.position]}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${player.position}</span>
+                            <i class="material-icons player-card-icon" style="color: ${positionColors[player.position]};">${positionIcons[player.position]}</i>
+                            <span class="player-card-name" style="font-weight: 700; color: #1e293b;">${player.player_name || 'Unknown'}</span>
+                            <span class="player-card-position-badge" style="background: ${positionColors[player.position]}; color: white; border-radius: 4px; font-weight: 600;">${player.position}</span>
                         </div>
-                        <div style="font-size: 14px; color: #64748b; margin-left: 28px;">
+                        <div class="player-card-stats" style="color: #64748b; margin-left: 28px;">
                             ${mainStat} • ${secondaryStat}
                         </div>
                     </div>
@@ -188,25 +188,25 @@ async function displayMatchupPredictions(awayTeam, homeTeam) {
                 
                 <!-- TD Probabilities -->
                 <div style="background: white; border-radius: 8px; padding: 12px; margin-top: 12px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">Touchdown Probabilities</div>
+                    <div class="player-card-section-title" style="font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">Touchdown Probabilities</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                         <div style="text-align: center;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Anytime TD</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #10b981;">${anytimeTD}%</div>
-                            <div style="font-size: 10px; color: #6b7280;">+${tdOdds}</div>
+                            <div class="player-card-td-label" style="color: #64748b; margin-bottom: 4px;">Anytime TD</div>
+                            <div class="player-card-td-value" style="font-weight: 700; color: #10b981;">${anytimeTD}%</div>
+                            <div class="player-card-odds" style="color: #6b7280;">+${tdOdds}</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">First TD</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #3b82f6;">${firstTD}%</div>
+                            <div class="player-card-td-label" style="color: #64748b; margin-bottom: 4px;">First TD</div>
+                            <div class="player-card-td-value" style="font-weight: 700; color: #3b82f6;">${firstTD}%</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">2+ TDs</div>
-                            <div style="font-size: 20px; font-weight: 700; color: #f59e0b;">${multiTD}%</div>
+                            <div class="player-card-td-label" style="color: #64748b; margin-bottom: 4px;">2+ TDs</div>
+                            <div class="player-card-td-value" style="font-weight: 700; color: #f59e0b;">${multiTD}%</div>
                         </div>
                     </div>
                     ${player.defense_adjustment && player.defense_adjustment !== 1.0 ? 
                         `<div style="margin-top: 8px; padding: 6px; background: ${player.defense_adjustment > 1.0 ? '#d1fae5' : '#fee2e2'}; border-radius: 4px; text-align: center;">
-                            <span style="font-size: 11px; color: ${player.defense_adjustment > 1.0 ? '#059669' : '#dc2626'}; font-weight: 600;">
+                            <span class="player-card-defense-adjustment" style="color: ${player.defense_adjustment > 1.0 ? '#059669' : '#dc2626'}; font-weight: 600;">
                                 ${player.defense_adjustment > 1.0 ? '↗' : '↘'} ${player.defense_adjustment > 1.0 ? '+' : ''}${((player.defense_adjustment - 1.0) * 100).toFixed(0)}% vs Defense
                             </span>
                         </div>` 

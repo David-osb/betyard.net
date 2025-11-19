@@ -1,0 +1,567 @@
+============================================================
+NBA PLAYER STATS FETCHER - 2024-25 SEASON
+============================================================
+Fetching NBA rosters from all 30 teams...
+Fetching ATL...
+  Nickeil Alexander-Walker (G)... ✓ 13 games
+  Dyson Daniels (G)... ✓ 15 games
+  N'Faly Dante (C)... ✓ 4 games
+  Nikola Durisic (F)... No data
+  Mouhamed Gueye (F)... ✓ 15 games
+  Caleb Houstan (G)... ✓ 6 games
+  Jalen Johnson (F)... ✓ 13 games
+  Luke Kennard (G)... ✓ 13 games
+  Vit Krejci (G)... ✓ 11 games
+  Eli John N'Diaye (C)... No data
+  Asa Newell (F)... ✓ 9 games
+  Onyeka Okongwu (F)... ✓ 15 games
+  Kristaps Porzingis (C)... ✓ 9 games
+  Zaccharie Risacher (F)... ✓ 12 games
+  Jacob Toppin (F)... ✓ 3 games
+  Keaton Wallace (G)... ✓ 14 games
+  Trae Young (G)... ✓ 5 games
+Fetching BOS...
+  Chris Boucher (F)... ✓ 7 games
+  Jaylen Brown (G)... ✓ 15 games
+  Luka Garza (C)... ✓ 14 games
+  Hugo Gonzalez (G)... ✓ 11 games
+  Ron Harper Jr. (G)... ✓ 3 games
+  Sam Hauser (F)... ✓ 15 games
+  Josh Minott (F)... ✓ 14 games
+  Payton Pritchard (G)... ✓ 15 games
+  Neemias Queta (C)... ✓ 15 games
+  Baylor Scheierman (G)... ✓ 11 games
+  Max Shulga (G)... No data
+  Anfernee Simons (G)... ✓ 15 games
+  Jayson Tatum (F)... ✓ 74 games
+  Xavier Tillman (F)... ✓ 8 games
+  Jordan Walsh (G)... ✓ 11 games
+  Derrick White (G)... ✓ 15 games
+  Amari Williams (F)... ✓ 2 games
+Fetching BKN...
+  Nic Claxton (C)... ✓ 14 games
+  Noah Clowney (F)... ✓ 14 games
+  Egor Demin (G)... ✓ 13 games
+  Tyson Etienne (G)... ✓ 5 games
+  Haywood Highsmith (F)... ✓ 76 games
+  E.J. Liddell (F)... ✓ 5 games
+  Terance Mann (G)... ✓ 14 games
+  Tyrese Martin (G)... ✓ 14 games
+  Michael Porter Jr. (F)... ✓ 13 games
+  Drake Powell (G)... ✓ 8 games
+  Ben Saraf (G)... ✓ 7 games
+  Day'Ron Sharpe (C)... ✓ 13 games
+  Cam Thomas (G)... ✓ 8 games
+  Nolan Traore (G)... ✓ 4 games
+  Ziaire Williams (F)... ✓ 12 games
+  Jalen Wilson (F)... ✓ 12 games
+  Danny Wolf (F)... ✓ 3 games
+Fetching CHA...
+  LaMelo Ball (G)... ✓ 8 games
+  Miles Bridges (F)... ✓ 14 games
+  Pat Connaughton (G)... ✓ 10 games
+  Moussa Diabate (F)... ✓ 14 games
+  Josh Green (G)... ✓ 68 games
+  Sion James (G)... ✓ 14 games
+  Ryan Kalkbrenner (C)... ✓ 13 games
+  Kon Knueppel (G)... ✓ 14 games
+  Tre Mann (G)... ✓ 14 games
+  Liam McNeeley (G)... ✓ 9 games
+  Brandon Miller (F)... ✓ 2 games
+  Drew Peterson (F)... ✓ 1 games
+  Mason Plumlee (C)... ✓ 6 games
+  Antonio Reeves (G)... ✓ 2 games
+  Tidjane Salaun (F)... ✓ 7 games
+  Collin Sexton (G)... ✓ 13 games
+  KJ Simpson (G)... ✓ 6 games
+  Grant Williams (F)... ✓ 16 games
+Fetching CHI...
+  Matas Buzelis (F)... ✓ 13 games
+  Jevon Carter (G)... ✓ 4 games
+  Zach Collins (F)... ✓ 65 games
+  Ayo Dosunmu (G)... ✓ 11 games
+  Noa Essengue (F)... No data
+  Trentyn Flowers (F)... ✓ 6 games
+  Josh Giddey (G)... ✓ 11 games
+  Kevin Huerter (G)... ✓ 13 games
+  Tre Jones (G)... ✓ 11 games
+  Emanuel Miller (F)... ✓ 6 games
+  Isaac Okoro (F)... ✓ 13 games
+  Lachlan Olbrich (C)... No data
+  Julian Phillips (F)... ✓ 12 games
+  Jalen Smith (F)... ✓ 13 games
+  Dalen Terry (F)... ✓ 8 games
+  Nikola Vucevic (C)... ✓ 13 games
+  Coby White (G)... ✓ 1 games
+  Patrick Williams (F)... ✓ 13 games
+Fetching CLE...
+  Jarrett Allen (C)... ✓ 13 games
+  Lonzo Ball (G)... ✓ 12 games
+  Thomas Bryant (C)... ✓ 9 games
+  Darius Garland (G)... ✓ 3 games
+  De'Andre Hunter (F)... ✓ 12 games
+  Chris Livingston (F)... ✓ 22 games
+  Sam Merrill (G)... ✓ 12 games
+  Donovan Mitchell (G)... ✓ 13 games
+  Evan Mobley (C)... ✓ 14 games
+  Larry Nance Jr. (F)... ✓ 12 games
+  Craig Porter Jr. (G)... ✓ 15 games
+  Tyrese Proctor (G)... ✓ 12 games
+  Max Strus (G)... ✓ 50 games
+  Nae'Qwan Tomlin (F)... ✓ 6 games
+  Luke Travers (F)... ✓ 6 games
+  Jaylon Tyson (G)... ✓ 11 games
+  Dean Wade (F)... ✓ 14 games
+Fetching DAL...
+  Max Christie (G)... ✓ 15 games
+  Moussa Cisse (C)... ✓ 10 games
+  Anthony Davis (F)... ✓ 5 games
+  Dante Exum (G)... ✓ 22 games
+  Cooper Flagg (F)... ✓ 15 games
+  Daniel Gafford (F)... ✓ 9 games
+  Jaden Hardy (G)... ✓ 12 games
+  Kyrie Irving (G)... ✓ 52 games
+  Miles Kelly (G)... ✓ 2 games
+  Dereck Lively II (C)... ✓ 5 games
+  Naji Marshall (F)... ✓ 15 games
+  Caleb Martin (F)... ✓ 13 games
+  Ryan Nembhard (G)... ✓ 5 games
+  Dwight Powell (F)... ✓ 11 games
+  D'Angelo Russell (G)... ✓ 15 games
+  Klay Thompson (G)... ✓ 14 games
+  P.J. Washington (F)... ✓ 14 games
+  Brandon Williams (G)... ✓ 13 games
+Fetching DEN...
+  Tamar Bates (G)... No data
+  Christian Braun (G)... ✓ 11 games
+  Bruce Brown (G)... ✓ 13 games
+  Aaron Gordon (F)... ✓ 12 games
+  Tim Hardaway Jr. (G)... ✓ 13 games
+  DaRon Holmes II (F)... ✓ 2 games
+  Cameron Johnson (F)... ✓ 12 games
+  Nikola Jokic (C)... ✓ 13 games
+  Curtis Jones (G)... No data
+  Spencer Jones (F)... ✓ 9 games
+  Jamal Murray (G)... ✓ 12 games
+  Zeke Nnaji (F)... ✓ 6 games
+  Jalen Pickett (G)... ✓ 7 games
+  Julian Strawther (G)... ✓ 9 games
+  Hunter Tyson (F)... ✓ 5 games
+  Jonas Valanciunas (C)... ✓ 13 games
+  Peyton Watson (G)... ✓ 13 games
+Fetching DET...
+  Cade Cunningham (G)... ✓ 12 games
+  Jalen Duren (C)... ✓ 13 games
+  Javonte Green (G)... ✓ 15 games
+  Tobias Harris (F)... ✓ 6 games
+  Ronald Holland II (F)... ✓ 15 games
+  Jaden Ivey (G)... ✓ 30 games
+  Daniss Jenkins (G)... ✓ 10 games
+  Isaac Jones (C)... ✓ 4 games
+  Bobi Klintman (F)... ✓ 6 games
+  Chaz Lanier (G)... ✓ 10 games
+  Caris LeVert (G)... ✓ 10 games
+  Wendell Moore Jr. (F)... ✓ 3 games
+  Paul Reed (F)... ✓ 13 games
+  Duncan Robinson (F)... ✓ 15 games
+  Marcus Sasser (G)... ✓ 57 games
+  Tolu Smith (F)... ✓ 2 games
+  Isaiah Stewart (F)... ✓ 12 games
+  Ausar Thompson (G)... ✓ 11 games
+Fetching GSW...
+  Jimmy Butler III (F)... ✓ 15 games
+  Stephen Curry (G)... ✓ 13 games
+  Draymond Green (F)... ✓ 15 games
+  Buddy Hield (G)... ✓ 16 games
+  Al Horford (C)... ✓ 11 games
+  Trayce Jackson-Davis (F)... ✓ 9 games
+  Jonathan Kuminga (F)... ✓ 13 games
+  De'Anthony Melton (G)... ✓ 6 games
+  Moses Moody (G)... ✓ 14 games
+  Gary Payton II (G)... ✓ 15 games
+  Brandin Podziemski (G)... ✓ 16 games
+  Quinten Post (C)... ✓ 16 games
+  Will Richard (G)... ✓ 14 games
+  Jackson Rowe (F)... ✓ 6 games
+  Gui Santos (F)... ✓ 12 games
+  Pat Spencer (G)... ✓ 9 games
+  Alex Toohey (F)... No data
+Fetching HOU...
+  Steven Adams (C)... ✓ 11 games
+  Clint Capela (C)... ✓ 11 games
+  Isaiah Crawford (F)... ✓ 15 games
+  JD Davison (G)... ✓ 5 games
+  Kevin Durant (F)... ✓ 12 games
+  Tari Eason (F)... ✓ 11 games
+  Dorian Finney-Smith (F)... ✓ 63 games
+  Jeff Green (F)... ✓ 5 games
+  Kevon Harris (G)... ✓ 2 games
+  Aaron Holiday (G)... ✓ 7 games
+  Josh Okogie (G)... ✓ 12 games
+  Alperen Sengun (C)... ✓ 12 games
+  Reed Sheppard (G)... ✓ 12 games
+  Jabari Smith Jr. (F)... ✓ 11 games
+  Jae'Sean Tate (F)... ✓ 6 games
+  Amen Thompson (G)... ✓ 12 games
+  Fred VanVleet (G)... ✓ 60 games
+Fetching IND...
+  Tony Bradley (C)... ✓ 14 games
+  RayJ Dennis (G)... ✓ 11 games
+  Johnny Furphy (G)... ✓ 3 games
+  Tyrese Haliburton (G)... ✓ 73 games
+  Jay Huff (C)... ✓ 14 games
+  Isaiah Jackson (F)... ✓ 14 games
+  Quenton Jackson (G)... ✓ 5 games
+  Kam Jones (G)... No data
+  Bennedict Mathurin (G)... ✓ 3 games
+  T.J. McConnell (G)... ✓ 4 games
+  Monte Morris (PG)... ✓ 6 games
+  Andrew Nembhard (G)... ✓ 7 games
+  Aaron Nesmith (G)... ✓ 11 games
+  Taelon Peter (G)... ✓ 10 games
+  Jeremiah Robinson-Earl (F)... ✓ 9 games
+  Ben Sheppard (G)... ✓ 14 games
+  Pascal Siakam (F)... ✓ 13 games
+  Obi Toppin (F)... ✓ 3 games
+  Jarace Walker (F)... ✓ 14 games
+Fetching LAC...
+  Nicolas Batum (F)... ✓ 14 games
+  Bradley Beal (G)... ✓ 6 games
+  Bogdan Bogdanovic (G)... ✓ 8 games
+  Kobe Brown (G)... ✓ 7 games
+  Cam Christie (G)... ✓ 9 games
+  John Collins (F)... ✓ 14 games
+  Kris Dunn (G)... ✓ 14 games
+  James Harden (G)... ✓ 13 games
+  Derrick Jones Jr. (F)... ✓ 13 games
+  Kawhi Leonard (F)... ✓ 6 games
+  Brook Lopez (C)... ✓ 14 games
+  Jordan Miller (G)... ✓ 3 games
+  Yanic Konan Niederhauser (C)... ✓ 5 games
+  Chris Paul (G)... ✓ 9 games
+  Kobe Sanders (G)... ✓ 6 games
+  Jahmyl Telfort (F)... ✓ 3 games
+  Ivica Zubac (C)... ✓ 14 games
+Fetching LAL...
+  Deandre Ayton (C)... ✓ 13 games
+  Luka Doncic (G)... ✓ 10 games
+  Rui Hachimura (F)... ✓ 13 games
+  Jaxson Hayes (C)... ✓ 11 games
+  Bronny James (G)... ✓ 9 games
+  LeBron James (F)... ✓ 70 games
+  Maxi Kleber (F)... ✓ 3 games
+  Dalton Knecht (F)... ✓ 13 games
+  Christian Koloko (C)... ✓ 2 games
+  Jake LaRavia (F)... ✓ 14 games
+  Chris Manon (G)... ✓ 2 games
+  Austin Reaves (G)... ✓ 11 games
+  Marcus Smart (G)... ✓ 11 games
+  Nick Smith Jr. (G)... ✓ 6 games
+  Adou Thiero (F)... ✓ 1 games
+  Jarred Vanderbilt (F)... ✓ 14 games
+  Gabe Vincent (G)... ✓ 3 games
+Fetching MEM...
+  Santi Aldama (F)... ✓ 15 games
+  Kentavious Caldwell-Pope (G)... ✓ 15 games
+  Brandon Clarke (F)... ✓ 64 games
+  Cedric Coward (F)... ✓ 15 games
+  Zach Edey (C)... ✓ 2 games
+  GG Jackson (F)... ✓ 6 games
+  Jaren Jackson Jr. (F)... ✓ 15 games
+  Ty Jerome (G)... ✓ 70 games
+  John Konchar (G)... ✓ 13 games
+  Jock Landale (C)... ✓ 15 games
+  Ja Morant (G)... ✓ 12 games
+  Scotty Pippen Jr. (G)... ✓ 81 games
+  Olivier-Maxence Prosper (F)... ✓ 8 games
+  Javon Small (G)... ✓ 7 games
+  Cam Spencer (G)... ✓ 15 games
+  Jaylen Wells (F)... ✓ 15 games
+  Vince Williams Jr. (G)... ✓ 10 games
+Fetching MIA...
+  Bam Adebayo (C)... ✓ 8 games
+  Simone Fontecchio (F)... ✓ 14 games
+  Myron Gardner (F)... ✓ 1 games
+  Vladislav Goldin (C)... No data
+  Tyler Herro (G)... ✓ 80 games
+  Kasparas Jakucionis (G)... No data
+  Jaime Jaquez Jr. (F)... ✓ 14 games
+  Keshad Johnson (F)... ✓ 5 games
+  Nikola Jovic (F)... ✓ 14 games
+  Pelle Larsson (G)... ✓ 14 games
+  Davion Mitchell (G)... ✓ 14 games
+  Norman Powell (G)... ✓ 11 games
+  Terry Rozier (G)... ✓ 64 games
+  Dru Smith (G)... ✓ 14 games
+  Kel'el Ware (C)... ✓ 14 games
+  Andrew Wiggins (F)... ✓ 14 games
+  Jahmir Young (G)... ✓ 2 games
+Fetching MIL...
+  Alex Antetokounmpo (F)... No data
+  Giannis Antetokounmpo (F)... ✓ 13 games
+  Thanasis Antetokounmpo (F)... ✓ 3 games
+  Cole Anthony (G)... ✓ 14 games
+  Amir Coffey (G)... ✓ 13 games
+  AJ Green (G)... ✓ 15 games
+  Gary Harris (G)... ✓ 8 games
+  Andre Jackson Jr. (G)... ✓ 5 games
+  Kyle Kuzma (F)... ✓ 14 games
+  Pete Nance (F)... ✓ 1 games
+  Kevin Porter Jr. (G)... ✓ 1 games
+  Bobby Portis (F)... ✓ 15 games
+  Taurean Prince (F)... ✓ 8 games
+  Ryan Rollins (G)... ✓ 15 games
+  Mark Sears (G)... ✓ 4 games
+  Jericho Sims (C)... ✓ 9 games
+  Gary Trent Jr. (G)... ✓ 15 games
+  Myles Turner (C)... ✓ 15 games
+Fetching MIN...
+  Joan Beringer (F)... ✓ 9 games
+  Jaylen Clark (G)... ✓ 12 games
+  Mike Conley (G)... ✓ 14 games
+  Rob Dillingham (G)... ✓ 12 games
+  Donte DiVincenzo (G)... ✓ 14 games
+  Anthony Edwards (G)... ✓ 10 games
+  Enrique Freeman (F)... ✓ 22 games
+  Rudy Gobert (C)... ✓ 14 games
+  Bones Hyland (G)... ✓ 11 games
+  Joe Ingles (F)... ✓ 4 games
+  Johnny Juzang (G)... ✓ 7 games
+  Jaden McDaniels (F)... ✓ 14 games
+  Leonard Miller (F)... ✓ 8 games
+  Julius Randle (F)... ✓ 14 games
+  Naz Reid (C)... ✓ 14 games
+  Terrence Shannon Jr. (G)... ✓ 7 games
+  Rocco Zikarsky (C)... No data
+Fetching NOP...
+  Trey Alexander (G)... ✓ 23 games
+  Jose Alvarado (G)... ✓ 13 games
+  Saddiq Bey (G)... ✓ 13 games
+  Hunter Dickinson (C)... ✓ 1 games
+  Jeremiah Fears (G)... ✓ 14 games
+  Jordan Hawkins (G)... ✓ 13 games
+  Herbert Jones (F)... ✓ 14 games
+  DeAndre Jordan (C)... ✓ 2 games
+  Kevon Looney (F)... ✓ 7 games
+  Karlo Matkovic (F)... ✓ 12 games
+  Bryce McGowens (G)... ✓ 6 games
+  Yves Missi (C)... ✓ 9 games
+  Trey Murphy III (F)... ✓ 14 games
+  Dejounte Murray (G)... ✓ 31 games
+  Micah Peavy (G)... ✓ 10 games
+  Jordan Poole (G)... ✓ 7 games
+  Derik Queen (C)... ✓ 14 games
+  Zion Williamson (F)... ✓ 5 games
+Fetching NYK...
+  OG Anunoby (F)... ✓ 12 games
+  Mikal Bridges (G)... ✓ 13 games
+  Jalen Brunson (G)... ✓ 11 games
+  Jordan Clarkson (G)... ✓ 13 games
+  Pacome Dadiet (F)... ✓ 5 games
+  Mohamed Diawara (F)... ✓ 7 games
+  Tosan Evbuomwan (F)... ✓ 28 games
+  Josh Hart (G)... ✓ 12 games
+  Ariel Hukporti (C)... ✓ 7 games
+  Trey Jemison III (F)... ✓ 1 games
+  Tyler Kolek (G)... ✓ 10 games
+  Miles McBride (G)... ✓ 11 games
+  Kevin McCullar Jr. (G)... ✓ 4 games
+  Mitchell Robinson (C)... ✓ 7 games
+  Landry Shamet (G)... ✓ 13 games
+  Karl-Anthony Towns (C)... ✓ 13 games
+  Guerschon Yabusele (F)... ✓ 12 games
+Fetching OKC...
+  Brooks Barnhizer (F)... ✓ 13 games
+  Branden Carlson (C)... ✓ 10 games
+  Alex Caruso (G)... ✓ 10 games
+  Ousmane Dieng (F)... ✓ 12 games
+  Luguentz Dort (G)... ✓ 9 games
+  Shai Gilgeous-Alexander (G)... ✓ 15 games
+  Isaiah Hartenstein (C)... ✓ 15 games
+  Chet Holmgren (C)... ✓ 11 games
+  Isaiah Joe (G)... ✓ 10 games
+  Ajay Mitchell (G)... ✓ 15 games
+  Thomas Sorber (C)... No data
+  Nikola Topic (G)... No data
+  Cason Wallace (G)... ✓ 14 games
+  Aaron Wiggins (G)... ✓ 9 games
+  Jalen Williams (G)... ✓ 71 games
+  Jaylin Williams (F)... ✓ 14 games
+  Kenrich Williams (G)... ✓ 70 games
+  Chris Youngblood (G)... ✓ 11 games
+Fetching ORL...
+  Paolo Banchero (F)... ✓ 12 games
+  Desmond Bane (G)... ✓ 15 games
+  Goga Bitadze (C)... ✓ 15 games
+  Anthony Black (G)... ✓ 15 games
+  Jamal Cain (F)... No data
+  Wendell Carter Jr. (C)... ✓ 15 games
+  Colin Castleton (C)... ✓ 25 games
+  Tristan da Silva (F)... ✓ 15 games
+  Jett Howard (G)... ✓ 10 games
+  Jonathan Isaac (F)... ✓ 13 games
+  Tyus Jones (G)... ✓ 15 games
+  Noah Penda (F)... ✓ 6 games
+  Jase Richardson (G)... ✓ 7 games
+  Orlando Robinson (C)... ✓ 1 games
+  Jalen Suggs (G)... ✓ 11 games
+  Franz Wagner (F)... ✓ 15 games
+  Moritz Wagner (F)... ✓ 30 games
+Fetching PHI...
+  Dominick Barlow (F)... ✓ 4 games
+  Adem Bona (C)... ✓ 12 games
+  Johni Broome (F)... ✓ 2 games
+  Andre Drummond (C)... ✓ 12 games
+  VJ Edgecombe (G)... ✓ 13 games
+  Justin Edwards (F)... ✓ 10 games
+  Joel Embiid (C)... ✓ 6 games
+  Paul George (F)... ✓ 1 games
+  Eric Gordon (G)... ✓ 3 games
+  Quentin Grimes (G)... ✓ 13 games
+  Kyle Lowry (G)... ✓ 1 games
+  Tyrese Maxey (G)... ✓ 13 games
+  Jared McCain (G)... ✓ 4 games
+  Kelly Oubre Jr. (G)... ✓ 12 games
+  Hunter Sallis (G)... ✓ 3 games
+  Jabari Walker (F)... ✓ 13 games
+  Trendon Watford (F)... ✓ 10 games
+Fetching PHX...
+  Grayson Allen (G)... ✓ 13 games
+  Devin Booker (G)... ✓ 14 games
+  Koby Brea (G)... ✓ 1 games
+  Dillon Brooks (F)... ✓ 8 games
+  Ryan Dunn (F)... ✓ 14 games
+  Rasheer Fleming (F)... ✓ 7 games
+  Collin Gillespie (G)... ✓ 14 games
+  Jordan Goodwin (G)... ✓ 11 games
+  Jalen Green (G)... ✓ 2 games
+  Nigel Hayes-Davis (F)... ✓ 11 games
+  CJ Huntley (F)... No data
+  Oso Ighodaro (F)... ✓ 14 games
+  Isaiah Livers (F)... ✓ 8 games
+  Khaman Maluach (C)... ✓ 7 games
+  Royce O'Neale (F)... ✓ 14 games
+  Nick Richards (C)... ✓ 14 games
+  Mark Williams (C)... ✓ 12 games
+Fetching POR...
+  Deni Avdija (F)... ✓ 13 games
+  Toumani Camara (F)... ✓ 13 games
+  Sidy Cissoko (G)... ✓ 8 games
+  Donovan Clingan (C)... ✓ 13 games
+  Javonte Cooke (G)... No data
+  Jerami Grant (F)... ✓ 13 games
+  Yang Hansen (C)... ✓ 5 games
+  Scoot Henderson (G)... ✓ 66 games
+  Jrue Holiday (G)... ✓ 12 games
+  Damian Lillard (G)... ✓ 61 games
+  Caleb Love (G)... ✓ 5 games
+  Kris Murray (F)... ✓ 12 games
+  Duop Reath (C)... ✓ 9 games
+  Rayan Rupert (G)... ✓ 7 games
+  Shaedon Sharpe (G)... ✓ 13 games
+  Matisse Thybulle (G)... ✓ 4 games
+  Blake Wesley (G)... ✓ 6 games
+  Robert Williams III (C)... ✓ 8 games
+Fetching SAC...
+  Precious Achiuwa (PF)... ✓ 7 games
+  Dylan Cardwell (C)... ✓ 3 games
+  Devin Carter (G)... ✓ 8 games
+  Nique Clifford (G)... ✓ 10 games
+  DeMar DeRozan (G)... ✓ 14 games
+  Keon Ellis (G)... ✓ 14 games
+  Drew Eubanks (F)... ✓ 14 games
+  Zach LaVine (G)... ✓ 12 games
+  Doug McDermott (F)... ✓ 1 games
+  Malik Monk (G)... ✓ 11 games
+  Keegan Murray (F)... ✓ 77 games
+  Daeqwon Plowden (G)... ✓ 1 games
+  Maxime Raynaud (C)... ✓ 6 games
+  Domantas Sabonis (F)... ✓ 11 games
+  Dario Saric (F)... ✓ 3 games
+  Dennis Schroder (G)... ✓ 14 games
+  Isaiah Stevens (G)... ✓ 3 games
+  Russell Westbrook (G)... ✓ 14 games
+Fetching SAS...
+  Harrison Barnes (F)... ✓ 14 games
+  Bismack Biyombo (C)... ✓ 6 games
+  Carter Bryant (F)... ✓ 9 games
+  Stephon Castle (G)... ✓ 13 games
+  Julian Champagnie (F)... ✓ 14 games
+  De'Aaron Fox (G)... ✓ 6 games
+  Dylan Harper (G)... ✓ 6 games
+  Harrison Ingram (F)... ✓ 3 games
+  Keldon Johnson (F)... ✓ 14 games
+  David Jones Garcia (F)... ✓ 4 games
+  Luke Kornet (C)... ✓ 7 games
+  Jordan McLaughlin (G)... ✓ 8 games
+  Riley Minix (F)... ✓ 3 games
+  Kelly Olynyk (F)... ✓ 5 games
+  Jeremy Sochan (F)... ✓ 8 games
+  Devin Vassell (G)... ✓ 14 games
+  Lindy Waters III (F)... ✓ 6 games
+  Victor Wembanyama (F)... ✓ 12 games
+Fetching TOR...
+  Ochai Agbaji (G)... ✓ 9 games
+  Scottie Barnes (F)... ✓ 14 games
+  RJ Barrett (F)... ✓ 14 games
+  Jamison Battle (F)... ✓ 9 games
+  Gradey Dick (G)... ✓ 14 games
+  Chucky Hepburn (G)... No data
+  Brandon Ingram (F)... ✓ 14 games
+  A.J. Lawson (G)... ✓ 26 games
+  Sandro Mamukelashvili (F)... ✓ 13 games
+  Alijah Martin (G)... No data
+  Jonathan Mogbo (F)... ✓ 7 games
+  Collin Murray-Boyles (F)... ✓ 11 games
+  Jakob Poeltl (C)... ✓ 10 games
+  Immanuel Quickley (G)... ✓ 14 games
+  Jamal Shead (G)... ✓ 14 games
+  Garrett Temple (G)... ✓ 2 games
+  Ja'Kobe Walter (G)... ✓ 11 games
+Fetching UTA...
+  Kyle Anderson (F)... ✓ 3 games
+  Ace Bailey (G)... ✓ 13 games
+  Walter Clayton Jr. (G)... ✓ 11 games
+  Isaiah Collier (G)... ✓ 5 games
+  Kyle Filipowski (F)... ✓ 13 games
+  Keyonte George (G)... ✓ 13 games
+  Elijah Harkless (G)... ✓ 6 games
+  Taylor Hendricks (F)... ✓ 9 games
+  Walker Kessler (C)... ✓ 5 games
+  Kevin Love (F)... ✓ 7 games
+  Lauri Markkanen (F)... ✓ 13 games
+  Svi Mykhailiuk (G)... ✓ 13 games
+  Georges Niang (F)... ✓ 81 games
+  Jusuf Nurkic (C)... ✓ 13 games
+  Brice Sensabaugh (F)... ✓ 11 games
+  John Tonje (F)... No data
+  Oscar Tshiebwe (C)... ✓ 14 games
+  Cody Williams (F)... ✓ 8 games
+Fetching WAS...
+  Marvin Bagley III (F)... ✓ 13 games
+  Malaki Branham (G)... ✓ 4 games
+  Bub Carrington (G)... ✓ 13 games
+  Justin Champagnie (F)... ✓ 11 games
+  Sharife Cooper (G)... ✓ 2 games
+  Bilal Coulibaly (G)... ✓ 5 games
+  Kyshawn George (F)... ✓ 12 games
+  Anthony Gill (F)... ✓ 5 games
+  AJ Johnson (G)... ✓ 8 games
+  Tre Johnson (G)... ✓ 13 games
+  Corey Kispert (F)... ✓ 13 games
+  CJ McCollum (G)... ✓ 13 games
+  Khris Middleton (F)... ✓ 10 games
+  Will Riley (G)... ✓ 9 games
+  Alex Sarr (C)... ✓ 13 games
+  Tristan Vukcevic (F)... ✓ 10 games
+  Jamir Watkins (G)... ✓ 2 games
+  Cam Whitmore (F)... ✓ 13 games
+
+============================================================
+COMPLETE: 503 players saved to nba_player_data.json
+============================================================
+
+Summary:
+  Total Players: 503
+  Total Games Logged: 6476
+  Average PPG: 9.5
