@@ -1491,6 +1491,7 @@
 
             #game-predictions {
                 gap: 12px !important;
+                grid-template-columns: 1fr !important;
             }
 
             #away-team-header, #home-team-header {
@@ -1504,6 +1505,11 @@
             #away-team-content, #home-team-content {
                 padding: 16px !important;
             }
+
+            /* Keep 2 columns but reduce gap on smaller screens */
+            #predictions-matchup-view > div:last-child {
+                gap: 16px !important;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1513,6 +1519,11 @@
 
             #away-team-content, #home-team-content {
                 padding: 12px !important;
+            }
+
+            /* Smaller gap for mobile */
+            #predictions-matchup-view > div:last-child {
+                gap: 12px !important;
             }
         }
 
@@ -6278,7 +6289,7 @@
                     </div>
                     
                     <!-- Two-team card layout -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr)); gap: 24px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                         <!-- Away Team Card -->
                         <div id="away-team-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                             <div id="away-team-header" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 20px; color: white;">
