@@ -234,6 +234,35 @@ async function displayMatchupPredictions(awayTeam, homeTeam) {
     console.log(`📊 Game Predictions: ML: ${gamePreds.moneyline.team}, Spread: ${gamePreds.spread.line}, Total: ${gamePreds.total.prediction}`);
 }
 
-// Make function globally available immediately
+// Back to Games button function
+function backToGames() {
+    // Hide predictions panel
+    const predictionsPanel = document.getElementById('predictions-panel');
+    if (predictionsPanel) {
+        predictionsPanel.style.display = 'none';
+        predictionsPanel.classList.remove('active');
+    }
+    
+    // Hide matchup view, show default state
+    const defaultState = document.getElementById('predictions-default-state');
+    const matchupView = document.getElementById('predictions-matchup-view');
+    if (defaultState) defaultState.style.display = 'block';
+    if (matchupView) matchupView.style.display = 'none';
+    
+    // Show game cards and UI elements
+    const gameCentricContainer = document.getElementById('game-centric-container');
+    const newsContainer = document.getElementById('news-container');
+    const sportSelector = document.getElementById('sport-selector');
+    
+    if (gameCentricContainer) gameCentricContainer.style.display = 'block';
+    if (newsContainer) newsContainer.style.display = 'block';
+    if (sportSelector) sportSelector.style.display = 'block';
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Make functions globally available immediately
 window.displayMatchupPredictions = displayMatchupPredictions;
-console.log('✅ displayMatchupPredictions function loaded and ready');
+window.backToGames = backToGames;
+console.log('✅ displayMatchupPredictions and backToGames functions loaded and ready');

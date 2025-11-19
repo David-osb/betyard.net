@@ -10067,36 +10067,7 @@
             }
         }
         
-        // Back to Games button function
-        function backToGames() {
-            // Hide predictions panel
-            const predictionsPanel = document.getElementById('predictions-panel');
-            if (predictionsPanel) {
-                predictionsPanel.style.display = 'none';
-                predictionsPanel.classList.remove('active');
-            }
-            
-            // Hide matchup view, show default state
-            const defaultState = document.getElementById('predictions-default-state');
-            const matchupView = document.getElementById('predictions-matchup-view');
-            if (defaultState) defaultState.style.display = 'block';
-            if (matchupView) matchupView.style.display = 'none';
-            
-            // Show game cards and UI elements
-            const gameCentricContainer = document.getElementById('game-centric-container');
-            const newsContainer = document.getElementById('news-container');
-            const sportSelector = document.getElementById('sport-selector');
-            
-            if (gameCentricContainer) gameCentricContainer.style.display = 'block';
-            if (newsContainer) newsContainer.style.display = 'block';
-            if (sportSelector) sportSelector.style.display = 'block';
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Make function globally available
-        window.backToGames = backToGames;
+        // Back to Games function now in matchup-predictions.js
         
         // Display TD Scorers in Predictions Panel (NOW LOADED FROM matchup-predictions.js)
         // displayMatchupPredictions function moved to assets/js/matchup-predictions.js
