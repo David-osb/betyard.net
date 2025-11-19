@@ -39,7 +39,7 @@ def fetch_with_retry(url, retries=2, delay=1):
     return None
 
 def get_team_roster(team_code):
-    """Fetch all offensive players from team roster"""
+    """Fetch all offensive players from team roster with positions"""
     team_id = NFL_TEAMS.get(team_code)
     if not team_id:
         return []
@@ -57,11 +57,17 @@ def get_team_roster(team_code):
             
         for athlete in group.get('items', []):
             try:
-                players.append({
-                    'id': athlete.get('id'),
-                    'name': athlete.get('displayName', 'Unknown'),
-                    'team': team_code
-                })
+                position_data = athlete.get('position', {})
+                position_abbr = position_data.get('abbreviation', '')
+                
+                # Only include QB, RB, WR, TE
+                if position_abbr in ['QB', 'RB', 'WR', 'TE']:
+                    players.append({
+                        'id': athlete.get('id'),
+                        'name': athlete.get('displayName', 'Unknown'),
+                        'team': team_code,
+                        'position': position_abbr  # Add position from roster
+                    })
             except:
                 pass
     
@@ -205,24 +211,27 @@ def build_training_dataset():
     for team_code in sorted(NFL_TEAMS.keys()):
         print(f"\n📋 {team_code}")
         roster = get_team_roster(team_code)
-        print(f"  Found {len(roster)} offensive players")
+        print(f"  Found {len(roster)} skill position players")
         
         for player in roster:
             player_id = player['id']
             player_name = player['name']
+            position = player['position']  # Get position from roster (already filtered to QB/RB/WR/TE)
             
-            # Fetch gamelog and determine position
-            position, gamelog = get_player_gamelog_with_position(player_id)
+            # Fetch gamelog
+            _, gamelog = get_player_gamelog_with_position(player_id)
             
-            if not position or not gamelog or len(gamelog) == 0:
+            if not gamelog or len(gamelog) == 0:
                 skipped += 1
                 continue
             
             # Calculate TD stats
             total_games = len(gamelog)
             games_with_td = sum(1 for g in gamelog if g['tds'] > 0)
+            games_with_2plus_tds = sum(1 for g in gamelog if g['tds'] >= 2)
             total_tds = sum(g['tds'] for g in gamelog)
             td_probability = games_with_td / total_games if total_games > 0 else 0
+            multi_td_probability = games_with_2plus_tds / total_games if total_games > 0 else 0
             avg_tds_per_game = total_tds / total_games if total_games > 0 else 0
             
             player_data = {
@@ -234,8 +243,10 @@ def build_training_dataset():
                 'td_stats': {
                     'games_played': total_games,
                     'games_with_td': games_with_td,
+                    'games_with_2plus_tds': games_with_2plus_tds,
                     'total_tds': total_tds,
                     'td_probability': round(td_probability, 3),
+                    'multi_td_probability': round(multi_td_probability, 3),
                     'avg_tds_per_game': round(avg_tds_per_game, 2)
                 }
             }
@@ -244,8 +255,9 @@ def build_training_dataset():
             position_counts[position] += 1
             
             # Show progress for players with TDs
-            if games_with_td > 0:
-                print(f"  ✅ {player_name} ({position}): {games_with_td} TDs in {total_games} games")
+            if total_tds > 0:
+                multi_info = f" ({games_with_2plus_tds} multi-TD)" if games_with_2plus_tds > 0 else ""
+                print(f"  ✅ {player_name} ({position}): {total_tds} TDs in {total_games} games{multi_info}")
             
             # Rate limiting
             time.sleep(0.3)

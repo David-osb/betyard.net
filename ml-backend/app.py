@@ -37,12 +37,14 @@ def load_td_probabilities():
         # Index by player name for quick lookup
         for player in player_data:
             name = player.get('name', '').lower()
+            td_stats = player.get('td_stats', {})
             TD_PROBABILITY_DATA[name] = {
                 'position': player.get('position'),
                 'team': player.get('team'),
-                'td_probability': player.get('td_stats', {}).get('td_probability', 0),
-                'avg_tds_per_game': player.get('td_stats', {}).get('avg_tds_per_game', 0),
-                'games_played': player.get('td_stats', {}).get('games_played', 0)
+                'td_probability': td_stats.get('td_probability', 0),
+                'multi_td_probability': td_stats.get('multi_td_probability', 0),
+                'avg_tds_per_game': td_stats.get('avg_tds_per_game', 0),
+                'games_played': td_stats.get('games_played', 0)
             }
         
         print(f"✅ Loaded {len(TD_PROBABILITY_DATA)} players with real 2025 TD probabilities")
@@ -211,17 +213,21 @@ def get_td_probability(player_name, position, opponent_code=None):
     adjusted_td_prob = base_td_prob * defense_multiplier
     adjusted_td_prob = min(1.0, adjusted_td_prob)  # Cap at 100%
     
-    # Get average TDs per game for multi-TD calculation
-    avg_tds = player_data.get('avg_tds_per_game', 0) if player_data else 0.5
+    # Get multi-TD probability from real game data
+    if player_data:
+        base_multi_td = player_data.get('multi_td_probability', 0)
+        adjusted_multi_td = base_multi_td * defense_multiplier
+    else:
+        # Fallback: estimate from average TDs per game
+        avg_tds = 0.5
+        adjusted_multi_td = min(0.4, avg_tds * 0.3 * defense_multiplier)
     
-    # Estimate multi-TD probability based on average TDs per game
-    # If avg > 1.0 TDs/game, higher chance of multi-TD
-    multi_td_prob = min(0.4, avg_tds * 0.3 * defense_multiplier) if avg_tds > 0.5 else adjusted_td_prob * 0.2
+    adjusted_multi_td = min(1.0, adjusted_multi_td)  # Cap at 100%
     
     result = {
         'anytime_td': adjusted_td_prob,
         'first_td': adjusted_td_prob / 8,  # First TD scorer is roughly 12.5% of anytime
-        'multi_td': multi_td_prob,
+        'multi_td': adjusted_multi_td,
         'source': 'player_gamelog' if player_data else 'position_average',
         'opponent_defense': get_team_stats(opponent_code).get('defense', None) if opponent_code else None,
         'defense_adjustment': defense_multiplier
@@ -298,20 +304,32 @@ def get_team_players(team_code):
     try:
         team_code_upper = team_code.upper()
         
+        # Load raw player data from JSON file
+        data_file = os.path.join(MODEL_DIR, 'espn_player_data.json')
+        if not os.path.exists(data_file):
+            return jsonify({
+                'success': False,
+                'error': 'Player data file not found'
+            }), 404
+        
+        with open(data_file, 'r') as f:
+            all_players = json.load(f)
+        
         # Find all players for this team, grouped by position
         team_players = {'QB': [], 'RB': [], 'WR': [], 'TE': []}
         
-        for player_name, player_data in TD_PROBABILITY_DATA.items():
-            if player_data['team'] == team_code_upper:
-                position = player_data['position']
+        for player in all_players:
+            if player.get('team') == team_code_upper:
+                position = player.get('position')
                 if position in team_players:
+                    td_stats = player.get('td_stats', {})
                     team_players[position].append({
-                        'name': player_name.title(),  # Capitalize properly
+                        'name': player.get('name'),
                         'position': position,
                         'team': team_code_upper,
-                        'td_probability': player_data['td_probability'],
-                        'avg_tds_per_game': player_data['avg_tds_per_game'],
-                        'games_played': player_data['games_played']
+                        'td_probability': td_stats.get('td_probability', 0),
+                        'avg_tds_per_game': td_stats.get('avg_tds_per_game', 0),
+                        'games_played': td_stats.get('games_played', 0)
                     })
         
         # Sort each position by TD probability and take top player
@@ -332,9 +350,11 @@ def get_team_players(team_code):
         })
         
     except Exception as e:
+        import traceback
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': str(e),
+            'traceback': traceback.format_exc()
         }), 500
 
 @app.route('/predict', methods=['POST'])
