@@ -1,6 +1,7 @@
-flask==3.0.0
-flask-cors==4.0.0
-xgboost==2.0.3
-numpy>=1.26.0
-scipy>=1.11.0
+flask==3.1.2
+flask-cors==6.0.1
+xgboost==3.1.1
+scikit-learn==1.7.2
+numpy==2.3.4
+scipy==1.16.3
 gunicorn==21.2.0
