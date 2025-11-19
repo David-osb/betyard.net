@@ -6202,6 +6202,12 @@
                 
                 <!-- Matchup-specific predictions: Shows when matchup is selected -->
                 <div id="predictions-matchup-view" style="display: none;">
+                    <!-- Back to Games Button -->
+                    <button onclick="backToGames()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; transition: all 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                        <i class="material-icons">arrow_back</i>
+                        Back to Games
+                    </button>
+                    
                     <!-- Matchup header with game predictions -->
                     <div id="matchup-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 24px; border-radius: 12px; color: white; margin-bottom: 24px;">
                         <h2 style="margin: 0 0 16px 0; font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 12px;">
@@ -10059,6 +10065,34 @@
                 detailsDiv.style.display = 'none';
                 button.innerHTML = '📊 View All Sportsbooks ▼';
             }
+        }
+        
+        // Back to Games button function
+        function backToGames() {
+            // Hide predictions panel
+            const predictionsPanel = document.getElementById('predictions-panel');
+            if (predictionsPanel) {
+                predictionsPanel.style.display = 'none';
+                predictionsPanel.classList.remove('active');
+            }
+            
+            // Hide matchup view, show default state
+            const defaultState = document.getElementById('predictions-default-state');
+            const matchupView = document.getElementById('predictions-matchup-view');
+            if (defaultState) defaultState.style.display = 'block';
+            if (matchupView) matchupView.style.display = 'none';
+            
+            // Show game cards and UI elements
+            const gameCentricContainer = document.getElementById('game-centric-container');
+            const newsContainer = document.getElementById('news-container');
+            const sportSelector = document.getElementById('sport-selector');
+            
+            if (gameCentricContainer) gameCentricContainer.style.display = 'block';
+            if (newsContainer) newsContainer.style.display = 'block';
+            if (sportSelector) sportSelector.style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
         // Display TD Scorers in Predictions Panel (NOW LOADED FROM matchup-predictions.js)
