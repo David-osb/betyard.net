@@ -1536,10 +1536,14 @@ async function handleNBAProps(game, homeTeam, awayTeam, propsContainer) {
     }
     
     // Fetch both teams
-    const homePlayers = await window.multiSportPredictions.fetchNBATeam(homeAbbrev);
-    const awayPlayers = await window.multiSportPredictions.fetchNBATeam(awayAbbrev);
+    const homeData = await window.multiSportPredictions.fetchNBATeam(homeAbbrev);
+    const awayData = await window.multiSportPredictions.fetchNBATeam(awayAbbrev);
     
-    console.log(`✅ Loaded ${awayPlayers?.length || 0} away players and ${homePlayers?.length || 0} home players`);
+    // Extract player arrays from response
+    const homePlayers = homeData?.players || [];
+    const awayPlayers = awayData?.players || [];
+    
+    console.log(`✅ Loaded ${awayPlayers.length} away players and ${homePlayers.length} home players`);
     
     // Render in props container
     const html = `
@@ -1551,13 +1555,13 @@ async function handleNBAProps(game, homeTeam, awayTeam, propsContainer) {
                 <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
                     ${awayTeam}
                 </h4>
-                ${window.multiSportPredictions.renderNBAPlayers(awayPlayers || [])}
+                ${window.multiSportPredictions.renderNBAPlayers(awayPlayers)}
             </div>
             <div>
                 <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
                     ${homeTeam}
                 </h4>
-                ${window.multiSportPredictions.renderNBAPlayers(homePlayers || [])}
+                ${window.multiSportPredictions.renderNBAPlayers(homePlayers)}
             </div>
         </div>
     `;
