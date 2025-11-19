@@ -1474,6 +1474,38 @@
             margin: 0;
         }
 
+        /* Responsive styles for predictions panel */
+        @media (max-width: 768px) {
+            .content-panel {
+                padding: 16px;
+                margin: 12px;
+            }
+
+            #matchup-header {
+                padding: 16px !important;
+            }
+
+            #matchup-header h2 {
+                font-size: 20px !important;
+            }
+
+            #game-predictions {
+                gap: 12px !important;
+            }
+
+            #away-team-header, #home-team-header {
+                padding: 16px !important;
+            }
+
+            #away-team-header h3, #home-team-header h3 {
+                font-size: 20px !important;
+            }
+
+            #away-team-content, #home-team-content {
+                padding: 12px !important;
+            }
+        }
+
         .action-button {
             background: linear-gradient(135deg, #003da5 0%, #0047ab 100%);
             color: white;
@@ -6216,7 +6248,7 @@
                         </h2>
                         
                         <!-- Game-level predictions (Moneyline, Spread, Total) -->
-                        <div id="game-predictions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px;">
+                        <div id="game-predictions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px; margin-top: 20px;">
                             <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; backdrop-filter: blur(10px);">
                                 <div style="font-size: 13px; opacity: 0.8; margin-bottom: 8px;">ML Prediction</div>
                                 <div id="ml-prediction" style="font-size: 22px; font-weight: 700;">--</div>
@@ -6236,7 +6268,7 @@
                     </div>
                     
                     <!-- Two-team card layout -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 24px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr)); gap: 24px;">
                         <!-- Away Team Card -->
                         <div id="away-team-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                             <div id="away-team-header" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 20px; color: white;">
