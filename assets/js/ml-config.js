@@ -12,7 +12,7 @@ const ML_CONFIG = {
     LOCAL: 'http://localhost:10000',
     
     // 🎯 Active Configuration - MULTI-SPORT ML MODELS LIVE! 🔥
-    ACTIVE: 'LOCAL' // ✅ LOCAL: Real NBA/NHL/MLB models + NFL predictions!
+    ACTIVE: 'RENDER' // ✅ RENDER: Real NBA/NHL/MLB models + NFL predictions!
 };
 
 // Export for use in ml-integration.js
