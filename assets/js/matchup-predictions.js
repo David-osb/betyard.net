@@ -249,14 +249,32 @@ function backToGames() {
     if (defaultState) defaultState.style.display = 'block';
     if (matchupView) matchupView.style.display = 'none';
     
-    // Show game cards and UI elements
+    // Show game cards container
     const gameCentricContainer = document.getElementById('game-centric-container');
-    const newsContainer = document.getElementById('news-container');
-    const sportSelector = document.getElementById('sport-selector');
-    
     if (gameCentricContainer) gameCentricContainer.style.display = 'block';
-    if (newsContainer) newsContainer.style.display = 'block';
-    if (sportSelector) sportSelector.style.display = 'block';
+    
+    // Show QB news section
+    const qbNewsSection = document.getElementById('qb-news-section');
+    if (qbNewsSection && qbNewsSection.parentElement) {
+        qbNewsSection.parentElement.style.display = 'block';
+    }
+    
+    // Show sport selector
+    const sportSelector = document.querySelector('.sport-selector-header');
+    if (sportSelector && sportSelector.parentElement) {
+        sportSelector.parentElement.style.display = 'block';
+    }
+    
+    // Show ML banner
+    const mlBanner = document.querySelector('.ml-active-banner');
+    if (mlBanner && mlBanner.parentElement) {
+        mlBanner.parentElement.style.display = 'block';
+    }
+    
+    // Clear game selection highlighting
+    document.querySelectorAll('.game-card').forEach(card => {
+        card.classList.remove('selected');
+    });
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
