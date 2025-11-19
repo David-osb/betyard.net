@@ -1486,7 +1486,11 @@
             }
 
             #matchup-header h2 {
-                font-size: 22px !important;
+                font-size: 20px !important;
+            }
+
+            #matchup-title {
+                font-size: 18px !important;
             }
 
             #game-predictions {
@@ -1494,36 +1498,230 @@
                 grid-template-columns: 1fr !important;
             }
 
+            #game-predictions > div {
+                padding: 12px !important;
+            }
+
+            #game-predictions > div > div:first-child {
+                font-size: 11px !important;
+            }
+
+            #ml-prediction, #spread-prediction, #total-prediction {
+                font-size: 18px !important;
+            }
+
+            #ml-confidence, #spread-confidence, #total-confidence {
+                font-size: 10px !important;
+            }
+
             #away-team-header, #home-team-header {
-                padding: 16px !important;
+                padding: 14px !important;
+            }
+
+            /* Responsive Player Card Styles - Medium */
+            .player-card-name {
+                font-size: 18px !important;
+            }
+
+            .player-card-stats {
+                font-size: 14px !important;
+            }
+
+            .player-card-td-value {
+                font-size: 20px !important;
+            }
+
+            .player-card-td-label {
+                font-size: 11px !important;
+            }
+
+            .player-card-odds {
+                font-size: 10px !important;
+            }
+
+            .player-card-position-badge {
+                font-size: 11px !important;
+            }
+
+            .player-card-icon {
+                font-size: 20px !important;
+            }
+
+            .player-card-section-title {
+                font-size: 12px !important;
+            }
+
+            .player-card-defense-adjustment {
+                font-size: 11px !important;
             }
 
             #away-team-header h3, #home-team-header h3 {
-                font-size: 20px !important;
-            }
-
-            #away-team-content, #home-team-content {
-                padding: 16px !important;
-            }
-
-            /* Keep 2 columns but reduce gap on smaller screens */
-            #predictions-matchup-view > div:last-child {
-                gap: 16px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            #matchup-header h2 {
-                font-size: 20px !important;
+                font-size: 18px !important;
             }
 
             #away-team-content, #home-team-content {
                 padding: 12px !important;
             }
 
-            /* Smaller gap for mobile */
+            /* Keep 2 columns but reduce gap on smaller screens */
             #predictions-matchup-view > div:last-child {
                 gap: 12px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #matchup-header h2 {
+                font-size: 18px !important;
+            }
+
+            #matchup-title {
+                font-size: 16px !important;
+            }
+
+            #game-predictions > div > div:first-child {
+                font-size: 10px !important;
+            }
+
+            #ml-prediction, #spread-prediction, #total-prediction {
+                font-size: 16px !important;
+            }
+
+            #ml-confidence, #spread-confidence, #total-confidence {
+                font-size: 9px !important;
+            }
+
+            #away-team-header h3, #home-team-header h3 {
+                font-size: 16px !important;
+            }
+
+            #away-team-header, #home-team-header {
+                padding: 12px !important;
+            }
+
+            #away-team-content, #home-team-content {
+                padding: 10px !important;
+            }
+
+            /* Responsive Player Card Styles - Tablet */
+            .player-card-name {
+                font-size: 16px !important;
+            }
+
+            .player-card-stats {
+                font-size: 12px !important;
+            }
+
+            .player-card-td-value {
+                font-size: 18px !important;
+            }
+
+            .player-card-td-label {
+                font-size: 10px !important;
+            }
+
+            .player-card-odds {
+                font-size: 9px !important;
+            }
+
+            .player-card-position-badge {
+                font-size: 10px !important;
+            }
+
+            .player-card-icon {
+                font-size: 18px !important;
+            }
+
+            .player-card-section-title {
+                font-size: 11px !important;
+            }
+
+            .player-card-defense-adjustment {
+                font-size: 10px !important;
+            }
+
+            /* Smaller gap for mobile */
+            #predictions-matchup-view > div:last-child {
+                gap: 10px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #matchup-header h2 {
+                font-size: 16px !important;
+            }
+
+            #matchup-title {
+                font-size: 14px !important;
+            }
+
+            #game-predictions > div {
+                padding: 10px !important;
+            }
+
+            #game-predictions > div > div:first-child {
+                font-size: 9px !important;
+            }
+
+            #ml-prediction, #spread-prediction, #total-prediction {
+                font-size: 14px !important;
+            }
+
+            #ml-confidence, #spread-confidence, #total-confidence {
+                font-size: 8px !important;
+            }
+
+            #away-team-header h3, #home-team-header h3 {
+                font-size: 14px !important;
+            }
+
+            #away-team-header, #home-team-header {
+                padding: 10px !important;
+            }
+
+            #away-team-content, #home-team-content {
+                padding: 8px !important;
+            }
+
+            /* Responsive Player Card Styles */
+            .player-card-name {
+                font-size: 14px !important;
+            }
+
+            .player-card-stats {
+                font-size: 11px !important;
+            }
+
+            .player-card-td-value {
+                font-size: 16px !important;
+            }
+
+            .player-card-td-label {
+                font-size: 9px !important;
+            }
+
+            .player-card-odds {
+                font-size: 8px !important;
+            }
+
+            .player-card-position-badge {
+                font-size: 9px !important;
+                padding: 2px 6px !important;
+            }
+
+            .player-card-icon {
+                font-size: 16px !important;
+            }
+
+            .player-card-section-title {
+                font-size: 10px !important;
+            }
+
+            .player-card-defense-adjustment {
+                font-size: 9px !important;
+            }
+
+            #predictions-matchup-view > div:last-child {
+                gap: 8px !important;
             }
         }
 
@@ -6818,7 +7016,6 @@
                                     <span style="display: none;">🏒</span>
                                 </div>
                                 <span class="sport-label">NHL</span>
-                                <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="baseball" onclick="universalSportsManager.switchSport('baseball')" title="MLB Baseball">
                                 <div class="sport-icon-wrapper">
@@ -6826,7 +7023,6 @@
                                     <span style="display: none;">⚾</span>
                                 </div>
                                 <span class="sport-label">MLB</span>
-                                <span class="coming-soon-badge">Soon</span>
                             </div>
                             <div class="sport-icon" data-sport="soccer" onclick="universalSportsManager.switchSport('soccer')" title="MLS Soccer">
                                 <div class="sport-icon-wrapper">
@@ -7459,6 +7655,7 @@
     
     <!-- NFL Schedule API removed - using ESPN directly -->
     <!-- Game-Centric UI and Weekly Schedule Manager REMOVED - Using Universal Sports Manager only -->
+    <script src="assets/js/multi-sport-predictions.js?v=2025-11-19-MULTI-SPORT&t=1732000000000"></script>
     <script src="assets/js/enhanced-betting-insights.js?v=2025-11-03-PLAYER-ID-FIX&t=1730661500000" async></script>
     
     <!-- Matchup Predictions - Must load BEFORE sports-config.js -->
@@ -8120,6 +8317,100 @@
                             console.error('🏀 NBA: Error in immediate updateNewsForSport call:', error);
                         }
                     }
+                }
+            } else if (sport === 'hockey') {
+                // Load NHL predictions
+                if (gameContainer && window.multiSportPredictions) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🏒</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading NHL Player Props...</h3>
+                            <p style="color: #64748b;">Fetching goal scorer odds, assists, and saves predictions</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    console.log('🏒 NHL: Loading player props from backend...');
+                    
+                    // Example: Load Toronto Maple Leafs (change this to dynamic team selection later)
+                    window.multiSportPredictions.fetchNHLTeam('TOR').then(data => {
+                        if (data && data.success) {
+                            const html = window.multiSportPredictions.renderNHLPlayers(data.skaters, data.goalies);
+                            gameContainer.innerHTML = `
+                                <div style="margin: 20px; background: white; border-radius: 12px; padding: 24px;">
+                                    <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">🏒 NHL Player Props</h2>
+                                    <p style="color: #64748b; margin: 0 0 24px 0;">ML-powered predictions for today's games</p>
+                                    ${html}
+                                </div>
+                            `;
+                        } else {
+                            gameContainer.innerHTML = `
+                                <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                                    <h3 style="color: #dc2626; margin-bottom: 8px;">Unable to Load NHL Props</h3>
+                                    <p style="color: #64748b;">Please try again later</p>
+                                </div>
+                            `;
+                        }
+                    }).catch(error => {
+                        console.error('🏒 NHL: Error loading props:', error);
+                        gameContainer.innerHTML = `
+                            <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                                <h3 style="color: #dc2626; margin-bottom: 8px;">Backend Connection Error</h3>
+                                <p style="color: #64748b;">Make sure the ML backend is running</p>
+                            </div>
+                        `;
+                    });
+                }
+            } else if (sport === 'baseball') {
+                // Load MLB predictions
+                if (gameContainer && window.multiSportPredictions) {
+                    gameContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">⚾</div>
+                            <h3 style="color: #1e293b; margin-bottom: 8px;">Loading MLB Player Props...</h3>
+                            <p style="color: #64748b;">Fetching hits, home runs, strikeouts predictions</p>
+                            <div style="margin-top: 20px;">
+                                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #dc2626; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    console.log('⚾ MLB: Loading player props from backend...');
+                    
+                    // Example: Load NY Yankees (change this to dynamic team selection later)
+                    window.multiSportPredictions.fetchMLBTeam('NYY').then(data => {
+                        if (data && data.success) {
+                            const html = window.multiSportPredictions.renderMLBPlayers(data.hitters, data.pitchers);
+                            gameContainer.innerHTML = `
+                                <div style="margin: 20px; background: white; border-radius: 12px; padding: 24px;">
+                                    <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">⚾ MLB Player Props</h2>
+                                    <p style="color: #64748b; margin: 0 0 24px 0;">ML-powered predictions for today's games</p>
+                                    ${html}
+                                </div>
+                            `;
+                        } else {
+                            gameContainer.innerHTML = `
+                                <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                                    <h3 style="color: #dc2626; margin-bottom: 8px;">Unable to Load MLB Props</h3>
+                                    <p style="color: #64748b;">Please try again later</p>
+                                </div>
+                            `;
+                        }
+                    }).catch(error => {
+                        console.error('⚾ MLB: Error loading props:', error);
+                        gameContainer.innerHTML = `
+                            <div style="text-align: center; padding: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                                <h3 style="color: #dc2626; margin-bottom: 8px;">Backend Connection Error</h3>
+                                <p style="color: #64748b;">Make sure the ML backend is running</p>
+                            </div>
+                        `;
+                    });
                 }
             } else {
                 // Show coming soon for other sports

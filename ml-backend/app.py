@@ -357,6 +357,159 @@ def get_team_players(team_code):
             'traceback': traceback.format_exc()
         }), 500
 
+@app.route('/players/nba/team/<team_code>', methods=['GET'])
+def get_nba_team_players(team_code):
+    """
+    Get top NBA players for a team with prop predictions
+    """
+    try:
+        team_code_upper = team_code.upper()
+        
+        # Load NBA predictions
+        pred_file = os.path.join(MODEL_DIR, 'nba_prop_predictions.json')
+        if not os.path.exists(pred_file):
+            return jsonify({
+                'success': False,
+                'error': 'NBA predictions file not found'
+            }), 404
+        
+        with open(pred_file, 'r') as f:
+            predictions = json.load(f)
+        
+        # Filter by team and get top scorers
+        team_players = [p for p in predictions if p.get('team') == team_code_upper]
+        
+        if not team_players:
+            return jsonify({
+                'success': False,
+                'error': f'No players found for team {team_code_upper}'
+            }), 404
+        
+        # Sort by points average (top scorers first)
+        team_players.sort(key=lambda p: p['props']['points']['average'], reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'sport': 'nba',
+            'team': team_code_upper,
+            'players': team_players[:10],  # Top 10 players
+            'count': len(team_players)
+        })
+        
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
+
+@app.route('/players/nhl/team/<team_code>', methods=['GET'])
+def get_nhl_team_players(team_code):
+    """
+    Get top NHL players for a team with prop predictions
+    """
+    try:
+        team_code_upper = team_code.upper()
+        
+        # Load NHL predictions
+        pred_file = os.path.join(MODEL_DIR, 'nhl_prop_predictions.json')
+        if not os.path.exists(pred_file):
+            return jsonify({
+                'success': False,
+                'error': 'NHL predictions file not found'
+            }), 404
+        
+        with open(pred_file, 'r') as f:
+            predictions = json.load(f)
+        
+        # Filter skaters and goalies by team
+        team_skaters = [p for p in predictions['skaters'] if p.get('team') == team_code_upper]
+        team_goalies = [p for p in predictions['goalies'] if p.get('team') == team_code_upper]
+        
+        if not team_skaters and not team_goalies:
+            return jsonify({
+                'success': False,
+                'error': f'No players found for team {team_code_upper}'
+            }), 404
+        
+        # Sort skaters by goal probability
+        team_skaters.sort(key=lambda p: p['props']['anytime_goal']['probability'], reverse=True)
+        
+        # Sort goalies by saves average
+        team_goalies.sort(key=lambda p: p['props']['saves']['average'], reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'sport': 'nhl',
+            'team': team_code_upper,
+            'skaters': team_skaters[:10],  # Top 10 goal scorers
+            'goalies': team_goalies[:2],   # Top 2 goalies
+            'total_skaters': len(team_skaters),
+            'total_goalies': len(team_goalies)
+        })
+        
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
+
+@app.route('/players/mlb/team/<team_code>', methods=['GET'])
+def get_mlb_team_players(team_code):
+    """
+    Get top MLB players for a team with prop predictions
+    """
+    try:
+        team_code_upper = team_code.upper()
+        
+        # Load MLB predictions
+        pred_file = os.path.join(MODEL_DIR, 'mlb_prop_predictions.json')
+        if not os.path.exists(pred_file):
+            return jsonify({
+                'success': False,
+                'error': 'MLB predictions file not found'
+            }), 404
+        
+        with open(pred_file, 'r') as f:
+            predictions = json.load(f)
+        
+        # Filter hitters and pitchers by team
+        team_hitters = [p for p in predictions['hitters'] if p.get('team') == team_code_upper]
+        team_pitchers = [p for p in predictions['pitchers'] if p.get('team') == team_code_upper]
+        
+        if not team_hitters and not team_pitchers:
+            return jsonify({
+                'success': False,
+                'error': f'No players found for team {team_code_upper}'
+            }), 404
+        
+        # Sort hitters by hits average
+        team_hitters.sort(key=lambda p: p['props']['hits']['average'], reverse=True)
+        
+        # Sort pitchers by strikeouts average
+        team_pitchers.sort(key=lambda p: p['props']['strikeouts']['average'], reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'sport': 'mlb',
+            'team': team_code_upper,
+            'hitters': team_hitters[:10],    # Top 10 hitters
+            'pitchers': team_pitchers[:5],   # Top 5 pitchers
+            'total_hitters': len(team_hitters),
+            'total_pitchers': len(team_pitchers)
+        })
+        
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
+
 @app.route('/predict', methods=['POST'])
 def predict():
     """
