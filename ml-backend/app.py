@@ -357,52 +357,112 @@ def get_team_players(team_code):
             'traceback': traceback.format_exc()
         }), 500
 
-@app.route('/players/nba/team/<team_code>', methods=['GET'])
-def get_nba_team_players(team_code):
-    """
-    Get top NBA players for a team with prop predictions
-    """
+def get_team_abbr_from_name(team_identifier):
+    """Convert team name or various identifiers to standard NBA abbreviation"""
+    team_identifier = team_identifier.upper().strip()
+    
+    # Mapping of team names and variations to abbreviations
+    team_map = {
+        'ATLANTA HAWKS': 'ATL', 'HAWKS': 'ATL', 'ATL': 'ATL',
+        'BOSTON CELTICS': 'BOS', 'CELTICS': 'BOS', 'BOS': 'BOS',
+        'BROOKLYN NETS': 'BKN', 'NETS': 'BKN', 'BKN': 'BKN',
+        'CHARLOTTE HORNETS': 'CHA', 'HORNETS': 'CHA', 'CHA': 'CHA',
+        'CHICAGO BULLS': 'CHI', 'BULLS': 'CHI', 'CHI': 'CHI',
+        'CLEVELAND CAVALIERS': 'CLE', 'CAVALIERS': 'CLE', 'CLE': 'CLE',
+        'DALLAS MAVERICKS': 'DAL', 'MAVERICKS': 'DAL', 'DAL': 'DAL',
+        'DENVER NUGGETS': 'DEN', 'NUGGETS': 'DEN', 'DEN': 'DEN',
+        'DETROIT PISTONS': 'DET', 'PISTONS': 'DET', 'DET': 'DET',
+        'GOLDEN STATE WARRIORS': 'GSW', 'WARRIORS': 'GSW', 'GSW': 'GSW',
+        'HOUSTON ROCKETS': 'HOU', 'ROCKETS': 'HOU', 'HOU': 'HOU',
+        'INDIANA PACERS': 'IND', 'PACERS': 'IND', 'IND': 'IND',
+        'LA CLIPPERS': 'LAC', 'CLIPPERS': 'LAC', 'LAC': 'LAC',
+        'LOS ANGELES LAKERS': 'LAL', 'LAKERS': 'LAL', 'LAL': 'LAL',
+        'MEMPHIS GRIZZLIES': 'MEM', 'GRIZZLIES': 'MEM', 'MEM': 'MEM',
+        'MIAMI HEAT': 'MIA', 'HEAT': 'MIA', 'MIA': 'MIA',
+        'MILWAUKEE BUCKS': 'MIL', 'BUCKS': 'MIL', 'MIL': 'MIL',
+        'MINNESOTA TIMBERWOLVES': 'MIN', 'TIMBERWOLVES': 'MIN', 'MIN': 'MIN',
+        'NEW ORLEANS PELICANS': 'NOP', 'PELICANS': 'NOP', 'NOP': 'NOP',
+        'NEW YORK KNICKS': 'NYK', 'KNICKS': 'NYK', 'NYK': 'NYK',
+        'OKLAHOMA CITY THUNDER': 'OKC', 'THUNDER': 'OKC', 'OKC': 'OKC',
+        'ORLANDO MAGIC': 'ORL', 'MAGIC': 'ORL', 'ORL': 'ORL',
+        'PHILADELPHIA 76ERS': 'PHI', '76ERS': 'PHI', 'PHI': 'PHI',
+        'PHOENIX SUNS': 'PHX', 'SUNS': 'PHX', 'PHX': 'PHX',
+        'PORTLAND TRAIL BLAZERS': 'POR', 'TRAIL BLAZERS': 'POR', 'POR': 'POR',
+        'SACRAMENTO KINGS': 'SAC', 'KINGS': 'SAC', 'SAC': 'SAC',
+        'SAN ANTONIO SPURS': 'SAS', 'SPURS': 'SAS', 'SAS': 'SAS',
+        'TORONTO RAPTORS': 'TOR', 'RAPTORS': 'TOR', 'TOR': 'TOR',
+        'UTAH JAZZ': 'UTA', 'JAZZ': 'UTA', 'UTA': 'UTA',
+        'WASHINGTON WIZARDS': 'WAS', 'WIZARDS': 'WAS', 'WAS': 'WAS'
+    }
+    
+    return team_map.get(team_identifier, team_identifier)
+
+@app.route('/players/nba/team/<team_identifier>', methods=['GET'])
+def get_nba_team_players(team_identifier):
+    """Get all players for an NBA team using ESPN API"""
     try:
-        team_code_upper = team_code.upper()
+        logger.info(f"🏀 Fetching NBA players for team: {team_identifier}")
         
-        # Load NBA predictions
-        pred_file = os.path.join(MODEL_DIR, 'nba_prop_predictions.json')
-        if not os.path.exists(pred_file):
-            return jsonify({
-                'success': False,
-                'error': 'NBA predictions file not found'
-            }), 404
+        # Convert team name/abbreviation to standard abbreviation
+        team_abbr = get_team_abbr_from_name(team_identifier)
+        if not team_abbr:
+            team_abbr = team_identifier
         
-        with open(pred_file, 'r') as f:
-            predictions = json.load(f)
+        # Use ESPN API to get team roster (ESPN uses lowercase team abbreviations)
+        espn_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_abbr.lower()}/roster"
         
-        # Filter by team and get top scorers
-        team_players = [p for p in predictions if p.get('team') == team_code_upper]
+        response = requests.get(espn_url, timeout=10)
         
-        if not team_players:
-            return jsonify({
-                'success': False,
-                'error': f'No players found for team {team_code_upper}'
-            }), 404
-        
-        # Sort by points average (top scorers first)
-        team_players.sort(key=lambda p: p['props']['points']['average'], reverse=True)
-        
-        return jsonify({
-            'success': True,
-            'sport': 'nba',
-            'team': team_code_upper,
-            'players': team_players[:10],  # Top 10 players
-            'count': len(team_players)
-        })
+        if response.status_code == 200:
+            roster_data = response.json()
+            
+            players = []
+            if 'athletes' in roster_data:
+                # NBA roster has athletes as a flat array (unlike NFL which groups by position)
+                for player in roster_data['athletes']:
+                    player_info = {
+                        'id': player.get('id'),
+                        'displayName': player.get('displayName'),
+                        'firstName': player.get('firstName'),
+                        'lastName': player.get('lastName'),
+                        'jersey': player.get('jersey'),
+                        'position': player.get('position', {}).get('abbreviation'),
+                        'height': player.get('displayHeight'),
+                        'weight': player.get('displayWeight'),
+                        'age': player.get('age'),
+                        'headshot': player.get('headshot', {}).get('href')
+                    }
+                    
+                    # Get season stats if available
+                    if 'statistics' in player:
+                        stats = player['statistics']
+                        if stats:
+                            player_info['stats'] = stats
+                    
+                    players.append(player_info)
+            
+            response = jsonify({
+                'success': True,
+                'team': team_identifier,
+                'team_abbr': team_abbr,
+                'players': players,
+                'total': len(players)
+            })
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            
+            logger.info(f"✅ Found {len(players)} players for {team_identifier}")
+            return response
+        else:
+            raise Exception(f"ESPN API returned status code: {response.status_code}")
         
     except Exception as e:
-        import traceback
-        return jsonify({
+        logger.error(f"❌ Error fetching NBA team {team_identifier}: {str(e)}")
+        response = jsonify({
             'success': False,
-            'error': str(e),
-            'traceback': traceback.format_exc()
-        }), 500
+            'error': f'No players found for team {team_identifier}'
+        })
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
 
 @app.route('/players/nhl/team/<team_code>', methods=['GET'])
 def get_nhl_team_players(team_code):
