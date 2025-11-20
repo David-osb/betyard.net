@@ -10,9 +10,15 @@ import xgboost as xgb
 import numpy as np
 import os
 import json
+import requests
+import logging
 
 app = Flask(__name__)
 CORS(app)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load models
 MODELS = {}
