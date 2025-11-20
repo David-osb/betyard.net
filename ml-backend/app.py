@@ -428,15 +428,25 @@ def get_nba_team_players(team_identifier):
                 for player in roster_data['athletes']:
                     player_info = {
                         'id': player.get('id'),
+                        'player_name': player.get('displayName'),
                         'displayName': player.get('displayName'),
                         'firstName': player.get('firstName'),
                         'lastName': player.get('lastName'),
                         'jersey': player.get('jersey'),
-                        'position': player.get('position', {}).get('abbreviation'),
+                        'position': player.get('position', {}).get('abbreviation', 'N/A'),
+                        'team': team_abbr,
                         'height': player.get('displayHeight'),
                         'weight': player.get('displayWeight'),
                         'age': player.get('age'),
-                        'headshot': player.get('headshot', {}).get('href')
+                        'games_played': 0,  # Will be populated if we add stats API
+                        'headshot': player.get('headshot', {}).get('href'),
+                        # Add empty props structure for frontend compatibility
+                        'props': {
+                            'points': None,
+                            'rebounds': None,
+                            'assists': None,
+                            'threes_made': None
+                        }
                     }
                     
                     # Get season stats if available
