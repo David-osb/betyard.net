@@ -4105,29 +4105,28 @@ def get_nba_team_players(team_identifier):
             
             players = []
             if 'athletes' in roster_data:
-                for athlete in roster_data['athletes']:
-                    if 'items' in athlete:
-                        for player in athlete['items']:
-                            player_info = {
-                                'id': player.get('id'),
-                                'displayName': player.get('displayName'),
-                                'firstName': player.get('firstName'),
-                                'lastName': player.get('lastName'),
-                                'jersey': player.get('jersey'),
-                                'position': player.get('position', {}).get('abbreviation'),
-                                'height': player.get('height'),
-                                'weight': player.get('weight'),
-                                'age': player.get('age'),
-                                'headshot': player.get('headshot', {}).get('href')
-                            }
-                            
-                            # Get season stats if available
-                            if 'statistics' in player:
-                                stats = player['statistics']
-                                if stats:
-                                    player_info['stats'] = stats
-                            
-                            players.append(player_info)
+                # NBA roster has athletes as a flat array (unlike NFL which groups by position)
+                for player in roster_data['athletes']:
+                    player_info = {
+                        'id': player.get('id'),
+                        'displayName': player.get('displayName'),
+                        'firstName': player.get('firstName'),
+                        'lastName': player.get('lastName'),
+                        'jersey': player.get('jersey'),
+                        'position': player.get('position', {}).get('abbreviation'),
+                        'height': player.get('displayHeight'),
+                        'weight': player.get('displayWeight'),
+                        'age': player.get('age'),
+                        'headshot': player.get('headshot', {}).get('href')
+                    }
+                    
+                    # Get season stats if available
+                    if 'statistics' in player:
+                        stats = player['statistics']
+                        if stats:
+                            player_info['stats'] = stats
+                    
+                    players.append(player_info)
             
             response = jsonify({
                 'success': True,
