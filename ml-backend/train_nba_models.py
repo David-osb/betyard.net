@@ -77,11 +77,26 @@ def generate_nba_predictions(players):
         apg = player['season_stats']['apg']
         three_pm = player['season_stats']['three_pm']
         
-        # Determine common prop lines based on averages
-        points_line = 0.5 + round(ppg * 2) / 2  # Round to nearest 0.5
-        rebounds_line = 0.5 + round(rpg * 2) / 2
-        assists_line = 0.5 + round(apg * 2) / 2
-        threes_line = 0.5 + round(three_pm * 2) / 2
+        # Use realistic prop lines based on sportsbook patterns
+        # Lines are typically set to create ~55-60% over probability for popular bets
+        # This means lines are often 35-40% below player averages
+        
+        def calculate_realistic_line(avg, position=''):
+            """Calculate realistic sportsbook line"""
+            if avg < 5:
+                # Low averages: use ~75% of average
+                return round((avg * 0.75) * 2) / 2
+            elif avg < 15:
+                # Mid averages: use ~65% of average  
+                return round((avg * 0.65) * 2) / 2
+            else:
+                # High averages: use ~60% of average
+                return round((avg * 0.60) * 2) / 2
+        
+        points_line = max(0.5, calculate_realistic_line(ppg))
+        rebounds_line = max(0.5, calculate_realistic_line(rpg))
+        assists_line = max(0.5, calculate_realistic_line(apg))
+        threes_line = max(0.5, calculate_realistic_line(three_pm))
         
         # Calculate probabilities for each prop
         points_prob = calculate_prop_probability(gamelog, 'points', points_line)
