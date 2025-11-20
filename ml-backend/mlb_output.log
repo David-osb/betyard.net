@@ -1,0 +1,1192 @@
+============================================================
+MLB PLAYER STATS FETCHER - 2024 SEASON
+============================================================
+Fetching MLB rosters from all 30 teams...
+NOTE: Using 2024 season data (2025 season hasn't started yet)
+Fetching ARI...
+  Philip Abner (RP)... ✓ 5 games
+  Kyle Backhus (RP)... ✓ 32 games
+  Mitch Bratt (SP)... No data
+  Juan Burgos (RP)... ✓ 13 games
+  Corbin Burnes (SP)... ✓ 11 games
+  Yilber Diaz (SP)... ✓ 1 games
+  Kohl Drake (SP)... No data
+  Brandyn Garcia (RP)... ✓ 14 games
+  Kevin Ginkel (RP)... ✓ 29 games
+  Andrew Hoffmann (RP)... ✓ 11 games
+  Drey Jameson (RP)... ✓ 3 games
+  Bryce Jarvis (RP)... ✓ 12 games
+  Justin Martinez (RP)... ✓ 17 games
+  Cristian Mena (RP)... ✓ 3 games
+  Juan Morillo (RP)... ✓ 42 games
+  Ryne Nelson (SP)... ✓ 33 games
+  Brandon Pfaadt (SP)... ✓ 33 games
+  A.J. Puk (RP)... ✓ 8 games
+  Taylor Rashi (RP)... ✓ 10 games
+  Dylan Ray (SP)... No data
+  Eduardo Rodriguez (SP)... ✓ 29 games
+  Andrew Saalfrank (RP)... ✓ 28 games
+  Ryan Thompson (RP)... ✓ 48 games
+  Gus Varland (RP)... No data
+  Blake Walston (SP)... No data
+  Adrian Del Castillo (C)... ✓ 43 games
+  Gabriel Moreno (C)... ✓ 82 games
+  Blaze Alexander (SS)... ✓ 70 games
+  Jose Fernandez (SS)... No data
+  Jordan Lawlar (SS)... ✓ 25 games
+  Tyler Locklear (1B)... ✓ 31 games
+  Ketel Marte (2B)... ✓ 127 games
+  Geraldo Perdomo (SS)... ✓ 161 games
+  Pavin Smith (1B)... ✓ 86 games
+  Tim Tawa (2B)... ✓ 71 games
+  Jorge Barrosa (LF)... ✓ 28 games
+  Corbin Carroll (RF)... ✓ 142 games
+  Lourdes Gurriel Jr. (LF)... ✓ 129 games
+  Jake McCarthy (CF)... ✓ 65 games
+  Alek Thomas (CF)... ✓ 135 games
+Fetching ATL...
+  Aaron Bummer (RP)... ✓ 42 games
+  Dylan Dodd (RP)... ✓ 28 games
+  Bryce Elder (SP)... ✓ 28 games
+  Didier Fuentes (SP)... ✓ 4 games
+  Hayden Harris (SP)... ✓ 3 games
+  Daysbel Hernandez (RP)... ✓ 39 games
+  Grant Holmes (SP)... ✓ 22 games
+  Joe Jimenez (RP)... ✓ 69 games
+  Jhancarlos Lara (RP)... No data
+  Dylan Lee (RP)... ✓ 74 games
+  Reynaldo Lopez (SP)... ✓ 1 games
+  Alek Manoah (SP)... ✓ 5 games
+  Rolddy Munoz (RP)... ✓ 3 games
+  Chris Sale (SP)... ✓ 21 games
+  Spencer Schwellenbach (SP)... ✓ 17 games
+  AJ Smith-Shawver (SP)... ✓ 9 games
+  Hunter Stratton (RP)... ✓ 15 games
+  Spencer Strider (SP)... ✓ 23 games
+  Jose Suarez (RP)... ✓ 7 games
+  Hurston Waldrep (SP)... ✓ 10 games
+  Joey Wentz (RP)... ✓ 39 games
+  Drake Baldwin (C)... ✓ 123 games
+  Sean Murphy (C)... ✓ 93 games
+  Ozzie Albies (2B)... ✓ 157 games
+  Nick Allen (SS)... ✓ 131 games
+  Nacho Alvarez Jr. (SS)... ✓ 58 games
+  Vidal Brujan (3B)... ✓ 54 games
+  Matt Olson (1B)... ✓ 163 games
+  Austin Riley (3B)... ✓ 102 games
+  Brett Wisely (2B)... ✓ 24 games
+  Ronald Acuna Jr. (RF)... ✓ 96 games
+  Michael Harris II (CF)... ✓ 159 games
+  Jurickson Profar (LF)... ✓ 80 games
+  Michael Siani (CF)... ✓ 15 games
+  Eli White (RF)... ✓ 95 games
+Fetching BAL...
+  Keegan Akin (RP)... ✓ 64 games
+  Felix Bautista (RP)... ✓ 35 games
+  Kyle Bradish (SP)... ✓ 6 games
+  Yennier Cano (RP)... ✓ 65 games
+  Dietrich Enns (RP)... ✓ 24 games
+  Jose Espada (RP)... ✓ 1 games
+  Cameron Foster (RP)... No data
+  Rico Garcia (RP)... ✓ 29 games
+  Yaramil Hiraldo (RP)... ✓ 18 games
+  Andrew Kittredge (RP)... ✓ 54 games
+  Dean Kremer (SP)... ✓ 31 games
+  Chayce McDermott (SP)... ✓ 4 games
+  Anthony Nunez (SP)... No data
+  Cade Povich (SP)... ✓ 22 games
+  Grayson Rodriguez (SP)... No data
+  Trevor Rogers (SP)... ✓ 18 games
+  Colin Selby (RP)... ✓ 11 games
+  George Soriano (RP)... ✓ 24 games
+  Kade Strowd (RP)... ✓ 25 games
+  Albert Suarez (RP)... ✓ 5 games
+  Tyler Wells (SP)... ✓ 4 games
+  Grant Wolfram (RP)... ✓ 21 games
+  Brandon Young (SP)... ✓ 12 games
+  Samuel Basallo (C)... ✓ 31 games
+  Maverick Handley (C)... ✓ 16 games
+  Alex Jackson (C)... ✓ 34 games
+  Adley Rutschman (C)... ✓ 90 games
+  Gunnar Henderson (SS)... ✓ 154 games
+  Jackson Holliday (2B)... ✓ 149 games
+  Jeremiah Jackson (2B)... ✓ 48 games
+  Coby Mayo (1B)... ✓ 84 games
+  Ryan Mountcastle (1B)... ✓ 89 games
+  Ryan Noda (1B)... ✓ 21 games
+  Jordan Westburg (3B)... ✓ 85 games
+  Dylan Beavers (RF)... ✓ 35 games
+  Colton Cowser (LF)... ✓ 91 games
+  Heston Kjerstad (LF)... ✓ 53 games
+  Tyler O'Neill (RF)... ✓ 54 games
+  Leody Taveras (OF)... ✓ 54 games
+  Reed Trimble (LF)... No data
+Fetching BOS...
+  Brayan Bello (SP)... ✓ 29 games
+  Aroldis Chapman (RP)... ✓ 68 games
+  Kutter Crawford (SP)... ✓ 33 games
+  Cooper Criswell (RP)... ✓ 7 games
+  Garrett Crochet (SP)... ✓ 32 games
+  Hunter Dobbins (SP)... ✓ 13 games
+  Shane Drohan (SP)... No data
+  Connelly Early (SP)... ✓ 4 games
+  Richard Fitts (SP)... ✓ 11 games
+  Kyle Harrison (RP)... ✓ 11 games
+  Jordan Hicks (RP)... ✓ 34 games
+  Tanner Houck (SP)... ✓ 9 games
+  Zack Kelly (RP)... ✓ 28 games
+  Jovani Moran (RP)... ✓ 2 games
+  Luis Perales (SP)... No data
+  David Sandlin (SP)... No data
+  Patrick Sandoval (SP)... ✓ 16 games
+  Justin Slaten (RP)... ✓ 36 games
+  Payton Tolle (SP)... ✓ 7 games
+  Greg Weissert (RP)... ✓ 72 games
+  Garrett Whitlock (RP)... ✓ 62 games
+  Josh Winckowski (RP)... ✓ 6 games
+  Carlos Narvaez (C)... ✓ 118 games
+  Connor Wong (C)... ✓ 56 games
+  Kristian Campbell (2B)... ✓ 67 games
+  Triston Casas (1B)... ✓ 29 games
+  Nate Eaton (3B)... ✓ 37 games
+  Romy Gonzalez (1B)... ✓ 94 games
+  Vaughn Grissom (2B)... No data
+  David Hamilton (2B)... ✓ 76 games
+  Marcelo Mayer (3B)... ✓ 42 games
+  Nick Sogard (1B)... ✓ 30 games
+  Trevor Story (SS)... ✓ 157 games
+  Wilyer Abreu (RF)... ✓ 112 games
+  Roman Anthony (RF)... ✓ 71 games
+  Jarren Duran (LF)... ✓ 157 games
+  Jhostynxon Garcia (CF)... ✓ 3 games
+  Ceddanne Rafaela (CF)... ✓ 153 games
+  Masataka Yoshida (LF)... ✓ 55 games
+Fetching CHC...
+  Javier Assad (SP)... ✓ 8 games
+  Matthew Boyd (SP)... ✓ 31 games
+  Ben Brown (SP)... ✓ 25 games
+  Porter Hodge (RP)... ✓ 36 games
+  Gavin Hollowell (RP)... ✓ 7 games
+  Cade Horton (SP)... ✓ 23 games
+  Luke Little (RP)... ✓ 2 games
+  Riley Martin (RP)... No data
+  Eli Morgan (RP)... ✓ 7 games
+  Jack Neely (RP)... No data
+  Daniel Palencia (RP)... ✓ 54 games
+  Colin Rea (SP)... ✓ 32 games
+  Ethan Roberts (RP)... ✓ 10 games
+  Justin Steele (SP)... ✓ 4 games
+  Jameson Taillon (SP)... ✓ 23 games
+  Jordan Wicks (RP)... ✓ 8 games
+  Miguel Amaya (C)... ✓ 28 games
+  Moises Ballesteros (C)... ✓ 20 games
+  Carson Kelly (C)... ✓ 109 games
+  Reese McGuire (C)... ✓ 43 games
+  Michael Busch (1B)... ✓ 154 games
+  Nico Hoerner (2B)... ✓ 156 games
+  Pedro Ramirez (2B)... No data
+  Matt Shaw (3B)... ✓ 123 games
+  Dansby Swanson (SS)... ✓ 159 games
+  James Triantos (2B)... No data
+  Kevin Alcantara (RF)... ✓ 7 games
+  Owen Caissie (RF)... ✓ 12 games
+  Pete Crow-Armstrong (CF)... ✓ 157 games
+  Ian Happ (LF)... ✓ 150 games
+  Seiya Suzuki (RF)... ✓ 151 games
+Fetching CWS...
+  Prelander Berroa (RP)... No data
+  Cam Booser (RP)... ✓ 39 games
+  Sean Burke (SP)... ✓ 28 games
+  Ky Bush (SP)... ✓ 4 games
+  Jonathan Cannon (SP)... ✓ 22 games
+  Duncan Davitt (RP)... No data
+  Brandon Eisert (RP)... ✓ 72 games
+  Fraser Ellard (RP)... ✓ 18 games
+  Tyler Gilbert (RP)... ✓ 46 games
+  Wikelman Gonzalez (RP)... ✓ 16 games
+  Bryan Hudson (RP)... ✓ 16 games
+  Jairo Iriarte (RP)... No data
+  Jordan Leasure (RP)... ✓ 68 games
+  Davis Martin (SP)... ✓ 26 games
+  Tanner McDougal (SP)... No data
+  Chris Murphy (RP)... ✓ 23 games
+  Shane Smith (SP)... ✓ 30 games
+  Grant Taylor (RP)... ✓ 36 games
+  Drew Thorpe (SP)... ✓ 9 games
+  Mike Vasil (RP)... ✓ 47 games
+  Korey Lee (C)... ✓ 21 games
+  Edgar Quero (C)... ✓ 111 games
+  Kyle Teel (C)... ✓ 77 games
+  Ben Cowles (3B)... No data
+  Tim Elko (1B)... ✓ 22 games
+  Curtis Mead (1B)... ✓ 88 games
+  Chase Meidroth (SS)... ✓ 119 games
+  Colson Montgomery (SS)... ✓ 71 games
+  Tanner Murray (2B)... No data
+  Bryan Ramos (3B)... ✓ 4 games
+  Lenyn Sosa (2B)... ✓ 140 games
+  Miguel Vargas (3B)... ✓ 138 games
+  Andrew Benintendi (LF)... ✓ 116 games
+  Derek Hill (CF)... ✓ 50 games
+  Everson Pereira (CF)... ✓ 22 games
+  Luis Robert Jr. (CF)... ✓ 107 games
+  Mike Tauchman (RF)... ✓ 93 games
+Fetching CIN...
+  Andrew Abbott (SP)... ✓ 30 games
+  Julian Aguiar (SP)... ✓ 7 games
+  Graham Ashcraft (RP)... ✓ 62 games
+  Chase Burns (SP)... ✓ 13 games
+  Hunter Greene (SP)... ✓ 19 games
+  Nick Lodolo (SP)... ✓ 29 games
+  Rhett Lowder (SP)... ✓ 6 games
+  Luis Mey (RP)... ✓ 23 games
+  Sam Moll (RP)... ✓ 23 games
+  Roddery Munoz (RP)... ✓ 9 games
+  Chase Petty (SP)... ✓ 3 games
+  Connor Phillips (RP)... ✓ 21 games
+  Lyon Richardson (RP)... ✓ 34 games
+  Tony Santillan (RP)... ✓ 80 games
+  Brady Singer (SP)... ✓ 32 games
+  Keegan Thompson (RP)... No data
+  Brandon Williamson (SP)... ✓ 4 games
+  Yosver Zulueta (RP)... ✓ 7 games
+  Will Banfield (C)... ✓ 7 games
+  Ben Rortvedt (C)... ✓ 42 games
+  Tyler Stephenson (C)... ✓ 88 games
+  Jose Trevino (C)... ✓ 92 games
+  Edwin Arroyo (SS)... No data
+  Leonado Balcazar (SS)... No data
+  Elly De La Cruz (SS)... ✓ 163 games
+  Christian Encarnacion-Strand (1B)... ✓ 36 games
+  Ke'Bryan Hayes (3B)... ✓ 150 games
+  Noelvi Marte (3B)... ✓ 88 games
+  Matt McLain (2B)... ✓ 145 games
+  Spencer Steer (1B)... ✓ 142 games
+  Sal Stewart (3B)... ✓ 18 games
+  Will Benson (LF)... ✓ 85 games
+  Tyler Callihan (LF)... ✓ 4 games
+  Blake Dunn (LF)... ✓ 28 games
+  TJ Friedl (CF)... ✓ 151 games
+  Rece Hinds (RF)... ✓ 14 games
+  Gavin Lux (LF)... ✓ 140 games
+  Hector Rodriguez (LF)... No data
+Fetching CLE...
+  Franco Aleman (RP)... No data
+  Logan Allen (SP)... ✓ 30 games
+  Tanner Bibee (SP)... ✓ 31 games
+  Joey Cantillo (RP)... ✓ 34 games
+  Slade Cecconi (SP)... ✓ 23 games
+  Daniel Espino (SP)... No data
+  Matt Festa (RP)... ✓ 63 games
+  Hunter Gaddis (RP)... ✓ 73 games
+  Sam Hentges (RP)... ✓ 25 games
+  Tim Herrin (RP)... ✓ 54 games
+  Zak Kent (RP)... ✓ 12 games
+  Parker Messick (SP)... ✓ 7 games
+  Doug Nikhazy (SP)... ✓ 2 games
+  Erik Sabrowski (RP)... ✓ 33 games
+  Cade Smith (RP)... ✓ 76 games
+  Andrew Walters (RP)... ✓ 2 games
+  Gavin Williams (SP)... ✓ 31 games
+  Austin Hedges (C)... ✓ 62 games
+  Bo Naylor (C)... ✓ 120 games
+  Gabriel Arias (SS)... ✓ 128 games
+  Juan Brito (SS)... No data
+  David Fry (1B)... ✓ 66 games
+  Angel Genao (3B)... No data
+  CJ Kayfus (1B)... ✓ 42 games
+  Kyle Manzardo (1B)... ✓ 142 games
+  Jose Ramirez (3B)... ✓ 158 games
+  Brayan Rocchio (SS)... ✓ 111 games
+  Daniel Schneemann (2B)... ✓ 129 games
+  Will Brennan (RF)... ✓ 6 games
+  Chase DeLauter (RF)... No data
+  Petey Halpin (CF)... ✓ 6 games
+  Nolan Jones (RF)... ✓ 131 games
+  Steven Kwan (LF)... ✓ 157 games
+  Angel Martinez (CF)... ✓ 136 games
+  Jhonkensy Noel (RF)... ✓ 61 games
+  Johnathan Rodriguez (RF)... ✓ 28 games
+  George Valera (RF)... ✓ 16 games
+  Kahlil Watson (LF)... No data
+Fetching COL...
+  Garrett Acton (RP)... ✓ 1 games
+  Zach Agnos (RP)... ✓ 30 games
+  Brennan Bernardino (RP)... ✓ 55 games
+  Bradley Blalock (SP)... ✓ 14 games
+  McCade Brown (SP)... ✓ 7 games
+  Angel Chivilli (RP)... ✓ 43 games
+  Roansy Contreras (RP)... ✓ 5 games
+  Jeff Criswell (RP)... ✓ 13 games
+  Chase Dollander (SP)... ✓ 21 games
+  Ryan Feltner (SP)... ✓ 6 games
+  Kyle Freeland (SP)... ✓ 31 games
+  Tanner Gordon (SP)... ✓ 15 games
+  Seth Halvorsen (RP)... ✓ 42 games
+  Jimmy Herget (RP)... ✓ 59 games
+  Jaden Hill (RP)... ✓ 28 games
+  Gabriel Hughes (SP)... No data
+  Juan Mejia (RP)... ✓ 55 games
+  Anthony Molina (RP)... ✓ 17 games
+  Carson Palmquist (SP)... ✓ 9 games
+  Luis Peralta (RP)... ✓ 22 games
+  Ryan Rolison (RP)... ✓ 31 games
+  Antonio Senzatela (SP)... ✓ 30 games
+  Victor Vodnik (RP)... ✓ 52 games
+  Braxton Fulford (C)... ✓ 37 games
+  Hunter Goodman (C)... ✓ 145 games
+  Drew Romo (C)... ✓ 3 games
+  Adael Amador (2B)... ✓ 39 games
+  Warming Bernabel (3B)... ✓ 39 games
+  Blaine Crim (1B)... ✓ 20 games
+  Kyle Karros (3B)... ✓ 42 games
+  Ryan Ritter (SS)... ✓ 59 games
+  Michael Toglia (1B)... ✓ 87 games
+  Ezequiel Tovar (SS)... ✓ 95 games
+  Jordan Beck (LF)... ✓ 147 games
+  Brenton Doyle (CF)... ✓ 138 games
+  Yanquiel Fernandez (RF)... ✓ 52 games
+  Tyler Freeman (RF)... ✓ 108 games
+  Troy Johnston (OF)... ✓ 44 games
+  Mickey Moniak (RF)... ✓ 134 games
+  Sterlin Thompson (OF)... No data
+  Zac Veen (LF)... ✓ 10 games
+  Kris Bryant (DH)... ✓ 11 games
+Fetching DET...
+  Beau Brieske (RP)... ✓ 22 games
+  Jack Flaherty (SP)... ✓ 31 games
+  Jason Foley (RP)... No data
+  Sawyer Gipson-Long (RP)... ✓ 8 games
+  Sean Guenther (RP)... ✓ 9 games
+  Brenan Hanifee (RP)... ✓ 54 games
+  Tyler Holton (RP)... ✓ 70 games
+  Bailey Horn (RP)... ✓ 10 games
+  Brant Hurter (RP)... ✓ 43 games
+  Jackson Jobe (SP)... ✓ 10 games
+  Chase Lee (RP)... ✓ 32 games
+  Jack Little (RP)... ✓ 2 games
+  Ty Madden (SP)... No data
+  Tyler Mattison (SP)... No data
+  Troy Melton (RP)... ✓ 16 games
+  Casey Mize (SP)... ✓ 29 games
+  Keider Montero (SP)... ✓ 20 games
+  Reese Olson (SP)... ✓ 13 games
+  Tanner Rainey (RP)... ✓ 13 games
+  Tarik Skubal (SP)... ✓ 32 games
+  Dylan Smith (RP)... ✓ 7 games
+  Drew Sommers (RP)... ✓ 4 games
+  Will Vest (RP)... ✓ 64 games
+  Dillon Dingler (C)... ✓ 125 games
+  Thayron Liranzo (C)... No data
+  Jake Rogers (C)... ✓ 46 games
+  Eduardo Valencia (C)... No data
+  Andy Ibanez (3B)... ✓ 87 games
+  Jace Jung (3B)... ✓ 19 games
+  Colt Keith (2B)... ✓ 137 games
+  Hao-Yu Lee (2B)... No data
+  Zach McKinstry (3B)... ✓ 143 games
+  Trey Sweeney (SS)... ✓ 109 games
+  Spencer Torkelson (1B)... ✓ 155 games
+  Javier Baez (CF)... ✓ 125 games
+  Kerry Carpenter (RF)... ✓ 130 games
+  Trei Cruz (CF)... No data
+  Riley Greene (LF)... ✓ 158 games
+  Jahmai Jones (RF)... ✓ 70 games
+  Justyn-Henry Malloy (RF)... ✓ 52 games
+  Parker Meadows (CF)... ✓ 57 games
+  Wenceel Perez (RF)... ✓ 98 games
+  Matt Vierling (CF)... ✓ 31 games
+Fetching HOU...
+  Bryan Abreu (RP)... ✓ 70 games
+  Jason Alexander (SP)... ✓ 18 games
+  Spencer Arrighetti (SP)... ✓ 7 games
+  Ronel Blanco (SP)... ✓ 9 games
+  AJ Blubaugh (RP)... ✓ 11 games
+  Hunter Brown (SP)... ✓ 31 games
+  Enyel De Los Santos (RP)... ✓ 65 games
+  J.P. France (SP)... ✓ 2 games
+  Colton Gordon (SP)... ✓ 20 games
+  Josh Hader (RP)... ✓ 48 games
+  Cristian Javier (SP)... ✓ 8 games
+  Bryan King (RP)... ✓ 68 games
+  Lance McCullers Jr. (SP)... ✓ 16 games
+  Jayden Murray (RP)... ✓ 9 games
+  Steven Okert (RP)... ✓ 68 games
+  Kaleb Ort (RP)... ✓ 49 games
+  Nate Pearson (RP)... ✓ 11 games
+  Bennett Sousa (RP)... ✓ 44 games
+  Miguel Ullola (SP)... No data
+  Logan VanWey (RP)... ✓ 9 games
+  Brandon Walter (SP)... ✓ 9 games
+  Hayden Wesneski (SP)... ✓ 6 games
+  Yainer Diaz (C)... ✓ 143 games
+  Cesar Salazar (C)... ✓ 9 games
+  Carlos Correa (SS)... ✓ 143 games
+  Mauricio Dubon (2B)... ✓ 123 games
+  Brice Matthews (SS)... ✓ 13 games
+  Isaac Paredes (3B)... ✓ 102 games
+  Jeremy Pena (SS)... ✓ 125 games
+  Ramon Urias (3B)... ✓ 110 games
+  Christian Walker (1B)... ✓ 154 games
+  Jose Altuve (LF)... ✓ 155 games
+  Yordan Alvarez (LF)... ✓ 48 games
+  Zach Cole (CF)... ✓ 15 games
+  Zach Dezenzo (LF)... ✓ 33 games
+  Jacob Melton (LF)... ✓ 29 games
+  Jake Meyers (CF)... ✓ 100 games
+  Jesus Sanchez (RF)... ✓ 134 games
+  Cam Smith (RF)... ✓ 133 games
+  Taylor Trammell (LF)... ✓ 49 games
+  Shay Whitcomb (LF)... ✓ 15 games
+Fetching KC...
+  Luinder Avila (RP)... ✓ 13 games
+  Ryan Bergert (SP)... ✓ 19 games
+  Mason Black (SP)... ✓ 1 games
+  Jonathan Bowlan (RP)... ✓ 34 games
+  Kris Bubic (SP)... ✓ 21 games
+  Noah Cameron (SP)... ✓ 24 games
+  Eric Cerantola (RP)... No data
+  Taylor Clarke (RP)... ✓ 51 games
+  Steven Cruz (RP)... ✓ 47 games
+  Lucas Erceg (RP)... ✓ 61 games
+  Carlos Estevez (RP)... ✓ 68 games
+  Bailey Falter (SP)... ✓ 26 games
+  Stephen Kolek (SP)... ✓ 19 games
+  Ben Kudrna (SP)... No data
+  Seth Lugo (SP)... ✓ 26 games
+  Daniel Lynch IV (RP)... ✓ 57 games
+  Alec Marsh (SP)... ✓ 26 games
+  James McArthur (RP)... ✓ 57 games
+  Cole Ragans (SP)... ✓ 13 games
+  John Schreiber (RP)... ✓ 74 games
+  Michael Wacha (SP)... ✓ 31 games
+  Kyle Wright (SP)... ✓ 9 games
+  Angel Zerpa (RP)... ✓ 69 games
+  Steven Zobac (SP)... No data
+  Carter Jensen (C)... ✓ 20 games
+  Salvador Perez (C)... ✓ 155 games
+  Maikel Garcia (3B)... ✓ 160 games
+  Jonathan India (2B)... ✓ 136 games
+  Michael Massey (2B)... ✓ 76 games
+  Vinnie Pasquantino (1B)... ✓ 160 games
+  Tyler Tolbert (2B)... ✓ 50 games
+  Bobby Witt Jr. (SS)... ✓ 158 games
+  Dairon Blanco (CF)... ✓ 8 games
+  Jac Caglianone (RF)... ✓ 62 games
+  Kyle Isbel (CF)... ✓ 128 games
+  Nick Loftin (LF)... ✓ 66 games
+  MJ Melendez (LF)... ✓ 21 games
+  Kameron Misner (CF)... ✓ 66 games
+  John Rave (RF)... ✓ 58 games
+  Drew Waters (LF)... ✓ 68 games
+Fetching LAA...
+  Sam Aldegheri (SP)... No data
+  Sam Bachman (RP)... No data
+  Brock Burke (RP)... ✓ 69 games
+  Caden Dana (SP)... ✓ 7 games
+  Reid Detmers (RP)... ✓ 61 games
+  Mitch Farris (SP)... ✓ 5 games
+  Jose Fermin (RP)... ✓ 40 games
+  Ryan Johnson (RP)... ✓ 14 games
+  Ben Joyce (RP)... ✓ 5 games
+  Yusei Kikuchi (SP)... ✓ 33 games
+  Jack Kochanowicz (SP)... ✓ 23 games
+  Cody Laweryson (RP)... ✓ 5 games
+  Victor Mederos (SP)... ✓ 5 games
+  Chase Silseth (RP)... ✓ 10 games
+  Jose Soriano (SP)... ✓ 31 games
+  Robert Stephenson (RP)... ✓ 12 games
+  Walbert Urena (SP)... No data
+  Ryan Zeferjahn (RP)... ✓ 62 games
+  Travis d'Arnaud (C)... ✓ 68 games
+  Logan O'Hoppe (C)... ✓ 119 games
+  Sebastian Rivero (C)... ✓ 11 games
+  Denzer Guzman (SS)... ✓ 13 games
+  Christian Moore (2B)... ✓ 51 games
+  Zach Neto (SS)... ✓ 128 games
+  Kyren Paris (2B)... ✓ 43 games
+  Oswald Peraza (3B)... ✓ 97 games
+  Anthony Rendon (3B)... ✓ 56 games
+  Nolan Schanuel (1B)... ✓ 131 games
+  Jo Adell (CF)... ✓ 150 games
+  Gustavo Campero (RF)... ✓ 26 games
+  Matthew Lugo (LF)... ✓ 25 games
+  Jorge Soler (RF)... ✓ 81 games
+  Bryce Teodosio (CF)... ✓ 49 games
+  Mike Trout (RF)... ✓ 130 games
+  Taylor Ward (LF)... ✓ 157 games
+Fetching LAD...
+  Anthony Banda (RP)... ✓ 71 games
+  Ben Casparius (RP)... ✓ 46 games
+  Jack Dreyer (RP)... ✓ 67 games
+  Nick Frasso (RP)... No data
+  Paul Gervase (RP)... ✓ 6 games
+  Tyler Glasnow (SP)... ✓ 18 games
+  Brusdar Graterol (RP)... ✓ 7 games
+  Edgardo Henriquez (RP)... ✓ 22 games
+  Kyle Hurt (RP)... ✓ 3 games
+  Will Klein (RP)... ✓ 14 games
+  Landon Knack (SP)... ✓ 10 games
+  Ronan Kopp (RP)... No data
+  Bobby Miller (SP)... ✓ 2 games
+  Evan Phillips (RP)... ✓ 7 games
+  River Ryan (SP)... ✓ 4 games
+  Roki Sasaki (SP)... ✓ 10 games
+  Tanner Scott (RP)... ✓ 61 games
+  Emmet Sheehan (SP)... ✓ 15 games
+  Blake Snell (SP)... ✓ 11 games
+  Brock Stewart (RP)... ✓ 43 games
+  Gavin Stone (SP)... ✓ 25 games
+  Blake Treinen (RP)... ✓ 32 games
+  Alex Vesia (RP)... ✓ 68 games
+  Justin Wrobleski (RP)... ✓ 24 games
+  Yoshinobu Yamamoto (SP)... ✓ 30 games
+  Dalton Rushing (C)... ✓ 52 games
+  Will Smith (C)... ✓ 111 games
+  Mookie Betts (SS)... ✓ 150 games
+  Tommy Edman (2B)... ✓ 96 games
+  Alex Freeland (SS)... ✓ 29 games
+  Freddie Freeman (1B)... ✓ 148 games
+  Hyeseong Kim (2B)... ✓ 63 games
+  Max Muncy (3B)... ✓ 100 games
+  Alex Call (RF)... ✓ 98 games
+  Teoscar Hernandez (RF)... ✓ 134 games
+  Andy Pages (CF)... ✓ 155 games
+  Esteury Ruiz (LF)... ✓ 15 games
+  Ryan Ward (LF)... No data
+  Shohei Ohtani (DH)... ✓ 159 games
+Fetching MIA...
+  Sandy Alcantara (SP)... ✓ 31 games
+  Lake Bachar (RP)... ✓ 53 games
+  Anthony Bender (RP)... ✓ 51 games
+  Zach Brzykcy (RP)... ✓ 26 games
+  Edward Cabrera (SP)... ✓ 26 games
+  Calvin Faucher (RP)... ✓ 65 games
+  Dax Fulton (SP)... No data
+  Braxton Garrett (SP)... ✓ 7 games
+  Cade Gibson (RP)... ✓ 44 games
+  Ryan Gusto (SP)... ✓ 27 games
+  Ronny Henriquez (RP)... ✓ 69 games
+  Janson Junk (SP)... ✓ 21 games
+  William Kempner (RP)... No data
+  Adam Mazur (SP)... ✓ 6 games
+  Max Meyer (SP)... ✓ 12 games
+  Andrew Nardi (RP)... ✓ 59 games
+  Eury Perez (SP)... ✓ 20 games
+  Michael Petersen (RP)... ✓ 15 games
+  Tyler Phillips (RP)... ✓ 54 games
+  Josh Simpson (RP)... ✓ 31 games
+  Ryan Weathers (SP)... ✓ 8 games
+  Liam Hicks (C)... ✓ 119 games
+  Joe Mack (C)... No data
+  Agustin Ramirez (C)... ✓ 136 games
+  Maximo Acosta (SS)... ✓ 18 games
+  Deyvison De Los Santos (3B)... No data
+  Xavier Edwards (SS)... ✓ 138 games
+  Otto Lopez (2B)... ✓ 142 games
+  Connor Norby (3B)... ✓ 87 games
+  Graham Pauley (3B)... ✓ 57 games
+  Javier Sanoja (2B)... ✓ 115 games
+  Jared Serna (SS)... No data
+  Eric Wagaman (1B)... ✓ 138 games
+  Griffin Conine (LF)... ✓ 24 games
+  Heriberto Hernandez (LF)... ✓ 86 games
+  Jakob Marsee (CF)... ✓ 55 games
+  Victor Mesa Jr. (CF)... ✓ 14 games
+  Dane Myers (CF)... ✓ 104 games
+  Kyle Stowers (LF)... ✓ 118 games
+  Joey Wiemer (LF)... ✓ 20 games
+Fetching MIL...
+  Grant Anderson (RP)... ✓ 66 games
+  Aaron Ashby (RP)... ✓ 43 games
+  Coleman Crow (SP)... No data
+  Robert Gasser (SP)... ✓ 2 games
+  DL Hall (RP)... ✓ 20 games
+  Logan Henderson (SP)... ✓ 5 games
+  Jared Koenig (RP)... ✓ 72 games
+  Easton McGee (SP)... ✓ 9 games
+  Nick Mears (RP)... ✓ 63 games
+  Trevor Megill (RP)... ✓ 51 games
+  Jacob Misiorowski (SP)... ✓ 16 games
+  Tobias Myers (RP)... ✓ 22 games
+  Chad Patrick (SP)... ✓ 27 games
+  Freddy Peralta (SP)... ✓ 33 games
+  Sammy Peralta (RP)... ✓ 5 games
+  Quinn Priester (SP)... ✓ 29 games
+  Carlos Rodriguez (RP)... ✓ 4 games
+  Abner Uribe (RP)... ✓ 75 games
+  Craig Yoho (RP)... ✓ 8 games
+  Rob Zastryzny (RP)... ✓ 26 games
+  William Contreras (C)... ✓ 150 games
+  Jeferson Quero (C)... No data
+  Jake Bauers (1B)... ✓ 83 games
+  Tyler Black (3B)... ✓ 5 games
+  Caleb Durbin (3B)... ✓ 134 games
+  Andruw Monasterio (SS)... ✓ 53 games
+  Joey Ortiz (SS)... ✓ 146 games
+  Anthony Seigler (2B)... ✓ 33 games
+  Brice Turang (2B)... ✓ 155 games
+  Andrew Vaughn (1B)... ✓ 112 games
+  Steward Berroa (RF)... ✓ 2 games
+  Jackson Chourio (CF)... ✓ 131 games
+  Isaac Collins (LF)... ✓ 127 games
+  Sal Frelick (RF)... ✓ 141 games
+  Brandon Lockridge (LF)... ✓ 56 games
+  Garrett Mitchell (CF)... ✓ 24 games
+  Blake Perkins (CF)... ✓ 49 games
+  Christian Yelich (LF)... ✓ 150 games
+Fetching MIN...
+  Mick Abel (SP)... ✓ 11 games
+  Travis Adams (RP)... ✓ 18 games
+  Taj Bradley (SP)... ✓ 27 games
+  David Festa (SP)... ✓ 11 games
+  Kody Funderburk (RP)... ✓ 39 games
+  John Klein (SP)... No data
+  Pablo Lopez (SP)... ✓ 14 games
+  Andrew Morris (SP)... No data
+  Bailey Ober (SP)... ✓ 27 games
+  Pierson Ohl (RP)... ✓ 14 games
+  Eric Orze (RP)... ✓ 33 games
+  Connor Prielipp (SP)... No data
+  Marco Raya (SP)... No data
+  Kendry Rojas (SP)... No data
+  Joe Ryan (SP)... ✓ 32 games
+  Cole Sands (RP)... ✓ 69 games
+  Justin Topa (RP)... ✓ 54 games
+  Simeon Woods Richardson (SP)... ✓ 23 games
+  Ryan Jeffers (C)... ✓ 116 games
+  Jhonny Pereda (C)... ✓ 29 games
+  Kody Clemens (2B)... ✓ 114 games
+  Ryan Fitzgerald (3B)... ✓ 21 games
+  Mickey Gasper (2B)... ✓ 40 games
+  Edouard Julien (2B)... ✓ 63 games
+  Luke Keaschall (2B)... ✓ 49 games
+  Brooks Lee (3B)... ✓ 138 games
+  Royce Lewis (3B)... ✓ 105 games
+  Byron Buxton (CF)... ✓ 127 games
+  Gabriel Gonzalez (RF)... No data
+  DaShawn Keirsey Jr. (CF)... ✓ 49 games
+  Ryan Kreidler (CF)... ✓ 15 games
+  Trevor Larnach (RF)... ✓ 141 games
+  Austin Martin (CF)... ✓ 47 games
+  Carson McCusker (LF)... ✓ 16 games
+  Hendry Mendez (OF)... No data
+  James Outman (CF)... ✓ 49 games
+  Alan Roden (LF)... ✓ 50 games
+  Emmanuel Rodriguez (CF)... No data
+  Matt Wallner (RF)... ✓ 104 games
+Fetching NYM...
+  Huascar Brazoban (RP)... ✓ 52 games
+  Alejandro Carrillo (RP)... ✓ 3 games
+  Jose Castillo (RP)... ✓ 29 games
+  Reed Garrett (RP)... ✓ 58 games
+  Joey Gerber (RP)... ✓ 2 games
+  Justin Hagenman (RP)... ✓ 9 games
+  Clay Holmes (SP)... ✓ 33 games
+  Max Kranick (RP)... ✓ 24 games
+  Richard Lovelady (RP)... ✓ 10 games
+  Sean Manaea (SP)... ✓ 15 games
+  Nolan McLean (SP)... ✓ 8 games
+  Tylor Megill (SP)... ✓ 14 games
+  A.J. Minter (RP)... ✓ 13 games
+  Dedniel Nunez (RP)... ✓ 10 games
+  David Peterson (SP)... ✓ 31 games
+  Jonathan Pintaro (RP)... ✓ 1 games
+  Brooks Raley (RP)... ✓ 30 games
+  Dylan Ross (RP)... No data
+  Christian Scott (SP)... ✓ 9 games
+  Kodai Senga (SP)... ✓ 22 games
+  Brandon Sproat (SP)... ✓ 4 games
+  Jonah Tong (SP)... ✓ 5 games
+  Brandon Waddell (RP)... ✓ 11 games
+  Austin Warren (RP)... ✓ 5 games
+  Danny Young (RP)... ✓ 10 games
+  Francisco Alvarez (C)... ✓ 75 games
+  Hayden Senger (C)... ✓ 31 games
+  Luis Torrens (C)... ✓ 90 games
+  Luisangel Acuna (2B)... ✓ 81 games
+  Brett Baty (3B)... ✓ 127 games
+  Francisco Lindor (SS)... ✓ 161 games
+  Ronny Mauricio (3B)... ✓ 58 games
+  Jeff McNeil (2B)... ✓ 122 games
+  Mark Vientos (3B)... ✓ 121 games
+  Ji Hwan Bae (CF)... ✓ 11 games
+  Nick Morabito (CF)... No data
+  Brandon Nimmo (LF)... ✓ 155 games
+  Juan Soto (RF)... ✓ 160 games
+  Tyrone Taylor (CF)... ✓ 103 games
+  Jared Young (LF)... ✓ 19 games
+Fetching NYY...
+  Michael Arias (SP)... No data
+  David Bednar (RP)... ✓ 64 games
+  Jake Bird (RP)... ✓ 48 games
+  Kervin Castro (RP)... No data
+  Gerrit Cole (SP)... No data
+  Jake Cousins (RP)... ✓ 37 games
+  Fernando Cruz (RP)... ✓ 49 games
+  Elmer Cruz-Rodriguez (SP)... No data
+  Yerry De los Santos (RP)... ✓ 25 games
+  Camilo Doval (RP)... ✓ 69 games
+  Scott Effross (RP)... ✓ 11 games
+  Max Fried (SP)... ✓ 32 games
+  Luis Gil (SP)... ✓ 11 games
+  Ian Hamilton (RP)... ✓ 36 games
+  Chase Hampton (SP)... No data
+  Brent Headrick (RP)... ✓ 17 games
+  Tim Hill (RP)... ✓ 70 games
+  Mark Leiter Jr. (RP)... ✓ 59 games
+  Carlos Rodon (SP)... ✓ 34 games
+  Jayvien Sandridge (RP)... ✓ 1 games
+  Cam Schlittler (SP)... ✓ 14 games
+  Clarke Schmidt (SP)... ✓ 14 games
+  Will Warren (SP)... ✓ 33 games
+  Allan Winans (SP)... ✓ 3 games
+  J.C. Escarra (C)... ✓ 37 games
+  Austin Wells (C)... ✓ 119 games
+  Jose Caballero (SS)... ✓ 117 games
+  Oswaldo Cabrera (3B)... ✓ 33 games
+  Jazz Chisholm Jr. (2B)... ✓ 131 games
+  Ryan McMahon (3B)... ✓ 151 games
+  Ben Rice (1B)... ✓ 137 games
+  Braden Shewmake (SS)... No data
+  Jorbit Vivas (2B)... ✓ 27 games
+  Anthony Volpe (SS)... ✓ 153 games
+  Jasson Dominguez (LF)... ✓ 119 games
+  Trent Grisham (CF)... ✓ 139 games
+  Spencer Jones (CF)... No data
+  Aaron Judge (RF)... ✓ 153 games
+  Giancarlo Stanton (DH)... ✓ 77 games
+Fetching OAK...
+  Elvis Alvarado (RP)... ✓ 37 games
+  Henry Baez (SP)... No data
+  Brady Basso (RP)... ✓ 11 games
+  Osvaldo Bido (RP)... ✓ 26 games
+  Joey Estes (SP)... ✓ 3 games
+  Tyler Ferguson (RP)... ✓ 56 games
+  J.T. Ginn (SP)... ✓ 23 games
+  Hogan Harris (RP)... ✓ 48 games
+  Gunnar Hoglund (SP)... ✓ 6 games
+  Grant Holman (RP)... ✓ 22 games
+  Michael Kelly (RP)... ✓ 42 games
+  Jacob Lopez (SP)... ✓ 21 games
+  Luis Medina (SP)... ✓ 8 games
+  Luis Morales (SP)... ✓ 10 games
+  Braden Nett (SP)... No data
+  Eduarniel Nunez (RP)... ✓ 10 games
+  Jack Perkins (RP)... ✓ 12 games
+  Luis Severino (SP)... ✓ 29 games
+  Mitch Spence (RP)... ✓ 32 games
+  Jeffrey Springs (SP)... ✓ 32 games
+  Justin Sterner (RP)... ✓ 59 games
+  Ken Waldichuk (SP)... ✓ 35 games
+  Chen Zhuang (RP)... No data
+  Shea Langeliers (C)... ✓ 123 games
+  Austin Wynns (C)... ✓ 37 games
+  Zack Gelof (2B)... ✓ 27 games
+  Brett Harris (3B)... ✓ 29 games
+  Darell Hernaiz (3B)... ✓ 50 games
+  Nick Kurtz (1B)... ✓ 117 games
+  Max Muncy (3B)... ✓ 61 games
+  Max Schuemann (3B)... ✓ 84 games
+  Jacob Wilson (SS)... ✓ 126 games
+  Lawrence Butler (RF)... ✓ 150 games
+  Denzel Clarke (CF)... ✓ 46 games
+  Carlos Cortes (LF)... ✓ 40 games
+  Junior Perez (CF)... No data
+  Brent Rooker (RF)... ✓ 163 games
+  Tyler Soderstrom (LF)... ✓ 157 games
+  Colby Thomas (RF)... ✓ 48 games
+Fetching PHI...
+  Jose Alvarado (RP)... ✓ 28 games
+  Tanner Banks (RP)... ✓ 69 games
+  Jean Cabrera (SP)... No data
+  Moises Chace (SP)... No data
+  Jhoan Duran (RP)... ✓ 72 games
+  Nolan Hoffman (RP)... ✓ 1 games
+  Seth Johnson (SP)... ✓ 10 games
+  Orion Kerkering (RP)... ✓ 69 games
+  Max Lazar (RP)... ✓ 36 games
+  Jesus Luzardo (SP)... ✓ 32 games
+  Alex McFarlane (SP)... No data
+  Michael Mercado (RP)... ✓ 3 games
+  Aaron Nola (SP)... ✓ 17 games
+  Andrew Painter (SP)... No data
+  Alan Rangel (RP)... ✓ 5 games
+  Daniel Robert (RP)... ✓ 15 games
+  Cristopher Sanchez (SP)... ✓ 32 games
+  Matt Strahm (RP)... ✓ 66 games
+  Taijuan Walker (SP)... ✓ 34 games
+  Zack Wheeler (SP)... ✓ 24 games
+  Rafael Marchan (C)... ✓ 42 games
+  Garrett Stubbs (C)... ✓ 4 games
+  Alec Bohm (3B)... ✓ 120 games
+  Bryce Harper (1B)... ✓ 132 games
+  Otto Kemp (1B)... ✓ 62 games
+  Edmundo Sosa (2B)... ✓ 86 games
+  Bryson Stott (2B)... ✓ 146 games
+  Trea Turner (SS)... ✓ 141 games
+  Nick Castellanos (RF)... ✓ 146 games
+  Brandon Marsh (CF)... ✓ 127 games
+  Gabriel Rincones Jr. (RF)... No data
+  Johan Rojas (CF)... ✓ 66 games
+  Weston Wilson (LF)... ✓ 50 games
+Fetching PIT...
+  Braxton Ashcraft (RP)... ✓ 26 games
+  Hunter Barco (SP)... ✓ 2 games
+  Brandan Bidois (RP)... No data
+  Mike Burrows (SP)... ✓ 23 games
+  Bubba Chandler (RP)... ✓ 7 games
+  Ryan Harbin (RP)... No data
+  Thomas Harrington (SP)... ✓ 3 games
+  Jared Jones (SP)... No data
+  Mitch Keller (SP)... ✓ 32 games
+  Justin Lawrence (RP)... ✓ 17 games
+  Isaac Mattson (RP)... ✓ 44 games
+  Carmen Mlodzinski (RP)... ✓ 34 games
+  Kyle Nicolas (RP)... ✓ 31 games
+  Johan Oviedo (SP)... ✓ 9 games
+  Yohan Ramirez (RP)... ✓ 24 games
+  Tyler Samaniego (RP)... No data
+  Cam Sanders (RP)... ✓ 6 games
+  Dennis Santana (RP)... ✓ 70 games
+  Chase Shugart (RP)... ✓ 35 games
+  Evan Sisk (RP)... ✓ 19 games
+  Paul Skenes (SP)... ✓ 33 games
+  Joey Bart (C)... ✓ 91 games
+  Henry Davis (C)... ✓ 82 games
+  Rafael Flores (C)... ✓ 6 games
+  Jack Brannigan (SS)... No data
+  Tsung-Che Cheng (SS)... ✓ 3 games
+  Nick Gonzales (2B)... ✓ 96 games
+  Spencer Horwitz (1B)... ✓ 108 games
+  Endy Rodriguez (1B)... ✓ 17 games
+  Jared Triolo (SS)... ✓ 102 games
+  Enmanuel Valdez (1B)... ✓ 31 games
+  Nick Yorke (2B)... ✓ 22 games
+  Billy Cook (OF)... ✓ 2 games
+  Oneil Cruz (CF)... ✓ 135 games
+  Bryan Reynolds (RF)... ✓ 154 games
+  Will Robertson (LF)... ✓ 26 games
+  Jack Suwinski (RF)... ✓ 56 games
+  Esmerlyn Valdez (OF)... No data
+Fetching SD...
+  Jason Adam (RP)... ✓ 66 games
+  Jhony Brito (RP)... No data
+  Omar Cruz (RP)... ✓ 2 games
+  Yu Darvish (SP)... ✓ 15 games
+  Jeremiah Estrada (RP)... ✓ 77 games
+  Garrett Hawkins (RP)... No data
+  Bryan Hoeing (RP)... ✓ 7 games
+  Alek Jacob (RP)... ✓ 29 games
+  Ron Marinaccio (RP)... ✓ 7 games
+  Yuki Matsui (RP)... ✓ 61 games
+  Mason Miller (RP)... ✓ 60 games
+  Adrian Morejon (RP)... ✓ 76 games
+  David Morgan (RP)... ✓ 41 games
+  Joe Musgrove (SP)... ✓ 19 games
+  Wandy Peralta (RP)... ✓ 71 games
+  Nick Pivetta (SP)... ✓ 31 games
+  Sean Reynolds (RP)... ✓ 19 games
+  Bradgley Rodriguez (SP)... ✓ 7 games
+  JP Sears (SP)... ✓ 27 games
+  Randy Vasquez (SP)... ✓ 28 games
+  Matt Waldron (SP)... ✓ 1 games
+  Luis Campusano (C)... ✓ 10 games
+  Freddy Fermin (C)... ✓ 104 games
+  Xander Bogaerts (SS)... ✓ 136 games
+  Jake Cronenworth (2B)... ✓ 135 games
+  Manny Machado (3B)... ✓ 160 games
+  Mason McCoy (2B)... ✓ 13 games
+  Will Wagner (3B)... ✓ 55 games
+  Bryce Johnson (CF)... ✓ 44 games
+  Ramon Laureano (RF)... ✓ 130 games
+  Jackson Merrill (CF)... ✓ 114 games
+  Tirso Ornelas (LF)... ✓ 7 games
+  Gavin Sheets (LF)... ✓ 145 games
+  Fernando Tatis Jr. (RF)... ✓ 156 games
+Fetching SF...
+  Tristan Beck (RP)... ✓ 31 games
+  Hayden Birdsong (RP)... ✓ 21 games
+  Spencer Bivens (RP)... ✓ 54 games
+  JT Brubaker (RP)... ✓ 17 games
+  Jose Butto (RP)... ✓ 55 games
+  Matt Gage (RP)... ✓ 33 games
+  Joey Lucchesi (RP)... ✓ 38 games
+  Trevor McDonald (SP)... ✓ 3 games
+  Erik Miller (RP)... ✓ 36 games
+  Joel Peguero (RP)... ✓ 17 games
+  Robbie Ray (SP)... ✓ 32 games
+  Randy Rodriguez (RP)... ✓ 51 games
+  Landen Roupp (SP)... ✓ 22 games
+  Reiver Sanmartin (RP)... ✓ 1 games
+  Carson Seymour (RP)... ✓ 16 games
+  Kai-Wei Teng (SP)... ✓ 8 games
+  Blade Tidwell (SP)... ✓ 4 games
+  Ryan Walker (RP)... ✓ 68 games
+  Logan Webb (SP)... ✓ 35 games
+  Carson Whisenhunt (SP)... ✓ 5 games
+  Keaton Winn (RP)... ✓ 7 games
+  Patrick Bailey (C)... ✓ 130 games
+  Andrew Knizner (C)... ✓ 30 games
+  Jesus Rodriguez (C)... No data
+  Willy Adames (SS)... ✓ 159 games
+  Matt Chapman (3B)... ✓ 127 games
+  Bryce Eldridge (1B)... ✓ 10 games
+  Tyler Fitzgerald (2B)... ✓ 69 games
+  Christian Koss (2B)... ✓ 64 games
+  Casey Schmitt (3B)... ✓ 94 games
+  Justin Dean (CF)... ✓ 5 games
+  Jerar Encarnacion (RF)... ✓ 19 games
+  Drew Gilbert (CF)... ✓ 34 games
+  Jung Hoo Lee (CF)... ✓ 149 games
+  Marco Luciano (OF)... No data
+  Luis Matos (RF)... ✓ 56 games
+  Grant McCray (CF)... ✓ 13 games
+  Wade Meckler (OF)... No data
+  Heliot Ramos (LF)... ✓ 157 games
+  Rafael Devers (DH)... ✓ 163 games
+Fetching SEA...
+  Eduard Bazardo (RP)... ✓ 73 games
+  Matt Brash (RP)... ✓ 53 games
+  Blas Castano (SP)... ✓ 1 games
+  Luis Castillo (SP)... ✓ 32 games
+  Jhonathan Diaz (RP)... ✓ 1 games
+  Logan Evans (SP)... ✓ 16 games
+  Logan Gilbert (SP)... ✓ 25 games
+  Domingo Gonzalez (SP)... No data
+  Emerson Hancock (SP)... ✓ 22 games
+  George Kirby (SP)... ✓ 23 games
+  Jackson Kowar (RP)... ✓ 15 games
+  Casey Legumina (RP)... ✓ 48 games
+  Ryan Loutos (RP)... ✓ 12 games
+  Bryce Miller (SP)... ✓ 18 games
+  Andres Munoz (RP)... ✓ 65 games
+  Gregory Santos (RP)... ✓ 8 games
+  Gabe Speier (RP)... ✓ 76 games
+  Troy Taylor (RP)... ✓ 8 games
+  Trent Thornton (RP)... ✓ 33 games
+  Carlos Vargas (RP)... ✓ 70 games
+  Cole Wilcox (RP)... ✓ 1 games
+  Bryan Woo (SP)... ✓ 31 games
+  Harry Ford (C)... ✓ 5 games
+  Cal Raleigh (C)... ✓ 160 games
+  Ryan Bliss (2B)... ✓ 11 games
+  J.P. Crawford (SS)... ✓ 155 games
+  Miles Mastrobuoni (3B)... ✓ 75 games
+  Leo Rivas (2B)... ✓ 43 games
+  Samad Taylor (2B)... ✓ 3 games
+  Ben Williamson (3B)... ✓ 83 games
+  Cole Young (2B)... ✓ 76 games
+  Randy Arozarena (LF)... ✓ 161 games
+  Dominic Canzone (RF)... ✓ 82 games
+  Luke Raley (RF)... ✓ 69 games
+  Victor Robles (RF)... ✓ 32 games
+  Julio Rodriguez (CF)... ✓ 160 games
+  Rhylan Thomas (LF)... ✓ 3 games
+Fetching STL...
+  Ryan Fernandez (RP)... ✓ 32 games
+  Gordon Graceffo (RP)... ✓ 26 games
+  Andre Granillo (RP)... ✓ 14 games
+  Sonny Gray (SP)... ✓ 32 games
+  Tink Hence (RP)... No data
+  Cooper Hjerpe (SP)... No data
+  John King (RP)... ✓ 51 games
+  Kyle Leahy (RP)... ✓ 62 games
+  Matthew Liberatore (SP)... ✓ 29 games
+  Brycen Mautz (RP)... No data
+  Michael McGreevy (SP)... ✓ 17 games
+  Riley O'Brien (RP)... ✓ 42 games
+  Andre Pallante (SP)... ✓ 31 games
+  Nick Raquet (RP)... ✓ 2 games
+  Sem Robberse (SP)... No data
+  Tekoah Roby (SP)... No data
+  JoJo Romero (RP)... ✓ 65 games
+  Chris Roycroft (RP)... ✓ 20 games
+  Matt Svanson (RP)... ✓ 39 games
+  Ryan Tepera (RP)... ✓ 12 games
+  Leonardo Bernal (C)... No data
+  Jimmy Crooks (C)... ✓ 13 games
+  Ivan Herrera (C)... ✓ 107 games
+  Pedro Pages (C)... ✓ 110 games
+  Yohel Pozo (C)... ✓ 64 games
+  Nolan Arenado (3B)... ✓ 106 games
+  Alec Burleson (1B)... ✓ 138 games
+  Willson Contreras (1B)... ✓ 135 games
+  Brendan Donovan (2B)... ✓ 119 games
+  Jose Fermin (2B)... ✓ 30 games
+  Nolan Gorman (2B)... ✓ 108 games
+  Cesar Prieto (2B)... ✓ 3 games
+  Thomas Saggese (2B)... ✓ 82 games
+  Masyn Winn (SS)... ✓ 128 games
+  Joshua Baez (RF)... No data
+  Nathan Church (LF)... ✓ 19 games
+  Matt Koperniak (LF)... No data
+  Lars Nootbaar (LF)... ✓ 133 games
+  Victor Scott II (CF)... ✓ 132 games
+  Bryan Torres (OF)... No data
+  Jordan Walker (RF)... ✓ 108 games
+Fetching TB...
+  Bryan Baker (RP)... ✓ 73 games
+  Shane Baz (SP)... ✓ 31 games
+  Hunter Bigge (RP)... ✓ 13 games
+  Joe Boyle (SP)... ✓ 13 games
+  Garrett Cleavinger (RP)... ✓ 67 games
+  Alexander Cook (RP)... No data
+  Yoniel Curet (SP)... No data
+  Mason Englert (RP)... ✓ 30 games
+  Yoendrys Gomez (SP)... ✓ 21 games
+  Griffin Jax (RP)... ✓ 73 games
+  Kevin Kelly (RP)... ✓ 41 games
+  Shane McClanahan (SP)... No data
+  Mason Montgomery (RP)... ✓ 57 games
+  Ryan Pepiot (SP)... ✓ 31 games
+  Drew Rasmussen (SP)... ✓ 32 games
+  Joe Rock (SP)... ✓ 3 games
+  Manuel Rodriguez (RP)... ✓ 31 games
+  Jesse Scholtens (RP)... ✓ 2 games
+  Ian Seymour (RP)... ✓ 19 games
+  Cole Sulser (RP)... ✓ 18 games
+  Edwin Uceta (RP)... ✓ 70 games
+  Forrest Whitley (RP)... ✓ 10 games
+  Steven Wilson (RP)... ✓ 59 games
+  Hunter Feduccia (C)... ✓ 36 games
+  Nick Fortes (C)... ✓ 88 games
+  Dominic Keegan (C)... No data
+  Jonathan Aranda (1B)... ✓ 107 games
+  Jadher Areinamo (2B)... No data
+  Junior Caminero (3B)... ✓ 155 games
+  Yandy Diaz (1B)... ✓ 150 games
+  Brandon Lowe (2B)... ✓ 134 games
+  Taylor Walls (SS)... ✓ 93 games
+  Carson Williams (SS)... ✓ 31 games
+  Jonny DeLuca (CF)... ✓ 20 games
+  Jake Fraley (RF)... ✓ 73 games
+  Josh Lowe (RF)... ✓ 108 games
+  Jake Mangum (LF)... ✓ 117 games
+  Christopher Morel (LF)... ✓ 103 games
+  Richie Palacios (LF)... ✓ 16 games
+  Tristan Peters (LF)... ✓ 4 games
+  Chandler Simpson (CF)... ✓ 108 games
+  Ryan Vilade (RF)... ✓ 6 games
+Fetching TEX...
+  Cody Bradford (SP)... No data
+  Marc Church (RP)... ✓ 5 games
+  Jose Corniell (SP)... ✓ 1 games
+  Luis Curvelo (RP)... ✓ 17 games
+  Jacob deGrom (SP)... ✓ 30 games
+  Nathan Eovaldi (SP)... ✓ 22 games
+  Robert Garcia (RP)... ✓ 71 games
+  Dominic Hamel (SP)... ✓ 1 games
+  Jacob Latz (RP)... ✓ 33 games
+  Jack Leiter (SP)... ✓ 29 games
+  Michel Otanez (RP)... ✓ 6 games
+  Kumar Rocker (SP)... ✓ 14 games
+  Winston Santos (SP)... No data
+  Josh Sborz (RP)... ✓ 17 games
+  Emiliano Teodo (SP)... No data
+  Jacob Webb (RP)... ✓ 55 games
+  Cole Winn (RP)... ✓ 33 games
+  Jonah Heim (C)... ✓ 122 games
+  Kyle Higashioka (C)... ✓ 94 games
+  Willie MacIver (C)... ✓ 30 games
+  Jake Burger (1B)... ✓ 103 games
+  Ezequiel Duran (SS)... ✓ 81 games
+  Justin Foscue (1B)... ✓ 4 games
+  Cody Freeman (3B)... ✓ 36 games
+  Josh Jung (3B)... ✓ 131 games
+  Abimelec Ortiz (1B)... No data
+  Joc Pederson (1B)... ✓ 96 games
+  Corey Seager (SS)... ✓ 102 games
+  Marcus Semien (2B)... ✓ 127 games
+  Josh Smith (SS)... ✓ 143 games
+  Evan Carter (CF)... ✓ 62 games
+  Adolis Garcia (RF)... ✓ 135 games
+  Sam Haggerty (CF)... ✓ 63 games
+  Michael Helman (CF)... ✓ 37 games
+  Wyatt Langford (LF)... ✓ 133 games
+  Alejandro Osuna (LF)... ✓ 57 games
+Fetching TOR...
+  Angel Bastardo (RP)... No data
+  Jose Berrios (SP)... ✓ 31 games
+  Shane Bieber (SP)... ✓ 7 games
+  Jake Bloss (SP)... No data
+  Justin Bruihl (RP)... ✓ 15 games
+  Lazaro Estrada (SP)... ✓ 2 games
+  Braydon Fisher (RP)... ✓ 52 games
+  Mason Fluharty (RP)... ✓ 55 games
+  Bowden Francis (SP)... ✓ 14 games
+  Yimi Garcia (RP)... ✓ 22 games
+  Kevin Gausman (SP)... ✓ 32 games
+  Jeff Hoffman (RP)... ✓ 71 games
+  Eric Lauer (SP)... ✓ 28 games
+  Brendon Little (RP)... ✓ 79 games
+  Easton Lucas (SP)... ✓ 6 games
+  Adam Macko (SP)... No data
+  Tommy Nance (RP)... ✓ 30 games
+  Yariel Rodriguez (RP)... ✓ 66 games
+  Paxton Schultz (RP)... ✓ 13 games
+  Ricky Tiedemann (SP)... No data
+  Louis Varland (RP)... ✓ 74 games
+  Trey Yesavage (SP)... ✓ 3 games
+  Tyler Heineman (C)... ✓ 58 games
+  Alejandro Kirk (C)... ✓ 131 games
+  Brandon Valenzuela (C)... No data
+  Addison Barger (3B)... ✓ 134 games
+  Ernie Clement (3B)... ✓ 152 games
+  Andres Gimenez (2B)... ✓ 98 games
+  Vladimir Guerrero Jr. (1B)... ✓ 157 games
+  Leo Jimenez (SS)... ✓ 14 games
+  Jonatan Clase (LF)... ✓ 33 games
+  Joey Loperfido (LF)... ✓ 38 games
+  Nathan Lukes (RF)... ✓ 131 games
+  Anthony Santander (RF)... ✓ 54 games
+  Davis Schneider (LF)... ✓ 80 games
+  George Springer (RF)... ✓ 139 games
+  Myles Straw (CF)... ✓ 111 games
+  Daulton Varsho (CF)... ✓ 68 games
+Fetching WSH...
+  Andrew Alvarez (SP)... ✓ 5 games
+  Clayton Beeter (RP)... ✓ 26 games
+  Cade Cavalli (SP)... ✓ 10 games
+  Jake Eder (RP)... ✓ 8 games
+  Julian Fernandez (RP)... ✓ 4 games
+  Jose Ferrer (RP)... ✓ 72 games
+  MacKenzie Gore (SP)... ✓ 31 games
+  Josiah Gray (SP)... ✓ 2 games
+  Cole Henry (RP)... ✓ 57 games
+  DJ Herz (SP)... No data
+  Jake Irvin (SP)... ✓ 33 games
+  Sauryn Lao (RP)... ✓ 8 games
+  Andry Lara (SP)... ✓ 9 games
+  Brad Lord (RP)... ✓ 48 games
+  Mitchell Parker (SP)... ✓ 33 games
+  Konnor Pilkington (RP)... ✓ 32 games
+  P.J. Poulin (RP)... ✓ 28 games
+  Orlando Ribalta (RP)... ✓ 22 games
+  Jackson Rutledge (RP)... ✓ 63 games
+  Trevor Williams (SP)... ✓ 17 games
+  Riley Adams (C)... ✓ 83 games
+  Drew Millas (C)... ✓ 16 games
+  Keibert Ruiz (C)... ✓ 68 games
+  CJ Abrams (SS)... ✓ 144 games
+  Andres Chaparro (1B)... ✓ 29 games
+  Luis Garcia Jr. (2B)... ✓ 138 games
+  Brady House (3B)... ✓ 73 games
+  Trey Lipscomb (3B)... ✓ 1 games
+  Nasim Nunez (SS)... ✓ 36 games
+  Jose Tena (3B)... ✓ 48 games
+  Dylan Crews (RF)... ✓ 84 games
+  Christian Franklin (LF)... No data
+  Robert Hassell III (CF)... ✓ 64 games
+  Daylen Lile (RF)... ✓ 91 games
+  James Wood (LF)... ✓ 158 games
+  Jacob Young (CF)... ✓ 112 games
+
+============================================================
+COMPLETE: 1024 players saved to mlb_player_data.json
+============================================================
+
+Summary:
+  Total Players: 1024
+  Pitchers: 557
+  Hitters: 467

@@ -427,6 +427,9 @@ class SportDataFetcher {
                     date: event.date,
                     status: event.status.type.description,
                     statusDetail: event.status.displayClock || '',
+                    statusPeriod: event.status.period || 0,
+                    statusType: event.status.type.state || 'pre',
+                    statusShortDetail: event.status.type.shortDetail || '',
                     
                     homeTeam: {
                         id: homeTeam.team.id,
@@ -731,7 +734,7 @@ class UniversalSportsManager {
         const gameTime = new Date(game.date).toLocaleTimeString('en-US', { 
             hour: 'numeric', minute: '2-digit' 
         });
-        const statusBadge = this.getStatusBadge(game.status, gameTime, config.color);
+        const statusBadge = this.getStatusBadge(game, gameTime, config);
         
         return `
             <div class="game-card" data-game-id="${game.id}" data-home-team="${game.homeTeam.name}" data-away-team="${game.awayTeam.name}" style="
@@ -792,16 +795,68 @@ class UniversalSportsManager {
     }
 
     /**
-     * Generate status badge
+     * Generate status badge with quarter, down, and halftime information
      */
-    getStatusBadge(status, gameTime, color) {
+    getStatusBadge(game, gameTime, config) {
+        const status = game.status || '';
+        const statusType = game.statusType || 'pre';
+        const color = config.color;
+        
+        // Final games
         if (status.includes('Final')) {
-            return `<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">FINAL</span>`;
-        } else if (status.includes('Live') || status.includes('In Progress')) {
-            return `<span style="background: #ef4444; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; animation: pulse 2s infinite;">LIVE</span>`;
-        } else {
-            return `<span style="background: ${color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">${gameTime}</span>`;
+            return `<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">✅ FINAL</span>`;
         }
+        
+        // Live/In Progress games
+        if (statusType === 'in' || status.includes('Live') || status.includes('In Progress')) {
+            const period = game.statusPeriod || 0;
+            const clock = game.statusDetail || '';
+            const shortDetail = game.statusShortDetail || '';
+            
+            // Check for halftime
+            if (status.includes('Halftime') || shortDetail.includes('Halftime')) {
+                return `<span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; animation: pulse 2s infinite;">⏸️ HALFTIME</span>`;
+            }
+            
+            // Build live status with quarter/period info
+            let liveText = '🔴 LIVE';
+            let detailText = '';
+            
+            // Add quarter/period for football
+            if (config.name === 'NFL') {
+                if (period === 1) liveText = '🔴 Q1';
+                else if (period === 2) liveText = '🔴 Q2';
+                else if (period === 3) liveText = '🔴 Q3';
+                else if (period === 4) liveText = '🔴 Q4';
+                else if (period > 4) liveText = '🔴 OT';
+                
+                // Add down and distance if available in shortDetail (e.g., "3rd & 7")
+                if (shortDetail && (shortDetail.includes('&') || shortDetail.includes('down'))) {
+                    // Extract down info (e.g., "3rd & 7 at DEN 35")
+                    const downMatch = shortDetail.match(/(\d+(?:st|nd|rd|th))\s*&\s*(\d+|Goal)/i);
+                    if (downMatch) {
+                        detailText = ` • ${downMatch[1]} & ${downMatch[2]}`;
+                    }
+                }
+            } else if (config.name === 'NBA') {
+                // NBA periods
+                if (period === 1) liveText = '🔴 Q1';
+                else if (period === 2) liveText = '🔴 Q2';
+                else if (period === 3) liveText = '🔴 Q3';
+                else if (period === 4) liveText = '🔴 Q4';
+                else if (period > 4) liveText = `🔴 OT${period > 5 ? period - 4 : ''}`;
+            }
+            
+            // Add clock if available
+            if (clock && clock !== '0:00') {
+                detailText = ` • ${clock}${detailText}`;
+            }
+            
+            return `<span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; animation: pulse 2s infinite; white-space: nowrap;">${liveText}${detailText}</span>`;
+        }
+        
+        // Upcoming/Scheduled games
+        return `<span style="background: ${color}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">📅 ${gameTime}</span>`;
     }
 
     /**
@@ -977,81 +1032,12 @@ class UniversalSportsManager {
         
         const predictionsPanel = document.getElementById('predictions-panel');
         if (predictionsPanel) {
-            // Clear existing content and create fresh matchup view
-            predictionsPanel.innerHTML = `
-                <div style="background: linear-gradient(135deg, #002d84, #003da5, #0047ab); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px; position: relative;">
-                    <button onclick="universalSportsManager.backToGames()" style="position: absolute; left: 16px; top: 16px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                        ← Back to Games
-                    </button>
-                    <div style="text-align: center; padding-top: 30px;">
-                        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 8px; color: white;">
-                            📊 ${homeTeam} vs ${awayTeam}
-                        </h2>
-                        <p style="font-size: 14px; opacity: 0.9; margin: 0;">AI-Powered Betting Predictions</p>
-                    </div>
-                </div>
-                
-                <div style="display: grid; gap: 20px; margin-bottom: 24px;">
-                    <!-- Moneyline Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>💰</span> Moneyline Pick
-                        </h3>
-                        <div id="moneyline-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing moneyline...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Spread Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>📏</span> Point Spread Pick
-                        </h3>
-                        <div id="spread-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing spread...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Over/Under Pick -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>🎯</span> Over/Under Pick
-                        </h3>
-                        <div id="total-pick" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Analyzing total...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Game Info -->
-                    <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                            <span>📈</span> Matchup Info
-                        </h3>
-                        <div id="matchup-info" style="font-size: 14px; color: #64748b;">
-                            <div style="text-align: center; padding: 20px;">
-                                <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                                <p style="margin-top: 12px; color: #94a3b8;">Loading matchup data...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <style>
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                </style>
-            `;
+            // Call displayMatchupPredictions (loaded from matchup-predictions.js)
+            if (typeof window.displayMatchupPredictions === 'function') {
+                window.displayMatchupPredictions(awayTeam, homeTeam);
+            } else {
+                console.error('❌ displayMatchupPredictions not found! Script may not be loaded.');
+            }
             
             predictionsPanel.style.display = 'block';
             predictionsPanel.classList.add('active');
@@ -1451,6 +1437,352 @@ function displayPrediction(game, mlPrediction) {
             </div>
         `;
     }
+    
+    // FETCH AND DISPLAY COMPREHENSIVE PROPS
+    fetchAndDisplayGameProps(game, homeTeam, awayTeam);
+}
+
+/**
+ * Fetch and display comprehensive props betting panel for game
+ */
+async function fetchAndDisplayGameProps(game, homeTeam, awayTeam) {
+    const propsContainer = document.getElementById('game-props-container');
+    if (!propsContainer) {
+        console.warn('Props container not available');
+        return;
+    }
+    
+    // Detect current sport
+    const currentSport = window.universalSportsManager?.currentSport || 'football';
+    console.log(`🎯 Fetching props for ${currentSport} game:`, game.id);
+    
+    // Show loading state
+    propsContainer.style.display = 'block';
+    propsContainer.innerHTML = `
+        <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+            <div class="loading-spinner" style="border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            <p style="margin-top: 16px; color: #64748b; font-size: 14px;">Loading player props...</p>
+        </div>
+    `;
+    
+    try {
+        // Route to appropriate service based on sport
+        if (currentSport === 'basketball' && window.MultiSportPredictions) {
+            await handleNBAProps(game, homeTeam, awayTeam, propsContainer);
+        } else if (currentSport === 'hockey' && window.MultiSportPredictions) {
+            await handleNHLProps(game, homeTeam, awayTeam, propsContainer);
+        } else if (currentSport === 'baseball' && window.MultiSportPredictions) {
+            await handleMLBProps(game, homeTeam, awayTeam, propsContainer);
+        } else if (currentSport === 'football' && window.PropsBetting) {
+            await handleNFLProps(game, homeTeam, awayTeam, propsContainer);
+        } else {
+            propsContainer.innerHTML = `
+                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                    <p style="color: #64748b; font-size: 14px;">Player props not yet available for this sport</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error fetching props:', error);
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                <p style="color: #ef4444; font-size: 14px;">Error loading props. Please try again later.</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Handle NFL props
+ */
+async function handleNFLProps(game, homeTeam, awayTeam, propsContainer) {
+    const eventId = game.id || game.eventId || null;
+    console.log('🏈 Fetching NFL props - Event ID:', eventId);
+    
+    const homeQB = getTeamQB(homeTeam);
+    const awayQB = getTeamQB(awayTeam);
+    
+    const homeProps = await window.PropsBetting.getPlayerProps(homeQB, homeTeam, 'QB', eventId);
+    const awayProps = await window.PropsBetting.getPlayerProps(awayQB, awayTeam, 'QB', eventId);
+    
+    const allProps = [...(homeProps || []), ...(awayProps || [])];
+    
+    if (allProps.length > 0) {
+        displayGamePropsPanel(allProps, homeTeam, awayTeam);
+    } else {
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                <p style="color: #64748b; font-size: 14px;">Props loading...</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Handle NBA props
+ */
+async function handleNBAProps(game, homeTeam, awayTeam, propsContainer) {
+    console.log('🏀 Fetching NBA props for:', homeTeam, 'vs', awayTeam);
+    
+    // Get team abbreviations from game object
+    const homeAbbrev = game.homeTeam?.abbreviation || extractTeamCode(homeTeam);
+    const awayAbbrev = game.awayTeam?.abbreviation || extractTeamCode(awayTeam);
+    
+    console.log('Team codes:', homeAbbrev, awayAbbrev);
+    
+    // Initialize MultiSportPredictions if needed
+    if (!window.multiSportPredictions) {
+        window.multiSportPredictions = new window.MultiSportPredictions();
+    }
+    
+    // Fetch both teams
+    const homeData = await window.multiSportPredictions.fetchNBATeam(homeAbbrev);
+    const awayData = await window.multiSportPredictions.fetchNBATeam(awayAbbrev);
+    
+    // Extract player arrays from response
+    const homePlayers = homeData?.players || [];
+    const awayPlayers = awayData?.players || [];
+    
+    console.log(`✅ Loaded ${awayPlayers.length} away players and ${homePlayers.length} home players`);
+    
+    // Render in props container
+    const html = `
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 20px 0; color: #1e293b; font-size: 18px; font-weight: 600;">
+                🏀 Player Props - ${awayTeam} @ ${homeTeam}
+            </h3>
+            <div style="margin-bottom: 24px;">
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${awayTeam}
+                </h4>
+                ${window.multiSportPredictions.renderNBAPlayers(awayPlayers)}
+            </div>
+            <div>
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${homeTeam}
+                </h4>
+                ${window.multiSportPredictions.renderNBAPlayers(homePlayers)}
+            </div>
+        </div>
+    `;
+    
+    propsContainer.innerHTML = html;
+}
+
+/**
+ * Handle NHL props
+ */
+async function handleNHLProps(game, homeTeam, awayTeam, propsContainer) {
+    console.log('🏒 Fetching NHL props for:', homeTeam, 'vs', awayTeam);
+    
+    const homeAbbrev = game.homeTeam?.abbreviation || extractTeamCode(homeTeam);
+    const awayAbbrev = game.awayTeam?.abbreviation || extractTeamCode(awayTeam);
+    
+    if (!window.multiSportPredictions) {
+        window.multiSportPredictions = new window.MultiSportPredictions();
+    }
+    
+    const homeData = await window.multiSportPredictions.fetchNHLTeam(homeAbbrev);
+    const awayData = await window.multiSportPredictions.fetchNHLTeam(awayAbbrev);
+    
+    const html = `
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 20px 0; color: #1e293b; font-size: 18px; font-weight: 600;">
+                🏒 Player Props - ${awayTeam} @ ${homeTeam}
+            </h3>
+            <div style="margin-bottom: 24px;">
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${awayTeam}
+                </h4>
+                ${window.multiSportPredictions.renderNHLPlayers(awayData?.skaters || [], awayData?.goalies || [])}
+            </div>
+            <div>
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${homeTeam}
+                </h4>
+                ${window.multiSportPredictions.renderNHLPlayers(homeData?.skaters || [], homeData?.goalies || [])}
+            </div>
+        </div>
+    `;
+    
+    propsContainer.innerHTML = html;
+}
+
+/**
+ * Handle MLB props
+ */
+async function handleMLBProps(game, homeTeam, awayTeam, propsContainer) {
+    console.log('⚾ Fetching MLB props for:', homeTeam, 'vs', awayTeam);
+    
+    const homeAbbrev = game.homeTeam?.abbreviation || extractTeamCode(homeTeam);
+    const awayAbbrev = game.awayTeam?.abbreviation || extractTeamCode(awayTeam);
+    
+    if (!window.multiSportPredictions) {
+        window.multiSportPredictions = new window.MultiSportPredictions();
+    }
+    
+    const homeData = await window.multiSportPredictions.fetchMLBTeam(homeAbbrev);
+    const awayData = await window.multiSportPredictions.fetchMLBTeam(awayAbbrev);
+    
+    const html = `
+        <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 20px 0; color: #1e293b; font-size: 18px; font-weight: 600;">
+                ⚾ Player Props - ${awayTeam} @ ${homeTeam}
+            </h3>
+            <div style="margin-bottom: 24px;">
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${awayTeam}
+                </h4>
+                ${window.multiSportPredictions.renderMLBPlayers(awayData?.hitters || [], awayData?.pitchers || [])}
+            </div>
+            <div>
+                <h4 style="color: #64748b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase;">
+                    ${homeTeam}
+                </h4>
+                ${window.multiSportPredictions.renderMLBPlayers(homeData?.hitters || [], homeData?.pitchers || [])}
+            </div>
+        </div>
+    `;
+    
+    propsContainer.innerHTML = html;
+}
+
+/**
+ * Extract team code from full team name
+ */
+function extractTeamCode(teamName) {
+    // NBA team codes mapping
+    const nbaTeams = {
+        'Houston Rockets': 'HOU', 'Cleveland Cavaliers': 'CLE', 'Boston Celtics': 'BOS',
+        'Los Angeles Lakers': 'LAL', 'Golden State Warriors': 'GSW', 'Brooklyn Nets': 'BKN',
+        'Milwaukee Bucks': 'MIL', 'Phoenix Suns': 'PHX', 'Dallas Mavericks': 'DAL',
+        'Miami Heat': 'MIA', 'Philadelphia 76ers': 'PHI', 'Denver Nuggets': 'DEN',
+        'Memphis Grizzlies': 'MEM', 'Sacramento Kings': 'SAC', 'New York Knicks': 'NYK',
+        'Los Angeles Clippers': 'LAC', 'Minnesota Timberwolves': 'MIN', 'New Orleans Pelicans': 'NOP',
+        'Atlanta Hawks': 'ATL', 'Chicago Bulls': 'CHI', 'Toronto Raptors': 'TOR',
+        'Indiana Pacers': 'IND', 'Oklahoma City Thunder': 'OKC', 'Portland Trail Blazers': 'POR',
+        'Utah Jazz': 'UTA', 'San Antonio Spurs': 'SAS', 'Orlando Magic': 'ORL',
+        'Charlotte Hornets': 'CHA', 'Detroit Pistons': 'DET', 'Washington Wizards': 'WSH'
+    };
+    
+    // NHL team codes mapping
+    const nhlTeams = {
+        'Toronto Maple Leafs': 'TOR', 'Montreal Canadiens': 'MTL', 'Boston Bruins': 'BOS',
+        'Tampa Bay Lightning': 'TB', 'Florida Panthers': 'FLA', 'New York Rangers': 'NYR',
+        'Carolina Hurricanes': 'CAR', 'New Jersey Devils': 'NJ', 'Pittsburgh Penguins': 'PIT',
+        'Washington Capitals': 'WSH', 'New York Islanders': 'NYI', 'Philadelphia Flyers': 'PHI',
+        'Columbus Blue Jackets': 'CBJ', 'Detroit Red Wings': 'DET', 'Buffalo Sabres': 'BUF',
+        'Ottawa Senators': 'OTT', 'Vegas Golden Knights': 'VGK', 'Colorado Avalanche': 'COL',
+        'Dallas Stars': 'DAL', 'Minnesota Wild': 'MIN', 'Winnipeg Jets': 'WPG',
+        'St. Louis Blues': 'STL', 'Nashville Predators': 'NSH', 'Arizona Coyotes': 'ARI',
+        'Chicago Blackhawks': 'CHI', 'Edmonton Oilers': 'EDM', 'Calgary Flames': 'CGY',
+        'Vancouver Canucks': 'VAN', 'Seattle Kraken': 'SEA', 'Los Angeles Kings': 'LA',
+        'Anaheim Ducks': 'ANA', 'San Jose Sharks': 'SJ'
+    };
+    
+    // MLB team codes mapping
+    const mlbTeams = {
+        'New York Yankees': 'NYY', 'Los Angeles Dodgers': 'LAD', 'Houston Astros': 'HOU',
+        'Atlanta Braves': 'ATL', 'Philadelphia Phillies': 'PHI', 'San Diego Padres': 'SD',
+        'Tampa Bay Rays': 'TB', 'Toronto Blue Jays': 'TOR', 'Seattle Mariners': 'SEA',
+        'Chicago White Sox': 'CWS', 'Boston Red Sox': 'BOS', 'St. Louis Cardinals': 'STL',
+        'Milwaukee Brewers': 'MIL', 'San Francisco Giants': 'SF', 'Minnesota Twins': 'MIN',
+        'Cleveland Guardians': 'CLE', 'Baltimore Orioles': 'BAL', 'New York Mets': 'NYM',
+        'Texas Rangers': 'TEX', 'Arizona Diamondbacks': 'ARI', 'Los Angeles Angels': 'LAA',
+        'Cincinnati Reds': 'CIN', 'Miami Marlins': 'MIA', 'Chicago Cubs': 'CHC',
+        'Kansas City Royals': 'KC', 'Detroit Tigers': 'DET', 'Colorado Rockies': 'COL',
+        'Pittsburgh Pirates': 'PIT', 'Oakland Athletics': 'OAK', 'Washington Nationals': 'WSH'
+    };
+    
+    return nbaTeams[teamName] || nhlTeams[teamName] || mlbTeams[teamName] || teamName;
+}
+
+/**
+ * Display props betting panel
+ */
+function displayGamePropsPanel(props, homeTeam, awayTeam) {
+    const propsContainer = document.getElementById('game-props-container');
+    if (!propsContainer) {
+        console.warn('⚠️ Props container not found');
+        return;
+    }
+    
+    console.log('📊 Displaying props panel with', props.length, 'props');
+    
+    // Call the existing displayPropsPanel function if available
+    if (typeof displayPropsPanel === 'function') {
+        displayPropsPanel(props);
+    } else {
+        // Fallback: Display props directly in container
+        propsContainer.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600;">📊 Betting Props (${props.length})</h3>
+                <div style="display: grid; gap: 12px;">
+                    ${props.map(prop => `
+                        <div style="padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid #6366f1;">
+                            <div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">${prop.type}</div>
+                            <div style="font-size: 14px; color: #64748b;">
+                                Line: ${prop.line} | Prediction: ${Math.round(prop.prediction * 10) / 10}
+                            </div>
+                            <div style="font-size: 13px; color: #6366f1; font-weight: 600; margin-top: 4px;">
+                                ${prop.recommendation} (${prop.confidence}% confidence)
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Get starting QB name for a team (fallback mapping)
+ */
+function getTeamQB(teamCode) {
+    const qbMap = {
+        // AFC East
+        'BUF': 'Josh Allen',
+        'MIA': 'Tua Tagovailoa',
+        'NE': 'Mac Jones',
+        'NYJ': 'Aaron Rodgers',
+        // AFC North
+        'BAL': 'Lamar Jackson',
+        'CIN': 'Joe Burrow',
+        'CLE': 'Deshaun Watson',
+        'PIT': 'Russell Wilson',
+        // AFC South
+        'HOU': 'C.J. Stroud',
+        'IND': 'Anthony Richardson',
+        'JAX': 'Trevor Lawrence',
+        'TEN': 'Will Levis',
+        // AFC West
+        'DEN': 'Bo Nix',
+        'KC': 'Patrick Mahomes',
+        'LV': 'Aidan O\'Connell',
+        'LAC': 'Justin Herbert',
+        // NFC East
+        'DAL': 'Dak Prescott',
+        'NYG': 'Daniel Jones',
+        'PHI': 'Jalen Hurts',
+        'WAS': 'Jayden Daniels',
+        // NFC North
+        'CHI': 'Caleb Williams',
+        'DET': 'Jared Goff',
+        'GB': 'Jordan Love',
+        'MIN': 'Sam Darnold',
+        // NFC South
+        'ATL': 'Kirk Cousins',
+        'CAR': 'Bryce Young',
+        'NO': 'Derek Carr',
+        'TB': 'Baker Mayfield',
+        // NFC West
+        'ARI': 'Kyler Murray',
+        'LAR': 'Matthew Stafford',
+        'SF': 'Brock Purdy',
+        'SEA': 'Geno Smith'
+    };
+    
+    return qbMap[teamCode] || `${teamCode} QB`;
 }
 
 console.log('🏆 Universal Sports Configuration System loaded successfully');

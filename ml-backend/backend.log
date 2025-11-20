@@ -1,0 +1,23 @@
+nohup: ignoring input
+✅ Loaded QB model v5 (441.6 KB) - FIXED FORMULA
+✅ Loaded RB model v5 (336.5 KB) - FIXED FORMULA
+✅ Loaded WR model v5 (312.7 KB) - FIXED FORMULA
+✅ Loaded TE model v5 (348.2 KB) - FIXED FORMULA
+✅ Loaded 482 players with real 2025 TD probabilities
+  QB: 10.5% average (n=69)
+  RB: 20.2% average (n=114)
+  WR: 14.7% average (n=187)
+  TE: 11.9% average (n=112)
+✅ Loaded real TD probabilities from ESPN data:
+❌ Failed to load TD probabilities: 'avg_probability'
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://10.0.0.198:10000
+Press CTRL+C to quit
+127.0.0.1 - - [19/Nov/2025 04:54:19] "GET /players/nba/team/LAL HTTP/1.1" 200 -
+127.0.0.1 - - [19/Nov/2025 04:54:26] "GET /players/nhl/team/TOR HTTP/1.1" 200 -
+127.0.0.1 - - [19/Nov/2025 04:55:30] "GET /players/mlb/team/NYY HTTP/1.1" 200 -
+127.0.0.1 - - [19/Nov/2025 05:16:35] "GET /players/nba/team/LAL HTTP/1.1" 200 -

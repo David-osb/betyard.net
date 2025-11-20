@@ -9,10 +9,10 @@ const ML_CONFIG = {
     FLY: 'https://betyard-ml-backend.fly.dev',
     
     // 🔧 Development
-    LOCAL: 'http://localhost:5001',
+    LOCAL: 'http://localhost:10000',
     
-    // 🎯 Active Configuration - REAL XGBOOST MODELS LIVE! 🔥
-    ACTIVE: 'RENDER' // ✅ RENDER: Real trained XGBoost models now live!
+    // 🎯 Active Configuration - MULTI-SPORT ML MODELS LIVE! 🔥
+    ACTIVE: 'RENDER' // ✅ RENDER: Real NBA/NHL/MLB models + NFL predictions!
 };
 
 // Export for use in ml-integration.js

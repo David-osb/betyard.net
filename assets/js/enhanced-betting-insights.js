@@ -1958,20 +1958,29 @@ class EnhancedBettingInsights {
         }
     }
 
-    addBettingRecommendationsSection(bettingRecommendations) {
+    async addBettingRecommendationsSection(bettingRecommendations) {
         if (!bettingRecommendations) return;
         
         const container = document.querySelector('.betting-insights .insights-grid');
-        if (container) {
-            const recommendationsHtml = `
-                <div class="insight-item betting-recommendations" style="grid-column: 1 / -1; margin-top: 12px; background: #fef3c7; border-left: 4px solid #f59e0b;">
-                    <div style="font-weight: 600; color: #d97706; margin-bottom: 12px;">
-                        💰 <strong>${bettingRecommendations.type}</strong>
-                    </div>
-                    <div style="display: grid; gap: 10px;">
-                        ${bettingRecommendations.recommendations.map((rec, index) => `
+        if (!container) return;
+        
+        // Get TD scorer data for the matchup
+        const tdScorersHtml = await this.generateTDScorersList();
+        
+        const recommendationsHtml = `
+            <div class="insight-item betting-recommendations" style="grid-column: 1 / -1; margin-top: 12px; background: #fef3c7; border-left: 4px solid #f59e0b;">
+                <div style="font-weight: 600; color: #d97706; margin-bottom: 12px;">
+                    💰 <strong>${bettingRecommendations.type}</strong>
+                </div>
+                <div style="display: grid; gap: 10px;">
+                    ${bettingRecommendations.recommendations.map((rec, index) => {
+                        // Replace TD recommendation with player list
+                        if (rec.bet.includes('Anytime TD')) {
+                            return tdScorersHtml;
+                        }
+                        return `
                             <div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #fed7aa;">
-                                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <span style="font-size: 13px; font-weight: 600; color: #374151;">${rec.bet}</span>
                                     <span style="font-size: 11px; padding: 2px 6px; background: ${rec.confidence === 'High' ? '#dcfce7' : '#fef3c7'}; color: ${rec.confidence === 'High' ? '#166534' : '#a16207'}; border-radius: 3px; font-weight: 500;">
                                         ${rec.confidence}
@@ -1980,16 +1989,116 @@ class EnhancedBettingInsights {
                                 <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">${rec.reasoning}</div>
                                 <div style="font-size: 11px; color: #d97706; font-weight: 500;">Stake: ${rec.suggestedStake}</div>
                             </div>
-                        `).join('')}
-                    </div>
-                    <div style="margin-top: 10px; padding: 8px; background: #fffbeb; border-radius: 4px; border: 1px dashed #f59e0b;">
-                        <div style="font-size: 11px; font-weight: 600; color: #d97706;">PORTFOLIO APPROACH:</div>
-                        <div style="font-size: 11px; color: #a16207; margin-top: 2px;">${bettingRecommendations.portfolioApproach}</div>
-                    </div>
-                </div>`;
-            
-            container.insertAdjacentHTML('beforeend', recommendationsHtml);
+                        `;
+                    }).join('')}
+                </div>
+                <div style="margin-top: 10px; padding: 8px; background: #fffbeb; border-radius: 4px; border: 1px dashed #f59e0b;">
+                    <div style="font-size: 11px; font-weight: 600; color: #d97706;">PORTFOLIO APPROACH:</div>
+                    <div style="font-size: 11px; color: #a16207; margin-top: 2px;">${bettingRecommendations.portfolioApproach}</div>
+                </div>
+            </div>`;
+        
+        container.insertAdjacentHTML('beforeend', recommendationsHtml);
+    }
+    
+    async generateTDScorersList() {
+        // Get current player context
+        const playerContext = window.currentPlayerSelection;
+        if (!playerContext || !playerContext.teamId || !playerContext.opponent) {
+            return `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #fed7aa;">
+                <div style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">🏈 Anytime TD Scorer</div>
+                <div style="font-size: 12px; color: #6b7280;">Select a matchup to see TD probabilities</div>
+            </div>`;
         }
+        
+        const homeTeam = playerContext.teamId;
+        const awayTeam = playerContext.opponent;
+        
+        console.log(`🏈 Fetching TD scorer probabilities for ${homeTeam} vs ${awayTeam}...`);
+        
+        // Fetch all skill players from both teams
+        const allPlayers = [];
+        
+        for (const team of [homeTeam, awayTeam]) {
+            const opponent = team === homeTeam ? awayTeam : homeTeam;
+            
+            for (const position of ['QB', 'RB', 'WR', 'TE']) {
+                try {
+                    const prediction = await window.BetYardML.getPrediction('Top Player', team, opponent, position);
+                    
+                    if (prediction && prediction.anytime_td_probability !== undefined) {
+                        allPlayers.push({
+                            name: prediction.player_name || `${team} ${position}`,
+                            team: team,
+                            position: position,
+                            anytimeTD: prediction.anytime_td_probability,
+                            firstTD: prediction.first_td_probability,
+                            multiTD: prediction.multi_td_probability,
+                            dataSource: prediction.td_data_source,
+                            opponentDefense: prediction.opponent_defense_rating,
+                            defenseAdjustment: prediction.defense_adjustment
+                        });
+                    }
+                } catch (error) {
+                    console.warn(`Failed to fetch ${position} for ${team}:`, error);
+                }
+            }
+        }
+        
+        if (allPlayers.length === 0) {
+            return `<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #fed7aa;">
+                <div style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">🏈 Anytime TD Scorer</div>
+                <div style="font-size: 12px; color: #dc2626;">No TD data available</div>
+            </div>`;
+        }
+        
+        // Sort by anytime TD probability (highest first)
+        allPlayers.sort((a, b) => b.anytimeTD - a.anytimeTD);
+        
+        // Take top 8 players
+        const topPlayers = allPlayers.slice(0, 8);
+        
+        // Generate player cards HTML
+        const playersHtml = topPlayers.map(player => {
+            const probabilityColor = player.anytimeTD > 0.4 ? '#10b981' : player.anytimeTD > 0.2 ? '#3b82f6' : player.anytimeTD > 0.1 ? '#f59e0b' : '#6b7280';
+            const impliedOdds = player.anytimeTD > 0 ? Math.round((1 / player.anytimeTD - 1) * 100) : 999;
+            const oddsDisplay = impliedOdds > 0 ? `+${impliedOdds}` : impliedOdds;
+            
+            return `
+                <div style="padding: 10px; background: white; border-radius: 6px; border-left: 3px solid ${probabilityColor}; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 13px; font-weight: 600; color: #374151;">${player.name}</div>
+                            <div style="font-size: 11px; color: #6b7280;">${player.team} ${player.position}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 13px; font-weight: 700; color: ${probabilityColor};">${(player.anytimeTD * 100).toFixed(1)}%</div>
+                            <div style="font-size: 10px; color: #6b7280;">${oddsDisplay}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 6px; font-size: 10px; color: #64748b;">
+                        <span>1st: ${(player.firstTD * 100).toFixed(1)}%</span>
+                        <span>2+: ${(player.multiTD * 100).toFixed(1)}%</span>
+                        ${player.defenseAdjustment !== 1.0 ? `<span style="color: ${player.defenseAdjustment > 1.0 ? '#10b981' : '#dc2626'}">${player.defenseAdjustment > 1.0 ? '+' : ''}${((player.defenseAdjustment - 1.0) * 100).toFixed(0)}% vs DEF</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        return `
+            <div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #fed7aa;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 13px; font-weight: 600; color: #374151;">🏈 Anytime TD Scorer</span>
+                    <span style="font-size: 11px; padding: 2px 6px; background: #dcfce7; color: #166534; border-radius: 3px; font-weight: 500;">
+                        Real 2025 Stats
+                    </span>
+                </div>
+                ${playersHtml}
+                <div style="font-size: 11px; color: #6b7280; margin-top: 8px; text-align: center;">
+                    Probabilities adjusted for ${awayTeam} vs ${homeTeam} defensive matchup
+                </div>
+            </div>
+        `;
     }
 
     updateESPNValuePick(valuePick) {

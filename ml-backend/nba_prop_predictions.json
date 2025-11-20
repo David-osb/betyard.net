@@ -1,0 +1,4889 @@
+[
+  {
+    "id": "3202",
+    "player_name": "Kevin Durant",
+    "team": "HOU",
+    "position": "F",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 44.5,
+        "average": 25.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 28.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 3.4,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 4.7,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 3.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.8,
+        "over_probability": 25.0,
+        "under_probability": 75.0,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2991235",
+    "player_name": "Steven Adams",
+    "team": "HOU",
+    "position": "C",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 6.5,
+        "average": 6.1,
+        "over_probability": 27.3,
+        "under_probability": 72.7,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 1.5,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 9.4,
+        "over_probability": 90.9,
+        "under_probability": 9.1,
+        "last_5_avg": 9.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3908809",
+    "player_name": "Donovan Mitchell",
+    "team": "CLE",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 44.5,
+        "average": 30.9,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 31.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 11.5,
+        "average": 5.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 6.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 4.6,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 7.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 4.0,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 3.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3912848",
+    "player_name": "Dean Wade",
+    "team": "CLE",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 6.5,
+        "average": 5.5,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.7,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 4.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.1,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4065663",
+    "player_name": "Josh Okogie",
+    "team": "HOU",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 8.0,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 6.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 2.2,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.3,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4065732",
+    "player_name": "De'Andre Hunter",
+    "team": "CLE",
+    "position": "F",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 17.5,
+        "average": 17.4,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 16.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.9,
+        "over_probability": 41.7,
+        "under_probability": 58.3,
+        "last_5_avg": 3.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.8,
+        "over_probability": 83.3,
+        "under_probability": 16.7,
+        "last_5_avg": 4.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.8,
+        "over_probability": 25.0,
+        "under_probability": 75.0,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066328",
+    "player_name": "Jarrett Allen",
+    "team": "CLE",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 13.5,
+        "average": 15.3,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 15.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 7.6,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 7.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066421",
+    "player_name": "Lonzo Ball",
+    "team": "CLE",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 6.3,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 8.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 4.5,
+        "average": 5.3,
+        "over_probability": 75.0,
+        "under_probability": 25.0,
+        "last_5_avg": 4.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.1,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 4.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.6,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432158",
+    "player_name": "Evan Mobley",
+    "team": "CLE",
+    "position": "C",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 18.9,
+        "over_probability": 71.4,
+        "under_probability": 28.6,
+        "last_5_avg": 17.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 4.3,
+        "over_probability": 64.3,
+        "under_probability": 35.7,
+        "last_5_avg": 4.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 8.8,
+        "over_probability": 85.7,
+        "under_probability": 14.3,
+        "last_5_avg": 9.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.7,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 1.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432639",
+    "player_name": "Jabari Smith Jr.",
+    "team": "HOU",
+    "position": "F",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 13.5,
+        "average": 14.5,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 13.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 6.5,
+        "average": 6.4,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 8.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.0,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4684740",
+    "player_name": "Amen Thompson",
+    "team": "HOU",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 34.5,
+        "average": 17.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 15.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 5.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 6.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4711272",
+    "player_name": "Reed Sheppard",
+    "team": "HOU",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 12.6,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 16.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 3.1,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 3.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 2.7,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 2.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.8,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4871144",
+    "player_name": "Alperen Sengun",
+    "team": "HOU",
+    "position": "C",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 23.0,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 23.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 11.5,
+        "average": 7.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 7.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 15.5,
+        "average": 10.3,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 11.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.4,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2530530",
+    "player_name": "T.J. McConnell",
+    "team": "IND",
+    "position": "G",
+    "games_played": 4,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 6.5,
+        "over_probability": 25.0,
+        "under_probability": 75.0,
+        "last_5_avg": 6.5,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 2.2,
+        "over_probability": 75.0,
+        "under_probability": 25.0,
+        "last_5_avg": 2.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3149673",
+    "player_name": "Pascal Siakam",
+    "team": "IND",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 39.5,
+        "average": 24.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 23.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 4.8,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 7.1,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 5.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.9,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 2.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066383",
+    "player_name": "Miles Bridges",
+    "team": "CHA",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 22.1,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 24.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.9,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 4.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 7.0,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 6.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 3.3,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4277811",
+    "player_name": "Collin Sexton",
+    "team": "CHA",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 16.5,
+        "average": 15.5,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 14.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 4.5,
+        "average": 4.8,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 4.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 2.4,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 1.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395712",
+    "player_name": "Andrew Nembhard",
+    "team": "IND",
+    "position": "G",
+    "games_played": 7,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 17.6,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 19.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 6.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 6.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 1.7,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.9,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432170",
+    "player_name": "Isaiah Jackson",
+    "team": "IND",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 8.6,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 10.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 6.4,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 7.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432816",
+    "player_name": "LaMelo Ball",
+    "team": "CHA",
+    "position": "G",
+    "games_played": 8,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 22.0,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 18.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 9.6,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 9.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 6.9,
+        "over_probability": 75.0,
+        "under_probability": 25.0,
+        "last_5_avg": 6.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.9,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 2.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4433076",
+    "player_name": "Ben Sheppard",
+    "team": "IND",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 6.4,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 4.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 4.5,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 3.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 0.9,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4433249",
+    "player_name": "Moussa Diabate",
+    "team": "CHA",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 10.3,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 10.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 15.5,
+        "average": 7.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 9.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4576060",
+    "player_name": "Ryan Kalkbrenner",
+    "team": "CHA",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 9.9,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 11.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 0.4,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 0.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 1.5,
+        "average": 7.1,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 7.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4602025",
+    "player_name": "Sion James",
+    "team": "CHA",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 7.6,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 1.5,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 1.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 0.5,
+        "average": 3.1,
+        "over_probability": 92.9,
+        "under_probability": 7.1,
+        "last_5_avg": 3.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4683634",
+    "player_name": "Bennedict Mathurin",
+    "team": "IND",
+    "position": "G",
+    "games_played": 3,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 29.0,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 29.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.3,
+        "over_probability": 33.3,
+        "under_probability": 66.7,
+        "last_5_avg": 2.3,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 5.7,
+        "over_probability": 33.3,
+        "under_probability": 66.7,
+        "last_5_avg": 5.7,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.7,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 2.7,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5061575",
+    "player_name": "Kon Knueppel",
+    "team": "CHA",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 17.6,
+        "over_probability": 64.3,
+        "under_probability": 35.7,
+        "last_5_avg": 19.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 2.7,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 3.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.0,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 6.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 5.5,
+        "average": 3.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5106060",
+    "player_name": "Jarace Walker",
+    "team": "IND",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 10.0,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 8.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.0,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 1.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 5.2,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.4,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "6585",
+    "player_name": "Andre Drummond",
+    "team": "PHI",
+    "position": "C",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 8.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 12.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 9.6,
+        "over_probability": 41.7,
+        "under_probability": 58.3,
+        "last_5_avg": 12.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3134908",
+    "player_name": "Jakob Poeltl",
+    "team": "TOR",
+    "position": "C",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 11.3,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 15.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 1.7,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 1.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 7.5,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 9.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3913176",
+    "player_name": "Brandon Ingram",
+    "team": "TOR",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 20.9,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 20.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 3.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 6.0,
+        "over_probability": 85.7,
+        "under_probability": 14.3,
+        "last_5_avg": 5.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278580",
+    "player_name": "Sandro Mamukelashvili",
+    "team": "TOR",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 9.4,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 10.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 3.6,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395625",
+    "player_name": "RJ Barrett",
+    "team": "TOR",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 19.1,
+        "over_probability": 78.6,
+        "under_probability": 21.4,
+        "last_5_avg": 16.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 3.9,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 4.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.9,
+        "over_probability": 64.3,
+        "under_probability": 35.7,
+        "last_5_avg": 5.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.8,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395724",
+    "player_name": "Immanuel Quickley",
+    "team": "TOR",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 15.7,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 19.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 6.1,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 4.7,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.4,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397014",
+    "player_name": "Quentin Grimes",
+    "team": "PHI",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 17.5,
+        "average": 16.8,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 14.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 4.3,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 3.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 3.8,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 3.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 5.5,
+        "average": 2.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4431675",
+    "player_name": "Trendon Watford",
+    "team": "PHI",
+    "position": "F",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 8.9,
+        "over_probability": 10.0,
+        "under_probability": 90.0,
+        "last_5_avg": 9.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.7,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 4.7,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 5.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 0.5,
+        "over_probability": 10.0,
+        "under_probability": 90.0,
+        "last_5_avg": 0.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4431678",
+    "player_name": "Tyrese Maxey",
+    "team": "PHI",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 29.5,
+        "average": 32.5,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 31.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 6.5,
+        "average": 7.7,
+        "over_probability": 69.2,
+        "under_probability": 30.8,
+        "last_5_avg": 6.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 4.9,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 4.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 3.8,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 3.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4433134",
+    "player_name": "Scottie Barnes",
+    "team": "TOR",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 19.4,
+        "over_probability": 71.4,
+        "under_probability": 28.6,
+        "last_5_avg": 18.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 5.3,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 5.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 7.7,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 8.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.5,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 0.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4711297",
+    "player_name": "Justin Edwards",
+    "team": "PHI",
+    "position": "F",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 6.7,
+        "over_probability": 10.0,
+        "under_probability": 90.0,
+        "last_5_avg": 9.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 2.0,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.6,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5106258",
+    "player_name": "Gradey Dick",
+    "team": "TOR",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 7.5,
+        "average": 7.7,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 6.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 1.5,
+        "average": 2.2,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 2.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.2,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 1.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5124612",
+    "player_name": "VJ Edgecombe",
+    "team": "PHI",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 15.5,
+        "over_probability": 84.6,
+        "under_probability": 15.4,
+        "last_5_avg": 12.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 4.3,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 3.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 5.7,
+        "over_probability": 84.6,
+        "under_probability": 15.4,
+        "last_5_avg": 5.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.1,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2595516",
+    "player_name": "Norman Powell",
+    "team": "MIA",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 39.5,
+        "average": 25.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 27.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.8,
+        "over_probability": 45.5,
+        "under_probability": 54.5,
+        "last_5_avg": 2.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 3.2,
+        "over_probability": 81.8,
+        "under_probability": 18.2,
+        "last_5_avg": 3.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2990984",
+    "player_name": "Buddy Hield",
+    "team": "GS",
+    "position": "G",
+    "games_played": 16,
+    "props": {
+      "points": {
+        "line": 12.5,
+        "average": 6.6,
+        "over_probability": 6.2,
+        "under_probability": 93.8,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.1,
+        "over_probability": 31.2,
+        "under_probability": 68.8,
+        "last_5_avg": 0.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3059319",
+    "player_name": "Andrew Wiggins",
+    "team": "MIA",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 16.7,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 15.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 4.9,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 5.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.8,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066261",
+    "player_name": "Bam Adebayo",
+    "team": "MIA",
+    "position": "C",
+    "games_played": 8,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 19.9,
+        "over_probability": 87.5,
+        "under_probability": 12.5,
+        "last_5_avg": 20.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 2.9,
+        "over_probability": 87.5,
+        "under_probability": 12.5,
+        "last_5_avg": 2.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 8.1,
+        "over_probability": 62.5,
+        "under_probability": 37.5,
+        "last_5_avg": 7.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.0,
+        "over_probability": 37.5,
+        "under_probability": 62.5,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278053",
+    "player_name": "Davion Mitchell",
+    "team": "MIA",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 10.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 13.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 7.4,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 7.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432171",
+    "player_name": "Moses Moody",
+    "team": "GS",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 12.6,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 14.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 1.5,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 1.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 2.9,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 3.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432848",
+    "player_name": "Jaime Jaquez Jr.",
+    "team": "MIA",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 17.1,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 16.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 5.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.9,
+        "over_probability": 64.3,
+        "under_probability": 35.7,
+        "last_5_avg": 7.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4593016",
+    "player_name": "Quinten Post",
+    "team": "GS",
+    "position": "C",
+    "games_played": 16,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 5.3,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 3.8,
+        "over_probability": 25.0,
+        "under_probability": 75.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.1,
+        "over_probability": 31.2,
+        "under_probability": 68.8,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4601025",
+    "player_name": "Pelle Larsson",
+    "team": "MIA",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 10.5,
+        "average": 10.1,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 12.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 2.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 2.7,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4709138",
+    "player_name": "Brandin Podziemski",
+    "team": "GS",
+    "position": "G",
+    "games_played": 16,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 11.5,
+        "over_probability": 62.5,
+        "under_probability": 37.5,
+        "last_5_avg": 10.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 2.9,
+        "over_probability": 12.5,
+        "under_probability": 87.5,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 4.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 1.8,
+        "over_probability": 6.2,
+        "under_probability": 93.8,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4897262",
+    "player_name": "Will Richard",
+    "team": "GS",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 9.1,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 7.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 1.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 2.3,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.4,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5105623",
+    "player_name": "Kel'el Ware",
+    "team": "MIA",
+    "position": "C",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 11.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 13.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 9.6,
+        "over_probability": 78.6,
+        "under_probability": 21.4,
+        "last_5_avg": 13.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3899664",
+    "player_name": "Simone Fontecchio",
+    "team": "MIA",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.6,
+        "over_probability": 78.6,
+        "under_probability": 21.4,
+        "last_5_avg": 3.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3195",
+    "player_name": "Mike Conley",
+    "team": "MIN",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 6.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.5,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 2.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.4,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 1.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "6609",
+    "player_name": "Khris Middleton",
+    "team": "WSH",
+    "position": "F",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 9.9,
+        "over_probability": 10.0,
+        "under_probability": 90.0,
+        "last_5_avg": 7.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.4,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 3.9,
+        "over_probability": 10.0,
+        "under_probability": 90.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 0.9,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2490149",
+    "player_name": "CJ McCollum",
+    "team": "WSH",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 16.3,
+        "over_probability": 69.2,
+        "under_probability": 30.8,
+        "last_5_avg": 23.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.3,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.2,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.6,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3032976",
+    "player_name": "Rudy Gobert",
+    "team": "MIN",
+    "position": "C",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 10.7,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 12.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 10.5,
+        "average": 9.6,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 9.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3064514",
+    "player_name": "Julius Randle",
+    "team": "MIN",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 24.5,
+        "over_probability": 92.9,
+        "under_probability": 7.1,
+        "last_5_avg": 22.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 6.1,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 5.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 7.3,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 7.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.9,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 1.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3934673",
+    "player_name": "Donte DiVincenzo",
+    "team": "MIN",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 14.1,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 13.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.4,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 2.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 3.9,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 2.9,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4277848",
+    "player_name": "Marvin Bagley III",
+    "team": "WSH",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 7.2,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 6.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 15.5,
+        "average": 4.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4280151",
+    "player_name": "Corey Kispert",
+    "team": "WSH",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 8.0,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 8.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 1.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4396971",
+    "player_name": "Naz Reid",
+    "team": "MIN",
+    "position": "C",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 13.5,
+        "average": 12.3,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 14.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 2.1,
+        "over_probability": 71.4,
+        "under_probability": 28.6,
+        "last_5_avg": 2.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 6.5,
+        "average": 6.1,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 7.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.9,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 2.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432247",
+    "player_name": "Jaylen Clark",
+    "team": "MIN",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 5.0,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 2.4,
+        "over_probability": 33.3,
+        "under_probability": 66.7,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 0.7,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 1.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4594268",
+    "player_name": "Anthony Edwards",
+    "team": "MIN",
+    "position": "G",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 26.5,
+        "average": 25.9,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 26.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 3.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 4.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 3.1,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5104155",
+    "player_name": "Bilal Coulibaly",
+    "team": "WSH",
+    "position": "G",
+    "games_played": 5,
+    "props": {
+      "points": {
+        "line": 10.5,
+        "average": 9.6,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 9.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 3.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.4,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 4.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 0.5,
+        "average": 1.0,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 1.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5105592",
+    "player_name": "Cam Whitmore",
+    "team": "WSH",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 8.9,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 11.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5174563",
+    "player_name": "Kyshawn George",
+    "team": "WSH",
+    "position": "F",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 13.5,
+        "average": 16.9,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 15.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 4.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.1,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 4.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.6,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 2.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5238230",
+    "player_name": "Tre Johnson",
+    "team": "WSH",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 11.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 11.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 3.2,
+        "over_probability": 69.2,
+        "under_probability": 30.8,
+        "last_5_avg": 3.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.9,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2528210",
+    "player_name": "Tim Hardaway Jr.",
+    "team": "DEN",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 11.5,
+        "average": 11.4,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 12.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.5,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 3.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3112335",
+    "player_name": "Nikola Jokic",
+    "team": "DEN",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 44.5,
+        "average": 29.2,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 37.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 10.5,
+        "average": 11.1,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 10.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 12.5,
+        "average": 13.4,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 14.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.8,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 2.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3138196",
+    "player_name": "Cameron Johnson",
+    "team": "DEN",
+    "position": "F",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 8.2,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 7.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 2.8,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.1,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 1.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3936299",
+    "player_name": "Jamal Murray",
+    "team": "DEN",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 23.1,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 23.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 6.1,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 7.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 5.6,
+        "over_probability": 75.0,
+        "under_probability": 25.0,
+        "last_5_avg": 5.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.5,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 3.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4065670",
+    "player_name": "Bruce Brown",
+    "team": "DEN",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 8.5,
+        "average": 6.2,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 5.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 4.3,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 5.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4277813",
+    "player_name": "Herbert Jones",
+    "team": "NO",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 9.7,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 8.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 2.3,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 3.5,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.6,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 1.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4277869",
+    "player_name": "Jose Alvarado",
+    "team": "NO",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 7.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 9.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.5,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 1.5,
+        "average": 2.4,
+        "over_probability": 76.9,
+        "under_probability": 23.1,
+        "last_5_avg": 1.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.5,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395628",
+    "player_name": "Zion Williamson",
+    "team": "NO",
+    "position": "F",
+    "games_played": 5,
+    "props": {
+      "points": {
+        "line": 18.5,
+        "average": 22.8,
+        "over_probability": 80.0,
+        "under_probability": 20.0,
+        "last_5_avg": 22.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 4.6,
+        "over_probability": 60.0,
+        "under_probability": 40.0,
+        "last_5_avg": 4.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.8,
+        "over_probability": 80.0,
+        "under_probability": 20.0,
+        "last_5_avg": 6.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397136",
+    "player_name": "Saddiq Bey",
+    "team": "NO",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 12.4,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 14.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 4.8,
+        "over_probability": 76.9,
+        "under_probability": 23.1,
+        "last_5_avg": 5.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.2,
+        "over_probability": 76.9,
+        "under_probability": 23.1,
+        "last_5_avg": 2.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397688",
+    "player_name": "Trey Murphy III",
+    "team": "NO",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 19.7,
+        "over_probability": 85.7,
+        "under_probability": 14.3,
+        "last_5_avg": 23.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 3.1,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.8,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 7.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 5.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4576087",
+    "player_name": "Peyton Watson",
+    "team": "DEN",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 6.4,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 7.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 3.6,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4869780",
+    "player_name": "Derik Queen",
+    "team": "NO",
+    "position": "C",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 10.4,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 13.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.6,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 3.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 13.5,
+        "average": 6.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 7.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5061589",
+    "player_name": "Yves Missi",
+    "team": "NO",
+    "position": "C",
+    "games_played": 9,
+    "props": {
+      "points": {
+        "line": 5.5,
+        "average": 5.9,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 4.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 4.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5144091",
+    "player_name": "Jeremiah Fears",
+    "team": "NO",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 15.3,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 18.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.8,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3468",
+    "player_name": "Russell Westbrook",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 14.4,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 11.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 11.5,
+        "average": 6.4,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 7.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 6.5,
+        "average": 6.6,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 5.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 2.1,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3978",
+    "player_name": "DeMar DeRozan",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 34.5,
+        "average": 18.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 15.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.5,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.3,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 0.9,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3032979",
+    "player_name": "Dennis Schroder",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 12.3,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 9.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 5.9,
+        "over_probability": 71.4,
+        "under_probability": 28.6,
+        "last_5_avg": 4.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 3.6,
+        "over_probability": 64.3,
+        "under_probability": 35.7,
+        "last_5_avg": 3.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 1.6,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3064440",
+    "player_name": "Zach LaVine",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 22.7,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 16.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.2,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 3.5,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 3.2,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 3.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3914285",
+    "player_name": "Drew Eubanks",
+    "team": "SAC",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 6.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 6.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 2.8,
+        "over_probability": 14.3,
+        "under_probability": 85.7,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066262",
+    "player_name": "Malik Monk",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 13.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 9.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 2.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 2.0,
+        "over_probability": 9.1,
+        "under_probability": 90.9,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4222252",
+    "player_name": "Isaiah Hartenstein",
+    "team": "OKC",
+    "position": "C",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 12.9,
+        "over_probability": 6.7,
+        "under_probability": 93.3,
+        "last_5_avg": 13.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.3,
+        "over_probability": 33.3,
+        "under_probability": 66.7,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 15.5,
+        "average": 10.9,
+        "over_probability": 6.7,
+        "under_probability": 93.3,
+        "last_5_avg": 9.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278073",
+    "player_name": "Shai Gilgeous-Alexander",
+    "team": "OKC",
+    "position": "G",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 44.5,
+        "average": 31.9,
+        "over_probability": 6.7,
+        "under_probability": 93.3,
+        "last_5_avg": 29.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 6.5,
+        "average": 6.7,
+        "over_probability": 53.3,
+        "under_probability": 46.7,
+        "last_5_avg": 8.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.9,
+        "over_probability": 73.3,
+        "under_probability": 26.7,
+        "last_5_avg": 4.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.3,
+        "over_probability": 73.3,
+        "under_probability": 26.7,
+        "last_5_avg": 2.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395702",
+    "player_name": "Isaiah Joe",
+    "team": "OKC",
+    "position": "G",
+    "games_played": 10,
+    "props": {
+      "points": {
+        "line": 12.5,
+        "average": 14.7,
+        "over_probability": 80.0,
+        "under_probability": 20.0,
+        "last_5_avg": 12.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 3.3,
+        "over_probability": 60.0,
+        "under_probability": 40.0,
+        "last_5_avg": 2.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 3.4,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397020",
+    "player_name": "Luguentz Dort",
+    "team": "OKC",
+    "position": "G",
+    "games_played": 9,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 7.8,
+        "over_probability": 11.1,
+        "under_probability": 88.9,
+        "last_5_avg": 9.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.4,
+        "over_probability": 66.7,
+        "under_probability": 33.3,
+        "last_5_avg": 3.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.3,
+        "over_probability": 22.2,
+        "under_probability": 77.8,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432823",
+    "player_name": "Jaylin Williams",
+    "team": "OKC",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 6.5,
+        "average": 5.0,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 4.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 4.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4433255",
+    "player_name": "Chet Holmgren",
+    "team": "OKC",
+    "position": "C",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 18.5,
+        "average": 19.9,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 21.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 1.6,
+        "over_probability": 9.1,
+        "under_probability": 90.9,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 8.3,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 7.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.7,
+        "over_probability": 9.1,
+        "under_probability": 90.9,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4683692",
+    "player_name": "Cason Wallace",
+    "team": "OKC",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 8.5,
+        "average": 8.4,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 6.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.9,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.1,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 1.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.6,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 1.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4702177",
+    "player_name": "Keon Ellis",
+    "team": "SAC",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 5.5,
+        "average": 7.1,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 7.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.7,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4900671",
+    "player_name": "Ajay Mitchell",
+    "team": "OKC",
+    "position": "G",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 29.5,
+        "average": 16.3,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 15.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 3.7,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 2.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.9,
+        "over_probability": 53.3,
+        "under_probability": 46.7,
+        "last_5_avg": 4.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.2,
+        "over_probability": 46.7,
+        "under_probability": 53.3,
+        "last_5_avg": 1.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "6475",
+    "player_name": "Klay Thompson",
+    "team": "DAL",
+    "position": "G",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 9.4,
+        "over_probability": 50.0,
+        "under_probability": 50.0,
+        "last_5_avg": 12.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 2.6,
+        "over_probability": 28.6,
+        "under_probability": 71.4,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 2.3,
+        "over_probability": 21.4,
+        "under_probability": 78.6,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2528426",
+    "player_name": "Jordan Clarkson",
+    "team": "NY",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 12.5,
+        "average": 10.6,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 13.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 1.5,
+        "average": 1.7,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 2.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 1.8,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 2.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.5,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3062679",
+    "player_name": "Josh Hart",
+    "team": "NY",
+    "position": "G",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 9.2,
+        "over_probability": 58.3,
+        "under_probability": 41.7,
+        "last_5_avg": 11.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 4.5,
+        "average": 4.7,
+        "over_probability": 41.7,
+        "under_probability": 58.3,
+        "last_5_avg": 6.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 13.5,
+        "average": 6.5,
+        "over_probability": 8.3,
+        "under_probability": 91.7,
+        "last_5_avg": 6.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.0,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 0.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3136195",
+    "player_name": "Karl-Anthony Towns",
+    "team": "NY",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 21.8,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 25.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 3.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 15.5,
+        "average": 12.7,
+        "over_probability": 7.7,
+        "under_probability": 92.3,
+        "last_5_avg": 12.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.9,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3136776",
+    "player_name": "D'Angelo Russell",
+    "team": "DAL",
+    "position": "G",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 12.5,
+        "average": 11.9,
+        "over_probability": 26.7,
+        "under_probability": 73.3,
+        "last_5_avg": 12.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 4.9,
+        "over_probability": 13.3,
+        "under_probability": 86.7,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 2.8,
+        "over_probability": 26.7,
+        "under_probability": 73.3,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.1,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 0.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3147657",
+    "player_name": "Mikal Bridges",
+    "team": "NY",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 16.2,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 16.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 4.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 4.4,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 3.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.5,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 2.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3914044",
+    "player_name": "Landry Shamet",
+    "team": "NY",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 10.5,
+        "average": 10.0,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 15.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.0,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 2.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "3934672",
+    "player_name": "Jalen Brunson",
+    "team": "NY",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 27.5,
+        "average": 28.0,
+        "over_probability": 63.6,
+        "under_probability": 36.4,
+        "last_5_avg": 24.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 6.5,
+        "average": 6.5,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 8.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 3.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.8,
+        "over_probability": 63.6,
+        "under_probability": 36.4,
+        "last_5_avg": 2.8,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278049",
+    "player_name": "Daniel Gafford",
+    "team": "DAL",
+    "position": "F",
+    "games_played": 9,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 10.7,
+        "over_probability": 55.6,
+        "under_probability": 44.4,
+        "last_5_avg": 12.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 0.5,
+        "average": 1.1,
+        "over_probability": 55.6,
+        "under_probability": 44.4,
+        "last_5_avg": 1.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 5.9,
+        "over_probability": 44.4,
+        "under_probability": 55.6,
+        "last_5_avg": 7.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278078",
+    "player_name": "P.J. Washington",
+    "team": "DAL",
+    "position": "F",
+    "games_played": 14,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 15.0,
+        "over_probability": 57.1,
+        "under_probability": 42.9,
+        "last_5_avg": 14.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.3,
+        "over_probability": 35.7,
+        "under_probability": 64.3,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 7.5,
+        "over_probability": 42.9,
+        "under_probability": 57.1,
+        "last_5_avg": 6.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 1.3,
+        "over_probability": 7.1,
+        "under_probability": 92.9,
+        "last_5_avg": 1.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4278594",
+    "player_name": "Naji Marshall",
+    "team": "DAL",
+    "position": "F",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 11.2,
+        "over_probability": 20.0,
+        "under_probability": 80.0,
+        "last_5_avg": 13.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 4.8,
+        "over_probability": 40.0,
+        "under_probability": 60.0,
+        "last_5_avg": 5.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4351852",
+    "player_name": "Mitchell Robinson",
+    "team": "NY",
+    "position": "C",
+    "games_played": 7,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 3.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397040",
+    "player_name": "Brandon Williams",
+    "team": "DAL",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 29.5,
+        "average": 10.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 14.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 4.5,
+        "average": 3.2,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 5.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 2.6,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 0.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 0.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4431823",
+    "player_name": "Miles McBride",
+    "team": "NY",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 10.0,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 10.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 2.5,
+        "over_probability": 27.3,
+        "under_probability": 72.7,
+        "last_5_avg": 2.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 2.7,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.2,
+        "over_probability": 27.3,
+        "under_probability": 72.7,
+        "last_5_avg": 2.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432582",
+    "player_name": "Max Christie",
+    "team": "DAL",
+    "position": "G",
+    "games_played": 15,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 12.1,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 10.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 3.3,
+        "over_probability": 46.7,
+        "under_probability": 53.3,
+        "last_5_avg": 4.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 5.5,
+        "average": 2.5,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4683688",
+    "player_name": "Dereck Lively II",
+    "team": "DAL",
+    "position": "C",
+    "games_played": 5,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 4.4,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 4.6,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "6478",
+    "player_name": "Nikola Vucevic",
+    "team": "CHI",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 24.5,
+        "average": 15.8,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 11.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 5.5,
+        "average": 3.7,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 4.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 10.0,
+        "over_probability": 92.3,
+        "under_probability": 7.7,
+        "last_5_avg": 8.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 4.5,
+        "average": 1.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 1.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "2991070",
+    "player_name": "Jerami Grant",
+    "team": "POR",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 21.5,
+        "average": 18.3,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 15.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.3,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 2.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 4.5,
+        "average": 3.0,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 2.1,
+        "over_probability": 69.2,
+        "under_probability": 30.8,
+        "last_5_avg": 1.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4066372",
+    "player_name": "Kevin Huerter",
+    "team": "CHI",
+    "position": "G",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 14.4,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 16.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 2.5,
+        "average": 2.8,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 2.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 3.5,
+        "average": 4.1,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 4.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.6,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 2.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4395651",
+    "player_name": "Coby White",
+    "team": "CHI",
+    "position": "G",
+    "games_played": 1,
+    "props": {
+      "points": {
+        "line": 29.5,
+        "average": 27.0,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 27.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 3.5,
+        "average": 8.0,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 8.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 4.0,
+        "over_probability": 100.0,
+        "under_probability": 0.0,
+        "last_5_avg": 4.0,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 5.5,
+        "average": 3.0,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 3.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397002",
+    "player_name": "Ayo Dosunmu",
+    "team": "CHI",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 15.7,
+        "over_probability": 36.4,
+        "under_probability": 63.6,
+        "last_5_avg": 17.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 3.4,
+        "over_probability": 9.1,
+        "under_probability": 90.9,
+        "last_5_avg": 3.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.8,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 1.8,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4397189",
+    "player_name": "Jalen Smith",
+    "team": "CHI",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 10.2,
+        "over_probability": 61.5,
+        "under_probability": 38.5,
+        "last_5_avg": 12.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 5.5,
+        "average": 6.3,
+        "over_probability": 38.5,
+        "under_probability": 61.5,
+        "last_5_avg": 8.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4431736",
+    "player_name": "Toumani Camara",
+    "team": "POR",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 9.5,
+        "average": 12.3,
+        "over_probability": 76.9,
+        "under_probability": 23.1,
+        "last_5_avg": 12.2,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 7.5,
+        "average": 2.9,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 2.4,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 5.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.1,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 2.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4432822",
+    "player_name": "Isaac Okoro",
+    "team": "CHI",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 6.5,
+        "average": 7.8,
+        "over_probability": 46.2,
+        "under_probability": 53.8,
+        "last_5_avg": 8.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 2.5,
+        "average": 2.8,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 3.4,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4594326",
+    "player_name": "Kris Murray",
+    "team": "POR",
+    "position": "F",
+    "games_played": 12,
+    "props": {
+      "points": {
+        "line": 7.5,
+        "average": 5.3,
+        "over_probability": 16.7,
+        "under_probability": 83.3,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 3.2,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 4.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4683021",
+    "player_name": "Deni Avdija",
+    "team": "POR",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 44.5,
+        "average": 26.0,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 28.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 4.8,
+        "over_probability": 0.0,
+        "under_probability": 100.0,
+        "last_5_avg": 5.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 6.5,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 6.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 2.5,
+        "average": 2.5,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 3.0,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4711294",
+    "player_name": "Matas Buzelis",
+    "team": "CHI",
+    "position": "F",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 14.5,
+        "average": 15.0,
+        "over_probability": 53.8,
+        "under_probability": 46.2,
+        "last_5_avg": 14.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 7.5,
+        "average": 5.6,
+        "over_probability": 23.1,
+        "under_probability": 76.9,
+        "last_5_avg": 6.6,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 1.5,
+        "average": 1.8,
+        "over_probability": 76.9,
+        "under_probability": 23.1,
+        "last_5_avg": 1.6,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "4871145",
+    "player_name": "Josh Giddey",
+    "team": "CHI",
+    "position": "G",
+    "games_played": 11,
+    "props": {
+      "points": {
+        "line": 19.5,
+        "average": 21.8,
+        "over_probability": 63.6,
+        "under_probability": 36.4,
+        "last_5_avg": 21.4,
+        "recommendation": "OVER",
+        "source": "ESPN BET"
+      },
+      "assists": {
+        "line": 9.5,
+        "average": 9.4,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 10.2,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 9.5,
+        "average": 10.3,
+        "over_probability": 54.5,
+        "under_probability": 45.5,
+        "last_5_avg": 11.6,
+        "recommendation": "NO BET",
+        "source": "ESPN BET"
+      },
+      "threes_made": {
+        "line": 3.5,
+        "average": 1.5,
+        "over_probability": 9.1,
+        "under_probability": 90.9,
+        "last_5_avg": 1.2,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  },
+  {
+    "id": "5105565",
+    "player_name": "Donovan Clingan",
+    "team": "POR",
+    "position": "C",
+    "games_played": 13,
+    "props": {
+      "points": {
+        "line": 10.5,
+        "average": 8.8,
+        "over_probability": 30.8,
+        "under_probability": 69.2,
+        "last_5_avg": 9.8,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      },
+      "rebounds": {
+        "line": 11.5,
+        "average": 9.0,
+        "over_probability": 15.4,
+        "under_probability": 84.6,
+        "last_5_avg": 9.0,
+        "recommendation": "UNDER",
+        "source": "ESPN BET"
+      }
+    }
+  }
+]

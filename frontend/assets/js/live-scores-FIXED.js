@@ -1382,6 +1382,11 @@ class LiveNFLScores {
 function selectGameTeams(awayTeam, homeTeam) {
     console.log(`🎯 Game selected: ${awayTeam} @ ${homeTeam}`);
     
+    // Load matchup predictions in the predictions panel immediately
+    if (window.displayMatchupPredictions) {
+        window.displayMatchupPredictions(awayTeam, homeTeam);
+    }
+    
     // Auto-fill team dropdown if it exists
     const teamSelect = document.getElementById('team-select');
     if (teamSelect) {

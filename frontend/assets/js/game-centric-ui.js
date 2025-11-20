@@ -2205,9 +2205,15 @@ class GameCentricUI {
                     ⚖️ Compare Players
                 </button>
             </div>
+            
+            <!-- TD Scorer Probabilities Section -->
+            <div id="td-scorers-section" style="margin-top: 24px;"></div>
         `;
         
         container.innerHTML = predictionsHTML;
+        
+        // Display TD Scorer Probabilities for the matchup
+        this.displayTDScorers(this.selectedTeam.code, opponent);
     }
     
     async generateRealisticPredictions(position, playerName) {
@@ -3755,6 +3761,143 @@ class GameCentricUI {
         if (rank <= 10) return '#059669'; // Green - Top tier
         if (rank <= 20) return '#d97706'; // Orange - Middle tier  
         return '#dc2626'; // Red - Bottom tier
+    }
+    
+    async displayTDScorers(homeTeam, awayTeam) {
+        const container = document.getElementById('td-scorers-section');
+        if (!container) {
+            console.warn('TD scorers section not found');
+            return;
+        }
+        
+        console.log(`🏈 Fetching TD scorer probabilities for ${homeTeam} vs ${awayTeam}...`);
+        
+        // Show loading state
+        container.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <div class="loading-spinner"></div>
+                <p>Loading TD Scorer Probabilities...</p>
+            </div>
+        `;
+        
+        // Fetch all skill players from both teams
+        const allPlayers = [];
+        
+        for (const team of [homeTeam, awayTeam]) {
+            const opponent = team === homeTeam ? awayTeam : homeTeam;
+            
+            for (const position of ['QB', 'RB', 'WR', 'TE']) {
+                try {
+                    const prediction = await window.BetYardML.getPrediction('Top Player', team, opponent, position);
+                    
+                    if (prediction && prediction.anytime_td_probability !== undefined) {
+                        allPlayers.push({
+                            name: prediction.player_name || `${team} ${position}`,
+                            team: team,
+                            position: position,
+                            anytimeTD: prediction.anytime_td_probability,
+                            firstTD: prediction.first_td_probability,
+                            multiTD: prediction.multi_td_probability,
+                            dataSource: prediction.td_data_source,
+                            opponentDefense: prediction.opponent_defense_rating,
+                            defenseAdjustment: prediction.defense_adjustment
+                        });
+                    }
+                } catch (error) {
+                    console.warn(`Failed to fetch ${position} for ${team}:`, error);
+                }
+            }
+        }
+        
+        if (allPlayers.length === 0) {
+            container.innerHTML = '<div style="padding: 20px; background: #fee; border-radius: 8px; color: #c33;">⚠️ No TD scorer data available</div>';
+            return;
+        }
+        
+        // Sort by anytime TD probability
+        allPlayers.sort((a, b) => b.anytimeTD - a.anytimeTD);
+        
+        // Generate HTML
+        let html = `
+            <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; color: white;">
+                <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">🏈 TD Scorer Probabilities</h3>
+                <p style="margin: 0; font-size: 14px; opacity: 0.9;">${homeTeam} vs ${awayTeam} - Based on 2025 Season Stats</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+        `;
+        
+        allPlayers.forEach((player) => {
+            const probabilityColor = player.anytimeTD > 0.4 ? '#10b981' : player.anytimeTD > 0.2 ? '#3b82f6' : player.anytimeTD > 0.1 ? '#f59e0b' : '#6b7280';
+            const probabilityLabel = player.anytimeTD > 0.4 ? 'HIGH' : player.anytimeTD > 0.2 ? 'GOOD' : player.anytimeTD > 0.1 ? 'MEDIUM' : 'LOW';
+            
+            // Calculate implied odds
+            const impliedOdds = player.anytimeTD > 0 ? Math.round((1 / player.anytimeTD - 1) * 100) : 999;
+            const oddsDisplay = impliedOdds > 0 ? `+${impliedOdds}` : impliedOdds;
+            
+            html += `
+                <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 4px solid ${probabilityColor};">
+                    <!-- Player Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                        <div>
+                            <div style="font-weight: 700; color: #1e293b; font-size: 16px;">${player.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">${player.team} ${player.position}</div>
+                        </div>
+                        <div style="background: ${probabilityColor}; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700;">
+                            ${probabilityLabel}
+                        </div>
+                    </div>
+                    
+                    <!-- Probabilities -->
+                    <div style="margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 12px; color: #64748b;">Anytime TD:</span>
+                            <span style="font-weight: 700; color: #1e293b;">${(player.anytimeTD * 100).toFixed(1)}%</span>
+                        </div>
+                        <div style="background: #f1f5f9; border-radius: 4px; height: 6px; overflow: hidden;">
+                            <div style="background: ${probabilityColor}; height: 100%; width: ${player.anytimeTD * 100}%; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                        <div style="background: #f8fafc; padding: 8px; border-radius: 6px;">
+                            <div style="font-size: 10px; color: #64748b; margin-bottom: 2px;">First TD</div>
+                            <div style="font-weight: 600; color: #1e293b; font-size: 13px;">${(player.firstTD * 100).toFixed(1)}%</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 8px; border-radius: 6px;">
+                            <div style="font-size: 10px; color: #64748b; margin-bottom: 2px;">2+ TDs</div>
+                            <div style="font-weight: 600; color: #1e293b; font-size: 13px;">${(player.multiTD * 100).toFixed(1)}%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Implied Odds -->
+                    <div style="text-align: center; padding: 8px; background: #f8fafc; border-radius: 6px;">
+                        <div style="font-size: 10px; color: #64748b; margin-bottom: 2px;">Fair Odds</div>
+                        <div style="font-weight: 700; color: #6366f1; font-size: 14px;">${oddsDisplay}</div>
+                    </div>
+                    
+                    ${player.dataSource === 'player_gamelog' ? 
+                        '<div style="margin-top: 8px; font-size: 10px; color: #10b981; text-align: center;">✓ Real 2025 Stats</div>' :
+                        '<div style="margin-top: 8px; font-size: 10px; color: #f59e0b; text-align: center;">⚠ Position Average</div>'
+                    }
+                    
+                    ${player.opponentDefense ? 
+                        `<div style="margin-top: 4px; font-size: 10px; color: #64748b; text-align: center;">
+                            vs DEF: ${player.opponentDefense.toFixed(0)} 
+                            ${player.defenseAdjustment !== 1.0 ? 
+                                `(${player.defenseAdjustment > 1.0 ? '+' : ''}${((player.defenseAdjustment - 1.0) * 100).toFixed(0)}%)` : 
+                                ''}
+                        </div>` :
+                        ''
+                    }
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+        
+        container.innerHTML = html;
+        console.log(`✅ Displayed ${allPlayers.length} TD scorer probabilities`);
     }
 }
 
