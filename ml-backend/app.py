@@ -466,13 +466,16 @@ def get_nba_team_players(team_identifier):
             if 'athletes' in roster_data:
                 # NBA roster has athletes as a flat array (unlike NFL which groups by position)
                 for idx, player in enumerate(roster_data['athletes']):
-                    # Fetch season stats for first 10 players only (to save API calls)
+                    # Only fetch stats for first 5 players to speed up response
                     player_stats = None
                     games_played = 0
-                    if idx < 10:  # Limit to top 10 players
-                        player_stats = get_player_season_stats(player.get('id'))
-                        if player_stats:
-                            games_played = int(player_stats.get('gamesPlayed', 0))
+                    if idx < 5:  # Top 5 players only
+                        try:
+                            player_stats = get_player_season_stats(player.get('id'))
+                            if player_stats:
+                                games_played = int(player_stats.get('gamesPlayed', 0))
+                        except:
+                            pass  # Skip if stats fetch fails
                     
                     # Generate props from stats if available
                     props = {
@@ -483,14 +486,17 @@ def get_nba_team_players(team_identifier):
                     }
                     
                     if player_stats:
-                        if 'avgPoints' in player_stats:
-                            props['points'] = generate_prop_from_average(player_stats['avgPoints'], 'points')
-                        if 'avgRebounds' in player_stats:
-                            props['rebounds'] = generate_prop_from_average(player_stats['avgRebounds'], 'rebounds')
-                        if 'avgAssists' in player_stats:
-                            props['assists'] = generate_prop_from_average(player_stats['avgAssists'], 'assists')
-                        if 'avgThreePointFieldGoalsMade' in player_stats:
-                            props['threes_made'] = generate_prop_from_average(player_stats['avgThreePointFieldGoalsMade'], 'threes')
+                        try:
+                            if 'avgPoints' in player_stats:
+                                props['points'] = generate_prop_from_average(player_stats['avgPoints'], 'points')
+                            if 'avgRebounds' in player_stats:
+                                props['rebounds'] = generate_prop_from_average(player_stats['avgRebounds'], 'rebounds')
+                            if 'avgAssists' in player_stats:
+                                props['assists'] = generate_prop_from_average(player_stats['avgAssists'], 'assists')
+                            if 'avgThreePointFieldGoalsMade' in player_stats:
+                                props['threes_made'] = generate_prop_from_average(player_stats['avgThreePointFieldGoalsMade'], 'threes')
+                        except:
+                            pass  # Keep props as null if generation fails
                     
                     player_info = {
                         'id': player.get('id'),
