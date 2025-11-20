@@ -403,6 +403,67 @@ def get_team_abbr_from_name(team_identifier):
     
     return team_map.get(team_identifier, team_identifier)
 
+def get_nfl_injury_report():
+    """Fetch NFL injury reports from ESPN API"""
+    try:
+        injuries_url = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams?enable=injuries"
+        response = requests.get(injuries_url, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            injury_dict = {}
+            
+            # Parse injury data for all teams
+            if 'sports' in data and len(data['sports']) > 0:
+                teams = data['sports'][0].get('leagues', [{}])[0].get('teams', [])
+                for team_obj in teams:
+                    team = team_obj.get('team', {})
+                    if 'injuries' in team:
+                        for injury in team['injuries']:
+                            athlete = injury.get('athlete', {})
+                            player_name = athlete.get('displayName', '').upper()
+                            status = injury.get('status', 'UNKNOWN')
+                            injury_dict[player_name] = {
+                                'status': status,
+                                'type': injury.get('type', 'Unknown'),
+                                'details': injury.get('details', '')
+                            }
+            
+            return injury_dict
+    except Exception as e:
+        logger.warning(f"Failed to fetch NFL injuries: {str(e)}")
+    return {}
+
+def get_nba_injury_report():
+    """Fetch NBA injury reports from ESPN API"""
+    try:
+        injuries_url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams?enable=injuries"
+        response = requests.get(injuries_url, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            injury_dict = {}
+            
+            if 'sports' in data and len(data['sports']) > 0:
+                teams = data['sports'][0].get('leagues', [{}])[0].get('teams', [])
+                for team_obj in teams:
+                    team = team_obj.get('team', {})
+                    if 'injuries' in team:
+                        for injury in team['injuries']:
+                            athlete = injury.get('athlete', {})
+                            player_name = athlete.get('displayName', '').upper()
+                            status = injury.get('status', 'UNKNOWN')
+                            injury_dict[player_name] = {
+                                'status': status,
+                                'type': injury.get('type', 'Unknown'),
+                                'details': injury.get('details', '')
+                            }
+            
+            return injury_dict
+    except Exception as e:
+        logger.warning(f"Failed to fetch NBA injuries: {str(e)}")
+    return {}
+
 def get_player_season_stats(player_id):
     """Fetch player season stats from ESPN API"""
     try:
@@ -459,6 +520,9 @@ def get_nba_team_players(team_identifier):
         
         response = requests.get(espn_url, timeout=10)
         
+        # Fetch injury report once for all players
+        injury_report = get_nba_injury_report()
+        
         if response.status_code == 200:
             roster_data = response.json()
             
@@ -466,6 +530,23 @@ def get_nba_team_players(team_identifier):
             if 'athletes' in roster_data:
                 # NBA roster has athletes as a flat array (unlike NFL which groups by position)
                 for idx, player in enumerate(roster_data['athletes']):
+                    player_name = player.get('displayName', '').upper()
+                    
+                    # Check injury status
+                    injury_status = None
+                    injury_info = injury_report.get(player_name)
+                    if injury_info:
+                        injury_status = {
+                            'status': injury_info['status'],
+                            'type': injury_info['type'],
+                            'details': injury_info['details']
+                        }
+                    
+                    # Skip players who are OUT (don't fetch stats or show props)
+                    if injury_info and injury_info['status'] == 'OUT':
+                        logger.info(f"⚠️ Skipping {player_name} - OUT with {injury_info['type']}")
+                        continue
+                    
                     # Only fetch stats for first 5 players to speed up response
                     player_stats = None
                     games_played = 0
@@ -512,6 +593,7 @@ def get_nba_team_players(team_identifier):
                         'age': player.get('age'),
                         'games_played': games_played,
                         'headshot': player.get('headshot', {}).get('href'),
+                        'injury_status': injury_status,  # Add injury info
                         'props': props
                     }
                     
@@ -674,6 +756,17 @@ def predict():
         opponent_code = data.get('opponent_code')
         position = data.get('position', 'QB').lower()
         
+        # Check injury status first
+        injury_report = get_nfl_injury_report()
+        player_injury = injury_report.get(player_name.upper())
+        
+        if player_injury and player_injury['status'] == 'OUT':
+            return jsonify({
+                'error': f'{player_name} is OUT - {player_injury["type"]}',
+                'injury_status': player_injury,
+                'prediction_available': False
+            }), 400
+        
         # Validate position
         if position not in MODELS:
             return jsonify({
@@ -796,6 +889,7 @@ def predict():
         prediction['opponent_code'] = opponent_code
         prediction['position'] = position.upper()
         prediction['model_version'] = 'v2025-11-16-enhanced-10-features'
+        prediction['injury_status'] = player_injury if player_injury else None  # Add injury info
         
         # Return in expected nested format for frontend
         return jsonify({
@@ -803,7 +897,8 @@ def predict():
             'metadata': {
                 'timestamp': datetime.now().isoformat(),
                 'model_version': 'v2025-11-16-enhanced-10-features',
-                'features_used': 10
+                'features_used': 10,
+                'injury_checked': True
             }
         })
         
@@ -813,6 +908,88 @@ def predict():
             'player_name': data.get('player_name', 'Unknown'),
             'position': data.get('position', 'Unknown')
         }), 500
+
+@app.route('/api/value-bets/compare', methods=['POST'])
+def compare_value_bets():
+    """
+    Compare model predictions vs sportsbook lines to find value bets
+    
+    Expected payload:
+    {
+        "player_name": "Josh Allen",
+        "team_code": "BUF",
+        "opponent_code": "HOU",
+        "position": "QB",
+        "sportsbook_lines": {
+            "passing_yards": 229.5,
+            "rushing_yards": 34.5,
+            "anytime_td": -125
+        }
+    }
+    """
+    try:
+        data = request.json
+        player_name = data.get('player_name')
+        sportsbook_lines = data.get('sportsbook_lines', {})
+        
+        # Get model prediction
+        prediction_response = predict()
+        if prediction_response[1] != 200:  # If prediction failed
+            return prediction_response
+        
+        prediction_data = prediction_response[0].get_json()
+        model_prediction = prediction_data['prediction']
+        
+        # Compare model vs sportsbook
+        value_opportunities = []
+        
+        for stat, sportsbook_line in sportsbook_lines.items():
+            model_value = model_prediction.get(stat)
+            
+            if model_value is None:
+                continue
+            
+            difference = model_value - sportsbook_line
+            percentage_diff = (difference / sportsbook_line) * 100 if sportsbook_line != 0 else 0
+            
+            # Flag as value if model differs by >10%
+            is_value = abs(percentage_diff) > 10
+            
+            # Determine recommendation
+            if percentage_diff > 10:
+                recommendation = f"OVER {sportsbook_line}"
+                edge = f"+{percentage_diff:.1f}%"
+            elif percentage_diff < -10:
+                recommendation = f"UNDER {sportsbook_line}"
+                edge = f"{percentage_diff:.1f}%"
+            else:
+                recommendation = "NO BET - Line matches model"
+                edge = f"{percentage_diff:+.1f}%"
+            
+            value_opportunities.append({
+                'stat': stat,
+                'sportsbook_line': sportsbook_line,
+                'model_prediction': round(model_value, 1),
+                'difference': round(difference, 1),
+                'percentage_edge': round(percentage_diff, 1),
+                'is_value_bet': is_value,
+                'recommendation': recommendation,
+                'edge': edge
+            })
+        
+        # Sort by absolute percentage edge (biggest opportunities first)
+        value_opportunities.sort(key=lambda x: abs(x['percentage_edge']), reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'player_name': player_name,
+            'value_opportunities': value_opportunities,
+            'model_prediction': model_prediction,
+            'total_value_bets': sum(1 for v in value_opportunities if v['is_value_bet'])
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Load models and TD probabilities on startup
