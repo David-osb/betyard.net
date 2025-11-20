@@ -150,23 +150,26 @@ class MultiSportPredictions {
                 </div>
                 
                 <div class="props-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                    ${this.renderNBAProp('Points', player.props.points, '🎯')}
-                    ${this.renderNBAProp('Rebounds', player.props.rebounds, '🏀')}
-                    ${this.renderNBAProp('Assists', player.props.assists, '🎯')}
-                    ${this.renderNBAProp('3-Pointers', player.props.threes_made, '🔥')}
+                    ${player.props.points ? this.renderNBAProp('Points', player.props.points, '🎯') : ''}
+                    ${player.props.rebounds ? this.renderNBAProp('Rebounds', player.props.rebounds, '🏀') : ''}
+                    ${player.props.assists ? this.renderNBAProp('Assists', player.props.assists, '🎯') : ''}
+                    ${player.props.threes_made ? this.renderNBAProp('3-Pointers', player.props.threes_made, '🔥') : ''}
                 </div>
             </div>
         `).join('');
     }
     
     renderNBAProp(label, prop, icon) {
+        if (!prop || !prop.line) return '';
+        
         const recommendationColor = {
             'OVER': '#10b981',
             'UNDER': '#ef4444',
             'NO BET': '#64748b'
         };
         
-        const color = recommendationColor[prop.recommendation] || '#64748b';
+        const recommendation = prop.recommendation || 'NO BET';
+        const color = recommendationColor[recommendation] || '#64748b';
         
         return `
             <div class="prop-item" style="background: #f8fafc; border-radius: 8px; padding: 12px;">
@@ -178,10 +181,10 @@ class MultiSportPredictions {
                     O/U ${prop.line}
                 </div>
                 <div style="font-size: 12px; color: #64748b; margin-bottom: 8px;">
-                    Avg: ${prop.average.toFixed(1)} | ${prop.over_probability.toFixed(1)}% OVER
+                    Avg: ${prop.average ? prop.average.toFixed(1) : 'N/A'} | ${prop.over_probability ? prop.over_probability.toFixed(1) : '50'}% OVER
                 </div>
                 <div style="background: ${color}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-align: center;">
-                    ${prop.recommendation}
+                    ${recommendation}
                 </div>
             </div>
         `;
