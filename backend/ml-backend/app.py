@@ -4095,8 +4095,8 @@ def get_nba_team_players(team_identifier):
             # Try using the identifier as-is
             team_abbr = team_identifier
         
-        # Use ESPN API to get team roster
-        espn_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_abbr}/roster"
+        # Use ESPN API to get team roster (ESPN uses lowercase team abbreviations)
+        espn_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_abbr.lower()}/roster"
         
         response = requests.get(espn_url, timeout=10)
         
