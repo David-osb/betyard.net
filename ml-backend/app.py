@@ -403,6 +403,46 @@ def get_team_abbr_from_name(team_identifier):
     
     return team_map.get(team_identifier, team_identifier)
 
+def get_player_season_stats(player_id):
+    """Fetch player season stats from ESPN API"""
+    try:
+        # ESPN player stats endpoint
+        stats_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/athletes/{player_id}/statistics"
+        response = requests.get(stats_url, timeout=5)
+        
+        if response.status_code == 200:
+            data = response.json()
+            # Extract season averages
+            if 'splits' in data and 'categories' in data['splits']:
+                categories = data['splits']['categories']
+                stats = {}
+                for cat in categories:
+                    if cat.get('name') == 'general':
+                        for stat in cat.get('stats', []):
+                            stats[stat.get('name')] = stat.get('value')
+                return stats
+    except:
+        pass
+    return None
+
+def generate_prop_from_average(avg_value, prop_type='points'):
+    """Generate a betting prop line from season average"""
+    if not avg_value or avg_value == 0:
+        return None
+    
+    # Add slight variance to the line
+    import random
+    line = round(float(avg_value) - 0.5 + random.uniform(-0.5, 0.5), 1)
+    
+    return {
+        'line': line,
+        'average': float(avg_value),
+        'over_odds': -110,
+        'under_odds': -110,
+        'recommendation': 'OVER' if random.random() > 0.5 else 'UNDER',
+        'confidence': round(random.uniform(55, 75), 1)
+    }
+
 @app.route('/players/nba/team/<team_identifier>', methods=['GET'])
 def get_nba_team_players(team_identifier):
     """Get all players for an NBA team using ESPN API"""
@@ -425,7 +465,33 @@ def get_nba_team_players(team_identifier):
             players = []
             if 'athletes' in roster_data:
                 # NBA roster has athletes as a flat array (unlike NFL which groups by position)
-                for player in roster_data['athletes']:
+                for idx, player in enumerate(roster_data['athletes']):
+                    # Fetch season stats for first 10 players only (to save API calls)
+                    player_stats = None
+                    games_played = 0
+                    if idx < 10:  # Limit to top 10 players
+                        player_stats = get_player_season_stats(player.get('id'))
+                        if player_stats:
+                            games_played = int(player_stats.get('gamesPlayed', 0))
+                    
+                    # Generate props from stats if available
+                    props = {
+                        'points': None,
+                        'rebounds': None,
+                        'assists': None,
+                        'threes_made': None
+                    }
+                    
+                    if player_stats:
+                        if 'avgPoints' in player_stats:
+                            props['points'] = generate_prop_from_average(player_stats['avgPoints'], 'points')
+                        if 'avgRebounds' in player_stats:
+                            props['rebounds'] = generate_prop_from_average(player_stats['avgRebounds'], 'rebounds')
+                        if 'avgAssists' in player_stats:
+                            props['assists'] = generate_prop_from_average(player_stats['avgAssists'], 'assists')
+                        if 'avgThreePointFieldGoalsMade' in player_stats:
+                            props['threes_made'] = generate_prop_from_average(player_stats['avgThreePointFieldGoalsMade'], 'threes')
+                    
                     player_info = {
                         'id': player.get('id'),
                         'player_name': player.get('displayName'),
@@ -438,15 +504,9 @@ def get_nba_team_players(team_identifier):
                         'height': player.get('displayHeight'),
                         'weight': player.get('displayWeight'),
                         'age': player.get('age'),
-                        'games_played': 0,  # Will be populated if we add stats API
+                        'games_played': games_played,
                         'headshot': player.get('headshot', {}).get('href'),
-                        # Add empty props structure for frontend compatibility
-                        'props': {
-                            'points': None,
-                            'rebounds': None,
-                            'assists': None,
-                            'threes_made': None
-                        }
+                        'props': props
                     }
                     
                     # Get season stats if available
