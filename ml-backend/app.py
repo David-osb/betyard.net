@@ -12,6 +12,17 @@ import os
 import json
 import requests
 import logging
+import sys
+
+# Import DraftKings scraper (now in same directory)
+try:
+    from adaptive_odds_scraper import AdaptiveOddsScraper
+    DRAFTKINGS_SCRAPER = AdaptiveOddsScraper(use_smart_requester=False)
+    ODDS_SCRAPER_AVAILABLE = True
+    print("✅ DraftKings live odds scraper loaded")
+except ImportError as e:
+    ODDS_SCRAPER_AVAILABLE = False
+    print(f"⚠️ DraftKings scraper not available: {e}")
 
 app = Flask(__name__)
 CORS(app)
@@ -1050,6 +1061,223 @@ def compare_value_bets():
         
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/live-odds/<player_name>', methods=['GET'])
+def get_live_odds(player_name):
+    """
+    Get live DraftKings odds for a player
+    
+    Example: /api/live-odds/Josh%20Allen?stat=passing_yards
+    """
+    try:
+        if not ODDS_SCRAPER_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'DraftKings scraper not available'
+            }), 503
+        
+        # Get stat type from query params (default: passing_yards)
+        stat_type = request.args.get('stat', 'passing_yards')
+        
+        logger.info(f"Getting odds for {player_name} - {stat_type}")
+        
+        # Get live odds from DraftKings
+        props = DRAFTKINGS_SCRAPER.get_player_props(player_name, stat_type)
+        
+        logger.info(f"Props received: books={list(props.get('books', {}).keys())}, error={props.get('error', 'None')}")
+        
+        # Check if we have valid DraftKings data
+        if 'error' in props or 'draftkings' not in props.get('books', {}):
+            logger.warning(f"No DraftKings data for {player_name} {stat_type}")
+            return jsonify({
+                'success': False,
+                'error': props.get('error', 'No odds data available'),
+                'player': player_name,
+                'stat': stat_type,
+                'debug_books': list(props.get('books', {}).keys())
+            }), 404
+        
+        # Format response
+        dk_data = props['books']['draftkings']
+        logger.info(f"Returning odds: line={dk_data['line']}, over={dk_data['over']}, under={dk_data['under']}")
+        return jsonify({
+            'success': True,
+            'player': player_name,
+            'stat': stat_type,
+            'line': dk_data['line'],
+            'over_odds': dk_data['over'],
+            'under_odds': dk_data['under'],
+            'market_name': dk_data['market_name'],
+            'timestamp': props['timestamp'],
+            'source': 'draftkings_live'
+        })
+        
+    except Exception as e:
+        import traceback
+        logger.error(f"Error getting live odds: {e}")
+        logger.error(traceback.format_exc())
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
+
+
+@app.route('/api/live-odds/multiple', methods=['POST'])
+def get_multiple_live_odds():
+    """
+    Get live odds for multiple player/stat combinations
+    
+    POST body:
+    {
+        "props": [
+            {"player": "Josh Allen", "stat": "passing_yards"},
+            {"player": "Patrick Mahomes", "stat": "passing_tds"},
+            {"player": "Christian McCaffrey", "stat": "rushing_yards"}
+        ]
+    }
+    """
+    try:
+        if not ODDS_SCRAPER_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'DraftKings scraper not available'
+            }), 503
+        
+        data = request.get_json()
+        props_requests = data.get('props', [])
+        
+        if not props_requests:
+            return jsonify({
+                'success': False,
+                'error': 'No props provided'
+            }), 400
+        
+        results = []
+        
+        for prop in props_requests:
+            player_name = prop.get('player')
+            stat_type = prop.get('stat', 'passing_yards')
+            
+            if not player_name:
+                continue
+            
+            try:
+                props_data = DRAFTKINGS_SCRAPER.get_player_props(player_name, stat_type)
+                
+                if 'error' not in props_data and 'draftkings' in props_data.get('books', {}):
+                    dk_data = props_data['books']['draftkings']
+                    results.append({
+                        'player': player_name,
+                        'stat': stat_type,
+                        'line': dk_data['line'],
+                        'over_odds': dk_data['over'],
+                        'under_odds': dk_data['under'],
+                        'market_name': dk_data['market_name'],
+                        'success': True
+                    })
+                else:
+                    results.append({
+                        'player': player_name,
+                        'stat': stat_type,
+                        'success': False,
+                        'error': props_data.get('error', 'No data available')
+                    })
+                    
+            except Exception as e:
+                results.append({
+                    'player': player_name,
+                    'stat': stat_type,
+                    'success': False,
+                    'error': str(e)
+                })
+        
+        return jsonify({
+            'success': True,
+            'total_requested': len(props_requests),
+            'successful': sum(1 for r in results if r.get('success')),
+            'results': results,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting multiple live odds: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/value-comparison/<player_name>', methods=['GET'])
+def get_value_comparison(player_name):
+    """
+    Compare model prediction vs live DraftKings odds
+    
+    Example: /api/value-comparison/Josh%20Allen?stat=passing_yards
+    """
+    try:
+        stat_type = request.args.get('stat', 'passing_yards')
+        
+        # Get model prediction
+        # This would call your existing prediction endpoint
+        # For now, return a placeholder
+        model_prediction = {
+            'passing_yards': 250.0,  # Placeholder - integrate with actual model
+            'passing_tds': 2.5
+        }
+        
+        # Get live odds
+        if ODDS_SCRAPER_AVAILABLE:
+            props = DRAFTKINGS_SCRAPER.get_player_props(player_name, stat_type)
+            
+            if 'error' not in props and 'draftkings' in props.get('books', {}):
+                dk_data = props['books']['draftkings']
+                sportsbook_line = dk_data['line']
+                
+                # Calculate value
+                model_value = model_prediction.get(stat_type, 0)
+                difference = model_value - sportsbook_line
+                percentage_edge = (difference / sportsbook_line * 100) if sportsbook_line != 0 else 0
+                
+                # Determine recommendation
+                if percentage_edge > 10:
+                    recommendation = f"OVER {sportsbook_line}"
+                    bet_value = "STRONG VALUE"
+                elif percentage_edge < -10:
+                    recommendation = f"UNDER {sportsbook_line}"
+                    bet_value = "STRONG VALUE"
+                else:
+                    recommendation = "NO BET"
+                    bet_value = "FAIR LINE"
+                
+                return jsonify({
+                    'success': True,
+                    'player': player_name,
+                    'stat': stat_type,
+                    'model_prediction': round(model_value, 1),
+                    'draftkings_line': sportsbook_line,
+                    'over_odds': dk_data['over'],
+                    'under_odds': dk_data['under'],
+                    'edge': round(percentage_edge, 1),
+                    'difference': round(difference, 1),
+                    'recommendation': recommendation,
+                    'value_rating': bet_value,
+                    'timestamp': datetime.now().isoformat()
+                })
+        
+        return jsonify({
+            'success': False,
+            'error': 'Live odds not available'
+        }), 503
+        
+    except Exception as e:
+        logger.error(f"Error in value comparison: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 
 if __name__ == '__main__':
     # Load models and TD probabilities on startup
