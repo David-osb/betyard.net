@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Odds Demo - BetYard</title>
+    <link rel="stylesheet" href="assets/css/live-odds.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .odds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .player-card {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .player-header {
+            color: #fff;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .player-name {
+            font-size: 20px;
+            font-weight: 700;
+            display: block;
+        }
+        .player-stat {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏈 Live NFL Odds - Powered by DraftKings</h1>
+        
+        <div class="odds-grid">
+            <!-- Josh Allen Passing Yards -->
+            <div class="player-card">
+                <div class="player-header">
+                    <span class="player-name">Josh Allen</span>
+                    <span class="player-stat">Passing Yards</span>
+                </div>
+                <div id="josh-allen-passing"></div>
+            </div>
+            
+            <!-- Josh Allen Rushing Yards -->
+            <div class="player-card">
+                <div class="player-header">
+                    <span class="player-name">Josh Allen</span>
+                    <span class="player-stat">Rushing Yards</span>
+                </div>
+                <div id="josh-allen-rushing"></div>
+            </div>
+            
+            <!-- Josh Allen Passing TDs -->
+            <div class="player-card">
+                <div class="player-header">
+                    <span class="player-name">Josh Allen</span>
+                    <span class="player-stat">Passing Touchdowns</span>
+                </div>
+                <div id="josh-allen-tds"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/live-odds.js"></script>
+    <script>
+        // Initialize live odds displays
+        window.addEventListener('DOMContentLoaded', () => {
+            // Josh Allen Passing Yards with auto-refresh
+            BetYardOdds.enableAutoRefresh(
+                document.getElementById('josh-allen-passing'),
+                'Josh Allen',
+                'passing_yards'
+            );
+            
+            // Josh Allen Rushing Yards with auto-refresh
+            BetYardOdds.enableAutoRefresh(
+                document.getElementById('josh-allen-rushing'),
+                'Josh Allen',
+                'rushing_yards'
+            );
+            
+            // Josh Allen Passing TDs with auto-refresh
+            BetYardOdds.enableAutoRefresh(
+                document.getElementById('josh-allen-tds'),
+                'Josh Allen',
+                'passing_tds'
+            );
+        });
+    </script>
+</body>
+</html>
