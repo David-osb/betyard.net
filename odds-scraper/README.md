@@ -1,63 +1,32 @@
-# Sports Odds Scraper
+# NFL Odds Scraper - DraftKings
 
-Automated scrapers for DraftKings and FanDuel sportsbook odds.
+Live odds scraper for NFL player props using DraftKings public API.
 
 ## Features
-- ✅ **DraftKings** - 100% automated, no API key required
-- ✅ **FanDuel** - Cookie-based authentication (one-time 2-min setup)
-- Real-time odds from public APIs
-- Supports NFL player props (passing yards, rushing yards, TDs, etc.)
-- Multi-book comparison for line shopping
 
-## Quick Start - DraftKings (WORKING)
+- ✅ **DraftKings**: Fully automated, unlimited free requests
+- Real-time player props (passing yards, rushing yards, TDs, etc.)
+- No authentication required
+- Clean JSON responses
+- Production-ready
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
 
 ```python
 from adaptive_odds_scraper import AdaptiveOddsScraper
 
-# Initialize scraper
 scraper = AdaptiveOddsScraper(use_smart_requester=False)
 
-# Get Josh Allen passing yards odds
-props = scraper.get_player_props('Josh Allen', 'passing_yards')
-
-print(f"Line: {props['books']['draftkings']['line']}")
-print(f"Over: {props['books']['draftkings']['over']}")
-print(f"Under: {props['books']['draftkings']['under']}")
-```
-
-## FanDuel Setup (2-Minute One-Time Setup)
-
-### 1. Extract cookies (run once):
-```bash
-python extract_fanduel_cookies.py
-```
-- Opens Chrome, you log in to FanDuel
-- Saves your cookies automatically
-- Cookies last 30-90 days
-
-### 2. Use FanDuel scraper:
-```python
-from fanduel_scraper import FanDuelScraper
-
-scraper = FanDuelScraper(use_cookies=True)
-props = scraper.get_player_props('Josh Allen', 'passing_yards')
-```
-
-**Full guide:** See [FANDUEL_SETUP.md](FANDUEL_SETUP.md)
-
-## Multi-Book Comparison
-
-Get best odds across both books:
-
-```python
-from multibook_scraper import MultiBookScraper
-
-scraper = MultiBookScraper()
-odds = scraper.get_best_odds('Josh Allen', 'passing_yards')
-
-print(f"Best Over: {odds['best_over']['book']} @ {odds['best_over']['odds']}")
-print(f"Best Under: {odds['best_under']['book']} @ {odds['best_under']['odds']}")
-print(f"Edge: {odds['edge']}")
+# Get player props
+odds = scraper.get_player_props('Josh Allen', 'passing_yards')
+print(odds)
+# {'book': 'draftkings', 'line': 249.5, 'over': -110, 'under': -110}
 ```
 
 ## Supported Stats
@@ -71,18 +40,47 @@ print(f"Edge: {odds['edge']}")
 - `receptions`
 - `interceptions`
 
-## Files
-- `adaptive_odds_scraper.py` - Main scraper class
-- `player_ids.py` - DraftKings player ID database (40+ NFL players)
-- `requirements.txt` - Python dependencies
+## Player IDs
+
+See `player_ids.py` for the full list of supported players (40+ NFL stars).
 
 ## How It Works
-Hits DraftKings public API at:
+
+Hits DraftKings public API:
 ```
 https://sportsbook-nash.draftkings.com/api/team/markets/dkusoh/v2/player/{player_id}/markets
 ```
 
-No authentication, no scraping HTML, just clean JSON responses.
+No authentication, no HTML scraping, just clean JSON responses.
 
 ## Integration
-This scraper is used by the BetYard ML backend to provide live odds in the app.
+
+This scraper is integrated into the main Flask backend at `ml-backend/app.py`:
+- Endpoint: `/api/live-odds/<player_name>`
+- Production: `betyard-ml-backend.onrender.com`
+- Auto-refresh: Every 60 seconds in frontend
+
+## Why DraftKings Only?
+
+- **Free & unlimited** - No API costs or request limits
+- **No authentication** - Public API, no login required
+- **Reliable** - No geolocation blocks or CAPTCHAs
+- **Real-time** - Always up-to-date odds
+- **Production tested** - Running live since November 2025
+
+## Example Response
+
+```json
+{
+  "player": "Josh Allen",
+  "stat": "passing_yards",
+  "books": {
+    "draftkings": {
+      "line": 249.5,
+      "over": -110,
+      "under": -110,
+      "timestamp": "2025-11-23T18:30:00Z"
+    }
+  }
+}
+```
