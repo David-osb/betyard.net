@@ -1,14 +1,15 @@
-# DraftKings Odds Scraper
+# Sports Odds Scraper
 
-Automated scraper for DraftKings sportsbook odds. No API key required.
+Automated scrapers for DraftKings and FanDuel sportsbook odds.
 
 ## Features
-- 100% automated - no manual work needed
-- Real-time odds from DraftKings public API
+- ✅ **DraftKings** - 100% automated, no API key required
+- ⚠️ **FanDuel** - API endpoints identified but requires browser session
+- Real-time odds from public APIs
 - Supports NFL player props (passing yards, rushing yards, TDs, etc.)
-- No captchas or authentication required
+- Multi-book comparison for line shopping
 
-## Quick Start
+## Quick Start - DraftKings (WORKING)
 
 ```python
 from adaptive_odds_scraper import AdaptiveOddsScraper
@@ -23,6 +24,15 @@ print(f"Line: {props['books']['draftkings']['line']}")
 print(f"Over: {props['books']['draftkings']['over']}")
 print(f"Under: {props['books']['draftkings']['under']}")
 ```
+
+## FanDuel Integration (IN PROGRESS)
+
+FanDuel uses these API endpoints:
+- `/api/content-managed-page` - Get NFL events/games
+- `/api/livedata` - Real-time game data
+- `/api/getMarketPrices` - Current odds (key endpoint)
+
+**Status**: Endpoints require browser cookies/session tokens. Working on authentication bypass.
 
 ## Supported Stats
 - `passing_yards`
