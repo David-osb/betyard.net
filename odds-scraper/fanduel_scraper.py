@@ -15,7 +15,7 @@ class FanDuelScraper:
     No authentication required - uses same endpoints as their website
     """
     
-    def __init__(self):
+    def __init__(self, use_cookies=True):
         self.base_url = "https://sportsbook.fanduel.com"
         self.session = requests.Session()
         self.session.headers.update({
@@ -23,6 +23,33 @@ class FanDuelScraper:
             'Accept': 'application/json',
             'Referer': 'https://sportsbook.fanduel.com/'
         })
+        
+        # Load saved cookies if available
+        if use_cookies:
+            self._load_cookies()
+        
+    def _load_cookies(self):
+        """Load saved cookies from file"""
+        import pickle
+        import os
+        
+        cookie_file = 'fanduel_cookies.pkl'
+        
+        if os.path.exists(cookie_file):
+            try:
+                with open(cookie_file, 'rb') as f:
+                    cookies = pickle.load(f)
+                
+                for cookie in cookies:
+                    self.session.cookies.set(cookie['name'], cookie['value'])
+                
+                print(f"✅ Loaded {len(cookies)} FanDuel cookies")
+            except Exception as e:
+                print(f"⚠️  Could not load cookies: {e}")
+                print("Run extract_fanduel_cookies.py first to save cookies")
+        else:
+            print("⚠️  No saved cookies found")
+            print("Run extract_fanduel_cookies.py first to save cookies")
         
     def get_nfl_events(self) -> List[Dict]:
         """

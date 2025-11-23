@@ -11,3 +11,7 @@ build/
 .venv/
 venv/
 .env
+
+# FanDuel cookies (sensitive!)
+fanduel_cookies.pkl
+fanduel_cookies.json

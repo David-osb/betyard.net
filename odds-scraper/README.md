@@ -4,7 +4,7 @@ Automated scrapers for DraftKings and FanDuel sportsbook odds.
 
 ## Features
 - ✅ **DraftKings** - 100% automated, no API key required
-- ⚠️ **FanDuel** - API endpoints identified but requires browser session
+- ✅ **FanDuel** - Cookie-based authentication (one-time 2-min setup)
 - Real-time odds from public APIs
 - Supports NFL player props (passing yards, rushing yards, TDs, etc.)
 - Multi-book comparison for line shopping
@@ -25,14 +25,40 @@ print(f"Over: {props['books']['draftkings']['over']}")
 print(f"Under: {props['books']['draftkings']['under']}")
 ```
 
-## FanDuel Integration (IN PROGRESS)
+## FanDuel Setup (2-Minute One-Time Setup)
 
-FanDuel uses these API endpoints:
-- `/api/content-managed-page` - Get NFL events/games
-- `/api/livedata` - Real-time game data
-- `/api/getMarketPrices` - Current odds (key endpoint)
+### 1. Extract cookies (run once):
+```bash
+python extract_fanduel_cookies.py
+```
+- Opens Chrome, you log in to FanDuel
+- Saves your cookies automatically
+- Cookies last 30-90 days
 
-**Status**: Endpoints require browser cookies/session tokens. Working on authentication bypass.
+### 2. Use FanDuel scraper:
+```python
+from fanduel_scraper import FanDuelScraper
+
+scraper = FanDuelScraper(use_cookies=True)
+props = scraper.get_player_props('Josh Allen', 'passing_yards')
+```
+
+**Full guide:** See [FANDUEL_SETUP.md](FANDUEL_SETUP.md)
+
+## Multi-Book Comparison
+
+Get best odds across both books:
+
+```python
+from multibook_scraper import MultiBookScraper
+
+scraper = MultiBookScraper()
+odds = scraper.get_best_odds('Josh Allen', 'passing_yards')
+
+print(f"Best Over: {odds['best_over']['book']} @ {odds['best_over']['odds']}")
+print(f"Best Under: {odds['best_under']['book']} @ {odds['best_under']['odds']}")
+print(f"Edge: {odds['edge']}")
+```
 
 ## Supported Stats
 - `passing_yards`
