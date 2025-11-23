@@ -1,0 +1,12 @@
+# Core dependencies
+requests>=2.32.3
+
+# Optional: Cloudflare bypass
+cloudscraper>=1.2.71
+
+# Optional: Tor network support
+stem>=1.8.2
+
+# Optional: Advanced scraping
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
