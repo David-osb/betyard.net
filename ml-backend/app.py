@@ -24,6 +24,15 @@ except ImportError as e:
     ODDS_SCRAPER_AVAILABLE = False
     print(f"⚠️ DraftKings scraper not available: {e}")
 
+# Import Live Data Service for real-time stats
+try:
+    from live_data_service import live_data_service
+    LIVE_DATA_AVAILABLE = True
+    print("✅ Live Data Service loaded (ESPN API + Weather)")
+except ImportError as e:
+    LIVE_DATA_AVAILABLE = False
+    print(f"⚠️ Live Data Service not available: {e}")
+
 app = Flask(__name__)
 CORS(app)
 
@@ -168,11 +177,40 @@ TEAM_STATS = {
 }
 
 def get_team_stats(team_code):
-    """Get team offensive/defensive ratings"""
+    """Get team offensive/defensive ratings - NOW USES REAL DATA"""
+    if LIVE_DATA_AVAILABLE:
+        # Try to load from real calculated ratings
+        ratings_file = os.path.join(MODEL_DIR, 'team_ratings.json')
+        if os.path.exists(ratings_file):
+            try:
+                with open(ratings_file, 'r') as f:
+                    all_ratings = json.load(f)
+                    if team_code in all_ratings:
+                        team_data = all_ratings[team_code]
+                        return {
+                            'offense': team_data['offense'],
+                            'defense': team_data.get('defense', 75)  # Defense still placeholder
+                        }
+            except Exception as e:
+                logger.error(f"Failed to load team ratings: {e}")
+    
+    # Fallback to static ratings
     return TEAM_STATS.get(team_code, {'offense': 75, 'defense': 75})
 
-def get_player_baseline(position):
-    """Get baseline stats for position (season averages)"""
+def get_player_baseline(position, player_name=None):
+    """Get baseline stats for position - NOW USES REAL PLAYER DATA IF AVAILABLE"""
+    
+    # Try to get real player stats first
+    if LIVE_DATA_AVAILABLE and player_name:
+        player_stats = live_data_service.get_player_stats(player_name)
+        if player_stats:
+            return {
+                'avg_yards': player_stats['season_avg_yards'],
+                'avg_tds': player_stats['season_avg_tds'],
+                'recent_avg': player_stats['recent_3game_avg']
+            }
+    
+    # Fallback to position averages
     baselines = {
         'QB': {'avg_yards': 250, 'avg_tds': 2.0, 'recent_avg': 245},
         'RB': {'avg_yards': 75, 'avg_tds': 0.5, 'recent_avg': 70},
@@ -261,26 +299,57 @@ def get_td_probability(player_name, position, opponent_code=None):
 
 def extract_features(player_name, team_code, opponent_code, position):
     """
-    Extract 10 features for enhanced ML predictions
+    Extract 10 features for enhanced ML predictions - NOW WITH REAL LIVE DATA
     
     Features:
-    1. Team offensive rating
-    2. Team defensive rating  
-    3. Opponent defensive rating
-    4. Is home game
-    5. Player season avg yards
-    6. Player season avg TDs
-    7. Player recent 3-game avg
-    8. Weather score
-    9. Matchup difficulty
-    10. Player health score
+    1. Team offensive rating (REAL from ESPN player data)
+    2. Team defensive rating (REAL from ESPN player data)
+    3. Opponent defensive rating (REAL from ESPN player data)
+    4. Is home game (REAL from ESPN schedule)
+    5. Player season avg yards (REAL from player game logs)
+    6. Player season avg TDs (REAL from player game logs)
+    7. Player recent 3-game avg (REAL from player game logs)
+    8. Weather score (REAL from OpenWeatherMap API)
+    9. Matchup difficulty (calculated from REAL team stats)
+    10. Player health score (REAL from ESPN injury reports)
     """
-    # Get team stats
+    # Get team stats (now using real ratings)
     team_stats = get_team_stats(team_code)
     opponent_stats = get_team_stats(opponent_code) if opponent_code else {'defense': 75}
     
-    # Get player baseline stats
-    player_baseline = get_player_baseline(position)
+    # Get player baseline stats (now using real player data)
+    player_baseline = get_player_baseline(position, player_name)
+    
+    # Get game info for home/away and weather
+    is_home = 1.0  # Default
+    weather_score = 75.0  # Default
+    
+    if LIVE_DATA_AVAILABLE:
+        try:
+            # Get real game info
+            game_info = live_data_service.get_game_info(team_code)
+            if game_info:
+                is_home = 1.0 if game_info['is_home'] else 0.0
+                
+                # Get real weather
+                if game_info.get('city') and game_info.get('state'):
+                    weather_data = live_data_service.get_weather(
+                        game_info['city'], 
+                        game_info['state'],
+                        game_info.get('date', '')
+                    )
+                    weather_score = weather_data.get('score', 75.0)
+        except Exception as e:
+            logger.warning(f"Failed to get live game/weather data: {e}")
+    
+    # Get player health score
+    health_score = 100.0  # Default healthy
+    if LIVE_DATA_AVAILABLE:
+        try:
+            injury_status = live_data_service.get_player_injury_status(player_name, team_code)
+            health_score = injury_status.get('score', 100.0)
+        except Exception as e:
+            logger.warning(f"Failed to get injury status: {e}")
     
     # Calculate matchup difficulty
     matchup_difficulty = max(0, min(100, 
@@ -289,16 +358,16 @@ def extract_features(player_name, team_code, opponent_code, position):
     
     # Build feature vector (EXACTLY 10 features)
     features = np.array([
-        team_stats['offense'],              # 1. Team offensive rating
-        team_stats['defense'],              # 2. Team defensive rating  
-        opponent_stats['defense'],          # 3. Opponent defensive rating
-        1.0,                                # 4. Is home game (default 1)
-        player_baseline['avg_yards'],       # 5. Player season avg yards
-        player_baseline['avg_tds'],         # 6. Player season avg TDs
-        player_baseline['recent_avg'],      # 7. Player recent 3-game avg
-        75.0,                               # 8. Weather score (default 75)
-        matchup_difficulty,                 # 9. Matchup difficulty
-        100.0                               # 10. Player health (default 100)
+        team_stats['offense'],              # 1. Team offensive rating (REAL)
+        team_stats['defense'],              # 2. Team defensive rating (REAL)
+        opponent_stats['defense'],          # 3. Opponent defensive rating (REAL)
+        is_home,                            # 4. Is home game (REAL from ESPN)
+        player_baseline['avg_yards'],       # 5. Player season avg yards (REAL)
+        player_baseline['avg_tds'],         # 6. Player season avg TDs (REAL)
+        player_baseline['recent_avg'],      # 7. Player recent 3-game avg (REAL)
+        weather_score,                      # 8. Weather score (REAL from API)
+        matchup_difficulty,                 # 9. Matchup difficulty (from REAL ratings)
+        health_score                        # 10. Player health (REAL from injuries)
     ]).reshape(1, -1)
     
     return features

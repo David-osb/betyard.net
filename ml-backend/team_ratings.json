@@ -1,0 +1,226 @@
+{
+  "ARI": {
+    "offense": 74,
+    "defense": 75,
+    "yards_per_game": 407.9,
+    "tds_per_game": 2.1,
+    "games": 10
+  },
+  "ATL": {
+    "offense": 77,
+    "defense": 75,
+    "yards_per_game": 499.1,
+    "tds_per_game": 2.1,
+    "games": 10
+  },
+  "BAL": {
+    "offense": 79,
+    "defense": 75,
+    "yards_per_game": 473.1,
+    "tds_per_game": 2.7,
+    "games": 10
+  },
+  "BUF": {
+    "offense": 87,
+    "defense": 75,
+    "yards_per_game": 579.1,
+    "tds_per_game": 3.7,
+    "games": 10
+  },
+  "CAR": {
+    "offense": 76,
+    "defense": 75,
+    "yards_per_game": 494.0,
+    "tds_per_game": 2.0,
+    "games": 11
+  },
+  "CHI": {
+    "offense": 80,
+    "defense": 75,
+    "yards_per_game": 548.7,
+    "tds_per_game": 2.4,
+    "games": 10
+  },
+  "CIN": {
+    "offense": 74,
+    "defense": 75,
+    "yards_per_game": 449.7,
+    "tds_per_game": 1.92,
+    "games": 13
+  },
+  "CLE": {
+    "offense": 64,
+    "defense": 75,
+    "yards_per_game": 253.0,
+    "tds_per_game": 1.15,
+    "games": 13
+  },
+  "DAL": {
+    "offense": 85,
+    "defense": 75,
+    "yards_per_game": 609.2,
+    "tds_per_game": 3.0,
+    "games": 9
+  },
+  "DEN": {
+    "offense": 71,
+    "defense": 75,
+    "yards_per_game": 367.1,
+    "tds_per_game": 1.92,
+    "games": 13
+  },
+  "DET": {
+    "offense": 83,
+    "defense": 75,
+    "yards_per_game": 528.8,
+    "tds_per_game": 3.2,
+    "games": 10
+  },
+  "GB": {
+    "offense": 76,
+    "defense": 75,
+    "yards_per_game": 481.0,
+    "tds_per_game": 2.1,
+    "games": 10
+  },
+  "HOU": {
+    "offense": 77,
+    "defense": 75,
+    "yards_per_game": 531.7,
+    "tds_per_game": 1.9,
+    "games": 10
+  },
+  "IND": {
+    "offense": 88,
+    "defense": 75,
+    "yards_per_game": 612.5,
+    "tds_per_game": 3.7,
+    "games": 10
+  },
+  "JAX": {
+    "offense": 66,
+    "defense": 75,
+    "yards_per_game": 290.6,
+    "tds_per_game": 1.41,
+    "games": 17
+  },
+  "KC": {
+    "offense": 84,
+    "defense": 75,
+    "yards_per_game": 577.5,
+    "tds_per_game": 3.0,
+    "games": 10
+  },
+  "LAC": {
+    "offense": 77,
+    "defense": 75,
+    "yards_per_game": 521.7,
+    "tds_per_game": 1.91,
+    "games": 11
+  },
+  "LAR": {
+    "offense": 86,
+    "defense": 75,
+    "yards_per_game": 582.5,
+    "tds_per_game": 3.4,
+    "games": 10
+  },
+  "LV": {
+    "offense": 63,
+    "defense": 75,
+    "yards_per_game": 255.7,
+    "tds_per_game": 1.0,
+    "games": 15
+  },
+  "MIA": {
+    "offense": 72,
+    "defense": 75,
+    "yards_per_game": 420.7,
+    "tds_per_game": 1.73,
+    "games": 11
+  },
+  "MIN": {
+    "offense": 67,
+    "defense": 75,
+    "yards_per_game": 276.6,
+    "tds_per_game": 1.62,
+    "games": 13
+  },
+  "NE": {
+    "offense": 82,
+    "defense": 75,
+    "yards_per_game": 562.6,
+    "tds_per_game": 2.82,
+    "games": 11
+  },
+  "NO": {
+    "offense": 62,
+    "defense": 75,
+    "yards_per_game": 258.6,
+    "tds_per_game": 0.69,
+    "games": 16
+  },
+  "NYG": {
+    "offense": 73,
+    "defense": 75,
+    "yards_per_game": 421.1,
+    "tds_per_game": 1.82,
+    "games": 11
+  },
+  "NYJ": {
+    "offense": 57,
+    "defense": 75,
+    "yards_per_game": 137.2,
+    "tds_per_game": 0.48,
+    "games": 25
+  },
+  "PHI": {
+    "offense": 73,
+    "defense": 75,
+    "yards_per_game": 387.9,
+    "tds_per_game": 2.17,
+    "games": 12
+  },
+  "PIT": {
+    "offense": 77,
+    "defense": 75,
+    "yards_per_game": 461.8,
+    "tds_per_game": 2.5,
+    "games": 10
+  },
+  "SEA": {
+    "offense": 70,
+    "defense": 75,
+    "yards_per_game": 353.9,
+    "tds_per_game": 1.72,
+    "games": 18
+  },
+  "SF": {
+    "offense": 80,
+    "defense": 75,
+    "yards_per_game": 536.1,
+    "tds_per_game": 2.45,
+    "games": 11
+  },
+  "TB": {
+    "offense": 79,
+    "defense": 75,
+    "yards_per_game": 508.2,
+    "tds_per_game": 2.5,
+    "games": 10
+  },
+  "TEN": {
+    "offense": 69,
+    "defense": 75,
+    "yards_per_game": 424.9,
+    "tds_per_game": 0.9,
+    "games": 10
+  },
+  "WAS": {
+    "offense": 75,
+    "defense": 75,
+    "yards_per_game": 448.5,
+    "tds_per_game": 2.18,
+    "games": 11
+  }
+}
