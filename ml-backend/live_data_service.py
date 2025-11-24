@@ -223,71 +223,107 @@ class LiveNFLDataService:
     
     def get_weather(self, city: str, state: str, game_date: str) -> Dict:
         """
-        Get weather forecast for game location
+        Get weather forecast for game location using Weather.gov (NOAA)
         Returns weather score 0-100 (100 = perfect, 0 = terrible)
         
-        NOTE: Requires OpenWeatherMap API key (free tier: 1000 calls/day)
-        Set OPENWEATHER_API_KEY environment variable
+        FREE - No API key needed, unlimited calls, US government data
         """
         try:
-            api_key = os.environ.get('OPENWEATHER_API_KEY')
-            if not api_key:
-                logger.warning("No weather API key - using default weather score")
-                return {'score': 75, 'description': 'Unknown'}
+            # Stadium coordinates for major NFL cities
+            # Weather.gov requires lat/lon, not city names
+            stadium_coords = {
+                'Glendale': (33.5276, -112.2626),  # ARI
+                'Atlanta': (33.7490, -84.3880),     # ATL
+                'Baltimore': (39.2904, -76.6122),   # BAL
+                'Buffalo': (42.7738, -78.7870),     # BUF
+                'Charlotte': (35.2271, -80.8431),   # CAR
+                'Chicago': (41.8781, -87.6298),     # CHI
+                'Cincinnati': (39.1031, -84.5120),  # CIN
+                'Cleveland': (41.4993, -81.6944),   # CLE
+                'Arlington': (32.7473, -97.0945),   # DAL (AT&T Stadium)
+                'Denver': (39.7439, -105.0201),     # DEN
+                'Detroit': (42.3400, -83.0456),     # DET
+                'Green Bay': (44.5013, -88.0622),   # GB
+                'Houston': (29.7604, -95.3698),     # HOU
+                'Indianapolis': (39.7601, -86.1639), # IND
+                'Jacksonville': (30.3322, -81.6557), # JAX
+                'Kansas City': (39.0997, -94.5786), # KC
+                'Paradise': (36.0909, -115.1833),   # LV (Allegiant Stadium)
+                'Inglewood': (33.9534, -118.3390),  # LAR/LAC (SoFi Stadium)
+                'Miami Gardens': (25.9580, -80.2389), # MIA
+                'Minneapolis': (44.9778, -93.2650), # MIN
+                'Foxborough': (42.0909, -71.2643),  # NE
+                'New Orleans': (29.9511, -90.0715), # NO
+                'East Rutherford': (40.8128, -74.0742), # NYG/NYJ (MetLife)
+                'Philadelphia': (39.9012, -75.1675), # PHI
+                'Pittsburgh': (40.4468, -80.0158),  # PIT
+                'Santa Clara': (37.4032, -121.9698), # SF (Levi's Stadium)
+                'Seattle': (47.5952, -122.3316),    # SEA
+                'Tampa': (27.9759, -82.5033),       # TB
+                'Nashville': (36.1627, -86.7816),   # TEN
+                'Landover': (38.9076, -76.8645)     # WAS (FedEx Field)
+            }
             
             # Get coordinates for city
-            geo_url = f"http://api.openweathermap.org/geo/1.0/direct"
-            geo_params = {
-                'q': f"{city},{state},US",
-                'limit': 1,
-                'appid': api_key
+            coords = stadium_coords.get(city)
+            if not coords:
+                # Fallback: try to match partial city name
+                for stadium_city, coord in stadium_coords.items():
+                    if city.lower() in stadium_city.lower() or stadium_city.lower() in city.lower():
+                        coords = coord
+                        break
+            
+            if not coords:
+                logger.warning(f"No coordinates found for {city}, {state}")
+                return {'score': 75, 'description': 'Unknown location'}
+            
+            lat, lon = coords
+            
+            # Step 1: Get grid point data from coordinates
+            points_url = f"https://api.weather.gov/points/{lat},{lon}"
+            points_response = requests.get(points_url, headers={'User-Agent': 'BetYard NFL Predictor'}, timeout=10)
+            
+            if points_response.status_code != 200:
+                logger.warning(f"Weather.gov points API failed: {points_response.status_code}")
+                return {'score': 75, 'description': 'API error'}
+            
+            points_data = points_response.json()
+            forecast_url = points_data['properties']['forecast']
+            
+            # Step 2: Get forecast
+            forecast_response = requests.get(forecast_url, headers={'User-Agent': 'BetYard NFL Predictor'}, timeout=10)
+            
+            if forecast_response.status_code != 200:
+                logger.warning(f"Weather.gov forecast API failed: {forecast_response.status_code}")
+                return {'score': 75, 'description': 'Forecast unavailable'}
+            
+            forecast_data = forecast_response.json()
+            
+            # Get current/next period forecast
+            periods = forecast_data['properties']['periods']
+            if not periods:
+                return {'score': 75, 'description': 'No forecast data'}
+            
+            current_forecast = periods[0]
+            
+            # Extract weather data
+            temp = current_forecast['temperature']
+            wind_speed = int(current_forecast.get('windSpeed', '0 mph').split()[0]) if current_forecast.get('windSpeed') else 0
+            conditions = current_forecast['shortForecast']
+            
+            # Calculate weather score
+            score = self._calculate_weather_score(temp, wind_speed, conditions)
+            
+            return {
+                'score': score,
+                'temp': temp,
+                'wind': wind_speed,
+                'conditions': conditions,
+                'description': f"{temp}°F, {conditions}, {wind_speed}mph wind"
             }
-            
-            geo_response = requests.get(geo_url, params=geo_params, timeout=10)
-            geo_data = geo_response.json()
-            
-            if not geo_data:
-                return {'score': 75, 'description': 'Unknown'}
-            
-            lat = geo_data[0]['lat']
-            lon = geo_data[0]['lon']
-            
-            # Get weather forecast
-            weather_url = f"http://api.openweathermap.org/data/2.5/forecast"
-            weather_params = {
-                'lat': lat,
-                'lon': lon,
-                'appid': api_key,
-                'units': 'imperial'
-            }
-            
-            weather_response = requests.get(weather_url, params=weather_params, timeout=10)
-            weather_data = weather_response.json()
-            
-            # Find forecast closest to game time
-            # For now, get current/next forecast
-            if 'list' in weather_data and len(weather_data['list']) > 0:
-                forecast = weather_data['list'][0]
-                
-                temp = forecast['main']['temp']
-                wind_speed = forecast['wind']['speed']
-                conditions = forecast['weather'][0]['main']
-                
-                # Calculate weather score
-                score = self._calculate_weather_score(temp, wind_speed, conditions)
-                
-                return {
-                    'score': score,
-                    'temp': temp,
-                    'wind': wind_speed,
-                    'conditions': conditions,
-                    'description': f"{temp}°F, {conditions}, {wind_speed}mph wind"
-                }
-            
-            return {'score': 75, 'description': 'Unknown'}
             
         except Exception as e:
-            logger.error(f"Failed to get weather: {e}")
+            logger.error(f"Failed to get weather from Weather.gov: {e}")
             return {'score': 75, 'description': 'Error fetching weather'}
     
     def _calculate_weather_score(self, temp: float, wind: float, conditions: str) -> int:
@@ -313,11 +349,14 @@ class LiveNFLDataService:
         elif wind > 15:  # Windy
             score -= 10
         
-        # Precipitation impact
-        if conditions in ['Rain', 'Thunderstorm']:
+        # Precipitation impact (check for keywords in conditions string)
+        conditions_lower = conditions.lower()
+        if 'rain' in conditions_lower or 'storm' in conditions_lower:
             score -= 15
-        elif conditions == 'Snow':
+        elif 'snow' in conditions_lower:
             score -= 25
+        elif 'shower' in conditions_lower:
+            score -= 10
         
         return max(0, min(100, score))
     
