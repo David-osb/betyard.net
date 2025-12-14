@@ -321,7 +321,13 @@ class SportDataFetcher {
         console.log(`🎮 Fetching ${this.sport.name} games for ${dateInfo.today}...`);
         
         try {
-            // Build date-aware ESPN API URL
+            // For NFL, always fetch the entire week to show all games
+            if (this.sport.name === 'NFL') {
+                console.log(`🏈 NFL: Fetching entire week to show all games...`);
+                return this.fetchWeekGames(dateInfo);
+            }
+            
+            // Build date-aware ESPN API URL for other sports
             let apiUrl = this.sport.apis.espn.scoreboard;
             
             // For most sports, add date parameter to get today's games
@@ -365,9 +371,17 @@ class SportDataFetcher {
         try {
             let apiUrl = this.sport.apis.espn.scoreboard;
             
-            // Remove any existing date params and add week range
-            apiUrl = apiUrl.split('?')[0];
-            apiUrl += `?limit=50&dates=${dateInfo.weekStart}-${dateInfo.weekEnd}`;
+            // For NFL, use week parameter instead of date range for better results
+            if (this.sport.name === 'NFL') {
+                const currentWeek = window.NFLSchedule ? window.NFLSchedule.getCurrentNFLWeek().week : 15;
+                apiUrl = apiUrl.split('?')[0];
+                apiUrl += `?limit=100&seasontype=2&week=${currentWeek}`;
+                console.log(`🏈 NFL: Fetching Week ${currentWeek} games with week parameter`);
+            } else {
+                // For other sports, use date range
+                apiUrl = apiUrl.split('?')[0];
+                apiUrl += `?limit=100&dates=${dateInfo.weekStart}-${dateInfo.weekEnd}`;
+            }
             
             console.log(`🗓️ ${this.sport.name}: Fetching week games from:`, apiUrl);
             
