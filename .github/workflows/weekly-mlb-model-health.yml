@@ -35,6 +35,11 @@ jobs:
         run: |
           echo "date_et=$(TZ=America/New_York date +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
+      - name: Validate MLB data contract
+        working-directory: ml-backend
+        run: |
+          python validate_mlb_data_contract.py --date "${{ steps.etdate.outputs.date_et }}" --require-props
+
       - name: Refresh MLB artifacts
         working-directory: ml-backend
         run: |
