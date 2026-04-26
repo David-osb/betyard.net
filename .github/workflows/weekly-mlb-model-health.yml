@@ -1,0 +1,66 @@
+name: Weekly MLB Model Health
+
+on:
+  schedule:
+    # Sundays at 14:00 UTC (~10:00 ET in DST)
+    - cron: "0 14 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: ml-backend/requirements.txt
+
+      - name: Install dependencies
+        working-directory: ml-backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Determine ET date
+        id: etdate
+        run: |
+          echo "date_et=$(TZ=America/New_York date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh MLB artifacts
+        working-directory: ml-backend
+        run: |
+          python fetch_mlb_stats.py --date "${{ steps.etdate.outputs.date_et }}"
+          python train_mlb_ensemble_models.py
+
+      - name: Generate model health report
+        working-directory: ml-backend
+        run: |
+          python mlb_model_health_report.py
+
+      - name: Add report to workflow summary
+        if: always()
+        run: |
+          if [ -f "ml-backend/reports/mlb_model_health_report.md" ]; then
+            cat "ml-backend/reports/mlb_model_health_report.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload health report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlb-model-health-report
+          path: |
+            ml-backend/reports/mlb_model_health_report.md
+            ml-backend/reports/mlb_model_health_report.json
+            ml-backend/mlb_ensemble_metrics.json
+            ml-backend/mlb_prop_predictions_ml.json
+          if-no-files-found: warn
