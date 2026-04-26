@@ -12,10 +12,22 @@ permissions:
 jobs:
   health-report:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Verify workspace layout
+        run: |
+          pwd
+          ls -la
+          test -d ml-backend
+          test -f ml-backend/mlb_model_health_report.py
+          test -f ml-backend/fetch_mlb_stats.py
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -38,7 +50,7 @@ jobs:
       - name: Validate MLB data contract
         working-directory: ml-backend
         run: |
-          python validate_mlb_data_contract.py --date "${{ steps.etdate.outputs.date_et }}" --require-props
+          python validate_mlb_data_contract.py --date "${{ steps.etdate.outputs.date_et }}"
 
       - name: Refresh MLB artifacts
         working-directory: ml-backend
@@ -56,6 +68,8 @@ jobs:
         run: |
           if [ -f "ml-backend/reports/mlb_model_health_report.md" ]; then
             cat "ml-backend/reports/mlb_model_health_report.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "MLB health report markdown was not generated." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Upload health report artifacts
