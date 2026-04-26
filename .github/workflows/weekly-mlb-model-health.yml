@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          submodules: false
 
       - name: Verify workspace layout
         run: |
@@ -28,6 +29,7 @@ jobs:
           test -d ml-backend
           test -f ml-backend/mlb_model_health_report.py
           test -f ml-backend/fetch_mlb_stats.py
+          test -f ml-backend/train_mlb_ensemble_models.py -o -f ml-backend/train_mlb_models.py
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -52,11 +54,25 @@ jobs:
         run: |
           python validate_mlb_data_contract.py --date "${{ steps.etdate.outputs.date_et }}"
 
+      - name: Resolve MLB trainer script
+        id: trainer
+        working-directory: ml-backend
+        run: |
+          if [ -f "train_mlb_ensemble_models.py" ]; then
+            echo "trainer_script=train_mlb_ensemble_models.py" >> "$GITHUB_OUTPUT"
+          elif [ -f "train_mlb_models.py" ]; then
+            echo "trainer_script=train_mlb_models.py" >> "$GITHUB_OUTPUT"
+          else
+            echo "No MLB trainer script found in ml-backend" >&2
+            ls -la
+            exit 1
+          fi
+
       - name: Refresh MLB artifacts
         working-directory: ml-backend
         run: |
           python fetch_mlb_stats.py --date "${{ steps.etdate.outputs.date_et }}"
-          python train_mlb_ensemble_models.py
+          python "${{ steps.trainer.outputs.trainer_script }}"
 
       - name: Generate model health report
         working-directory: ml-backend
