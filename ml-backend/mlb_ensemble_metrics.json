@@ -1,0 +1,689 @@
+{
+  "model_type": "Stacked Ensemble (XGBoost + RandomForest + ExtraTrees -> Ridge)",
+  "windows": [
+    5,
+    10,
+    20
+  ],
+  "hitter_features": [
+    "games_in_history",
+    "is_catcher",
+    "is_infield",
+    "is_outfield",
+    "is_dh",
+    "hits_last1",
+    "hits_avg_5",
+    "hits_std_5",
+    "hits_max_5",
+    "hits_min_5",
+    "hits_avg_10",
+    "hits_std_10",
+    "hits_max_10",
+    "hits_min_10",
+    "hits_avg_20",
+    "hits_std_20",
+    "hits_max_20",
+    "hits_min_20",
+    "hits_trend_5v20",
+    "home_runs_last1",
+    "home_runs_avg_5",
+    "home_runs_std_5",
+    "home_runs_max_5",
+    "home_runs_min_5",
+    "home_runs_avg_10",
+    "home_runs_std_10",
+    "home_runs_max_10",
+    "home_runs_min_10",
+    "home_runs_avg_20",
+    "home_runs_std_20",
+    "home_runs_max_20",
+    "home_runs_min_20",
+    "home_runs_trend_5v20",
+    "rbis_last1",
+    "rbis_avg_5",
+    "rbis_std_5",
+    "rbis_max_5",
+    "rbis_min_5",
+    "rbis_avg_10",
+    "rbis_std_10",
+    "rbis_max_10",
+    "rbis_min_10",
+    "rbis_avg_20",
+    "rbis_std_20",
+    "rbis_max_20",
+    "rbis_min_20",
+    "rbis_trend_5v20",
+    "batter_strikeouts_last1",
+    "batter_strikeouts_avg_5",
+    "batter_strikeouts_std_5",
+    "batter_strikeouts_max_5",
+    "batter_strikeouts_min_5",
+    "batter_strikeouts_avg_10",
+    "batter_strikeouts_std_10",
+    "batter_strikeouts_max_10",
+    "batter_strikeouts_min_10",
+    "batter_strikeouts_avg_20",
+    "batter_strikeouts_std_20",
+    "batter_strikeouts_max_20",
+    "batter_strikeouts_min_20",
+    "batter_strikeouts_trend_5v20",
+    "season_hits",
+    "season_home_runs",
+    "season_rbis",
+    "season_batter_strikeouts",
+    "ctx_is_home",
+    "ctx_park_factor",
+    "ctx_opp_starter_era",
+    "ctx_opp_starter_k9",
+    "ctx_opp_team_k_rate",
+    "ctx_temperature_f",
+    "ctx_wind_out_mph"
+  ],
+  "pitcher_features": [
+    "games_in_history",
+    "is_starter",
+    "is_reliever",
+    "strikeouts_last1",
+    "strikeouts_avg_5",
+    "strikeouts_std_5",
+    "strikeouts_max_5",
+    "strikeouts_min_5",
+    "strikeouts_avg_10",
+    "strikeouts_std_10",
+    "strikeouts_max_10",
+    "strikeouts_min_10",
+    "strikeouts_avg_20",
+    "strikeouts_std_20",
+    "strikeouts_max_20",
+    "strikeouts_min_20",
+    "strikeouts_trend_5v20",
+    "hits_allowed_last1",
+    "hits_allowed_avg_5",
+    "hits_allowed_std_5",
+    "hits_allowed_max_5",
+    "hits_allowed_min_5",
+    "hits_allowed_avg_10",
+    "hits_allowed_std_10",
+    "hits_allowed_max_10",
+    "hits_allowed_min_10",
+    "hits_allowed_avg_20",
+    "hits_allowed_std_20",
+    "hits_allowed_max_20",
+    "hits_allowed_min_20",
+    "hits_allowed_trend_5v20",
+    "earned_runs_last1",
+    "earned_runs_avg_5",
+    "earned_runs_std_5",
+    "earned_runs_max_5",
+    "earned_runs_min_5",
+    "earned_runs_avg_10",
+    "earned_runs_std_10",
+    "earned_runs_max_10",
+    "earned_runs_min_10",
+    "earned_runs_avg_20",
+    "earned_runs_std_20",
+    "earned_runs_max_20",
+    "earned_runs_min_20",
+    "earned_runs_trend_5v20",
+    "season_strikeouts",
+    "season_hits_allowed",
+    "season_earned_runs",
+    "ctx_is_home",
+    "ctx_park_factor",
+    "ctx_opp_starter_era",
+    "ctx_opp_starter_k9",
+    "ctx_opp_team_k_rate",
+    "ctx_temperature_f",
+    "ctx_wind_out_mph"
+  ],
+  "market_features": [
+    "mkt_has_line",
+    "mkt_line",
+    "mkt_over_odds",
+    "mkt_under_odds",
+    "mkt_implied_over"
+  ],
+  "hitter_targets": {
+    "hits": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 3246,
+      "test_samples": 1588,
+      "train_nonzero": 1912,
+      "test_nonzero": 962,
+      "train_nonzero_rate": 0.589,
+      "test_nonzero_rate": 0.6058,
+      "train_market_rows": 0,
+      "test_market_rows": 67,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0422,
+      "mae": 0.6525,
+      "rmse": 0.822,
+      "r2": 0.1275,
+      "residual_sigma": 0.9018,
+      "directional_accuracy": 0.6669,
+      "recommendation_hit_rate": 0.6956,
+      "recommendation_rate": 0.8564,
+      "probability_mae": 0.4333,
+      "brier": 0.2104,
+      "calibration": [
+        {
+          "bucket": "0.1-0.2",
+          "n": 18,
+          "avg_pred": 0.1806,
+          "actual_rate": 0.0556
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 149,
+          "avg_pred": 0.253,
+          "actual_rate": 0.1342
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 164,
+          "avg_pred": 0.3462,
+          "actual_rate": 0.2744
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 179,
+          "avg_pred": 0.4516,
+          "actual_rate": 0.3464
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 327,
+          "avg_pred": 0.555,
+          "actual_rate": 0.4801
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 504,
+          "avg_pred": 0.6504,
+          "actual_rate": 0.6429
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 235,
+          "avg_pred": 0.7341,
+          "actual_rate": 0.7872
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 12,
+          "avg_pred": 0.8118,
+          "actual_rate": 0.9167
+        }
+      ]
+    },
+    "home_runs": {
+      "status": "ok",
+      "mode": "binary_hr_classifier",
+      "train_samples": 3246,
+      "test_samples": 1588,
+      "train_nonzero": 350,
+      "test_nonzero": 200,
+      "train_nonzero_rate": 0.1078,
+      "test_nonzero_rate": 0.1259,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "directional_accuracy": 0.6826,
+      "recommendation_hit_rate": 0.7361,
+      "recommendation_rate": 0.6562,
+      "probability_mae": 0.4191,
+      "brier": 0.2113,
+      "auc": 0.7633,
+      "calibration": [
+        {
+          "bucket": "0.0-0.1",
+          "n": 5,
+          "avg_pred": 0.0924,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.1-0.2",
+          "n": 126,
+          "avg_pred": 0.1653,
+          "actual_rate": 0.0079
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 323,
+          "avg_pred": 0.2482,
+          "actual_rate": 0.0186
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 289,
+          "avg_pred": 0.3489,
+          "actual_rate": 0.083
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 255,
+          "avg_pred": 0.4504,
+          "actual_rate": 0.102
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 208,
+          "avg_pred": 0.5466,
+          "actual_rate": 0.1538
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 165,
+          "avg_pred": 0.6482,
+          "actual_rate": 0.2606
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 123,
+          "avg_pred": 0.7458,
+          "actual_rate": 0.2927
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 87,
+          "avg_pred": 0.843,
+          "actual_rate": 0.3103
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 7,
+          "avg_pred": 0.9299,
+          "actual_rate": 0.7143
+        }
+      ],
+      "line": 0.5
+    },
+    "rbis": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 3246,
+      "test_samples": 1588,
+      "train_nonzero": 973,
+      "test_nonzero": 487,
+      "train_nonzero_rate": 0.2998,
+      "test_nonzero_rate": 0.3067,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "mae": 0.6038,
+      "rmse": 0.805,
+      "r2": 0.0934,
+      "residual_sigma": 0.7738,
+      "directional_accuracy": 0.5926,
+      "recommendation_hit_rate": 0.6353,
+      "recommendation_rate": 0.6889,
+      "probability_mae": 0.4724,
+      "brier": 0.2357,
+      "calibration": [
+        {
+          "bucket": "0.2-0.3",
+          "n": 49,
+          "avg_pred": 0.2771,
+          "actual_rate": 0.102
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 315,
+          "avg_pred": 0.3572,
+          "actual_rate": 0.1524
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 498,
+          "avg_pred": 0.4507,
+          "actual_rate": 0.3032
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 433,
+          "avg_pred": 0.5464,
+          "actual_rate": 0.358
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 222,
+          "avg_pred": 0.6444,
+          "actual_rate": 0.4099
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 64,
+          "avg_pred": 0.734,
+          "actual_rate": 0.5
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 7,
+          "avg_pred": 0.822,
+          "actual_rate": 0.7143
+        }
+      ]
+    },
+    "batter_strikeouts": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 3246,
+      "test_samples": 1588,
+      "train_nonzero": 1904,
+      "test_nonzero": 910,
+      "train_nonzero_rate": 0.5866,
+      "test_nonzero_rate": 0.573,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "mae": 0.681,
+      "rmse": 0.8429,
+      "r2": 0.039,
+      "residual_sigma": 0.8199,
+      "directional_accuracy": 0.6297,
+      "recommendation_hit_rate": 0.6403,
+      "recommendation_rate": 0.954,
+      "probability_mae": 0.4305,
+      "brier": 0.2219,
+      "calibration": [
+        {
+          "bucket": "0.1-0.2",
+          "n": 136,
+          "avg_pred": 0.1792,
+          "actual_rate": 0.1471
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 541,
+          "avg_pred": 0.2472,
+          "actual_rate": 0.2495
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 136,
+          "avg_pred": 0.3319,
+          "actual_rate": 0.3309
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 38,
+          "avg_pred": 0.4519,
+          "actual_rate": 0.4737
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 259,
+          "avg_pred": 0.5676,
+          "actual_rate": 0.4247
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 431,
+          "avg_pred": 0.6405,
+          "actual_rate": 0.5429
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 46,
+          "avg_pred": 0.7242,
+          "actual_rate": 0.5
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 1,
+          "avg_pred": 0.842,
+          "actual_rate": 0.0
+        }
+      ]
+    }
+  },
+  "pitcher_targets": {
+    "strikeouts": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 719,
+      "test_samples": 511,
+      "train_nonzero": 458,
+      "test_nonzero": 335,
+      "train_nonzero_rate": 0.637,
+      "test_nonzero_rate": 0.6556,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "mae": 0.6562,
+      "rmse": 0.8201,
+      "r2": 0.2869,
+      "residual_sigma": 0.8214,
+      "directional_accuracy": 0.7045,
+      "recommendation_hit_rate": 0.736,
+      "recommendation_rate": 0.8748,
+      "probability_mae": 0.3941,
+      "brier": 0.1935,
+      "calibration": [
+        {
+          "bucket": "0.1-0.2",
+          "n": 3,
+          "avg_pred": 0.1887,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 10,
+          "avg_pred": 0.238,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 23,
+          "avg_pred": 0.3548,
+          "actual_rate": 0.2609
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 55,
+          "avg_pred": 0.4449,
+          "actual_rate": 0.4
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 84,
+          "avg_pred": 0.5525,
+          "actual_rate": 0.5238
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 128,
+          "avg_pred": 0.6484,
+          "actual_rate": 0.7031
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 114,
+          "avg_pred": 0.7443,
+          "actual_rate": 0.6842
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 69,
+          "avg_pred": 0.8486,
+          "actual_rate": 0.8841
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 25,
+          "avg_pred": 0.9443,
+          "actual_rate": 0.96
+        }
+      ]
+    },
+    "hits_allowed": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 719,
+      "test_samples": 511,
+      "train_nonzero": 390,
+      "test_nonzero": 291,
+      "train_nonzero_rate": 0.5424,
+      "test_nonzero_rate": 0.5695,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "mae": 0.739,
+      "rmse": 0.9317,
+      "r2": 0.3017,
+      "residual_sigma": 0.9841,
+      "directional_accuracy": 0.6791,
+      "recommendation_hit_rate": 0.7098,
+      "recommendation_rate": 0.681,
+      "probability_mae": 0.4483,
+      "brier": 0.2166,
+      "calibration": [
+        {
+          "bucket": "0.1-0.2",
+          "n": 4,
+          "avg_pred": 0.1805,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 14,
+          "avg_pred": 0.2594,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 56,
+          "avg_pred": 0.3586,
+          "actual_rate": 0.0893
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 136,
+          "avg_pred": 0.4565,
+          "actual_rate": 0.1985
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 156,
+          "avg_pred": 0.5477,
+          "actual_rate": 0.4551
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 97,
+          "avg_pred": 0.6439,
+          "actual_rate": 0.6082
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 32,
+          "avg_pred": 0.7349,
+          "actual_rate": 0.8125
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 10,
+          "avg_pred": 0.8382,
+          "actual_rate": 0.8
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 6,
+          "avg_pred": 0.9212,
+          "actual_rate": 0.8333
+        }
+      ]
+    },
+    "earned_runs": {
+      "status": "ok",
+      "mode": "regression_plus_residual_calibration",
+      "train_samples": 719,
+      "test_samples": 511,
+      "train_nonzero": 177,
+      "test_nonzero": 150,
+      "train_nonzero_rate": 0.2462,
+      "test_nonzero_rate": 0.2935,
+      "train_market_rows": 0,
+      "test_market_rows": 0,
+      "train_market_rate": 0.0,
+      "test_market_rate": 0.0,
+      "mae": 0.5604,
+      "rmse": 0.8181,
+      "r2": 0.1485,
+      "residual_sigma": 0.6066,
+      "directional_accuracy": 0.7221,
+      "recommendation_hit_rate": 0.7489,
+      "recommendation_rate": 0.8571,
+      "probability_mae": 0.3946,
+      "brier": 0.1879,
+      "calibration": [
+        {
+          "bucket": "0.0-0.1",
+          "n": 5,
+          "avg_pred": 0.0401,
+          "actual_rate": 0.0
+        },
+        {
+          "bucket": "0.1-0.2",
+          "n": 54,
+          "avg_pred": 0.1619,
+          "actual_rate": 0.0556
+        },
+        {
+          "bucket": "0.2-0.3",
+          "n": 108,
+          "avg_pred": 0.2468,
+          "actual_rate": 0.1667
+        },
+        {
+          "bucket": "0.3-0.4",
+          "n": 119,
+          "avg_pred": 0.3503,
+          "actual_rate": 0.2185
+        },
+        {
+          "bucket": "0.4-0.5",
+          "n": 95,
+          "avg_pred": 0.4491,
+          "actual_rate": 0.3158
+        },
+        {
+          "bucket": "0.5-0.6",
+          "n": 51,
+          "avg_pred": 0.5506,
+          "actual_rate": 0.2941
+        },
+        {
+          "bucket": "0.6-0.7",
+          "n": 44,
+          "avg_pred": 0.6477,
+          "actual_rate": 0.5909
+        },
+        {
+          "bucket": "0.7-0.8",
+          "n": 19,
+          "avg_pred": 0.7427,
+          "actual_rate": 0.5789
+        },
+        {
+          "bucket": "0.8-0.9",
+          "n": 12,
+          "avg_pred": 0.8533,
+          "actual_rate": 0.75
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 4,
+          "avg_pred": 0.9781,
+          "actual_rate": 1.0
+        }
+      ]
+    }
+  }
+}
