@@ -147,155 +147,167 @@
     "hits": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 3586,
-      "test_samples": 1657,
-      "train_nonzero": 2116,
-      "test_nonzero": 994,
-      "train_nonzero_rate": 0.5901,
-      "test_nonzero_rate": 0.5999,
-      "train_market_rows": 0,
-      "test_market_rows": 166,
-      "train_market_rate": 0.0,
-      "test_market_rate": 0.1002,
-      "mae": 0.6544,
-      "rmse": 0.816,
-      "r2": 0.1254,
-      "residual_sigma": 0.7995,
-      "directional_accuracy": 0.6548,
-      "recommendation_hit_rate": 0.6674,
-      "recommendation_rate": 0.8745,
-      "probability_mae": 0.4336,
-      "brier": 0.2154,
+      "train_samples": 3934,
+      "test_samples": 1776,
+      "train_nonzero": 2340,
+      "test_nonzero": 1040,
+      "train_nonzero_rate": 0.5948,
+      "test_nonzero_rate": 0.5856,
+      "train_market_rows": 2,
+      "test_market_rows": 218,
+      "train_market_rate": 0.0005,
+      "test_market_rate": 0.1227,
+      "mae": 0.6915,
+      "rmse": 0.8758,
+      "r2": 0.0135,
+      "residual_sigma": 0.7977,
+      "directional_accuracy": 0.6256,
+      "recommendation_hit_rate": 0.6413,
+      "recommendation_rate": 0.8947,
+      "probability_mae": 0.4354,
+      "brier": 0.2291,
       "calibration": [
         {
+          "bucket": "0.0-0.1",
+          "n": 50,
+          "avg_pred": 0.0419,
+          "actual_rate": 0.18
+        },
+        {
           "bucket": "0.1-0.2",
-          "n": 46,
-          "avg_pred": 0.1759,
-          "actual_rate": 0.087
+          "n": 89,
+          "avg_pred": 0.1591,
+          "actual_rate": 0.2697
         },
         {
           "bucket": "0.2-0.3",
-          "n": 144,
-          "avg_pred": 0.2558,
-          "actual_rate": 0.1736
+          "n": 177,
+          "avg_pred": 0.251,
+          "actual_rate": 0.3051
         },
         {
           "bucket": "0.3-0.4",
-          "n": 183,
-          "avg_pred": 0.345,
-          "actual_rate": 0.3115
+          "n": 206,
+          "avg_pred": 0.3459,
+          "actual_rate": 0.3495
         },
         {
           "bucket": "0.4-0.5",
-          "n": 188,
-          "avg_pred": 0.4514,
-          "actual_rate": 0.3564
+          "n": 176,
+          "avg_pred": 0.4492,
+          "actual_rate": 0.375
         },
         {
           "bucket": "0.5-0.6",
-          "n": 292,
-          "avg_pred": 0.5583,
-          "actual_rate": 0.476
+          "n": 239,
+          "avg_pred": 0.5531,
+          "actual_rate": 0.4561
         },
         {
           "bucket": "0.6-0.7",
-          "n": 475,
-          "avg_pred": 0.6518,
-          "actual_rate": 0.5937
+          "n": 425,
+          "avg_pred": 0.652,
+          "actual_rate": 0.5318
         },
         {
           "bucket": "0.7-0.8",
-          "n": 286,
-          "avg_pred": 0.7434,
-          "actual_rate": 0.7657
+          "n": 342,
+          "avg_pred": 0.7431,
+          "actual_rate": 0.7047
         },
         {
           "bucket": "0.8-0.9",
-          "n": 43,
-          "avg_pred": 0.8211,
-          "actual_rate": 0.8605
+          "n": 66,
+          "avg_pred": 0.8309,
+          "actual_rate": 0.8636
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 6,
+          "avg_pred": 0.9306,
+          "actual_rate": 0.8333
         }
       ]
     },
     "home_runs": {
       "status": "ok",
       "mode": "binary_hr_classifier",
-      "train_samples": 3586,
-      "test_samples": 1657,
-      "train_nonzero": 384,
-      "test_nonzero": 211,
-      "train_nonzero_rate": 0.1071,
-      "test_nonzero_rate": 0.1273,
+      "train_samples": 3934,
+      "test_samples": 1776,
+      "train_nonzero": 434,
+      "test_nonzero": 210,
+      "train_nonzero_rate": 0.1103,
+      "test_nonzero_rate": 0.1182,
       "train_market_rows": 0,
       "test_market_rows": 0,
       "train_market_rate": 0.0,
       "test_market_rate": 0.0,
-      "directional_accuracy": 0.6982,
-      "recommendation_hit_rate": 0.7581,
-      "recommendation_rate": 0.6488,
-      "probability_mae": 0.4109,
-      "brier": 0.2029,
-      "auc": 0.7455,
+      "directional_accuracy": 0.6684,
+      "recommendation_hit_rate": 0.7036,
+      "recommendation_rate": 0.661,
+      "probability_mae": 0.434,
+      "brier": 0.2249,
+      "auc": 0.7365,
       "calibration": [
         {
           "bucket": "0.0-0.1",
-          "n": 5,
-          "avg_pred": 0.0908,
+          "n": 3,
+          "avg_pred": 0.0922,
           "actual_rate": 0.0
         },
         {
           "bucket": "0.1-0.2",
-          "n": 160,
-          "avg_pred": 0.1678,
-          "actual_rate": 0.0063
+          "n": 91,
+          "avg_pred": 0.1682,
+          "actual_rate": 0.0
         },
         {
           "bucket": "0.2-0.3",
-          "n": 357,
-          "avg_pred": 0.2505,
-          "actual_rate": 0.0308
+          "n": 348,
+          "avg_pred": 0.2497,
+          "actual_rate": 0.0086
         },
         {
           "bucket": "0.3-0.4",
-          "n": 301,
-          "avg_pred": 0.3491,
-          "actual_rate": 0.0764
+          "n": 388,
+          "avg_pred": 0.3482,
+          "actual_rate": 0.0747
         },
         {
           "bucket": "0.4-0.5",
-          "n": 269,
-          "avg_pred": 0.447,
-          "actual_rate": 0.1413
+          "n": 281,
+          "avg_pred": 0.4484,
+          "actual_rate": 0.1246
         },
         {
           "bucket": "0.5-0.6",
-          "n": 207,
-          "avg_pred": 0.5494,
-          "actual_rate": 0.2174
+          "n": 217,
+          "avg_pred": 0.5491,
+          "actual_rate": 0.1843
         },
         {
           "bucket": "0.6-0.7",
-          "n": 179,
-          "avg_pred": 0.6441,
-          "actual_rate": 0.2458
+          "n": 188,
+          "avg_pred": 0.6521,
+          "actual_rate": 0.2074
         },
         {
           "bucket": "0.7-0.8",
-          "n": 102,
-          "avg_pred": 0.7477,
+          "n": 136,
+          "avg_pred": 0.7498,
           "actual_rate": 0.2059
         },
         {
           "bucket": "0.8-0.9",
-          "n": 70,
-          "avg_pred": 0.8419,
-          "actual_rate": 0.3429
+          "n": 104,
+          "avg_pred": 0.8445,
+          "actual_rate": 0.2596
         },
         {
           "bucket": "0.9-1.0",
-          "n": 7,
-          "avg_pred": 0.9251,
-          "actual_rate": 0.5714
+          "n": 20,
+          "avg_pred": 0.9193,
+          "actual_rate": 0.45
         }
       ],
       "line": 0.5
@@ -303,146 +315,140 @@
     "rbis": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 3586,
-      "test_samples": 1657,
-      "train_nonzero": 1071,
-      "test_nonzero": 491,
-      "train_nonzero_rate": 0.2987,
-      "test_nonzero_rate": 0.2963,
+      "train_samples": 3934,
+      "test_samples": 1776,
+      "train_nonzero": 1196,
+      "test_nonzero": 513,
+      "train_nonzero_rate": 0.304,
+      "test_nonzero_rate": 0.2889,
       "train_market_rows": 0,
       "test_market_rows": 0,
       "train_market_rate": 0.0,
       "test_market_rate": 0.0,
-      "mae": 0.5934,
-      "rmse": 0.8213,
-      "r2": 0.0943,
-      "residual_sigma": 0.764,
-      "directional_accuracy": 0.6343,
-      "recommendation_hit_rate": 0.6681,
-      "recommendation_rate": 0.6946,
-      "probability_mae": 0.4624,
-      "brier": 0.2262,
+      "mae": 0.5968,
+      "rmse": 0.8017,
+      "r2": 0.089,
+      "residual_sigma": 0.7568,
+      "directional_accuracy": 0.6273,
+      "recommendation_hit_rate": 0.6567,
+      "recommendation_rate": 0.6937,
+      "probability_mae": 0.4679,
+      "brier": 0.2329,
       "calibration": [
         {
-          "bucket": "0.1-0.2",
-          "n": 3,
-          "avg_pred": 0.1928,
-          "actual_rate": 0.0
-        },
-        {
           "bucket": "0.2-0.3",
-          "n": 75,
-          "avg_pred": 0.2736,
-          "actual_rate": 0.0533
+          "n": 61,
+          "avg_pred": 0.2782,
+          "actual_rate": 0.0492
         },
         {
           "bucket": "0.3-0.4",
-          "n": 418,
-          "avg_pred": 0.3549,
-          "actual_rate": 0.1722
+          "n": 400,
+          "avg_pred": 0.3612,
+          "actual_rate": 0.1225
         },
         {
           "bucket": "0.4-0.5",
-          "n": 520,
-          "avg_pred": 0.4519,
-          "actual_rate": 0.2923
+          "n": 554,
+          "avg_pred": 0.4505,
+          "actual_rate": 0.2798
         },
         {
           "bucket": "0.5-0.6",
-          "n": 408,
-          "avg_pred": 0.5454,
-          "actual_rate": 0.3676
+          "n": 423,
+          "avg_pred": 0.5445,
+          "actual_rate": 0.3877
         },
         {
           "bucket": "0.6-0.7",
-          "n": 187,
-          "avg_pred": 0.6418,
-          "actual_rate": 0.4599
+          "n": 229,
+          "avg_pred": 0.6415,
+          "actual_rate": 0.3668
         },
         {
           "bucket": "0.7-0.8",
-          "n": 41,
-          "avg_pred": 0.7314,
-          "actual_rate": 0.6098
+          "n": 87,
+          "avg_pred": 0.7385,
+          "actual_rate": 0.5402
         },
         {
           "bucket": "0.8-0.9",
-          "n": 5,
-          "avg_pred": 0.8452,
-          "actual_rate": 0.4
+          "n": 20,
+          "avg_pred": 0.8463,
+          "actual_rate": 0.55
+        },
+        {
+          "bucket": "0.9-1.0",
+          "n": 2,
+          "avg_pred": 0.907,
+          "actual_rate": 0.0
         }
       ]
     },
     "batter_strikeouts": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 3586,
-      "test_samples": 1657,
-      "train_nonzero": 2095,
-      "test_nonzero": 941,
-      "train_nonzero_rate": 0.5842,
-      "test_nonzero_rate": 0.5679,
+      "train_samples": 3934,
+      "test_samples": 1776,
+      "train_nonzero": 2286,
+      "test_nonzero": 1017,
+      "train_nonzero_rate": 0.5811,
+      "test_nonzero_rate": 0.5726,
       "train_market_rows": 0,
       "test_market_rows": 0,
       "train_market_rate": 0.0,
       "test_market_rate": 0.0,
-      "mae": 0.6772,
-      "rmse": 0.8339,
-      "r2": 0.0405,
-      "residual_sigma": 0.8096,
-      "directional_accuracy": 0.6307,
-      "recommendation_hit_rate": 0.6384,
-      "recommendation_rate": 0.9596,
-      "probability_mae": 0.4314,
-      "brier": 0.2218,
+      "mae": 0.6824,
+      "rmse": 0.8488,
+      "r2": 0.0456,
+      "residual_sigma": 0.8036,
+      "directional_accuracy": 0.6227,
+      "recommendation_hit_rate": 0.6349,
+      "recommendation_rate": 0.9516,
+      "probability_mae": 0.4333,
+      "brier": 0.2233,
       "calibration": [
         {
           "bucket": "0.1-0.2",
-          "n": 128,
-          "avg_pred": 0.182,
-          "actual_rate": 0.1328
+          "n": 136,
+          "avg_pred": 0.1827,
+          "actual_rate": 0.1838
         },
         {
           "bucket": "0.2-0.3",
-          "n": 563,
-          "avg_pred": 0.2484,
-          "actual_rate": 0.2398
+          "n": 608,
+          "avg_pred": 0.2475,
+          "actual_rate": 0.2484
         },
         {
           "bucket": "0.3-0.4",
-          "n": 154,
-          "avg_pred": 0.3331,
-          "actual_rate": 0.3442
+          "n": 148,
+          "avg_pred": 0.3314,
+          "actual_rate": 0.3446
         },
         {
           "bucket": "0.4-0.5",
-          "n": 16,
-          "avg_pred": 0.4558,
-          "actual_rate": 0.375
+          "n": 14,
+          "avg_pred": 0.4474,
+          "actual_rate": 0.5714
         },
         {
           "bucket": "0.5-0.6",
-          "n": 287,
-          "avg_pred": 0.5687,
-          "actual_rate": 0.4704
+          "n": 328,
+          "avg_pred": 0.5661,
+          "actual_rate": 0.4512
         },
         {
           "bucket": "0.6-0.7",
-          "n": 466,
-          "avg_pred": 0.6415,
-          "actual_rate": 0.5236
+          "n": 499,
+          "avg_pred": 0.6388,
+          "actual_rate": 0.521
         },
         {
           "bucket": "0.7-0.8",
-          "n": 42,
-          "avg_pred": 0.7291,
-          "actual_rate": 0.381
-        },
-        {
-          "bucket": "0.8-0.9",
-          "n": 1,
-          "avg_pred": 0.8071,
-          "actual_rate": 0.0
+          "n": 43,
+          "avg_pred": 0.7253,
+          "actual_rate": 0.6279
         }
       ]
     }
@@ -451,243 +457,237 @@
     "strikeouts": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 811,
-      "test_samples": 530,
-      "train_nonzero": 516,
-      "test_nonzero": 352,
-      "train_nonzero_rate": 0.6363,
-      "test_nonzero_rate": 0.6642,
+      "train_samples": 907,
+      "test_samples": 548,
+      "train_nonzero": 584,
+      "test_nonzero": 362,
+      "train_nonzero_rate": 0.6439,
+      "test_nonzero_rate": 0.6606,
       "train_market_rows": 0,
       "test_market_rows": 1,
       "train_market_rate": 0.0,
-      "test_market_rate": 0.0019,
-      "mae": 0.647,
-      "rmse": 0.8182,
-      "r2": 0.2816,
-      "residual_sigma": 0.7949,
-      "directional_accuracy": 0.7151,
-      "recommendation_hit_rate": 0.7215,
-      "recommendation_rate": 0.8943,
-      "probability_mae": 0.383,
-      "brier": 0.1924,
+      "test_market_rate": 0.0018,
+      "mae": 0.6728,
+      "rmse": 0.8326,
+      "r2": 0.2662,
+      "residual_sigma": 0.8796,
+      "directional_accuracy": 0.6734,
+      "recommendation_hit_rate": 0.6898,
+      "recommendation_rate": 0.8942,
+      "probability_mae": 0.4003,
+      "brier": 0.2057,
       "calibration": [
         {
-          "bucket": "0.1-0.2",
-          "n": 1,
-          "avg_pred": 0.1524,
-          "actual_rate": 0.0
-        },
-        {
           "bucket": "0.2-0.3",
-          "n": 8,
-          "avg_pred": 0.2607,
-          "actual_rate": 0.125
+          "n": 4,
+          "avg_pred": 0.2798,
+          "actual_rate": 0.25
         },
         {
           "bucket": "0.3-0.4",
-          "n": 17,
-          "avg_pred": 0.3553,
-          "actual_rate": 0.2353
+          "n": 14,
+          "avg_pred": 0.3554,
+          "actual_rate": 0.2143
         },
         {
           "bucket": "0.4-0.5",
-          "n": 52,
-          "avg_pred": 0.4553,
-          "actual_rate": 0.2885
+          "n": 33,
+          "avg_pred": 0.4594,
+          "actual_rate": 0.303
         },
         {
           "bucket": "0.5-0.6",
-          "n": 60,
-          "avg_pred": 0.5506,
-          "actual_rate": 0.5
+          "n": 91,
+          "avg_pred": 0.5577,
+          "actual_rate": 0.4615
         },
         {
           "bucket": "0.6-0.7",
-          "n": 127,
-          "avg_pred": 0.6558,
-          "actual_rate": 0.6299
+          "n": 149,
+          "avg_pred": 0.6555,
+          "actual_rate": 0.604
         },
         {
           "bucket": "0.7-0.8",
-          "n": 144,
-          "avg_pred": 0.751,
-          "actual_rate": 0.7292
+          "n": 143,
+          "avg_pred": 0.7488,
+          "actual_rate": 0.6923
         },
         {
           "bucket": "0.8-0.9",
-          "n": 75,
-          "avg_pred": 0.8467,
-          "actual_rate": 0.8133
+          "n": 77,
+          "avg_pred": 0.8486,
+          "actual_rate": 0.8831
         },
         {
           "bucket": "0.9-1.0",
-          "n": 46,
-          "avg_pred": 0.9346,
-          "actual_rate": 0.9783
+          "n": 37,
+          "avg_pred": 0.9436,
+          "actual_rate": 0.8919
         }
       ]
     },
     "hits_allowed": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 811,
-      "test_samples": 530,
-      "train_nonzero": 440,
-      "test_nonzero": 312,
-      "train_nonzero_rate": 0.5425,
-      "test_nonzero_rate": 0.5887,
+      "train_samples": 907,
+      "test_samples": 548,
+      "train_nonzero": 491,
+      "test_nonzero": 323,
+      "train_nonzero_rate": 0.5413,
+      "test_nonzero_rate": 0.5894,
       "train_market_rows": 0,
       "test_market_rows": 0,
       "train_market_rate": 0.0,
       "test_market_rate": 0.0,
-      "mae": 0.7742,
-      "rmse": 0.9983,
-      "r2": 0.2735,
-      "residual_sigma": 0.956,
-      "directional_accuracy": 0.6302,
-      "recommendation_hit_rate": 0.6959,
-      "recommendation_rate": 0.6887,
-      "probability_mae": 0.4541,
-      "brier": 0.2232,
+      "mae": 0.7437,
+      "rmse": 0.9369,
+      "r2": 0.2935,
+      "residual_sigma": 0.8738,
+      "directional_accuracy": 0.6314,
+      "recommendation_hit_rate": 0.671,
+      "recommendation_rate": 0.7044,
+      "probability_mae": 0.4537,
+      "brier": 0.2227,
       "calibration": [
         {
           "bucket": "0.1-0.2",
           "n": 1,
-          "avg_pred": 0.1851,
+          "avg_pred": 0.1719,
           "actual_rate": 0.0
         },
         {
           "bucket": "0.2-0.3",
-          "n": 20,
-          "avg_pred": 0.2633,
-          "actual_rate": 0.15
+          "n": 9,
+          "avg_pred": 0.2831,
+          "actual_rate": 0.0
         },
         {
           "bucket": "0.3-0.4",
-          "n": 51,
-          "avg_pred": 0.3596,
-          "actual_rate": 0.0784
+          "n": 65,
+          "avg_pred": 0.3549,
+          "actual_rate": 0.0462
         },
         {
           "bucket": "0.4-0.5",
-          "n": 137,
-          "avg_pred": 0.4593,
-          "actual_rate": 0.2847
+          "n": 138,
+          "avg_pred": 0.454,
+          "actual_rate": 0.2826
         },
         {
           "bucket": "0.5-0.6",
-          "n": 164,
-          "avg_pred": 0.5487,
-          "actual_rate": 0.4512
+          "n": 155,
+          "avg_pred": 0.547,
+          "actual_rate": 0.3935
         },
         {
           "bucket": "0.6-0.7",
-          "n": 103,
-          "avg_pred": 0.6454,
-          "actual_rate": 0.4757
+          "n": 113,
+          "avg_pred": 0.643,
+          "actual_rate": 0.5487
         },
         {
           "bucket": "0.7-0.8",
-          "n": 35,
-          "avg_pred": 0.7387,
-          "actual_rate": 0.9143
+          "n": 44,
+          "avg_pred": 0.7361,
+          "actual_rate": 0.75
         },
         {
           "bucket": "0.8-0.9",
-          "n": 14,
-          "avg_pred": 0.8512,
-          "actual_rate": 0.8571
+          "n": 21,
+          "avg_pred": 0.8343,
+          "actual_rate": 0.8095
         },
         {
           "bucket": "0.9-1.0",
-          "n": 5,
-          "avg_pred": 0.9355,
-          "actual_rate": 0.8
+          "n": 2,
+          "avg_pred": 0.9138,
+          "actual_rate": 1.0
         }
       ]
     },
     "earned_runs": {
       "status": "ok",
       "mode": "regression_plus_residual_calibration",
-      "train_samples": 811,
-      "test_samples": 530,
-      "train_nonzero": 203,
-      "test_nonzero": 157,
-      "train_nonzero_rate": 0.2503,
-      "test_nonzero_rate": 0.2962,
+      "train_samples": 907,
+      "test_samples": 548,
+      "train_nonzero": 230,
+      "test_nonzero": 155,
+      "train_nonzero_rate": 0.2536,
+      "test_nonzero_rate": 0.2828,
       "train_market_rows": 0,
       "test_market_rows": 0,
       "train_market_rate": 0.0,
       "test_market_rate": 0.0,
-      "mae": 0.562,
-      "rmse": 0.8267,
-      "r2": 0.2167,
-      "residual_sigma": 0.8091,
-      "directional_accuracy": 0.7491,
-      "recommendation_hit_rate": 0.7985,
-      "recommendation_rate": 0.7491,
-      "probability_mae": 0.4139,
-      "brier": 0.1885,
+      "mae": 0.5517,
+      "rmse": 0.796,
+      "r2": 0.1782,
+      "residual_sigma": 0.6375,
+      "directional_accuracy": 0.7281,
+      "recommendation_hit_rate": 0.772,
+      "recommendation_rate": 0.8084,
+      "probability_mae": 0.4046,
+      "brier": 0.1879,
       "calibration": [
         {
           "bucket": "0.0-0.1",
-          "n": 2,
-          "avg_pred": 0.0991,
+          "n": 3,
+          "avg_pred": 0.0847,
           "actual_rate": 0.0
         },
         {
           "bucket": "0.1-0.2",
-          "n": 9,
-          "avg_pred": 0.161,
+          "n": 23,
+          "avg_pred": 0.1714,
           "actual_rate": 0.0
         },
         {
           "bucket": "0.2-0.3",
-          "n": 73,
-          "avg_pred": 0.2676,
-          "actual_rate": 0.0274
+          "n": 111,
+          "avg_pred": 0.2542,
+          "actual_rate": 0.0991
         },
         {
           "bucket": "0.3-0.4",
-          "n": 134,
-          "avg_pred": 0.348,
-          "actual_rate": 0.1866
+          "n": 127,
+          "avg_pred": 0.3489,
+          "actual_rate": 0.1654
         },
         {
           "bucket": "0.4-0.5",
-          "n": 144,
-          "avg_pred": 0.4471,
-          "actual_rate": 0.2083
+          "n": 130,
+          "avg_pred": 0.4511,
+          "actual_rate": 0.2923
         },
         {
           "bucket": "0.5-0.6",
-          "n": 101,
-          "avg_pred": 0.5425,
-          "actual_rate": 0.4554
+          "n": 84,
+          "avg_pred": 0.551,
+          "actual_rate": 0.369
         },
         {
           "bucket": "0.6-0.7",
-          "n": 39,
-          "avg_pred": 0.6466,
-          "actual_rate": 0.5385
+          "n": 35,
+          "avg_pred": 0.6583,
+          "actual_rate": 0.4286
         },
         {
           "bucket": "0.7-0.8",
-          "n": 14,
-          "avg_pred": 0.7401,
-          "actual_rate": 0.7857
+          "n": 17,
+          "avg_pred": 0.7399,
+          "actual_rate": 0.7647
         },
         {
           "bucket": "0.8-0.9",
-          "n": 9,
+          "n": 10,
           "avg_pred": 0.8339,
-          "actual_rate": 1.0
+          "actual_rate": 0.9
         },
         {
           "bucket": "0.9-1.0",
-          "n": 5,
-          "avg_pred": 0.9414,
-          "actual_rate": 1.0
+          "n": 8,
+          "avg_pred": 0.9611,
+          "actual_rate": 0.875
         }
       ]
     }
