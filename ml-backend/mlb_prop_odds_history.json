@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-14T07:59:23.683274+00:00",
+  "updated_at_utc": "2026-05-14T16:49:23.842539+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -18043,23 +18043,23 @@
       "target": "strikeouts",
       "line": 5.5,
       "over": 120,
-      "under": -154,
+      "under": -153,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815338|4927516|strikeouts": {
       "game_id": "401815338",
       "player_id": "4927516",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -140,
-      "under": 110,
+      "over": -138,
+      "under": 108,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815338|33089|hits": {
       "game_id": "401815338",
@@ -18126,24 +18126,24 @@
       "player_id": "41065",
       "target": "strikeouts",
       "line": 4.5,
-      "over": 110,
-      "under": -140,
+      "over": 102,
+      "under": -130,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815341|4683375|strikeouts": {
       "game_id": "401815341",
       "player_id": "4683375",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -140,
-      "under": 110,
+      "over": -144,
+      "under": 113,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815341|31097|hits": {
       "game_id": "401815341",
@@ -18234,24 +18234,24 @@
       "player_id": "39667",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -146,
-      "under": 115,
+      "over": -151,
+      "under": 118,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815337|39817|strikeouts": {
       "game_id": "401815337",
       "player_id": "39817",
       "target": "strikeouts",
       "line": 4.5,
-      "over": -158,
-      "under": 124,
+      "over": -153,
+      "under": 120,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815337|30951|hits": {
       "game_id": "401815337",
@@ -18342,24 +18342,24 @@
       "player_id": "30948",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -141,
-      "under": 110,
+      "over": -152,
+      "under": 119,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815334|41516|strikeouts": {
       "game_id": "401815334",
       "player_id": "41516",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -157,
-      "under": 123,
+      "over": -120,
+      "under": -106,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815334|32767|hits": {
       "game_id": "401815334",
@@ -18402,24 +18402,24 @@
       "player_id": "40947",
       "target": "strikeouts",
       "line": 3.5,
-      "over": 108,
-      "under": -138,
+      "over": 104,
+      "under": -133,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815339|41201|strikeouts": {
       "game_id": "401815339",
       "player_id": "41201",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -114,
-      "under": -112,
+      "over": -115,
+      "under": -111,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815339|30830|hits": {
       "game_id": "401815339",
@@ -18486,24 +18486,24 @@
       "player_id": "4345404",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 114,
-      "under": -145,
+      "over": 122,
+      "under": -156,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815343|4417806|strikeouts": {
       "game_id": "401815343",
       "player_id": "4417806",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -133,
-      "under": 104,
+      "over": -120,
+      "under": -106,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T04:10:35.071101+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815343|30193|hits": {
       "game_id": "401815343",
@@ -18582,12 +18582,12 @@
       "player_id": "4719068",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 113,
-      "under": -144,
+      "over": -105,
+      "under": -122,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815335|31668|hits": {
       "game_id": "401815335",
@@ -18690,24 +18690,24 @@
       "player_id": "4433874",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -119,
-      "under": -107,
+      "over": -144,
+      "under": 113,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815336|5182933|strikeouts": {
       "game_id": "401815336",
       "player_id": "5182933",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -132,
-      "under": 103,
+      "over": -155,
+      "under": 121,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815336|32146|hits": {
       "game_id": "401815336",
@@ -18798,36 +18798,36 @@
       "player_id": "4791597",
       "target": "strikeouts",
       "line": 4.5,
-      "over": -136,
-      "under": 107,
+      "over": -127,
+      "under": 100,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815342|35124|strikeouts": {
       "game_id": "401815342",
       "player_id": "35124",
       "target": "strikeouts",
-      "line": 5.5,
-      "over": 102,
-      "under": -130,
+      "line": 4.5,
+      "over": -161,
+      "under": 126,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815342|4918155|strikeouts": {
       "game_id": "401815342",
       "player_id": "4918155",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -113,
-      "under": null,
+      "over": 106,
+      "under": -135,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815342|31662|hits": {
       "game_id": "401815342",
@@ -18918,24 +18918,24 @@
       "player_id": "42239",
       "target": "strikeouts",
       "line": 4.5,
-      "over": -141,
-      "under": 110,
+      "over": -140,
+      "under": 109,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815344|4424141|strikeouts": {
       "game_id": "401815344",
       "player_id": "4424141",
       "target": "strikeouts",
       "line": 4.5,
-      "over": 125,
-      "under": -160,
+      "over": 121,
+      "under": -155,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T05:20:49.071725+00:00",
-      "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     },
     "401815344|33900|hits": {
       "game_id": "401815344",
@@ -18972,6 +18972,18 @@
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-05-14T07:59:23.683214+00:00",
       "last_seen_utc": "2026-05-14T07:59:23.683214+00:00"
+    },
+    "401815340|40971|strikeouts": {
+      "game_id": "401815340",
+      "player_id": "40971",
+      "target": "strikeouts",
+      "line": 4.5,
+      "over": 109,
+      "under": -140,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-05-14T16:49:23.842481+00:00",
+      "last_seen_utc": "2026-05-14T16:49:23.842481+00:00"
     }
   }
 }
