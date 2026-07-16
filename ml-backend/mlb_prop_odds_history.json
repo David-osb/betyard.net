@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-07-16T05:25:38.627101+00:00",
+  "updated_at_utc": "2026-07-16T06:15:58.691375+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -72942,24 +72942,24 @@
       "player_id": "33709",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 111,
-      "under": -142,
+      "over": 126,
+      "under": -161,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-07-16T05:25:38.627067+00:00",
-      "last_seen_utc": "2026-07-16T05:25:38.627067+00:00"
+      "last_seen_utc": "2026-07-16T06:15:58.691338+00:00"
     },
     "401816143|4414215|strikeouts": {
       "game_id": "401816143",
       "player_id": "4414215",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -102,
-      "under": -125,
+      "over": 102,
+      "under": -130,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-07-16T05:25:38.627067+00:00",
-      "last_seen_utc": "2026-07-16T05:25:38.627067+00:00"
+      "last_seen_utc": "2026-07-16T06:15:58.691338+00:00"
     },
     "401816143|30951|hits": {
       "game_id": "401816143",
@@ -72967,11 +72967,23 @@
       "target": "hits",
       "line": 0.5,
       "over": -241,
-      "under": null,
+      "under": 178,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-07-16T05:25:38.627067+00:00",
-      "last_seen_utc": "2026-07-16T05:25:38.627067+00:00"
+      "last_seen_utc": "2026-07-16T06:15:58.691338+00:00"
+    },
+    "401816143|32129|hits": {
+      "game_id": "401816143",
+      "player_id": "32129",
+      "target": "hits",
+      "line": 0.5,
+      "over": -192,
+      "under": null,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-07-16T06:15:58.691338+00:00",
+      "last_seen_utc": "2026-07-16T06:15:58.691338+00:00"
     }
   }
 }
