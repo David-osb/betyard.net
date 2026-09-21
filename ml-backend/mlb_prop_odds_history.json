@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-21T05:39:28.565038+00:00",
+  "updated_at_utc": "2026-09-21T06:24:11.121131+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -132258,12 +132258,12 @@
       "player_id": "39639",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -138,
-      "under": 109,
+      "over": -143,
+      "under": 112,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-09-21T04:14:02.182295+00:00",
-      "last_seen_utc": "2026-09-21T05:39:28.564989+00:00"
+      "last_seen_utc": "2026-09-21T06:24:11.121102+00:00"
     },
     "401817027|32078|hits": {
       "game_id": "401817027",
@@ -132354,12 +132354,12 @@
       "player_id": "4917686",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -103,
-      "under": -124,
+      "over": -113,
+      "under": null,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-09-21T04:14:02.182295+00:00",
-      "last_seen_utc": "2026-09-21T05:39:28.564989+00:00"
+      "last_seen_utc": "2026-09-21T06:24:11.121102+00:00"
     },
     "401817028|33804|hits": {
       "game_id": "401817028",
@@ -132426,24 +132426,24 @@
       "player_id": "4719088",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -148,
-      "under": 116,
+      "over": -161,
+      "under": 126,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-09-21T04:14:02.182295+00:00",
-      "last_seen_utc": "2026-09-21T05:39:28.564989+00:00"
+      "last_seen_utc": "2026-09-21T06:24:11.121102+00:00"
     },
     "401817029|4791597|strikeouts": {
       "game_id": "401817029",
       "player_id": "4791597",
       "target": "strikeouts",
       "line": 4.5,
-      "over": -134,
-      "under": 105,
+      "over": -131,
+      "under": 103,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-09-21T04:14:02.182295+00:00",
-      "last_seen_utc": "2026-09-21T05:39:28.564989+00:00"
+      "last_seen_utc": "2026-09-21T06:24:11.121102+00:00"
     },
     "401817029|32517|hits": {
       "game_id": "401817029",
