@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-06T17:52:27.256149+00:00",
+  "updated_at_utc": "2026-10-06T18:25:43.595892+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138498,36 +138498,36 @@
       "player_id": "30948",
       "target": "strikeouts",
       "line": 7.5,
-      "over": 114,
-      "under": -145,
+      "over": 118,
+      "under": -150,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T17:52:27.256111+00:00"
+      "last_seen_utc": "2026-10-06T18:25:43.595858+00:00"
     },
     "401908015|4872587|strikeouts": {
       "game_id": "401908015",
       "player_id": "4872587",
       "target": "strikeouts",
       "line": 6.5,
-      "over": 105,
-      "under": -134,
+      "over": 112,
+      "under": -143,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T17:52:27.256111+00:00"
+      "last_seen_utc": "2026-10-06T18:25:43.595858+00:00"
     },
     "401908004|36071|strikeouts": {
       "game_id": "401908004",
       "player_id": "36071",
       "target": "strikeouts",
       "line": 4.5,
-      "over": 123,
-      "under": -157,
+      "over": 110,
+      "under": -141,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T17:52:27.256111+00:00"
+      "last_seen_utc": "2026-10-06T18:25:43.595858+00:00"
     },
     "401908004|40937|strikeouts": {
       "game_id": "401908004",
@@ -138539,7 +138539,7 @@
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T17:52:27.256111+00:00"
+      "last_seen_utc": "2026-10-06T18:25:43.595858+00:00"
     }
   }
 }
