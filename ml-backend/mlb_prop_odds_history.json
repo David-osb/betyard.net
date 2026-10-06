@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-06T03:56:17.068132+00:00",
+  "updated_at_utc": "2026-10-06T04:13:43.926146+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138492,6 +138492,54 @@
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-05T04:05:47.962397+00:00",
       "last_seen_utc": "2026-10-06T03:56:17.068091+00:00"
+    },
+    "401908015|30948|strikeouts": {
+      "game_id": "401908015",
+      "player_id": "30948",
+      "target": "strikeouts",
+      "line": 7.5,
+      "over": 115,
+      "under": -146,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
+      "last_seen_utc": "2026-10-06T04:13:43.926106+00:00"
+    },
+    "401908015|4872587|strikeouts": {
+      "game_id": "401908015",
+      "player_id": "4872587",
+      "target": "strikeouts",
+      "line": 6.5,
+      "over": 100,
+      "under": -127,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
+      "last_seen_utc": "2026-10-06T04:13:43.926106+00:00"
+    },
+    "401908004|36071|strikeouts": {
+      "game_id": "401908004",
+      "player_id": "36071",
+      "target": "strikeouts",
+      "line": 3.5,
+      "over": -160,
+      "under": 125,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
+      "last_seen_utc": "2026-10-06T04:13:43.926106+00:00"
+    },
+    "401908004|40937|strikeouts": {
+      "game_id": "401908004",
+      "player_id": "40937",
+      "target": "strikeouts",
+      "line": 2.5,
+      "over": -162,
+      "under": 127,
+      "source": "ESPN_DRAFTKINGS_LIVE",
+      "side_assignment": "feed_order_guess",
+      "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
+      "last_seen_utc": "2026-10-06T04:13:43.926106+00:00"
     }
   }
 }
