@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-06T21:51:02.936182+00:00",
+  "updated_at_utc": "2026-10-06T22:19:15.412505+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138497,25 +138497,25 @@
       "game_id": "401908015",
       "player_id": "30948",
       "target": "strikeouts",
-      "line": 7.5,
-      "over": 119,
-      "under": -152,
+      "line": 6.5,
+      "over": -156,
+      "under": 122,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T21:51:02.936144+00:00"
+      "last_seen_utc": "2026-10-06T22:19:15.412477+00:00"
     },
     "401908015|4872587|strikeouts": {
       "game_id": "401908015",
       "player_id": "4872587",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -102,
-      "under": -125,
+      "over": 111,
+      "under": -141,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T21:51:02.936144+00:00"
+      "last_seen_utc": "2026-10-06T22:19:15.412477+00:00"
     },
     "401908004|36071|strikeouts": {
       "game_id": "401908004",
@@ -138527,19 +138527,19 @@
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T21:51:02.936144+00:00"
+      "last_seen_utc": "2026-10-06T22:19:15.412477+00:00"
     },
     "401908004|40937|strikeouts": {
       "game_id": "401908004",
       "player_id": "40937",
       "target": "strikeouts",
       "line": 2.5,
-      "over": -156,
-      "under": 122,
+      "over": -151,
+      "under": 118,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-06T04:13:43.926106+00:00",
-      "last_seen_utc": "2026-10-06T21:51:02.936144+00:00"
+      "last_seen_utc": "2026-10-06T22:19:15.412477+00:00"
     }
   }
 }
