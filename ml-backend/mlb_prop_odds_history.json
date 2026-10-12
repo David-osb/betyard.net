@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-12T18:23:48.228823+00:00",
+  "updated_at_utc": "2026-10-12T18:50:15.996690+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138906,36 +138906,36 @@
       "player_id": "4872587",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -130,
-      "under": 102,
+      "over": -136,
+      "under": 107,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
+      "last_seen_utc": "2026-10-12T18:50:15.996655+00:00"
     },
     "401908031|4917878|strikeouts": {
       "game_id": "401908031",
       "player_id": "4917878",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 111,
-      "under": -142,
+      "over": 106,
+      "under": -135,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
+      "last_seen_utc": "2026-10-12T18:50:15.996655+00:00"
     },
     "401908023|33773|strikeouts": {
       "game_id": "401908023",
       "player_id": "33773",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -110,
-      "under": -115,
+      "over": -104,
+      "under": -122,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
+      "last_seen_utc": "2026-10-12T18:50:15.996655+00:00"
     },
     "401908023|42584|strikeouts": {
       "game_id": "401908023",
@@ -138947,7 +138947,7 @@
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
+      "last_seen_utc": "2026-10-12T18:50:15.996655+00:00"
     }
   }
 }
