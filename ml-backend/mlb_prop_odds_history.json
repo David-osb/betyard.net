@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-12T17:55:16.551636+00:00",
+  "updated_at_utc": "2026-10-12T18:23:48.228823+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138906,24 +138906,24 @@
       "player_id": "4872587",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -134,
-      "under": 105,
+      "over": -130,
+      "under": 102,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T17:55:16.551600+00:00"
+      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
     },
     "401908031|4917878|strikeouts": {
       "game_id": "401908031",
       "player_id": "4917878",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 106,
-      "under": -135,
+      "over": 111,
+      "under": -142,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T17:55:16.551600+00:00"
+      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
     },
     "401908023|33773|strikeouts": {
       "game_id": "401908023",
@@ -138935,19 +138935,19 @@
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T17:55:16.551600+00:00"
+      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
     },
     "401908023|42584|strikeouts": {
       "game_id": "401908023",
       "player_id": "42584",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -115,
-      "under": -110,
+      "over": -119,
+      "under": -107,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T17:55:16.551600+00:00"
+      "last_seen_utc": "2026-10-12T18:23:48.228784+00:00"
     }
   }
 }
