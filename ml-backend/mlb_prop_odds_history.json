@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-12T19:56:27.805917+00:00",
+  "updated_at_utc": "2026-10-12T20:20:29.298964+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -138906,48 +138906,48 @@
       "player_id": "4872587",
       "target": "strikeouts",
       "line": 6.5,
-      "over": -168,
-      "under": 131,
+      "over": -171,
+      "under": 133,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T19:56:27.805885+00:00"
+      "last_seen_utc": "2026-10-12T20:20:29.298940+00:00"
     },
     "401908031|4917878|strikeouts": {
       "game_id": "401908031",
       "player_id": "4917878",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -102,
-      "under": -125,
+      "over": 110,
+      "under": -140,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T19:56:27.805885+00:00"
+      "last_seen_utc": "2026-10-12T20:20:29.298940+00:00"
     },
     "401908023|33773|strikeouts": {
       "game_id": "401908023",
       "player_id": "33773",
       "target": "strikeouts",
       "line": 3.5,
-      "over": -122,
-      "under": -105,
+      "over": -107,
+      "under": -119,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T19:56:27.805885+00:00"
+      "last_seen_utc": "2026-10-12T20:20:29.298940+00:00"
     },
     "401908023|42584|strikeouts": {
       "game_id": "401908023",
       "player_id": "42584",
       "target": "strikeouts",
       "line": 5.5,
-      "over": -119,
-      "under": -107,
+      "over": -114,
+      "under": -112,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-12T04:21:11.329679+00:00",
-      "last_seen_utc": "2026-10-12T19:56:27.805885+00:00"
+      "last_seen_utc": "2026-10-12T20:20:29.298940+00:00"
     }
   }
 }
