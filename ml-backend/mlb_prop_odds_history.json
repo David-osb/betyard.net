@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-10-18T20:50:31.345158+00:00",
+  "updated_at_utc": "2026-10-18T21:14:21.400237+00:00",
   "records": {
     "401815095|4311625|strikeouts": {
       "game_id": "401815095",
@@ -139194,12 +139194,12 @@
       "player_id": "42584",
       "target": "strikeouts",
       "line": 5.5,
-      "over": 116,
-      "under": -149,
+      "over": 114,
+      "under": -146,
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-18T04:12:10.032716+00:00",
-      "last_seen_utc": "2026-10-18T20:50:31.345123+00:00"
+      "last_seen_utc": "2026-10-18T21:14:21.400200+00:00"
     },
     "401930515|4619898|strikeouts": {
       "game_id": "401930515",
@@ -139211,7 +139211,7 @@
       "source": "ESPN_DRAFTKINGS_LIVE",
       "side_assignment": "feed_order_guess",
       "first_seen_utc": "2026-10-18T04:12:10.032716+00:00",
-      "last_seen_utc": "2026-10-18T20:50:31.345123+00:00"
+      "last_seen_utc": "2026-10-18T21:14:21.400200+00:00"
     },
     "401930515|32801|hits": {
       "game_id": "401930515",
